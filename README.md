@@ -10,7 +10,7 @@ Project Report Wiki: https://github.com/McGill-ECSE321-Winter2020/project-group-
 
 ### Overview Table
 
-| Names  | Christopher Boustros | Ding Ma | Katrina Poulin | Louis Barrette | Mat Bis |
+| Names  | Christopher Boustros | Ding Ma | Katrina Poulin | Louis Barrette-Vanasse | Mathieu Bissonnette |
 | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
 | Roles  | ? | ? | ? | ? | ? |
 | Hours  | ∞ | ∞ | ∞ | ∞ | ∞ |
