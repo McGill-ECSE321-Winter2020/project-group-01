@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_DB688ELgEeqn1Yx1l3bFFQ" name="UML_Lab">
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_DB688ELgEeqn1Yx1l3bFFQ" name="UML_Lab">
   <elementImport xmi:id="_I6MX4ELgEeqn1Yx1l3bFFQ">
     <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#boolean"/>
   </elementImport>
@@ -46,15 +46,15 @@
     <ownedAttribute xmi:id="_T8PwEELgEeqn1Yx1l3bFFQ" name="enumStaffOrCustomer">
       <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
-    <ownedAttribute xmi:id="_VF78AELgEeqn1Yx1l3bFFQ" name="picture">
-      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-    </ownedAttribute>
     <ownedAttribute xmi:id="_W8spUELgEeqn1Yx1l3bFFQ" name="idUser">
       <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_zXQ6kELiEeqsu8CCrtRz3Q" name="advertisements" type="_PpEOMELhEeqsu8CCrtRz3Q" association="_zXQTgELiEeqsu8CCrtRz3Q">
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_zXQ6kULiEeqsu8CCrtRz3Q"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_zXQ6kkLiEeqsu8CCrtRz3Q" value="*"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:id="_R7CaYELtEeqbwb4BnY-qfw" name="picture">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#byte"/>
     </ownedAttribute>
   </packagedElement>
   <packagedElement xmi:type="uml:Class" xmi:id="_XdPKkELgEeqn1Yx1l3bFFQ" name="Comments">
@@ -88,15 +88,6 @@
     </ownedAttribute>
     <ownedAttribute xmi:id="_KG3J4ELhEeqsu8CCrtRz3Q" name="idForum">
       <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
-    </ownedAttribute>
-    <ownedAttribute xmi:id="_Mld6UELhEeqsu8CCrtRz3Q" name="yearOfCreation">
-      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-    </ownedAttribute>
-    <ownedAttribute xmi:id="_NodBUELhEeqsu8CCrtRz3Q" name="monthOfCreation">
-      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-    </ownedAttribute>
-    <ownedAttribute xmi:id="_OcBzUELhEeqsu8CCrtRz3Q" name="dayOfCreation">
-      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_q3wXoULiEeqsu8CCrtRz3Q" name="user" type="_F7qKMELgEeqn1Yx1l3bFFQ" association="_q3vwkELiEeqsu8CCrtRz3Q">
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_q3wXokLiEeqsu8CCrtRz3Q"/>
@@ -138,12 +129,6 @@
     <ownedAttribute xmi:id="_rpyuAELhEeqsu8CCrtRz3Q" name="dayOfDonation">
       <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
-    <ownedAttribute xmi:id="_tKlyYELhEeqsu8CCrtRz3Q" name="nameOfDonor">
-      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-    </ownedAttribute>
-    <ownedAttribute xmi:id="_vOPFIELhEeqsu8CCrtRz3Q" name="emailOfDonor">
-      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-    </ownedAttribute>
     <ownedAttribute xmi:id="_utyOBELiEeqsu8CCrtRz3Q" name="user" type="_F7qKMELgEeqn1Yx1l3bFFQ" association="_utyOAELiEeqsu8CCrtRz3Q">
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_utyOBULiEeqsu8CCrtRz3Q" value="1"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_utyOBkLiEeqsu8CCrtRz3Q" value="1"/>
@@ -169,7 +154,7 @@
       <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_8nY3kELhEeqsu8CCrtRz3Q" name="pictures">
-      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#byte"/>
     </ownedAttribute>
     <ownedAttribute xmi:id="_-JEswELhEeqsu8CCrtRz3Q" name="idPet">
       <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
@@ -206,4 +191,11 @@
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8o-Wg0LiEeqsu8CCrtRz3Q" value="1"/>
     </ownedEnd>
   </packagedElement>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_LVhe8ELtEeqbwb4BnY-qfw" name="byteArray"/>
+  <profileApplication xmi:id="_LVhe8ULtEeqbwb4BnY-qfw">
+    <eAnnotations xmi:id="_LVhe8kLtEeqbwb4BnY-qfw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+      <references xmi:type="ecore:EPackage" href="pathmap://UMLLAB_PROFILES/UMLLab.profile.uml#UMLLabProfile-Annotation_2-UMLLabProfile"/>
+    </eAnnotations>
+    <appliedProfile href="pathmap://UMLLAB_PROFILES/UMLLab.profile.uml#UMLLabProfile"/>
+  </profileApplication>
 </uml:Model>
