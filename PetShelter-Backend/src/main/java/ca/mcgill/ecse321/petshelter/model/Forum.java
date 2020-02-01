@@ -4,6 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Set;
 import javax.persistence.OneToMany;
+
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.CascadeType;
 
 /**
@@ -11,44 +15,36 @@ import javax.persistence.CascadeType;
  *
  */
 @Entity
-public class Forum{
-   private String title;
+public class Forum {
+	@Getter
+	@Setter
+	private String title;
 
-public void setTitle(String value) {
-    this.title = value;
-}
-public String getTitle() {
-    return this.title;
-}
-private long id;
+	@Getter
+	@Setter
+	@Id
+	private long id;
 
-public void setId(long value) {
-    this.id = value;
+	private Set<User> subscribers;
+
+	@OneToMany
+	public Set<User> getSubscribers() {
+		return this.subscribers;
+	}
+
+	public void setSubscribers(Set<User> subscriberss) {
+		this.subscribers = subscriberss;
+	}
+
+	private Set<Comment> comments;
+
+	@OneToMany(mappedBy = "forum", cascade = { CascadeType.ALL })
+	public Set<Comment> getComments() {
+		return this.comments;
+	}
+
+	public void setComments(Set<Comment> commentss) {
+		this.comments = commentss;
+	}
+
 }
-@Id
-public long getId() {
-    return this.id;
-}
-   private Set<User> subscribers;
-   
-   @OneToMany
-   public Set<User> getSubscribers() {
-      return this.subscribers;
-   }
-   
-   public void setSubscribers(Set<User> subscriberss) {
-      this.subscribers = subscriberss;
-   }
-   
-   private Set<Comment> comments;
-   
-   @OneToMany(mappedBy="forum" , cascade={CascadeType.ALL})
-   public Set<Comment> getComments() {
-      return this.comments;
-   }
-   
-   public void setComments(Set<Comment> commentss) {
-      this.comments = commentss;
-   }
-   
-   }

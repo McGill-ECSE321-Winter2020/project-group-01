@@ -7,54 +7,40 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author louis
  *
  */
 @Entity
-public class Donation{
-   private double amount;
+public class Donation {
+	@Getter
+	@Setter
+	private double amount;
 
-public void setAmount(double value) {
-    this.amount = value;
-}
-public double getAmount() {
-    return this.amount;
-}
-private long id;
+	@Getter
+	@Setter
+	@Id
+	private long id;
 
-public void setId(long value) {
-    this.id = value;
-}
-@Id
-public long getId() {
-    return this.id;
-}
-private Date date;
+	@Getter
+	@Setter
+	private Date date;
 
-public void setDate(Date value) {
-    this.date = value;
-}
-public Date getDate() {
-    return this.date;
-}
-private User user;
+	private User user;
 
-@ManyToOne
-public User getUser() {
-   return this.user;
-}
+	@ManyToOne
+	public User getUser() {
+		return this.user;
+	}
 
-public void setUser(User user) {
-   this.user = user;
-}
+	public void setUser(User user) {
+		this.user = user;
+	}
 
-private Time time;
-
-public void setTime(Time value) {
-    this.time = value;
-}
-public Time getTime() {
-    return this.time;
-}
+	@Getter
+	@Setter
+	private Time time;
 }
