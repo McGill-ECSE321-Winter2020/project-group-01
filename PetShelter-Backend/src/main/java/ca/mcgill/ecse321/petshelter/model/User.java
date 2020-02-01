@@ -1,8 +1,8 @@
 package ca.mcgill.ecse321.petshelter.model;
 
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
-import StaffOrCustomer;
 import java.util.Set;
 import javax.persistence.OneToMany;
 
@@ -83,14 +83,15 @@ public class User {
 		return this.picture;
 	}
 
-	private StaffOrCustomer staffOrCustomer;
+	@Enumerated
+	private UserType userType;
 
-	public void setStaffOrCustomer(StaffOrCustomer value) {
-		this.staffOrCustomer = value;
+	public void setStaffOrCustomer(UserType value) {
+		this.userType = value;
 	}
 
-	public StaffOrCustomer getStaffOrCustomer() {
-		return this.staffOrCustomer;
+	public UserType getStaffOrCustomer() {
+		return this.userType;
 	}
 
 	private Set<Pet> pets;
