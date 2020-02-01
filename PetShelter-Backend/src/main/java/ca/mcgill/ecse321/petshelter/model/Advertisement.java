@@ -1,37 +1,25 @@
 package ca.mcgill.ecse321.petshelter.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+
+import lombok.Data;
 
 /**
  * @author louis
  *
  */
 @Entity
-public class Advertisement{
-   private String description;
+@Data
+@Table(name = "Advertisements")
+public class Advertisement {
+	private String description;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long id;
+	private boolean isFulfilled;
 
-public void setDescription(String value) {
-    this.description = value;
-}
-public String getDescription() {
-    return this.description;
-}
-private long id;
-
-public void setId(long value) {
-    this.id = value;
-}
-@Id
-public long getId() {
-    return this.id;
-}
-private boolean isFulfilled;
-
-public void setIsFulfilled(boolean value) {
-    this.isFulfilled = value;
-}
-public boolean isIsFulfilled() {
-    return this.isFulfilled;
-}
 }
