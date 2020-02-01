@@ -7,93 +7,48 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author louis
  *
  */
 @Entity
 public class Pet {
+	@Getter
+	@Setter
 	private Date dateOfBirth;
 
-	public void setDateOfBirth(Date value) {
-		this.dateOfBirth = value;
-	}
-
-	public Date getDateOfBirth() {
-		return this.dateOfBirth;
-	}
-
+	@Getter
+	@Setter
 	private String name;
 
-	public void setName(String value) {
-		this.name = value;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
+	@Getter
+	@Setter
 	private String species;
 
-	public void setSpecies(String value) {
-		this.species = value;
-	}
-
-	public String getSpecies() {
-		return this.species;
-	}
-
+	@Getter
+	@Setter
 	private String breed;
 
-	public void setBreed(String value) {
-		this.breed = value;
-	}
-
-	public String getBreed() {
-		return this.breed;
-	}
-
+	@Getter
+	@Setter
 	private String description;
 
-	public void setDescription(String value) {
-		this.description = value;
-	}
+	@Getter
+	@Setter
+	private byte[] picture;
 
-	public String getDescription() {
-		return this.description;
-	}
-
-	private byte picture;
-
-	public void setPicture(byte value) {
-		this.picture = value;
-	}
-
-	public byte getPicture() {
-		return this.picture;
-	}
-
+	@Getter
+	@Setter
+	@Id
 	private long id;
 
-	public void setId(long value) {
-		this.id = value;
-	}
-
-	@Id
-	public long getId() {
-		return this.id;
-	}
-
+	@Getter
+	@Setter
 	@Enumerated
 	private Gender gender;
-
-	public void setGender(Gender value) {
-		this.gender = value;
-	}
-
-	public Gender getGender() {
-		return this.gender;
-	}
 
 	private Advertisement advertisement;
 

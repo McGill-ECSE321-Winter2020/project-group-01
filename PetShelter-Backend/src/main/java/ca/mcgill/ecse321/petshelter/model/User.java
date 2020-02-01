@@ -6,93 +6,48 @@ import javax.persistence.Id;
 import java.util.Set;
 import javax.persistence.OneToMany;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author louis
  *
  */
 @Entity
 public class User {
+	@Getter
+	@Setter
 	private String name;
 
-	public void setName(String value) {
-		this.name = value;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
+	@Getter
+	@Setter
 	private String password;
 
-	public void setPassword(String value) {
-		this.password = value;
-	}
-
-	public String getPassword() {
-		return this.password;
-	}
-
+	@Getter
+	@Setter
 	private boolean isEmailValidated;
 
-	public void setIsEmailValidated(boolean value) {
-		this.isEmailValidated = value;
-	}
-
-	public boolean isIsEmailValidated() {
-		return this.isEmailValidated;
-	}
-
+	@Getter
+	@Setter
 	private String email;
 
-	public void setEmail(String value) {
-		this.email = value;
-	}
-
-	public String getEmail() {
-		return this.email;
-	}
-
+	@Getter
+	@Setter
 	private String apiToken;
 
-	public void setApiToken(String value) {
-		this.apiToken = value;
-	}
-
-	public String getApiToken() {
-		return this.apiToken;
-	}
-
+	@Id
+	@Getter
+	@Setter
 	private long idUser;
 
-	public void setIdUser(long value) {
-		this.idUser = value;
-	}
-
-	@Id
-	public long getIdUser() {
-		return this.idUser;
-	}
-
-	private byte picture;
-
-	public void setPicture(byte value) {
-		this.picture = value;
-	}
-
-	public byte getPicture() {
-		return this.picture;
-	}
+	@Getter
+	@Setter
+	private byte[] picture;
 
 	@Enumerated
+	@Getter
+	@Setter
 	private UserType userType;
-
-	public void setStaffOrCustomer(UserType value) {
-		this.userType = value;
-	}
-
-	public UserType getStaffOrCustomer() {
-		return this.userType;
-	}
 
 	private Set<Pet> pets;
 
@@ -101,8 +56,8 @@ public class User {
 		return this.pets;
 	}
 
-	public void setPets(Set<Pet> petss) {
-		this.pets = petss;
+	public void setPets(Set<Pet> pets) {
+		this.pets = pets;
 	}
 
 }
