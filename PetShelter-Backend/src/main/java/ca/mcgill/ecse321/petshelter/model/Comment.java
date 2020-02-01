@@ -8,7 +8,7 @@ import javax.persistence.ManyToMany;
 import ca.mcgill.ecse321.petshelter.model.java.sql.Time;
 
 @Entity
-public class Comments{
+public class Comment{
    private Date yearOfPost;
 
 public void setYearOfPost(Date value) {
