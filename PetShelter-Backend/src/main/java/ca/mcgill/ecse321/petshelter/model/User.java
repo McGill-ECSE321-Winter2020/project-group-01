@@ -1,4 +1,5 @@
 package ca.mcgill.ecse321.petshelter.model;
+import javax.persistence.OneToOne;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -8,6 +9,17 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class User {
+private Comments comments;
+   
+   @OneToOne(optional=false)
+   public Comments getComments() {
+      return this.comments;
+   }
+   
+   public void setComments(Comments comments) {
+      this.comments = comments;
+   }
+   
 	private String name;
 
 	public void setName(String value) {
