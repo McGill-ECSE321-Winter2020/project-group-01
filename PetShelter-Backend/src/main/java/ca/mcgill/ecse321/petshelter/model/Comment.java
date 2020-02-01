@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
  *
  */
 @Entity
-public class Comments{
+public class Comment{
    private Date datePosted;
 
 public void setDatePosted(Date value) {
