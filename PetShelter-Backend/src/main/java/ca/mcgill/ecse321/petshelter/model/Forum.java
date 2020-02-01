@@ -4,7 +4,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Set;
 import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
 
+/**
+ * @author louis
+ *
+ */
 @Entity
 public class Forum{
    private String title;
@@ -15,24 +20,35 @@ public void setTitle(String value) {
 public String getTitle() {
     return this.title;
 }
-private long idForum;
+private long id;
 
-public void setIdForum(long value) {
-    this.idForum = value;
+public void setId(long value) {
+    this.id = value;
 }
 @Id
-public long getIdForum() {
-    return this.idForum;
+public long getId() {
+    return this.id;
 }
-   private Set<User> users;
+   private Set<User> subscribers;
    
    @OneToMany
-   public Set<User> getUsers() {
-      return this.users;
+   public Set<User> getSubscribers() {
+      return this.subscribers;
    }
    
-   public void setUsers(Set<User> userss) {
-      this.users = userss;
+   public void setSubscribers(Set<User> subscriberss) {
+      this.subscribers = subscriberss;
+   }
+   
+   private Set<Comments> comments;
+   
+   @OneToMany(mappedBy="forum" , cascade={CascadeType.ALL})
+   public Set<Comments> getComments() {
+      return this.comments;
+   }
+   
+   public void setComments(Set<Comments> commentss) {
+      this.comments = commentss;
    }
    
    }

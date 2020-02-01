@@ -1,11 +1,16 @@
 package ca.mcgill.ecse321.petshelter.model;
 
+import java.sql.Date;
+import java.sql.Time;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import ca.mcgill.ecse321.petshelter.model.java.sql.Date;
 import javax.persistence.ManyToOne;
-import ca.mcgill.ecse321.petshelter.model.java.sql.Time;
 
+/**
+ * @author louis
+ *
+ */
 @Entity
 public class Donation{
    private double amount;
@@ -16,42 +21,26 @@ public void setAmount(double value) {
 public double getAmount() {
     return this.amount;
 }
-private long idDonation;
+private long id;
 
-public void setIdDonation(long value) {
-    this.idDonation = value;
+public void setId(long value) {
+    this.id = value;
 }
 @Id
-public long getIdDonation() {
-    return this.idDonation;
+public long getId() {
+    return this.id;
 }
-private Date yearOfDonation;
+private Date date;
 
-public void setYearOfDonation(Date value) {
-    this.yearOfDonation = value;
+public void setDate(Date value) {
+    this.date = value;
 }
-public Date getYearOfDonation() {
-    return this.yearOfDonation;
-}
-private Date monthOfDonation;
-
-public void setMonthOfDonation(Date value) {
-    this.monthOfDonation = value;
-}
-public Date getMonthOfDonation() {
-    return this.monthOfDonation;
-}
-private Date dayOfDonation;
-
-public void setDayOfDonation(Date value) {
-    this.dayOfDonation = value;
-}
-public Date getDayOfDonation() {
-    return this.dayOfDonation;
+public Date getDate() {
+    return this.date;
 }
 private User user;
 
-@ManyToOne(optional=false)
+@ManyToOne
 public User getUser() {
    return this.user;
 }
@@ -60,12 +49,12 @@ public void setUser(User user) {
    this.user = user;
 }
 
-private Time timeOfDonation;
+private Time time;
 
-public void setTimeOfDonation(Time value) {
-    this.timeOfDonation = value;
+public void setTime(Time value) {
+    this.time = value;
 }
-public Time getTimeOfDonation() {
-    return this.timeOfDonation;
+public Time getTime() {
+    return this.time;
 }
 }

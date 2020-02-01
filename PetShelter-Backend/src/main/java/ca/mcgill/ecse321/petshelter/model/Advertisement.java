@@ -3,31 +3,35 @@ package ca.mcgill.ecse321.petshelter.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+/**
+ * @author louis
+ *
+ */
 @Entity
 public class Advertisement{
-   private String desciption;
+   private String description;
 
-public void setDesciption(String value) {
-    this.desciption = value;
+public void setDescription(String value) {
+    this.description = value;
 }
-public String getDesciption() {
-    return this.desciption;
+public String getDescription() {
+    return this.description;
 }
-private long idAd;
+private long id;
 
-public void setIdAd(long value) {
-    this.idAd = value;
+public void setId(long value) {
+    this.id = value;
 }
 @Id
-public long getIdAd() {
-    return this.idAd;
+public long getId() {
+    return this.id;
 }
-private boolean isCompleted;
+private boolean isFulfilled;
 
-public void setIsCompleted(boolean value) {
-    this.isCompleted = value;
+public void setIsFulfilled(boolean value) {
+    this.isFulfilled = value;
 }
-public boolean isIsCompleted() {
-    return this.isCompleted;
+public boolean isIsFulfilled() {
+    return this.isFulfilled;
 }
 }
