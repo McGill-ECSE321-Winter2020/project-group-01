@@ -32,8 +32,8 @@ public class Forum {
 		return this.subscribers;
 	}
 
-	public void setSubscribers(Set<User> subscriberss) {
-		this.subscribers = subscriberss;
+	public void setSubscribers(Set<User> subscribers) {
+		this.subscribers = subscribers;
 	}
 
 	private Set<Comment> comments;
@@ -43,8 +43,8 @@ public class Forum {
 		return this.comments;
 	}
 
-	public void setComments(Set<Comment> commentss) {
-		this.comments = commentss;
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
 	}
 
 }
