@@ -7,7 +7,7 @@ import ca.mcgill.ecse321.petshelter.model.java.sql.Time;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Comments{
+public class Comment{
    private Date yearOfPost;
 
 public void setYearOfPost(Date value) {
