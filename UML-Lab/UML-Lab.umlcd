@@ -14,7 +14,7 @@
       <visibility xmi:id="_q3yz5ELiEeqsu8CCrtRz3Q" label="+"/>
       <cardinality xmi:id="_q3yz5ULiEeqsu8CCrtRz3Q" label="1" max="1" min="1"/>
     </sourceRole>
-    <targetRole xmi:id="_q3yz5kLiEeqsu8CCrtRz3Q" aggregationKind="NONE" name="users" navigable="true">
+    <targetRole xmi:id="_q3yz5kLiEeqsu8CCrtRz3Q" aggregationKind="NONE" name="subscribers" navigable="true">
       <modelElement href="UML-Lab.uml#_q3wXoULiEeqsu8CCrtRz3Q"/>
       <visualProperties xmi:id="_q6tlAkLiEeqsu8CCrtRz3Q" position="-44.0,34.0"/>
       <visibility xmi:id="_q3yz50LiEeqsu8CCrtRz3Q" label="+"/>
@@ -37,7 +37,7 @@
       <modelElement href="UML-Lab.uml#_utyOBELiEeqsu8CCrtRz3Q"/>
       <visualProperties xmi:id="_uwrJ8ULiEeqsu8CCrtRz3Q" position="27.0,-46.999999999999886"/>
       <visibility xmi:id="_ut0DN0LiEeqsu8CCrtRz3Q" label="+"/>
-      <cardinality xmi:id="_ut0DOELiEeqsu8CCrtRz3Q" label="1" max="1" min="1"/>
+      <cardinality xmi:id="_ut0DOELiEeqsu8CCrtRz3Q" label="0..1" max="1"/>
     </targetRole>
   </edges>
   <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_pC5y0EUnEeqzEM0-RgJSnQ" sourceAnchor="2.0,25.0" targetAnchor="92.0,29.0"/>
@@ -94,6 +94,9 @@
     <sourceRole xmi:id="_4wJRUkUzEeqiQLhfP_8_1Q" aggregationKind="NONE" name="staffOrCustomer" navigable="true">
       <modelElement href="UML-Lab.uml#_SvzkMEUnEeqzEM0-RgJSnQ"/>
       <stereotypes xmi:id="_4wTpYEUzEeqiQLhfP_8_1Q" name="StyledElement"/>
+      <stereotypes xmi:id="_YPJmIEVFEeqUGMj4hedUew" name="StyledElement">
+        <modelElement href="UML-Lab.uml#_4uXvs0UzEeqiQLhfP_8_1Q"/>
+      </stereotypes>
       <visibility xmi:id="_4wJRU0UzEeqiQLhfP_8_1Q" label="+"/>
       <cardinality xmi:id="_4wJRVEUzEeqiQLhfP_8_1Q" label="1" max="1" min="1"/>
     </sourceRole>
@@ -115,11 +118,11 @@
       <visibility xmi:id="__lZnBEU1EeqiQLhfP_8_1Q" label="+"/>
       <cardinality xmi:id="__lZnBUU1EeqiQLhfP_8_1Q" label="1" max="1" min="1"/>
     </sourceRole>
-    <targetRole xmi:id="__lZnBkU1EeqiQLhfP_8_1Q" name="comments">
+    <targetRole xmi:id="__lZnBkU1EeqiQLhfP_8_1Q" name="comments" navigable="true">
       <modelElement href="UML-Lab.uml#__lYY4EU1EeqiQLhfP_8_1Q"/>
       <visualProperties xmi:id="__oL1QUU1EeqiQLhfP_8_1Q" position="-74.00000000000003,30.0"/>
       <visibility xmi:id="__lZnB0U1EeqiQLhfP_8_1Q" label="+"/>
-      <cardinality xmi:id="__lZnCEU1EeqiQLhfP_8_1Q" label="*" max="-1"/>
+      <cardinality xmi:id="__lZnCEU1EeqiQLhfP_8_1Q" label="1..*" max="-1" min="1"/>
     </targetRole>
   </edges>
   <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_CANckEU2EeqiQLhfP_8_1Q" sourceAnchor="0.0,54.0" targetAnchor="216.0,93.0" target="_yEUhcELhEeqsu8CCrtRz3Q" source="_PpE1QELhEeqsu8CCrtRz3Q">
@@ -132,13 +135,13 @@
       <modelElement href="UML-Lab.uml#_CALnYUU2EeqiQLhfP_8_1Q"/>
       <visualProperties xmi:id="_CDCuIUU2EeqiQLhfP_8_1Q" position="-143.0,2.0000000000000284"/>
       <visibility xmi:id="_CANclEU2EeqiQLhfP_8_1Q" label="+"/>
-      <cardinality xmi:id="_CANclUU2EeqiQLhfP_8_1Q" label="1" max="1" min="1"/>
+      <cardinality xmi:id="_CANclUU2EeqiQLhfP_8_1Q" label="0..1" max="1"/>
     </sourceRole>
     <targetRole xmi:id="_CANclkU2EeqiQLhfP_8_1Q" name="pet">
       <modelElement href="UML-Lab.uml#_CAMOcUU2EeqiQLhfP_8_1Q"/>
       <visualProperties xmi:id="_CDDVMUU2EeqiQLhfP_8_1Q" position="27.0,2.0"/>
       <visibility xmi:id="_CANcl0U2EeqiQLhfP_8_1Q" label="+"/>
-      <cardinality xmi:id="_CANcmEU2EeqiQLhfP_8_1Q" label="1" max="1" min="1"/>
+      <cardinality xmi:id="_CANcmEU2EeqiQLhfP_8_1Q" label="1..*" max="-1" min="1"/>
     </targetRole>
   </edges>
   <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_ZdKPMEU2EeqiQLhfP_8_1Q" sourceAnchor="282.0,74.0" targetAnchor="0.0,99.0" target="_F7t0kELgEeqn1Yx1l3bFFQ" source="_XdPxoELgEeqn1Yx1l3bFFQ">
@@ -147,7 +150,7 @@
     <nameVisual xmi:id="_ZdKPMkU2EeqiQLhfP_8_1Q" text="">
       <visualProperties xmi:id="_Zf5aIUU2EeqiQLhfP_8_1Q" position="-0.5238095238095184,2.5"/>
     </nameVisual>
-    <sourceRole xmi:id="_ZdKPM0U2EeqiQLhfP_8_1Q" aggregationKind="NONE" name="comments">
+    <sourceRole xmi:id="_ZdKPM0U2EeqiQLhfP_8_1Q" aggregationKind="NONE" name="comment">
       <modelElement href="UML-Lab.uml#_ZdJBEUU2EeqiQLhfP_8_1Q"/>
       <visualProperties xmi:id="_Zf5aIEU2EeqiQLhfP_8_1Q" position="38.0,-46.5"/>
       <visibility xmi:id="_ZdKPNEU2EeqiQLhfP_8_1Q" label="+"/>
@@ -164,13 +167,13 @@
     <modelElement href="UML-Lab.uml#_yET6YELhEeqsu8CCrtRz3Q"/>
     <visualProperties xmi:id="_yEUhcULhEeqsu8CCrtRz3Q" position="537.0,31.0" size="216.0,-1.0"/>
     <visibility xmi:id="_yEUhckLhEeqsu8CCrtRz3Q" label="+"/>
-    <attributes xmi:id="_2R7KUELhEeqsu8CCrtRz3Q" name="age">
+    <attributes xmi:id="_2R7KUELhEeqsu8CCrtRz3Q" name="dateOfBirth">
       <modelElement href="UML-Lab.uml#_2R58MELhEeqsu8CCrtRz3Q"/>
       <visualProperties xmi:id="_PFdGckU0EeqiQLhfP_8_1Q"/>
       <visibility xmi:id="_2R7KUULhEeqsu8CCrtRz3Q" label="+"/>
       <cardinality xmi:id="_2R7KUkLhEeqsu8CCrtRz3Q" label="1" max="1" min="1"/>
-      <type xmi:id="_2R7KU0LhEeqsu8CCrtRz3Q" name="int">
-        <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+      <type xmi:id="_le4W0EVFEeqUGMj4hedUew" name="Date">
+        <modelElement href="UML-Lab.uml#_0luVwEUnEeqzEM0-RgJSnQ"/>
       </type>
     </attributes>
     <attributes xmi:id="_3IAdwELhEeqsu8CCrtRz3Q" name="name">
@@ -182,7 +185,7 @@
         <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
       </type>
     </attributes>
-    <attributes xmi:id="_4wZ-8ELhEeqsu8CCrtRz3Q" name="animalKind">
+    <attributes xmi:id="_4wZ-8ELhEeqsu8CCrtRz3Q" name="species">
       <modelElement href="UML-Lab.uml#_4wZX4ELhEeqsu8CCrtRz3Q"/>
       <visualProperties xmi:id="_PFdGdEU0EeqiQLhfP_8_1Q"/>
       <visibility xmi:id="_4wZ-8ULhEeqsu8CCrtRz3Q" label="+"/>
@@ -191,7 +194,7 @@
         <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
       </type>
     </attributes>
-    <attributes xmi:id="_5auHQELhEeqsu8CCrtRz3Q" name="race">
+    <attributes xmi:id="_5auHQELhEeqsu8CCrtRz3Q" name="breed">
       <modelElement href="UML-Lab.uml#_5as5IELhEeqsu8CCrtRz3Q"/>
       <visualProperties xmi:id="_PFdGdUU0EeqiQLhfP_8_1Q"/>
       <visibility xmi:id="_5auHQULhEeqsu8CCrtRz3Q" label="+"/>
@@ -209,7 +212,7 @@
         <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
       </type>
     </attributes>
-    <attributes xmi:id="_8nZeoELhEeqsu8CCrtRz3Q" name="pictures">
+    <attributes xmi:id="_8nZeoELhEeqsu8CCrtRz3Q" name="picture">
       <modelElement href="UML-Lab.uml#_8nY3kELhEeqsu8CCrtRz3Q"/>
       <visualProperties xmi:id="_PFdGd0U0EeqiQLhfP_8_1Q"/>
       <visibility xmi:id="_8nZeoULhEeqsu8CCrtRz3Q" label="+"/>
@@ -218,7 +221,7 @@
         <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#byte"/>
       </type>
     </attributes>
-    <attributes xmi:id="_-JFT0ELhEeqsu8CCrtRz3Q" name="idPet">
+    <attributes xmi:id="_-JFT0ELhEeqsu8CCrtRz3Q" name="id">
       <modelElement href="UML-Lab.uml#_-JEswELhEeqsu8CCrtRz3Q"/>
       <visualProperties xmi:id="_PFdGeEU0EeqiQLhfP_8_1Q"/>
       <stereotypes xmi:id="_L-S3UUUrEeqzEM0-RgJSnQ" name="PrimaryKey">
@@ -242,7 +245,7 @@
     <attributes xmi:id="_CANcmUU2EeqiQLhfP_8_1Q" name="advertisement">
       <modelElement href="UML-Lab.uml#_CALnYUU2EeqiQLhfP_8_1Q"/>
       <visibility xmi:id="_CANcmkU2EeqiQLhfP_8_1Q" label="+"/>
-      <cardinality xmi:id="_CANcm0U2EeqiQLhfP_8_1Q" label="1" max="1" min="1"/>
+      <cardinality xmi:id="_CANcm0U2EeqiQLhfP_8_1Q" label="0..1" max="1"/>
       <type xmi:id="_CANcnEU2EeqiQLhfP_8_1Q" name="Advertisement">
         <modelElement href="UML-Lab.uml#_PpEOMELhEeqsu8CCrtRz3Q"/>
       </type>
@@ -252,7 +255,7 @@
     <modelElement href="UML-Lab.uml#_PpEOMELhEeqsu8CCrtRz3Q"/>
     <visualProperties xmi:id="_PpE1QULhEeqsu8CCrtRz3Q" position="999.0,70.0" size="228.0,108.0"/>
     <visibility xmi:id="_PpE1QkLhEeqsu8CCrtRz3Q" label="+"/>
-    <attributes xmi:id="_T0UtsELhEeqsu8CCrtRz3Q" name="desciption">
+    <attributes xmi:id="_T0UtsELhEeqsu8CCrtRz3Q" name="description">
       <modelElement href="UML-Lab.uml#_T0UGoELhEeqsu8CCrtRz3Q"/>
       <visualProperties xmi:id="_PFdtgEU0EeqiQLhfP_8_1Q"/>
       <visibility xmi:id="_T0UtsULhEeqsu8CCrtRz3Q" label="+"/>
@@ -261,7 +264,7 @@
         <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
       </type>
     </attributes>
-    <attributes xmi:id="_UWeYgELhEeqsu8CCrtRz3Q" name="idAd">
+    <attributes xmi:id="_UWeYgELhEeqsu8CCrtRz3Q" name="id">
       <modelElement href="UML-Lab.uml#_UWdKYELhEeqsu8CCrtRz3Q"/>
       <visualProperties xmi:id="_PFdtgUU0EeqiQLhfP_8_1Q"/>
       <stereotypes xmi:id="_KMWYkEUrEeqzEM0-RgJSnQ" name="PrimaryKey">
@@ -273,7 +276,7 @@
         <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
       </type>
     </attributes>
-    <attributes xmi:id="_VuXYgELhEeqsu8CCrtRz3Q" name="isCompleted">
+    <attributes xmi:id="_VuXYgELhEeqsu8CCrtRz3Q" name="isFulfilled">
       <modelElement href="UML-Lab.uml#_VuWKYELhEeqsu8CCrtRz3Q"/>
       <visualProperties xmi:id="_PFdtgkU0EeqiQLhfP_8_1Q"/>
       <visibility xmi:id="_VuXYgULhEeqsu8CCrtRz3Q" label="+"/>
@@ -296,7 +299,7 @@
         <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#double"/>
       </type>
     </attributes>
-    <attributes xmi:id="_ZDPCkELhEeqsu8CCrtRz3Q" name="idDonation">
+    <attributes xmi:id="_ZDPCkELhEeqsu8CCrtRz3Q" name="id">
       <modelElement href="UML-Lab.uml#_ZDObgELhEeqsu8CCrtRz3Q"/>
       <visualProperties xmi:id="_PFdthEU0EeqiQLhfP_8_1Q"/>
       <stereotypes xmi:id="_JmvKEEUrEeqzEM0-RgJSnQ" name="PrimaryKey">
@@ -311,25 +314,7 @@
         <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
       </type>
     </attributes>
-    <attributes xmi:id="_eC-TAELhEeqsu8CCrtRz3Q" name="yearOfDonation">
-      <modelElement href="UML-Lab.uml#_eC9E4ELhEeqsu8CCrtRz3Q"/>
-      <visualProperties xmi:id="_PFeUkEU0EeqiQLhfP_8_1Q"/>
-      <visibility xmi:id="_eC-TAULhEeqsu8CCrtRz3Q" label="+"/>
-      <cardinality xmi:id="_eC-TAkLhEeqsu8CCrtRz3Q" label="1" max="1" min="1"/>
-      <type xmi:id="_ODNcwEUoEeqzEM0-RgJSnQ" name="Date">
-        <modelElement href="UML-Lab.uml#_0luVwEUnEeqzEM0-RgJSnQ"/>
-      </type>
-    </attributes>
-    <attributes xmi:id="_qa4q4ELhEeqsu8CCrtRz3Q" name="monthOfDonation">
-      <modelElement href="UML-Lab.uml#_qa3cwELhEeqsu8CCrtRz3Q"/>
-      <visualProperties xmi:id="_PFeUkUU0EeqiQLhfP_8_1Q"/>
-      <visibility xmi:id="_qa4q4ULhEeqsu8CCrtRz3Q" label="+"/>
-      <cardinality xmi:id="_qa4q4kLhEeqsu8CCrtRz3Q" label="1" max="1" min="1"/>
-      <type xmi:id="_Oer30EUoEeqzEM0-RgJSnQ" name="Date">
-        <modelElement href="UML-Lab.uml#_0luVwEUnEeqzEM0-RgJSnQ"/>
-      </type>
-    </attributes>
-    <attributes xmi:id="_rpz8IELhEeqsu8CCrtRz3Q" name="dayOfDonation">
+    <attributes xmi:id="_rpz8IELhEeqsu8CCrtRz3Q" name="date">
       <modelElement href="UML-Lab.uml#_rpyuAELhEeqsu8CCrtRz3Q"/>
       <visualProperties xmi:id="_PFeUkkU0EeqiQLhfP_8_1Q"/>
       <visibility xmi:id="_rpz8IULhEeqsu8CCrtRz3Q" label="+"/>
@@ -341,12 +326,12 @@
     <attributes xmi:id="_ut0qQELiEeqsu8CCrtRz3Q" name="user">
       <modelElement href="UML-Lab.uml#_utyOBELiEeqsu8CCrtRz3Q"/>
       <visibility xmi:id="_ut0qQULiEeqsu8CCrtRz3Q" label="+"/>
-      <cardinality xmi:id="_ut0qQkLiEeqsu8CCrtRz3Q" label="1" max="1" min="1"/>
+      <cardinality xmi:id="_ut0qQkLiEeqsu8CCrtRz3Q" label="0..1" max="1"/>
       <type xmi:id="_ut0qQ0LiEeqsu8CCrtRz3Q" name="User">
         <modelElement href="UML-Lab.uml#_F7qKMELgEeqn1Yx1l3bFFQ"/>
       </type>
     </attributes>
-    <attributes xmi:id="_Py-KMEUoEeqzEM0-RgJSnQ" name="timeOfDonation">
+    <attributes xmi:id="_Py-KMEUoEeqzEM0-RgJSnQ" name="time">
       <modelElement href="UML-Lab.uml#_Py88EEUoEeqzEM0-RgJSnQ"/>
       <visualProperties xmi:id="_PFeUk0U0EeqiQLhfP_8_1Q"/>
       <visibility xmi:id="_Py-KMUUoEeqzEM0-RgJSnQ" label="+"/>
@@ -393,7 +378,7 @@
     <modelElement href="UML-Lab.uml#_F7qKMELgEeqn1Yx1l3bFFQ"/>
     <visualProperties xmi:id="_F7t0kULgEeqn1Yx1l3bFFQ" position="514.0,414.0" size="262.0,199.0"/>
     <visibility xmi:id="_F7t0kkLgEeqn1Yx1l3bFFQ" label="+"/>
-    <attributes xmi:id="_JbCbIULgEeqn1Yx1l3bFFQ" name="name">
+    <attributes xmi:id="_JbCbIULgEeqn1Yx1l3bFFQ" name="userName">
       <modelElement href="UML-Lab.uml#_JbCbIELgEeqn1Yx1l3bFFQ"/>
       <visualProperties xmi:id="_PFbRQEU0EeqiQLhfP_8_1Q"/>
       <stereotypes xmi:id="_4wJ4YEUzEeqiQLhfP_8_1Q" name="StyledElement">
@@ -453,7 +438,7 @@
         <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
       </type>
     </attributes>
-    <attributes xmi:id="_W8tQYELgEeqn1Yx1l3bFFQ" name="idUser">
+    <attributes xmi:id="_W8tQYELgEeqn1Yx1l3bFFQ" name="id">
       <modelElement href="UML-Lab.uml#_W8spUELgEeqn1Yx1l3bFFQ"/>
       <visualProperties xmi:id="_PFb4U0U0EeqiQLhfP_8_1Q"/>
       <stereotypes xmi:id="_I8esIEUrEeqzEM0-RgJSnQ" name="PrimaryKey">
@@ -468,7 +453,7 @@
         <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
       </type>
     </attributes>
-    <attributes xmi:id="_R7EPkELtEeqbwb4BnY-qfw" name="picture">
+    <attributes xmi:id="_R7EPkELtEeqbwb4BnY-qfw" name="profilePicture">
       <modelElement href="UML-Lab.uml#_R7CaYELtEeqbwb4BnY-qfw"/>
       <visualProperties xmi:id="_PFb4VEU0EeqiQLhfP_8_1Q"/>
       <stereotypes xmi:id="_4wTCUEUzEeqiQLhfP_8_1Q" name="StyledElement">
@@ -483,9 +468,9 @@
     <attributes xmi:id="_Sv0LQEUnEeqzEM0-RgJSnQ" name="staffOrCustomer">
       <modelElement href="UML-Lab.uml#_SvzkMEUnEeqzEM0-RgJSnQ"/>
       <visualProperties xmi:id="_PFcfYEU0EeqiQLhfP_8_1Q"/>
-      <stereotypes xmi:id="_4vWnIEUzEeqiQLhfP_8_1Q" name="StyledElement">
-        <modelElement href="UML-Lab.uml#_4uXvs0UzEeqiQLhfP_8_1Q"/>
-      </stereotypes>
+      <stereotypes xmi:id="_YPZdwEVFEeqUGMj4hedUew" name="StyledElement"/>
+      <stereotypes xmi:id="_YPchEEVFEeqUGMj4hedUew" name="StyledElement"/>
+      <stereotypes xmi:id="_YPhZkEVFEeqUGMj4hedUew" name="StyledElement"/>
       <visibility xmi:id="_Sv0LQUUnEeqzEM0-RgJSnQ" label="+"/>
       <cardinality xmi:id="_Sv0LQkUnEeqzEM0-RgJSnQ" label="1" max="1" min="1"/>
       <type xmi:id="_4vVZAEUzEeqiQLhfP_8_1Q" name="StaffOrCustomer">
@@ -505,16 +490,7 @@
     <modelElement href="UML-Lab.uml#_XdPKkELgEeqn1Yx1l3bFFQ"/>
     <visualProperties xmi:id="_XdPxoULgEeqn1Yx1l3bFFQ" position="10.0,439.0" size="282.0,-1.0"/>
     <visibility xmi:id="_XdPxokLgEeqn1Yx1l3bFFQ" label="+"/>
-    <attributes xmi:id="_bTylYULgEeqn1Yx1l3bFFQ" name="yearOfPost">
-      <modelElement href="UML-Lab.uml#_bTylYELgEeqn1Yx1l3bFFQ"/>
-      <visualProperties xmi:id="_PFcfYUU0EeqiQLhfP_8_1Q"/>
-      <visibility xmi:id="_bTylYkLgEeqn1Yx1l3bFFQ" label="+"/>
-      <cardinality xmi:id="_bTylY0LgEeqn1Yx1l3bFFQ" label="1" max="1" min="1"/>
-      <type xmi:id="_9aFuYEUnEeqzEM0-RgJSnQ" name="Date">
-        <modelElement href="UML-Lab.uml#_0luVwEUnEeqzEM0-RgJSnQ"/>
-      </type>
-    </attributes>
-    <attributes xmi:id="_cGUOgELgEeqn1Yx1l3bFFQ" name="dayOfPost">
+    <attributes xmi:id="_cGUOgELgEeqn1Yx1l3bFFQ" name="datePosted">
       <modelElement href="UML-Lab.uml#_cGTAYELgEeqn1Yx1l3bFFQ"/>
       <visualProperties xmi:id="_PFcfYkU0EeqiQLhfP_8_1Q"/>
       <visibility xmi:id="_cGUOgULgEeqn1Yx1l3bFFQ" label="+"/>
@@ -523,7 +499,7 @@
         <modelElement href="UML-Lab.uml#_0luVwEUnEeqzEM0-RgJSnQ"/>
       </type>
     </attributes>
-    <attributes xmi:id="_dMDHgELgEeqn1Yx1l3bFFQ" name="idComment">
+    <attributes xmi:id="_dMDHgELgEeqn1Yx1l3bFFQ" name="id">
       <modelElement href="UML-Lab.uml#_dMB5YELgEeqn1Yx1l3bFFQ"/>
       <visualProperties xmi:id="_PFcfY0U0EeqiQLhfP_8_1Q"/>
       <stereotypes xmi:id="_LUAkMEUrEeqzEM0-RgJSnQ" name="PrimaryKey">
@@ -535,15 +511,6 @@
         <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
       </type>
     </attributes>
-    <attributes xmi:id="_ekmO0ELgEeqn1Yx1l3bFFQ" name="montOfPost">
-      <modelElement href="UML-Lab.uml#_eklAsELgEeqn1Yx1l3bFFQ"/>
-      <visualProperties xmi:id="_PFcfZEU0EeqiQLhfP_8_1Q"/>
-      <visibility xmi:id="_ekmO0ULgEeqn1Yx1l3bFFQ" label="+"/>
-      <cardinality xmi:id="_ekmO0kLgEeqn1Yx1l3bFFQ" label="1" max="1" min="1"/>
-      <type xmi:id="_-dXwUEUnEeqzEM0-RgJSnQ" name="Date">
-        <modelElement href="UML-Lab.uml#_0luVwEUnEeqzEM0-RgJSnQ"/>
-      </type>
-    </attributes>
     <attributes xmi:id="_fMVkQELgEeqn1Yx1l3bFFQ" name="text">
       <modelElement href="UML-Lab.uml#_fMU9MELgEeqn1Yx1l3bFFQ"/>
       <visualProperties xmi:id="_PFcfZUU0EeqiQLhfP_8_1Q"/>
@@ -553,7 +520,7 @@
         <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
       </type>
     </attributes>
-    <attributes xmi:id="__ZUbMEUnEeqzEM0-RgJSnQ" name="commentTime">
+    <attributes xmi:id="__ZUbMEUnEeqzEM0-RgJSnQ" name="comment">
       <modelElement href="UML-Lab.uml#__ZSmAEUnEeqzEM0-RgJSnQ"/>
       <visualProperties xmi:id="_PFcfZkU0EeqiQLhfP_8_1Q"/>
       <visibility xmi:id="__ZUbMUUnEeqzEM0-RgJSnQ" label="+"/>
@@ -562,20 +529,20 @@
         <modelElement href="UML-Lab.uml#_1k8XEEUnEeqzEM0-RgJSnQ"/>
       </type>
     </attributes>
-    <attributes xmi:id="_BDyQkEU2EeqiQLhfP_8_1Q" name="forum">
-      <modelElement href="UML-Lab.uml#__lXx0UU1EeqiQLhfP_8_1Q"/>
-      <visibility xmi:id="_BDyQkUU2EeqiQLhfP_8_1Q" label="+"/>
-      <cardinality xmi:id="_BDyQkkU2EeqiQLhfP_8_1Q" label="1" max="1" min="1"/>
-      <type xmi:id="_BDyQk0U2EeqiQLhfP_8_1Q" name="Forum">
-        <modelElement href="UML-Lab.uml#_GVMPEELhEeqsu8CCrtRz3Q"/>
+    <attributes xmi:id="_EX9j0EVGEeqUGMj4hedUew" name="user">
+      <modelElement href="UML-Lab.uml#_ZdJoIEU2EeqiQLhfP_8_1Q"/>
+      <visibility xmi:id="_EX9j0UVGEeqUGMj4hedUew" label="+"/>
+      <cardinality xmi:id="_EX9j0kVGEeqUGMj4hedUew" label="1" max="1" min="1"/>
+      <type xmi:id="_EX9j00VGEeqUGMj4hedUew" name="User">
+        <modelElement href="UML-Lab.uml#_F7qKMELgEeqn1Yx1l3bFFQ"/>
       </type>
     </attributes>
-    <attributes xmi:id="_ZdK2QEU2EeqiQLhfP_8_1Q" name="user">
-      <modelElement href="UML-Lab.uml#_ZdJoIEU2EeqiQLhfP_8_1Q"/>
-      <visibility xmi:id="_ZdK2QUU2EeqiQLhfP_8_1Q" label="+"/>
-      <cardinality xmi:id="_ZdK2QkU2EeqiQLhfP_8_1Q" label="1" max="1" min="1"/>
-      <type xmi:id="_ZdK2Q0U2EeqiQLhfP_8_1Q" name="User">
-        <modelElement href="UML-Lab.uml#_F7qKMELgEeqn1Yx1l3bFFQ"/>
+    <attributes xmi:id="_R_E5wEVGEeqUGMj4hedUew" name="forum">
+      <modelElement href="UML-Lab.uml#__lXx0UU1EeqiQLhfP_8_1Q"/>
+      <visibility xmi:id="_R_E5wUVGEeqUGMj4hedUew" label="+"/>
+      <cardinality xmi:id="_R_E5wkVGEeqUGMj4hedUew" label="1" max="1" min="1"/>
+      <type xmi:id="_R_E5w0VGEeqUGMj4hedUew" name="Forum">
+        <modelElement href="UML-Lab.uml#_GVMPEELhEeqsu8CCrtRz3Q"/>
       </type>
     </attributes>
   </nodes>
@@ -592,7 +559,7 @@
         <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
       </type>
     </attributes>
-    <attributes xmi:id="_KG4_EELhEeqsu8CCrtRz3Q" name="idForum">
+    <attributes xmi:id="_KG4_EELhEeqsu8CCrtRz3Q" name="id">
       <modelElement href="UML-Lab.uml#_KG3J4ELhEeqsu8CCrtRz3Q"/>
       <visualProperties xmi:id="_PFdGcUU0EeqiQLhfP_8_1Q"/>
       <stereotypes xmi:id="_Kw_WsEUrEeqzEM0-RgJSnQ" name="PrimaryKey">
@@ -607,12 +574,20 @@
         <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
       </type>
     </attributes>
-    <attributes xmi:id="_q3yz6ULiEeqsu8CCrtRz3Q" name="users">
+    <attributes xmi:id="_q3yz6ULiEeqsu8CCrtRz3Q" name="subscribers">
       <modelElement href="UML-Lab.uml#_q3wXoULiEeqsu8CCrtRz3Q"/>
       <visibility xmi:id="_q3yz6kLiEeqsu8CCrtRz3Q" label="+"/>
       <cardinality xmi:id="_q3yz60LiEeqsu8CCrtRz3Q" label="*" max="-1"/>
       <type xmi:id="_q3yz7ELiEeqsu8CCrtRz3Q" name="User">
         <modelElement href="UML-Lab.uml#_F7qKMELgEeqn1Yx1l3bFFQ"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_POxVUEVGEeqUGMj4hedUew" name="comments">
+      <modelElement href="UML-Lab.uml#__lYY4EU1EeqiQLhfP_8_1Q"/>
+      <visibility xmi:id="_POxVUUVGEeqUGMj4hedUew" label="+"/>
+      <cardinality xmi:id="_POxVUkVGEeqUGMj4hedUew" label="1..*" max="-1" min="1"/>
+      <type xmi:id="_POxVU0VGEeqUGMj4hedUew" name="Comments">
+        <modelElement href="UML-Lab.uml#_XdPKkELgEeqn1Yx1l3bFFQ"/>
       </type>
     </attributes>
   </nodes>
