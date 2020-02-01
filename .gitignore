@@ -6,3 +6,5 @@ build/
 
 # Ignore the MacOS DS_Store file
 .DS_Store/
+
+.settings/
