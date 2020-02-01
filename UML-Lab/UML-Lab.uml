@@ -4,7 +4,7 @@
     <eAnnotations xmi:id="_CGk2MEUpEeqzEM0-RgJSnQ" source="http://ns.yatta.de/umllab">
       <contents xmi:type="ecore:EAnnotation" xmi:id="_CGk2MUUpEeqzEM0-RgJSnQ" source="codegen">
         <details xmi:id="_CGk2MkUpEeqzEM0-RgJSnQ" key="codegenDirectory" value="/UML-Lab/src-gen"/>
-        <details xmi:id="_N_w_0EUrEeqzEM0-RgJSnQ" key="AssociatedSourceCode" value="/UML-Lab/src-gen/StaffOrCustomer.java;2334250590/1;/UML-Lab/src-gen/Gender.java;4081524722/1;/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/Donation.java;3010748574/1;/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/Advertisement.java;2275377688/1;/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/User.java;64949935/1;/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/Forum.java;3137641100/1;/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/Pet.java;4252685414/1;/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/Comments.java;1746986851/1;"/>
+        <details xmi:id="_N_w_0EUrEeqzEM0-RgJSnQ" key="AssociatedSourceCode" value="/UML-Lab/src-gen/StaffOrCustomer.java;2334250590/1;/UML-Lab/src-gen/Gender.java;4081524722/1;/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/Donation.java;3010748574/1;/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/Advertisement.java;2275377688/1;/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/User.java;1752152450/1;/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/Forum.java;3137641100/1;/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/Pet.java;4252685414/1;/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/Comments.java;1746986851/1;"/>
       </contents>
     </eAnnotations>
     <elementImport xmi:id="_I6MX4ELgEeqn1Yx1l3bFFQ">
@@ -53,22 +53,6 @@
       </ownedEnd>
     </packagedElement>
     <packagedElement xmi:type="uml:DataType" xmi:id="_LVhe8ELtEeqbwb4BnY-qfw" name="byteArray"/>
-    <packagedElement xmi:type="uml:Enumeration" xmi:id="_M8PqIEUnEeqzEM0-RgJSnQ" name="StaffOrCustomer">
-      <ownedAttribute xmi:id="_O2LnQEUnEeqzEM0-RgJSnQ" name="staff">
-        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-      </ownedAttribute>
-      <ownedAttribute xmi:id="_Prs6AEUnEeqzEM0-RgJSnQ" name="customer">
-        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-      </ownedAttribute>
-    </packagedElement>
-    <packagedElement xmi:type="uml:Enumeration" xmi:id="_T3j2cEUnEeqzEM0-RgJSnQ" name="Gender">
-      <ownedAttribute xmi:id="_WkCq0EUnEeqzEM0-RgJSnQ" name="male">
-        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-      </ownedAttribute>
-      <ownedAttribute xmi:id="_XRF-EEUnEeqzEM0-RgJSnQ" name="female">
-        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-      </ownedAttribute>
-    </packagedElement>
     <packagedElement xmi:type="uml:Package" xmi:id="_nv1ocEUnEeqzEM0-RgJSnQ" name="ca">
       <packagedElement xmi:type="uml:Package" xmi:id="_pC2vgEUnEeqzEM0-RgJSnQ" name="mcgill" visibility="public">
         <packagedElement xmi:type="uml:Package" xmi:id="_rHgH0EUnEeqzEM0-RgJSnQ" name="ecse321" visibility="public">
@@ -123,7 +107,7 @@
                 <ownedAttribute xmi:id="_R7CaYELtEeqbwb4BnY-qfw" name="picture">
                   <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#byte"/>
                 </ownedAttribute>
-                <ownedAttribute xmi:id="_SvzkMEUnEeqzEM0-RgJSnQ" name="staffOrCustomer" type="_M8PqIEUnEeqzEM0-RgJSnQ"/>
+                <ownedAttribute xmi:id="_SvzkMEUnEeqzEM0-RgJSnQ" name="staffOrCustomer" type="_4vIksEUzEeqiQLhfP_8_1Q" association="_4vSVsEUzEeqiQLhfP_8_1Q"/>
                 <ownedAttribute xmi:id="_zKa7xEUvEeqzEM0-RgJSnQ" name="pets" type="_yET6YELhEeqsu8CCrtRz3Q" association="_zKa7wEUvEeqzEM0-RgJSnQ">
                   <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_zKa7xUUvEeqzEM0-RgJSnQ"/>
                   <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_zKa7xkUvEeqzEM0-RgJSnQ" value="*"/>
@@ -207,17 +191,43 @@
                   <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_00-ZEkUvEeqzEM0-RgJSnQ" value="1"/>
                 </ownedEnd>
               </packagedElement>
+              <packagedElement xmi:type="uml:Class" xmi:id="_4vIksEUzEeqiQLhfP_8_1Q" name="StaffOrCustomer"/>
+              <packagedElement xmi:type="uml:Association" xmi:id="_4vSVsEUzEeqiQLhfP_8_1Q" name="" memberEnd="_SvzkMEUnEeqzEM0-RgJSnQ _4vSVsUUzEeqiQLhfP_8_1Q">
+                <ownedEnd xmi:id="_4vSVsUUzEeqiQLhfP_8_1Q" name="" type="_F7qKMELgEeqn1Yx1l3bFFQ" association="_4vSVsEUzEeqiQLhfP_8_1Q"/>
+              </packagedElement>
+              <packagedElement xmi:type="uml:Enumeration" xmi:id="_T3j2cEUnEeqzEM0-RgJSnQ" name="Gender">
+                <ownedAttribute xmi:id="_WkCq0EUnEeqzEM0-RgJSnQ" name="male">
+                  <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                </ownedAttribute>
+                <ownedAttribute xmi:id="_XRF-EEUnEeqzEM0-RgJSnQ" name="female">
+                  <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+                </ownedAttribute>
+              </packagedElement>
+              <packagedElement xmi:type="uml:Package" xmi:id="_V9euMEU0EeqiQLhfP_8_1Q" name="java">
+                <packagedElement xmi:type="uml:Package" xmi:id="_V9fVQEU0EeqiQLhfP_8_1Q" name="sql">
+                  <packagedElement xmi:type="uml:DataType" xmi:id="_0luVwEUnEeqzEM0-RgJSnQ" name="Date"/>
+                  <packagedElement xmi:type="uml:DataType" xmi:id="_1k8XEEUnEeqzEM0-RgJSnQ" name="Time"/>
+                </packagedElement>
+              </packagedElement>
             </packagedElement>
           </packagedElement>
         </packagedElement>
       </packagedElement>
     </packagedElement>
     <packagedElement xmi:type="uml:Package" xmi:id="_7XzGgEUnEeqzEM0-RgJSnQ" name="java">
-      <packagedElement xmi:type="uml:Package" xmi:id="_7X0UoEUnEeqzEM0-RgJSnQ" name="sql">
-        <packagedElement xmi:type="uml:DataType" xmi:id="_0luVwEUnEeqzEM0-RgJSnQ" name="Date"/>
-        <packagedElement xmi:type="uml:DataType" xmi:id="_1k8XEEUnEeqzEM0-RgJSnQ" name="Time"/>
+      <packagedElement xmi:type="uml:Package" xmi:id="_7X0UoEUnEeqzEM0-RgJSnQ" name="sql"/>
+      <packagedElement xmi:type="uml:Package" xmi:id="_4uSQIEUzEeqiQLhfP_8_1Q" name="util">
+        <packagedElement xmi:type="uml:Class" xmi:id="_4u4GAUUzEeqiQLhfP_8_1Q" name="Set"/>
       </packagedElement>
     </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_4uRCAEUzEeqiQLhfP_8_1Q" name="javax">
+      <packagedElement xmi:type="uml:Package" xmi:id="_4uRpEEUzEeqiQLhfP_8_1Q" name="persistence">
+        <packagedElement xmi:type="uml:Class" xmi:id="_4udPQEUzEeqiQLhfP_8_1Q" name="Entity"/>
+        <packagedElement xmi:type="uml:Class" xmi:id="_4ulyIUUzEeqiQLhfP_8_1Q" name="Id"/>
+        <packagedElement xmi:type="uml:Class" xmi:id="_4vBP8UUzEeqiQLhfP_8_1Q" name="OneToMany"/>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_4uu8EUUzEeqiQLhfP_8_1Q" name="StaffOrCustomer"/>
     <profileApplication xmi:id="_LVhe8ULtEeqbwb4BnY-qfw">
       <eAnnotations xmi:id="_LVhe8kLtEeqbwb4BnY-qfw" source="http://www.eclipse.org/uml2/2.0.0/UML">
         <references xmi:type="ecore:EPackage" href="pathmap://UMLLAB_PROFILES/UMLLab.profile.uml#UMLLabProfile-Annotation_2-UMLLabProfile"/>
@@ -244,4 +254,17 @@
   <Persistency:PrimaryKeyJoinColumns xmi:id="_K7QtAEUrEeqzEM0-RgJSnQ" base_Element="_KG3J4ELhEeqsu8CCrtRz3Q"/>
   <Persistency:PrimaryKey xmi:id="_LT_9IEUrEeqzEM0-RgJSnQ" base_Property="_dMB5YELgEeqn1Yx1l3bFFQ"/>
   <Persistency:PrimaryKey xmi:id="_L-S3UEUrEeqzEM0-RgJSnQ" base_Property="_-JEswELhEeqsu8CCrtRz3Q"/>
+  <UMLLabProfile:StyledElement xmi:id="_4uV6gEUzEeqiQLhfP_8_1Q" base_Element="_JbCbIELgEeqn1Yx1l3bFFQ"/>
+  <UMLLabProfile:StyledElement xmi:id="_4uXIoEUzEeqiQLhfP_8_1Q" base_Element="_KUOF4ELgEeqn1Yx1l3bFFQ"/>
+  <UMLLabProfile:StyledElement xmi:id="_4uXIoUUzEeqiQLhfP_8_1Q" base_Element="_LpOxAELgEeqn1Yx1l3bFFQ"/>
+  <UMLLabProfile:StyledElement xmi:id="_4uXvsEUzEeqiQLhfP_8_1Q" base_Element="_MeK08ELgEeqn1Yx1l3bFFQ"/>
+  <UMLLabProfile:StyledElement xmi:id="_4uXvsUUzEeqiQLhfP_8_1Q" base_Element="_NxwjwELgEeqn1Yx1l3bFFQ"/>
+  <UMLLabProfile:StyledElement xmi:id="_4uXvskUzEeqiQLhfP_8_1Q" base_Element="_R7CaYELtEeqbwb4BnY-qfw"/>
+  <UMLLabProfile:StyledElement xmi:id="_4uXvs0UzEeqiQLhfP_8_1Q" base_Element="_SvzkMEUnEeqzEM0-RgJSnQ"/>
+  <UMLLabProfile:Reference xmi:id="_4ulyIEUzEeqiQLhfP_8_1Q" base_Element="_4udPQEUzEeqiQLhfP_8_1Q"/>
+  <UMLLabProfile:Reference xmi:id="_4uu8EEUzEeqiQLhfP_8_1Q" base_Element="_4ulyIUUzEeqiQLhfP_8_1Q"/>
+  <UMLLabProfile:Reference xmi:id="_4u4GAEUzEeqiQLhfP_8_1Q" base_Element="_4uu8EUUzEeqiQLhfP_8_1Q"/>
+  <UMLLabProfile:Reference xmi:id="_4vBP8EUzEeqiQLhfP_8_1Q" base_Element="_4u4GAUUzEeqiQLhfP_8_1Q"/>
+  <UMLLabProfile:Reference xmi:id="_4vHWkEUzEeqiQLhfP_8_1Q" base_Element="_4vBP8UUzEeqiQLhfP_8_1Q"/>
+  <UMLLabProfile:Reference xmi:id="_4vRuoEUzEeqiQLhfP_8_1Q" base_Element="_4vIksEUzEeqiQLhfP_8_1Q"/>
 </xmi:XMI>
