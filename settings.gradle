@@ -1,1 +1,2 @@
-include ':EventRegistration-Backend'
+rootProject.name - 'petshelter'
+include ':PetShelter-Backend'
