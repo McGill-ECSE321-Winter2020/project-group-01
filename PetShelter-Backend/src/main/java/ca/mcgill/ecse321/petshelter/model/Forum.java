@@ -40,14 +40,14 @@ public long getId() {
       this.subscribers = subscriberss;
    }
    
-   private Set<Comments> comments;
+   private Set<Comment> comments;
    
    @OneToMany(mappedBy="forum" , cascade={CascadeType.ALL})
-   public Set<Comments> getComments() {
+   public Set<Comment> getComments() {
       return this.comments;
    }
    
-   public void setComments(Set<Comments> commentss) {
+   public void setComments(Set<Comment> commentss) {
       this.comments = commentss;
    }
    
