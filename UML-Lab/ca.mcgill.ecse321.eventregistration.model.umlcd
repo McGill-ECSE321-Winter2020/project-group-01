@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.yattasolutions.uml.diagrams.classifier:ClassDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com.yattasolutions.diagrams="http://ns.yatta-solutions.com/umllab/diagrams/1.1.0" xmlns:com.yattasolutions.uml.diagrams.classifier="http://ns.yatta-solutions.com/umllab/diagrams/classifier/1.1.0" xmi:id="_yGbYYEPgEeqitd51iBwtiw">
+  <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_yDbuwEPgEeqitd51iBwtiw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_1X56wUPhEeqI5YgxX-63wA" sourceAnchor="92.0,43.0" targetAnchor="2.0,24.0" enclosingItem="_ykEhMUPhEeqI5YgxX-63wA" containedItem="_1YDrwEPhEeqI5YgxX-63wA"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_2F-hsEPhEeqI5YgxX-63wA" sourceAnchor="47.0,16.0" targetAnchor="2.0,29.0" enclosingItem="_1YDrwEPhEeqI5YgxX-63wA" containedItem="_2F-hsUPhEeqI5YgxX-63wA">
+    <bendpoints xmi:id="_6lW9cUPpEeqm2LFU6lhHcQ" sourceY="-103" targetX="-65"/>
+  </edges>
+  <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_2nt80UPhEeqI5YgxX-63wA" sourceAnchor="82.0,16.0" targetAnchor="47.0,56.0" enclosingItem="_2F-hsUPhEeqI5YgxX-63wA" containedItem="_2nt80kPhEeqI5YgxX-63wA"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_4IjdcUPhEeqI5YgxX-63wA" sourceAnchor="2.0,29.0" targetAnchor="66.0,56.0" enclosingItem="_2nt80kPhEeqI5YgxX-63wA" containedItem="_4IsnYEPhEeqI5YgxX-63wA">
+    <bendpoints xmi:id="_6lW9cEPpEeqm2LFU6lhHcQ" sourceX="-67" targetY="60"/>
+  </edges>
+  <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_GwhIMEPpEeqm2LFU6lhHcQ" sourceAnchor="41.0,0.0" targetAnchor="47.0,56.0" enclosingItem="_4IsnYEPhEeqI5YgxX-63wA" containedItem="_6nqkMUPhEeqI5YgxX-63wA"/>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_hppGwEPpEeqm2LFU6lhHcQ" sourceAnchor="96.0,0.0" targetAnchor="70.0,70.0" target="_6nqkMUPhEeqI5YgxX-63wA" source="_SlHXoEPpEeqm2LFU6lhHcQ">
+    <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_hpnRkEPpEeqm2LFU6lhHcQ"/>
+    <visualProperties xmi:id="_hppGwUPpEeqm2LFU6lhHcQ"/>
+    <nameVisual xmi:id="_hppGwkPpEeqm2LFU6lhHcQ" text="">
+      <visualProperties xmi:id="_hsWcgEPpEeqm2LFU6lhHcQ" position="-13.0,-9.0"/>
+    </nameVisual>
+    <sourceRole xmi:id="_hppGw0PpEeqm2LFU6lhHcQ" aggregationKind="NONE" name="registrationManager" navigable="true">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_hpnRkUPpEeqm2LFU6lhHcQ"/>
+      <visualProperties xmi:id="_hsV1cEPpEeqm2LFU6lhHcQ" position="-163.0,-46.0"/>
+      <visibility xmi:id="_hppGxEPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_hppGxUPpEeqm2LFU6lhHcQ" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_hppGxkPpEeqm2LFU6lhHcQ" name="participants" navigable="true">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_hpn4okPpEeqm2LFU6lhHcQ"/>
+      <visualProperties xmi:id="_hsWcgUPpEeqm2LFU6lhHcQ" position="2.0,14.0"/>
+      <visibility xmi:id="_hppGx0PpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_hppGyEPpEeqm2LFU6lhHcQ" label="*" max="-1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_iZyKQEPpEeqm2LFU6lhHcQ" sourceAnchor="163.0,26.0" targetAnchor="55.0,54.0" target="_U9qjYEPpEeqm2LFU6lhHcQ" source="_SlHXoEPpEeqm2LFU6lhHcQ">
+    <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_iZsDoEPpEeqm2LFU6lhHcQ"/>
+    <visualProperties xmi:id="_iZyKQUPpEeqm2LFU6lhHcQ"/>
+    <bendpoints xmi:id="_6lW9ckPpEeqm2LFU6lhHcQ" sourceX="487" targetY="27"/>
+    <nameVisual xmi:id="_iZyKQkPpEeqm2LFU6lhHcQ" text="">
+      <visualProperties xmi:id="_ibyVYUPpEeqm2LFU6lhHcQ" position="-12.5,-20.666666666666686"/>
+    </nameVisual>
+    <sourceRole xmi:id="_iZyKQ0PpEeqm2LFU6lhHcQ" aggregationKind="NONE" name="registrationManager" navigable="true">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_iZsqsEPpEeqm2LFU6lhHcQ"/>
+      <visualProperties xmi:id="_ibyVYEPpEeqm2LFU6lhHcQ" position="29.875,-46.0"/>
+      <visibility xmi:id="_iZyKREPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_iZyKRUPpEeqm2LFU6lhHcQ" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_iZyKRkPpEeqm2LFU6lhHcQ" name="registrations" navigable="true">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_iZtRwkPpEeqm2LFU6lhHcQ"/>
+      <visualProperties xmi:id="_ibyVYkPpEeqm2LFU6lhHcQ" position="-134.1428571428571,-20.0"/>
+      <visibility xmi:id="_iZyKR0PpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_iZyKSEPpEeqm2LFU6lhHcQ" label="*" max="-1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_p9PUoEPpEeqm2LFU6lhHcQ" sourceAnchor="85.0,54.0" targetAnchor="174.0,65.0" target="_V1e8MEPpEeqm2LFU6lhHcQ" source="_U9qjYEPpEeqm2LFU6lhHcQ">
+    <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_p9JOAEPpEeqm2LFU6lhHcQ"/>
+    <visualProperties xmi:id="_p9PUoUPpEeqm2LFU6lhHcQ"/>
+    <bendpoints xmi:id="_6lXkgkPpEeqm2LFU6lhHcQ" sourceY="250" targetX="161"/>
+    <nameVisual xmi:id="_p9PUokPpEeqm2LFU6lhHcQ" text="">
+      <visualProperties xmi:id="_qALT4UPpEeqm2LFU6lhHcQ" position="-80.79999999999995,-19.0"/>
+    </nameVisual>
+    <sourceRole xmi:id="_p9PUo0PpEeqm2LFU6lhHcQ" aggregationKind="NONE" name="registration">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_p9J1EEPpEeqm2LFU6lhHcQ"/>
+      <visualProperties xmi:id="_qALT4EPpEeqm2LFU6lhHcQ" position="-76.5,34.833333333333314"/>
+      <visibility xmi:id="_p9PUpEPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_p9PUpUPpEeqm2LFU6lhHcQ" label="*" max="-1"/>
+    </sourceRole>
+    <targetRole xmi:id="_p9PUpkPpEeqm2LFU6lhHcQ" aggregationKind="NONE" name="event" navigable="true">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_p9KcIUPpEeqm2LFU6lhHcQ"/>
+      <visualProperties xmi:id="_qAL68EPpEeqm2LFU6lhHcQ" position="29.875,-47.0"/>
+      <visibility xmi:id="_p9PUp0PpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_p9PUqEPpEeqm2LFU6lhHcQ" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_t_1AUEPpEeqm2LFU6lhHcQ" sourceAnchor="0.0,65.0" targetAnchor="81.0,105.0" target="_SlHXoEPpEeqm2LFU6lhHcQ" source="_V1e8MEPpEeqm2LFU6lhHcQ">
+    <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_t_ykEEPpEeqm2LFU6lhHcQ"/>
+    <visualProperties xmi:id="_t_1AUUPpEeqm2LFU6lhHcQ"/>
+    <bendpoints xmi:id="_6lXkgEPpEeqm2LFU6lhHcQ" sourceX="-264" targetY="144"/>
+    <nameVisual xmi:id="_t_1AUkPpEeqm2LFU6lhHcQ" text="">
+      <visualProperties xmi:id="_uCeEokPpEeqm2LFU6lhHcQ" position="-13.000000000000057,-73.99999999999989"/>
+    </nameVisual>
+    <sourceRole xmi:id="_t_1AU0PpEeqm2LFU6lhHcQ" aggregationKind="NONE" name="event" navigable="true">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_t_zLIEPpEeqm2LFU6lhHcQ"/>
+      <visualProperties xmi:id="_uCeEoUPpEeqm2LFU6lhHcQ" position="-82.0,2.0"/>
+      <visibility xmi:id="_t_1AVEPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_t_1AVUPpEeqm2LFU6lhHcQ" label="*" max="-1"/>
+    </sourceRole>
+    <targetRole xmi:id="_t_1AVkPpEeqm2LFU6lhHcQ" aggregationKind="NONE" name="registrationManager1" navigable="true">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_t_zLI0PpEeqm2LFU6lhHcQ"/>
+      <visualProperties xmi:id="_uCeEo0PpEeqm2LFU6lhHcQ" position="1.0,58.0"/>
+      <visibility xmi:id="_t_1AV0PpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_t_1AWEPpEeqm2LFU6lhHcQ" label="*" max="-1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_wofrsEPpEeqm2LFU6lhHcQ" sourceAnchor="55.0,0.0" targetAnchor="140.0,35.0" target="_6nqkMUPhEeqI5YgxX-63wA" source="_U9qjYEPpEeqm2LFU6lhHcQ">
+    <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_wocoYEPpEeqm2LFU6lhHcQ"/>
+    <visualProperties xmi:id="_wofrsUPpEeqm2LFU6lhHcQ"/>
+    <bendpoints xmi:id="_6lXkg0PpEeqm2LFU6lhHcQ" sourceY="-68" targetX="484"/>
+    <nameVisual xmi:id="_wofrskPpEeqm2LFU6lhHcQ" text="">
+      <visualProperties xmi:id="_wrLzUUPpEeqm2LFU6lhHcQ" position="-247.25,2.0"/>
+    </nameVisual>
+    <sourceRole xmi:id="_wofrs0PpEeqm2LFU6lhHcQ" aggregationKind="NONE" name="registration">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_wodPcEPpEeqm2LFU6lhHcQ"/>
+      <visualProperties xmi:id="_wrLzUEPpEeqm2LFU6lhHcQ" position="-115.5,-67.0"/>
+      <visibility xmi:id="_wofrtEPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_wofrtUPpEeqm2LFU6lhHcQ" label="*" max="-1"/>
+    </sourceRole>
+    <targetRole xmi:id="_wofrtkPpEeqm2LFU6lhHcQ" aggregationKind="NONE" name="participant" navigable="true">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_wod2gEPpEeqm2LFU6lhHcQ"/>
+      <visualProperties xmi:id="_wrLzUkPpEeqm2LFU6lhHcQ" position="59.64285714285717,-47.0"/>
+      <visibility xmi:id="_wofrt0PpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_wofruEPpEeqm2LFU6lhHcQ" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_3_2TwEPpEeqm2LFU6lhHcQ" sourceAnchor="87.0,0.0" targetAnchor="163.0,56.0" target="_SlHXoEPpEeqm2LFU6lhHcQ" source="_V1e8MEPpEeqm2LFU6lhHcQ">
+    <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_3_0ekEPpEeqm2LFU6lhHcQ"/>
+    <visualProperties xmi:id="_3_2TwUPpEeqm2LFU6lhHcQ"/>
+    <bendpoints xmi:id="_6lXkgUPpEeqm2LFU6lhHcQ" sourceY="-128" targetX="269"/>
+    <nameVisual xmi:id="_3_2TwkPpEeqm2LFU6lhHcQ" text="">
+      <visualProperties xmi:id="_4CpJEUPpEeqm2LFU6lhHcQ" position="-140.0,-19.0"/>
+    </nameVisual>
+    <sourceRole xmi:id="_3_2Tw0PpEeqm2LFU6lhHcQ" aggregationKind="NONE" name="event1" navigable="true">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_3_0ekUPpEeqm2LFU6lhHcQ"/>
+      <visualProperties xmi:id="_4CpJEEPpEeqm2LFU6lhHcQ" position="-51.0,-87.0"/>
+      <visibility xmi:id="_3_2TxEPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_3_2TxUPpEeqm2LFU6lhHcQ" label="*" max="-1"/>
+    </sourceRole>
+    <targetRole xmi:id="_3_2TxkPpEeqm2LFU6lhHcQ" aggregationKind="NONE" name="registrationManager" navigable="true">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_3_1FokPpEeqm2LFU6lhHcQ"/>
+      <visualProperties xmi:id="_4CpJEkPpEeqm2LFU6lhHcQ" position="49.0,2.0"/>
+      <visibility xmi:id="_3_2Tx0PpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_3_2TyEPpEeqm2LFU6lhHcQ" label="*" max="-1"/>
+    </targetRole>
+  </edges>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:UMLDataTypeVisual" xmi:id="_FLzRUEPiEeqI5YgxX-63wA" name="Date">
+    <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_FLkn0EPiEeqI5YgxX-63wA"/>
+    <visualProperties xmi:id="_FLzRUUPiEeqI5YgxX-63wA" position="1041.0,44.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_FLzRUkPiEeqI5YgxX-63wA" label="+"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:PackageVisual" xmi:id="_4IsnYEPhEeqI5YgxX-63wA" containment="_4IjdcUPhEeqI5YgxX-63wA" containments="_GwhIMEPpEeqm2LFU6lhHcQ" classes="_6nqkMUPhEeqI5YgxX-63wA" name="model" nestingPackage="_2nt80kPhEeqI5YgxX-63wA">
+    <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_4IjdcEPhEeqI5YgxX-63wA"/>
+    <visualProperties xmi:id="_4IsnYUPhEeqI5YgxX-63wA" position="159.0,159.0" size="-1.0,-1.0"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:PackageVisual" xmi:id="_1YDrwEPhEeqI5YgxX-63wA" containment="_1X56wUPhEeqI5YgxX-63wA" containments="_2F-hsEPhEeqI5YgxX-63wA" name="mcgill" nestedPackages="_2F-hsUPhEeqI5YgxX-63wA" nestingPackage="_ykEhMUPhEeqI5YgxX-63wA">
+    <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_1X56wEPhEeqI5YgxX-63wA"/>
+    <visualProperties xmi:id="_1YDrwUPhEeqI5YgxX-63wA" position="173.0,-129.0" size="-1.0,-1.0"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:PackageVisual" xmi:id="_2F-hsUPhEeqI5YgxX-63wA" containment="_2F-hsEPhEeqI5YgxX-63wA" containments="_2nt80UPhEeqI5YgxX-63wA" name="ecse321" nestedPackages="_2nt80kPhEeqI5YgxX-63wA" nestingPackage="_1YDrwEPhEeqI5YgxX-63wA">
+    <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_2F1XwEPhEeqI5YgxX-63wA"/>
+    <visualProperties xmi:id="_2F-hskPhEeqI5YgxX-63wA" position="63.0,-13.0" size="-1.0,-1.0"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:PackageVisual" xmi:id="_2nt80kPhEeqI5YgxX-63wA" containment="_2nt80UPhEeqI5YgxX-63wA" containments="_4IjdcUPhEeqI5YgxX-63wA" name="eventregistration" nestedPackages="_4IsnYEPhEeqI5YgxX-63wA" nestingPackage="_2F-hsUPhEeqI5YgxX-63wA">
+    <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_2nt80EPhEeqI5YgxX-63wA"/>
+    <visualProperties xmi:id="_2nt800PhEeqI5YgxX-63wA" position="28.0,72.0" size="-1.0,-1.0"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:PackageVisual" xmi:id="_ykEhMUPhEeqI5YgxX-63wA" containments="_1X56wUPhEeqI5YgxX-63wA" name="ca" nestedPackages="_1YDrwEPhEeqI5YgxX-63wA">
+    <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_ykEhMEPhEeqI5YgxX-63wA"/>
+    <visualProperties xmi:id="_ykEhMkPhEeqI5YgxX-63wA" position="313.0,-110.0" size="-1.0,-1.0"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_U9qjYEPpEeqm2LFU6lhHcQ" name="Registration" associationsIn="_iZyKQEPpEeqm2LFU6lhHcQ" associationsOut="_p9PUoEPpEeqm2LFU6lhHcQ _wofrsEPpEeqm2LFU6lhHcQ">
+    <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_U9p8UEPpEeqm2LFU6lhHcQ"/>
+    <visualProperties xmi:id="_U9qjYUPpEeqm2LFU6lhHcQ" position="734.0,364.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_U9qjYkPpEeqm2LFU6lhHcQ" label="+"/>
+    <attributes xmi:id="_d9Ac8EPpEeqm2LFU6lhHcQ" name="id">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_d8_14EPpEeqm2LFU6lhHcQ"/>
+      <stereotypes xmi:id="_HXaToEPqEeqm2LFU6lhHcQ" name="PrimaryKey">
+        <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_HXZskEPqEeqm2LFU6lhHcQ"/>
+      </stereotypes>
+      <visibility xmi:id="_d9Ac8UPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_d9Ac8kPpEeqm2LFU6lhHcQ" label="1" max="1" min="1"/>
+      <type xmi:id="_d9Ac80PpEeqm2LFU6lhHcQ" name="Integer">
+        <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_iZyxUEPpEeqm2LFU6lhHcQ" name="registrationManager">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_iZsqsEPpEeqm2LFU6lhHcQ"/>
+      <visibility xmi:id="_iZyxUUPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_iZyxUkPpEeqm2LFU6lhHcQ" label="1" max="1" min="1"/>
+      <type xmi:id="_iZyxU0PpEeqm2LFU6lhHcQ" name="RegistrationManager">
+        <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_SlGJgEPpEeqm2LFU6lhHcQ"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_p9P7sEPpEeqm2LFU6lhHcQ" name="event">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_p9KcIUPpEeqm2LFU6lhHcQ"/>
+      <visibility xmi:id="_p9P7sUPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_p9P7skPpEeqm2LFU6lhHcQ" label="1" max="1" min="1"/>
+      <type xmi:id="_p9P7s0PpEeqm2LFU6lhHcQ" name="Event">
+        <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_V1eVIEPpEeqm2LFU6lhHcQ"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_wogSwEPpEeqm2LFU6lhHcQ" name="participant">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_wod2gEPpEeqm2LFU6lhHcQ"/>
+      <visibility xmi:id="_wogSwUPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_wogSwkPpEeqm2LFU6lhHcQ" label="1" max="1" min="1"/>
+      <type xmi:id="_wogSw0PpEeqm2LFU6lhHcQ" name="Person">
+        <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_6nqkMEPhEeqI5YgxX-63wA"/>
+      </type>
+    </attributes>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:UMLDataTypeVisual" xmi:id="_H7iOAUPiEeqI5YgxX-63wA" name="Time">
+    <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_H7iOAEPiEeqI5YgxX-63wA"/>
+    <visualProperties xmi:id="_H7iOAkPiEeqI5YgxX-63wA" position="1047.0,117.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_H7iOA0PiEeqI5YgxX-63wA" label="+"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_SlHXoEPpEeqm2LFU6lhHcQ" name="RegistrationManager" associationsIn="_t_1AUEPpEeqm2LFU6lhHcQ _3_2TwEPpEeqm2LFU6lhHcQ" associationsOut="_hppGwEPpEeqm2LFU6lhHcQ _iZyKQEPpEeqm2LFU6lhHcQ">
+    <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_SlGJgEPpEeqm2LFU6lhHcQ"/>
+    <visualProperties xmi:id="_SlHXoUPpEeqm2LFU6lhHcQ" position="139.0,419.0" size="163.0,105.0"/>
+    <visibility xmi:id="_SlHXokPpEeqm2LFU6lhHcQ" label="+"/>
+    <attributes xmi:id="_hppt0EPpEeqm2LFU6lhHcQ" name="participants">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_hpn4okPpEeqm2LFU6lhHcQ"/>
+      <visibility xmi:id="_hppt0UPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_hppt0kPpEeqm2LFU6lhHcQ" label="*" max="-1"/>
+      <type xmi:id="_hppt00PpEeqm2LFU6lhHcQ" name="Person">
+        <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_6nqkMEPhEeqI5YgxX-63wA"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_iZz_cEPpEeqm2LFU6lhHcQ" name="registrations">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_iZtRwkPpEeqm2LFU6lhHcQ"/>
+      <visibility xmi:id="_iZz_cUPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_iZz_ckPpEeqm2LFU6lhHcQ" label="*" max="-1"/>
+      <type xmi:id="_iZz_c0PpEeqm2LFU6lhHcQ" name="Registration">
+        <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_U9p8UEPpEeqm2LFU6lhHcQ"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_t_1nYEPpEeqm2LFU6lhHcQ" name="event">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_t_zLIEPpEeqm2LFU6lhHcQ"/>
+      <visibility xmi:id="_t_1nYUPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_t_1nYkPpEeqm2LFU6lhHcQ" label="*" max="-1"/>
+      <type xmi:id="_t_1nY0PpEeqm2LFU6lhHcQ" name="Event">
+        <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_V1eVIEPpEeqm2LFU6lhHcQ"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_3_260EPpEeqm2LFU6lhHcQ" name="event1">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_3_0ekUPpEeqm2LFU6lhHcQ"/>
+      <visibility xmi:id="_3_260UPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_3_260kPpEeqm2LFU6lhHcQ" label="*" max="-1"/>
+      <type xmi:id="_3_2600PpEeqm2LFU6lhHcQ" name="Event">
+        <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_V1eVIEPpEeqm2LFU6lhHcQ"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_KoPLMEPqEeqm2LFU6lhHcQ" name="id">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_KoN9EEPqEeqm2LFU6lhHcQ"/>
+      <visibility xmi:id="_KoPLMUPqEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_KoPLMkPqEeqm2LFU6lhHcQ" label="1" max="1" min="1"/>
+      <type xmi:id="_KoPLM0PqEeqm2LFU6lhHcQ" name="Integer">
+        <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+      </type>
+    </attributes>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_V1e8MEPpEeqm2LFU6lhHcQ" name="Event" associationsIn="_p9PUoEPpEeqm2LFU6lhHcQ" associationsOut="_t_1AUEPpEeqm2LFU6lhHcQ _3_2TwEPpEeqm2LFU6lhHcQ">
+    <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_V1eVIEPpEeqm2LFU6lhHcQ"/>
+    <visualProperties xmi:id="_V1e8MUPpEeqm2LFU6lhHcQ" position="484.0,603.0" size="174.0,130.0"/>
+    <visibility xmi:id="_V1e8MkPpEeqm2LFU6lhHcQ" label="+"/>
+    <attributes xmi:id="_YlflsEPpEeqm2LFU6lhHcQ" name="name">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_Yle-oEPpEeqm2LFU6lhHcQ"/>
+      <stereotypes xmi:id="_D9E6wEPqEeqm2LFU6lhHcQ" name="PrimaryKey">
+        <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_D9ETsEPqEeqm2LFU6lhHcQ"/>
+      </stereotypes>
+      <stereotypes xmi:id="_XC7KQEPqEeqm2LFU6lhHcQ" name="JPA1StyledElement">
+        <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_XC6jMEPqEeqm2LFU6lhHcQ"/>
+      </stereotypes>
+      <visibility xmi:id="_YlflsUPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_YlflskPpEeqm2LFU6lhHcQ" label="1" max="1" min="1"/>
+      <type xmi:id="_Ylfls0PpEeqm2LFU6lhHcQ" name="String">
+        <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_Zl_ZYEPpEeqm2LFU6lhHcQ" name="eventDate">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_Zl-yUEPpEeqm2LFU6lhHcQ"/>
+      <visibility xmi:id="_Zl_ZYUPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_Zl_ZYkPpEeqm2LFU6lhHcQ" label="1" max="1" min="1"/>
+      <type xmi:id="_Zl_ZY0PpEeqm2LFU6lhHcQ" name="Date">
+        <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_FLkn0EPiEeqI5YgxX-63wA"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_a3NwsEPpEeqm2LFU6lhHcQ" name="startTime">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_a3NJoEPpEeqm2LFU6lhHcQ"/>
+      <visibility xmi:id="_a3NwsUPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_a3NwskPpEeqm2LFU6lhHcQ" label="1" max="1" min="1"/>
+      <type xmi:id="_a3Nws0PpEeqm2LFU6lhHcQ" name="Time">
+        <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_H7iOAEPiEeqI5YgxX-63wA"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_bjOiIEPpEeqm2LFU6lhHcQ" name="endTime">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_bjN7EEPpEeqm2LFU6lhHcQ"/>
+      <visibility xmi:id="_bjOiIUPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_bjOiIkPpEeqm2LFU6lhHcQ" label="1" max="1" min="1"/>
+      <type xmi:id="_bjOiI0PpEeqm2LFU6lhHcQ" name="Time">
+        <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_H7iOAEPiEeqI5YgxX-63wA"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_t_2OcEPpEeqm2LFU6lhHcQ" name="registrationManager1">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_t_zLI0PpEeqm2LFU6lhHcQ"/>
+      <visibility xmi:id="_t_2OcUPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_t_2OckPpEeqm2LFU6lhHcQ" label="*" max="-1"/>
+      <type xmi:id="_t_2Oc0PpEeqm2LFU6lhHcQ" name="RegistrationManager">
+        <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_SlGJgEPpEeqm2LFU6lhHcQ"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_3_261EPpEeqm2LFU6lhHcQ" name="registrationManager">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_3_1FokPpEeqm2LFU6lhHcQ"/>
+      <visibility xmi:id="_3_261UPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_3_261kPpEeqm2LFU6lhHcQ" label="*" max="-1"/>
+      <type xmi:id="_3_2610PpEeqm2LFU6lhHcQ" name="RegistrationManager">
+        <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_SlGJgEPpEeqm2LFU6lhHcQ"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_LhypYEPqEeqm2LFU6lhHcQ" name="id">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_LhxbQEPqEeqm2LFU6lhHcQ"/>
+      <visibility xmi:id="_LhypYUPqEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_LhypYkPqEeqm2LFU6lhHcQ" label="1" max="1" min="1"/>
+      <type xmi:id="_LhypY0PqEeqm2LFU6lhHcQ" name="Integer">
+        <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+      </type>
+    </attributes>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_6nqkMUPhEeqI5YgxX-63wA" containment="_GwhIMEPpEeqm2LFU6lhHcQ" name="Person" package="_4IsnYEPhEeqI5YgxX-63wA" associationsIn="_hppGwEPpEeqm2LFU6lhHcQ _wofrsEPpEeqm2LFU6lhHcQ">
+    <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_6nqkMEPhEeqI5YgxX-63wA"/>
+    <visualProperties xmi:id="_6nqkMkPhEeqI5YgxX-63wA" position="165.0,261.0" size="140.0,70.0"/>
+    <visibility xmi:id="_6nqkM0PhEeqI5YgxX-63wA" label="+"/>
+    <attributes xmi:id="_Nfx1gEPpEeqm2LFU6lhHcQ" name="name">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_NfwnYEPpEeqm2LFU6lhHcQ"/>
+      <stereotypes xmi:id="_GEghUEPqEeqm2LFU6lhHcQ" name="PrimaryKey">
+        <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_GEf6QEPqEeqm2LFU6lhHcQ"/>
+      </stereotypes>
+      <visibility xmi:id="_Nfx1gUPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_Nfx1gkPpEeqm2LFU6lhHcQ" label="1" max="1" min="1"/>
+      <type xmi:id="_Nfx1g0PpEeqm2LFU6lhHcQ" name="String">
+        <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_hppGyUPpEeqm2LFU6lhHcQ" name="registrationManager">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_hpnRkUPpEeqm2LFU6lhHcQ"/>
+      <visibility xmi:id="_hppGykPpEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_hppGy0PpEeqm2LFU6lhHcQ" label="1" max="1" min="1"/>
+      <type xmi:id="_hppGzEPpEeqm2LFU6lhHcQ" name="RegistrationManager">
+        <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_SlGJgEPpEeqm2LFU6lhHcQ"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_Jv5N8EPqEeqm2LFU6lhHcQ" name="id">
+      <modelElement href="ca.mcgill.ecse321.eventregistration.model.uml#_Jv4m4EPqEeqm2LFU6lhHcQ"/>
+      <visibility xmi:id="_Jv5N8UPqEeqm2LFU6lhHcQ" label="+"/>
+      <cardinality xmi:id="_Jv5N8kPqEeqm2LFU6lhHcQ" label="1" max="1" min="1"/>
+      <type xmi:id="_Jv5N80PqEeqm2LFU6lhHcQ" name="Integer">
+        <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+      </type>
+    </attributes>
+  </nodes>
+</com.yattasolutions.uml.diagrams.classifier:ClassDiagram>
