@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Persistency="http:///schemas/Persistency/NS/0" xmlns:UMLLabProfile="http:///schemas/UMLLabProfile/NS/0" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/Persistency/NS/0 pathmap://PERSISTENCY_PROFILES/Persistency.profile.uml#Persistency_2-Annotation-Persistency http:///schemas/UMLLabProfile/NS/0 pathmap://UMLLAB_PROFILES/UMLLab.profile.uml#UMLLabProfile-Annotation_2-UMLLabProfile">
-  <uml:Model xmi:id="_DB688ELgEeqn1Yx1l3bFFQ" name="UML_Lab">
+  <uml:Model xmi:id="_DB688ELgEeqn1Yx1l3bFFQ" name="UML_Lab" URI="">
     <eAnnotations xmi:id="_CGk2MEUpEeqzEM0-RgJSnQ" source="http://ns.yatta.de/umllab">
       <contents xmi:type="ecore:EAnnotation" xmi:id="_CGk2MUUpEeqzEM0-RgJSnQ" source="codegen">
-        <details xmi:id="_CGk2MkUpEeqzEM0-RgJSnQ" key="codegenDirectory" value="/UML-Lab/src-gen"/>
-        <details xmi:id="_N_w_0EUrEeqzEM0-RgJSnQ" key="AssociatedSourceCode" value="/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/Donation.java;2333963514/1;/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/Advertisement.java;2862243597/1;/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/User.java;2643515539/1;/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/Forum.java;3585123738/1;/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/Pet.java;3800601056/1;/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/Comments.java;3091382790/1;/UML-Lab/src-gen/ca/mcgill/ecse321/petshelter/model/Gender.java;2137026600/1;"/>
+        <details xmi:id="_CGk2MkUpEeqzEM0-RgJSnQ" key="codegenDirectory" value="/UML-Lab/model"/>
+        <details xmi:id="_N_w_0EUrEeqzEM0-RgJSnQ" key="AssociatedSourceCode" value="/UML-Lab/model/ca/mcgill/ecse321/petshelter/model/Donation.java;2333963514/1;/UML-Lab/model/ca/mcgill/ecse321/petshelter/model/Advertisement.java;2862243597/1;/UML-Lab/model/ca/mcgill/ecse321/petshelter/model/User.java;2643515539/1;/UML-Lab/model/ca/mcgill/ecse321/petshelter/model/Forum.java;3585123738/1;/UML-Lab/model/ca/mcgill/ecse321/petshelter/model/Pet.java;3800601056/1;/UML-Lab/model/ca/mcgill/ecse321/petshelter/model/Comments.java;3091382790/1;/UML-Lab/model/ca/mcgill/ecse321/petshelter/model/Gender.java;2137026600/1;"/>
       </contents>
     </eAnnotations>
     <elementImport xmi:id="_I6MX4ELgEeqn1Yx1l3bFFQ">
@@ -237,7 +237,6 @@
   <UMLLabProfile:TargetLanguage xmi:id="_KNE4sEUoEeqzEM0-RgJSnQ" base_Package="_DB688ELgEeqn1Yx1l3bFFQ">
     <languageName>java</languageName>
   </UMLLabProfile:TargetLanguage>
-  <Persistency:JPA1StyledElement xmi:id="_KkghQEUoEeqzEM0-RgJSnQ" base_Element="_DB688ELgEeqn1Yx1l3bFFQ"/>
   <Persistency:PrimaryKey xmi:id="_I8c28EUrEeqzEM0-RgJSnQ" base_Property="_W8spUELgEeqn1Yx1l3bFFQ"/>
   <Persistency:PrimaryKeyJoinColumns xmi:id="_JGe8sEUrEeqzEM0-RgJSnQ" base_Element="_W8spUELgEeqn1Yx1l3bFFQ"/>
   <Persistency:PrimaryKey xmi:id="_Jmt78EUrEeqzEM0-RgJSnQ" base_Property="_ZDObgELhEeqsu8CCrtRz3Q"/>
@@ -260,4 +259,5 @@
   <UMLLabProfile:Reference xmi:id="_4vBP8EUzEeqiQLhfP_8_1Q" base_Element="_4u4GAUUzEeqiQLhfP_8_1Q"/>
   <UMLLabProfile:Reference xmi:id="_4vHWkEUzEeqiQLhfP_8_1Q" base_Element="_4vBP8UUzEeqiQLhfP_8_1Q"/>
   <UMLLabProfile:Reference xmi:id="_4vRuoEUzEeqiQLhfP_8_1Q" base_Element="_4vIksEUzEeqiQLhfP_8_1Q"/>
+  <Persistency:JPA1StyledElement xmi:id="_9_pE8EVHEeqUGMj4hedUew" base_Element="_DB688ELgEeqn1Yx1l3bFFQ"/>
 </xmi:XMI>

@@ -1,12 +1,17 @@
 package ca.mcgill.ecse321.petshelter.model;
 
+import java.sql.Date;
+import java.sql.Time;
+
 import javax.persistence.Entity;
-import ca.mcgill.ecse321.petshelter.model.java.sql.Date;
 import javax.persistence.Id;
-import ca.mcgill.ecse321.petshelter.model.java.sql.Time;
 import javax.persistence.OneToOne;
 import javax.persistence.ManyToOne;
 
+/**
+ * @author louis
+ *
+ */
 @Entity
 public class Comments{
    private Date datePosted;
