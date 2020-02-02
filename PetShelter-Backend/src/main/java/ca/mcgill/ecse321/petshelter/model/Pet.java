@@ -4,6 +4,8 @@ import java.sql.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
@@ -43,6 +45,7 @@ public class Pet {
 	@Getter
 	@Setter
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
 	@Getter
