@@ -32,7 +32,7 @@ public class Donation {
 	@Setter
 	private Date date;
 
-	@ManyToOne
+	@ManyToOne(optional=true)
 	@Getter
 	@Setter
 	private User user;
