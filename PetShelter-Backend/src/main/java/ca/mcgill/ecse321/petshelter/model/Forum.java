@@ -24,27 +24,15 @@ public class Forum {
 	@Setter
 	@Id
 	private long id;
-
+	
+	@OneToMany
+	@Getter
+	@Setter
 	private Set<User> subscribers;
 
-	@OneToMany
-	public Set<User> getSubscribers() {
-		return this.subscribers;
-	}
-
-	public void setSubscribers(Set<User> subscribers) {
-		this.subscribers = subscribers;
-	}
-
-	private Set<Comment> comments;
-
 	@OneToMany(mappedBy = "forum", cascade = { CascadeType.ALL })
-	public Set<Comment> getComments() {
-		return this.comments;
-	}
-
-	public void setComments(Set<Comment> comments) {
-		this.comments = comments;
-	}
+	@Getter
+	@Setter
+	private Set<Comment> comments;
 
 }

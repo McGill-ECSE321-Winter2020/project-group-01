@@ -50,15 +50,9 @@ public class Pet {
 	@Enumerated
 	private Gender gender;
 
-	private Advertisement advertisement;
-
 	@ManyToOne
-	public Advertisement getAdvertisement() {
-		return this.advertisement;
-	}
-
-	public void setAdvertisement(Advertisement advertisement) {
-		this.advertisement = advertisement;
-	}
+	@Getter
+	@Setter
+	private Advertisement advertisement;
 
 }
