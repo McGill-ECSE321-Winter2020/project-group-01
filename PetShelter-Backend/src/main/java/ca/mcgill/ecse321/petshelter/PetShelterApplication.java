@@ -32,7 +32,7 @@ public class PetShelterApplication {
 
   @RequestMapping("/")
   public String greeting(){
-    return "Hello world!";
+    return "This is a test";
   }
 
 }
