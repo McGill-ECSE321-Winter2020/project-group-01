@@ -29,16 +29,10 @@ public class Donation {
 	@Setter
 	private Date date;
 
-	private User user;
-
 	@ManyToOne
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
+	@Getter
+	@Setter
+	private User user;
 
 	@Getter
 	@Setter

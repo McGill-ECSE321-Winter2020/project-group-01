@@ -49,15 +49,9 @@ public class User {
 	@Setter
 	private UserType userType;
 
-	private Set<Pet> pets;
-
 	@OneToMany
-	public Set<Pet> getPets() {
-		return this.pets;
-	}
-
-	public void setPets(Set<Pet> pets) {
-		this.pets = pets;
-	}
+	@Getter
+	@Setter
+	private Set<Pet> pets;
 
 }

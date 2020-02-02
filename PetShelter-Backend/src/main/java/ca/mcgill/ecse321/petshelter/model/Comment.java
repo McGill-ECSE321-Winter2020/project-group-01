@@ -35,26 +35,14 @@ public class Comment {
 	@Setter
 	private Time comment;
 
+	@OneToOne(optional = false)
+	@Getter
+	@Setter
 	private User user;
 
-	@OneToOne(optional = false)
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	private Forum forum;
-
 	@ManyToOne(optional = false)
-	public Forum getForum() {
-		return this.forum;
-	}
-
-	public void setForum(Forum forum) {
-		this.forum = forum;
-	}
+	@Getter
+	@Setter
+	private Forum forum;
 
 }
