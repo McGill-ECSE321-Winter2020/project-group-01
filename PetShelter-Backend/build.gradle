@@ -10,7 +10,7 @@ apply plugin: "org.springframework.boot" // Added this
 group = 'ca.mcgill.ecse321.group1'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
-mainClassName='ca.mcgill.ecse321.group1.petshelter.PetShelterApplication'
+mainClassName='ca.mcgill.ecse321.petshelter.PetShelterApplication'
 
 configurations {
 	developmentOnly
