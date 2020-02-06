@@ -1,4 +1,4 @@
-# Project Group 1
+# Project Group 1 ![Travis Build Status](https://travis-ci.com/McGill-ECSE321-Winter2020/project-group-01.svg?token=fsmRFkAy9TTnJy5UEPzf&branch=master)
 
 Scope: 
 
