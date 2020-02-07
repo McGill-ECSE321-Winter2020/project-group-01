@@ -25,7 +25,7 @@ public class Application {
 	private boolean isAccepted;
 	
 	@OneToOne(optional = false)
-	private User user;
+	private User applicant;
 	
 	@OneToOne(optional = false)
 	private Advertisement advertisement;

@@ -41,7 +41,7 @@ public class Comment {
 	@OneToOne(optional = false)
 	@Getter
 	@Setter
-	private User user;
+	private User userPoster;
 
 	@ManyToOne(optional = false)
 	@Getter
