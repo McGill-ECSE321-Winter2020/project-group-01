@@ -5,6 +5,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+
 import java.util.Set;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -58,5 +60,10 @@ public class User {
 	@Getter
 	@Setter
 	private Set<Pet> pets;
+	
+	@ManyToMany
+	@Getter
+	@Setter
+	private Set<Application> applications;
 
 }
