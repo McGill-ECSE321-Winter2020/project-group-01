@@ -10,4 +10,6 @@ import ca.mcgill.ecse321.petshelter.model.*;
  */
 public interface ApplicationRepository extends JpaRepository<AdoptionApplication, Long>{
 
+	AdoptionApplication findApplicationByUserAndAdvertisement(User applicant, Advertisement advertisement);
+
 }
