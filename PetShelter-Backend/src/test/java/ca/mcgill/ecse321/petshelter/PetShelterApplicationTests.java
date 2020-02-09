@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +31,7 @@ class PetShelterApplicationTests {
 	@Autowired
 	private UserRepository userRepository;
 	
-	@AfterEach
+	@BeforeEach
 	public void clearDatabase() {
 		advertisementRepository.deleteAll();
 		applicationRepository.deleteAll();
@@ -49,7 +50,7 @@ class PetShelterApplicationTests {
 		
 		user = null;
 		
-		user = userRepository.findUserByName(name);
+		user = userRepository.findUserByUserName(name);
 		assertNotNull(user);
 		assertEquals(name, user.getUserName());	
 	}

@@ -1,13 +1,14 @@
 package ca.mcgill.ecse321.petshelter.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+
 import ca.mcgill.ecse321.petshelter.model.User;
 
 /**
  * @author louis
  *
  */
-public interface UserRepository extends JpaRepository<User, Long>{
+public interface UserRepository extends CrudRepository<User, Long>{
 
-	User findUserByName(String name);
+	User findUserByUserName(String name);
 }

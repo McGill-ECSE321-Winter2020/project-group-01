@@ -36,6 +36,7 @@ public long getId() {
       return this.isFulfilled;
    }
    
+   
    private Set<AdoptionApplication> adoptionApplication;
    
    @OneToMany(mappedBy="advertisement" )

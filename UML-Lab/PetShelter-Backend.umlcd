@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <com.yattasolutions.uml.diagrams.classifier:ClassDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com.yattasolutions.diagrams="http://ns.yatta-solutions.com/umllab/diagrams/1.1.0" xmlns:com.yattasolutions.uml.diagrams.classifier="http://ns.yatta-solutions.com/umllab/diagrams/classifier/1.1.0" xmi:id="_DEAnoELgEeqn1Yx1l3bFFQ">
   <modelElement href="PetShelter-Backend.uml#_DB688ELgEeqn1Yx1l3bFFQ"/>
-  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_q3yz4ELiEeqsu8CCrtRz3Q" sourceAnchor="211.0,40.0" targetAnchor="130.0,247.0" source="_GVPSYELhEeqsu8CCrtRz3Q">
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_q3yz4ELiEeqsu8CCrtRz3Q" sourceAnchor="211.0,40.0" targetAnchor="132.0,201.0" target="_LrzSsErJEeqms7VTPZBVfQ" source="_GVPSYELhEeqsu8CCrtRz3Q">
     <modelElement href="PetShelter-Backend.uml#_q3vwkELiEeqsu8CCrtRz3Q"/>
     <visualProperties xmi:id="_q3yz4ULiEeqsu8CCrtRz3Q" position="0.0,0.0"/>
-    <bendpoints xmi:id="_bvkVcErCEeqzE6J998oZWg" sourceX="388" sourceY="-6" targetY="157"/>
+    <bendpoints xmi:id="_LTMvAkrVEeqms7VTPZBVfQ" sourceX="330" sourceY="26" targetX="56" targetY="120"/>
     <nameVisual xmi:id="_q3yz4kLiEeqsu8CCrtRz3Q" text="">
       <visualProperties xmi:id="_q6tlAULiEeqsu8CCrtRz3Q" position="0.0,0.0"/>
     </nameVisual>
@@ -25,14 +25,15 @@
   <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_rHh9AEUnEeqzEM0-RgJSnQ" sourceAnchor="2.0,29.0" targetAnchor="92.0,29.0"/>
   <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_s5-yEEUnEeqzEM0-RgJSnQ" sourceAnchor="0.0,17.0" targetAnchor="94.0,29.0"/>
   <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_tyvmEEUnEeqzEM0-RgJSnQ" sourceAnchor="0.0,43.0" targetAnchor="94.0,14.0"/>
-  <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_xmUlYEUnEeqzEM0-RgJSnQ" sourceAnchor="201.0,84.0" targetAnchor="47.0,63.0" enclosingItem="_XS8ZIErCEeqzE6J998oZWg" containedItem="_WfukAELhEeqsu8CCrtRz3Q">
-    <bendpoints xmi:id="_6nR6YkrLEeqms7VTPZBVfQ" sourceX="55" targetX="460" targetY="650"/>
-    <bendpoints xmi:id="_6nR6Y0rLEeqms7VTPZBVfQ" sourceX="55" sourceY="-630" targetX="460" targetY="20"/>
-    <bendpoints xmi:id="_6nR6ZErLEeqms7VTPZBVfQ" sourceX="-405" sourceY="-630" targetY="20"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_xmUlYEUnEeqzEM0-RgJSnQ" sourceAnchor="100.0,169.0" targetAnchor="47.0,63.0" enclosingItem="_XS8ZIErCEeqzE6J998oZWg" containedItem="_WfukAELhEeqsu8CCrtRz3Q">
+    <bendpoints xmi:id="_LTMH8UrVEeqms7VTPZBVfQ" sourceY="45" targetX="304" targetY="780"/>
+    <bendpoints xmi:id="_LTMH8krVEeqms7VTPZBVfQ" sourceX="156" sourceY="45" targetX="460" targetY="780"/>
+    <bendpoints xmi:id="_LTMvAErVEeqms7VTPZBVfQ" sourceX="156" sourceY="-715" targetX="460" targetY="20"/>
+    <bendpoints xmi:id="_LTMvAUrVEeqms7VTPZBVfQ" sourceX="-304" sourceY="-715" targetY="20"/>
   </edges>
   <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_xzZYEEUnEeqzEM0-RgJSnQ" sourceAnchor="114.0,0.0" targetAnchor="47.0,63.0" enclosingItem="_XS8ZIErCEeqzE6J998oZWg" containedItem="_PpE1QELhEeqsu8CCrtRz3Q">
-    <bendpoints xmi:id="_6nQsQUrLEeqms7VTPZBVfQ" sourceY="-30" targetX="301" targetY="20"/>
-    <bendpoints xmi:id="_6nQsQkrLEeqms7VTPZBVfQ" sourceX="-301" sourceY="-30" targetY="20"/>
+    <bendpoints xmi:id="_LTJEoErVEeqms7VTPZBVfQ" sourceY="-30" targetX="301" targetY="20"/>
+    <bendpoints xmi:id="_LTJEoUrVEeqms7VTPZBVfQ" sourceX="-301" sourceY="-30" targetY="20"/>
   </edges>
   <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_yCsYUEUnEeqzEM0-RgJSnQ" sourceAnchor="169.0,199.0" targetAnchor="47.0,0.0">
     <bendpoints xmi:id="_VVhscEUrEeqzEM0-RgJSnQ" sourceY="281" targetX="72" targetY="-270"/>
@@ -43,8 +44,8 @@
     <bendpoints xmi:id="_VViTgEUrEeqzEM0-RgJSnQ" sourceX="-537" sourceY="237" targetY="-270"/>
   </edges>
   <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_yzb4wEUnEeqzEM0-RgJSnQ" sourceAnchor="107.0,0.0" targetAnchor="47.0,63.0" enclosingItem="_XS8ZIErCEeqzE6J998oZWg" containedItem="_yEUhcELhEeqsu8CCrtRz3Q">
-    <bendpoints xmi:id="_6nQFMErLEeqms7VTPZBVfQ" sourceY="-20" targetX="-62" targetY="20"/>
-    <bendpoints xmi:id="_6nQsQErLEeqms7VTPZBVfQ" sourceX="62" sourceY="-20" targetY="20"/>
+    <bendpoints xmi:id="_LTIdkErVEeqms7VTPZBVfQ" sourceY="-20" targetX="-62" targetY="20"/>
+    <bendpoints xmi:id="_LTIdkUrVEeqms7VTPZBVfQ" sourceX="62" sourceY="-20" targetY="20"/>
   </edges>
   <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_zHs4kEUnEeqzEM0-RgJSnQ" sourceAnchor="282.0,74.0" targetAnchor="47.0,0.0">
     <bendpoints xmi:id="_VVi6kUUrEeqzEM0-RgJSnQ" sourceX="176" targetX="1231" targetY="-706"/>
@@ -71,7 +72,7 @@
     </targetRole>
   </edges>
   <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_Y_jr8ErCEeqzE6J998oZWg" sourceAnchor="2.0,25.0" targetAnchor="92.0,38.0" enclosingItem="_OhGwEUrCEeqzE6J998oZWg" containedItem="_QDl2gErCEeqzE6J998oZWg"/>
-  <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_fRgLIErCEeqzE6J998oZWg" sourceAnchor="0.0,22.0" targetAnchor="105.0,32.0" enclosingItem="_WPKn8UrCEeqzE6J998oZWg" containedItem="_XS8ZIErCEeqzE6J998oZWg"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_fRgLIErCEeqzE6J998oZWg" sourceAnchor="2.0,22.0" targetAnchor="103.0,32.0" enclosingItem="_WPKn8UrCEeqzE6J998oZWg" containedItem="_XS8ZIErCEeqzE6J998oZWg"/>
   <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_gLegEErCEeqzE6J998oZWg" sourceAnchor="2.0,31.0" targetAnchor="92.0,32.0" enclosingItem="_QDl2gErCEeqzE6J998oZWg" containedItem="_WPKn8UrCEeqzE6J998oZWg"/>
   <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_kWz4EErCEeqzE6J998oZWg" sourceAnchor="2.0,42.0" targetAnchor="92.0,32.0" enclosingItem="_Nn6eQErCEeqzE6J998oZWg" containedItem="_OhGwEUrCEeqzE6J998oZWg"/>
   <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_UiMTUErDEeqzE6J998oZWg" target="_PpE1QELhEeqsu8CCrtRz3Q">
@@ -155,7 +156,7 @@
   <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_B8KSsErLEeqms7VTPZBVfQ" sourceAnchor="100.0,0.0" targetAnchor="229.0,100.0" target="_LrzSsErJEeqms7VTPZBVfQ" source="_WfukAELhEeqsu8CCrtRz3Q">
     <modelElement href="PetShelter-Backend.uml#_B8CW4ErLEeqms7VTPZBVfQ"/>
     <visualProperties xmi:id="_B8KSsUrLEeqms7VTPZBVfQ"/>
-    <bendpoints xmi:id="_6nR6YUrLEeqms7VTPZBVfQ" sourceY="-112" targetX="241"/>
+    <bendpoints xmi:id="_LTMH8ErVEeqms7VTPZBVfQ" sourceY="-112" targetX="241"/>
     <nameVisual xmi:id="_B8KSskrLEeqms7VTPZBVfQ" text="">
       <visualProperties xmi:id="_CDUDkErLEeqms7VTPZBVfQ" position="-112.0,-24.0"/>
     </nameVisual>
@@ -210,33 +211,13 @@
       <cardinality xmi:id="_W3HpuErLEeqms7VTPZBVfQ" label="1" max="1" min="1"/>
     </targetRole>
   </edges>
-  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_dPhWMErLEeqms7VTPZBVfQ" sourceAnchor="211.0,41.0" targetAnchor="114.0,201.0" target="_LrzSsErJEeqms7VTPZBVfQ" source="_GVPSYELhEeqsu8CCrtRz3Q">
-    <modelElement href="PetShelter-Backend.uml#_dPZaYErLEeqms7VTPZBVfQ"/>
-    <visualProperties xmi:id="_dPhWMUrLEeqms7VTPZBVfQ"/>
-    <bendpoints xmi:id="_6nR6ZUrLEeqms7VTPZBVfQ" sourceX="256" targetY="95"/>
-    <nameVisual xmi:id="_dPhWMkrLEeqms7VTPZBVfQ" text="">
-      <visualProperties xmi:id="_dUMa0ErLEeqms7VTPZBVfQ" position="-12.0,-63.0"/>
-    </nameVisual>
-    <sourceRole xmi:id="_dPhWM0rLEeqms7VTPZBVfQ" aggregationKind="NONE" name="forum">
-      <modelElement href="PetShelter-Backend.uml#_dPaBcErLEeqms7VTPZBVfQ"/>
-      <visualProperties xmi:id="_dULMsErLEeqms7VTPZBVfQ" position="40.0,-57.0"/>
-      <visibility xmi:id="_dPhWNErLEeqms7VTPZBVfQ" label="+"/>
-      <cardinality xmi:id="_dPhWNUrLEeqms7VTPZBVfQ" label="1" max="1" min="1"/>
-    </sourceRole>
-    <targetRole xmi:id="_dPhWNkrLEeqms7VTPZBVfQ" aggregationKind="NONE" name="subscribers" navigable="true">
-      <modelElement href="PetShelter-Backend.uml#_dPbPkErLEeqms7VTPZBVfQ"/>
-      <visualProperties xmi:id="_dUMa0UrLEeqms7VTPZBVfQ" position="-84.0,39.0"/>
-      <visibility xmi:id="_dPhWN0rLEeqms7VTPZBVfQ" label="+"/>
-      <cardinality xmi:id="_dPhWOErLEeqms7VTPZBVfQ" label="*" max="-1"/>
-    </targetRole>
-  </edges>
   <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_gQLq0ErLEeqms7VTPZBVfQ" sourceAnchor="0.0,58.0" targetAnchor="229.0,15.0" target="_LrzSsErJEeqms7VTPZBVfQ" source="_KpfEoErKEeqms7VTPZBVfQ">
     <modelElement href="PetShelter-Backend.uml#_gQEWEErLEeqms7VTPZBVfQ"/>
     <visualProperties xmi:id="_gQLq0UrLEeqms7VTPZBVfQ"/>
     <nameVisual xmi:id="_gQLq0krLEeqms7VTPZBVfQ" text="">
       <visualProperties xmi:id="_gVgPsErLEeqms7VTPZBVfQ" position="-15.0,2.0"/>
     </nameVisual>
-    <sourceRole xmi:id="_gQLq00rLEeqms7VTPZBVfQ" aggregationKind="NONE" name="applications">
+    <sourceRole xmi:id="_gQLq00rLEeqms7VTPZBVfQ" aggregationKind="NONE" name="applications" navigable="true">
       <modelElement href="PetShelter-Backend.uml#_gQFkMErLEeqms7VTPZBVfQ"/>
       <visualProperties xmi:id="_gVfooErLEeqms7VTPZBVfQ" position="-149.0,-57.0"/>
       <visibility xmi:id="_gQLq1ErLEeqms7VTPZBVfQ" label="+"/>
@@ -246,22 +227,64 @@
       <modelElement href="PetShelter-Backend.uml#_gQGLQErLEeqms7VTPZBVfQ"/>
       <visualProperties xmi:id="_gVg2wErLEeqms7VTPZBVfQ" position="84.0,2.0"/>
       <visibility xmi:id="_gQLq10rLEeqms7VTPZBVfQ" label="+"/>
-      <cardinality xmi:id="_gQLq2ErLEeqms7VTPZBVfQ" label="1" max="1" min="1"/>
+      <cardinality xmi:id="_gQLq2ErLEeqms7VTPZBVfQ" label="0..1" max="1"/>
     </targetRole>
   </edges>
-  <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_1RKxUErLEeqms7VTPZBVfQ" sourceAnchor="192.0,54.0" targetAnchor="47.0,63.0" enclosingItem="_XS8ZIErCEeqzE6J998oZWg" containedItem="_KpfEoErKEeqms7VTPZBVfQ">
-    <bendpoints xmi:id="_6nRTVUrLEeqms7VTPZBVfQ" sourceX="32" targetX="430" targetY="365"/>
-    <bendpoints xmi:id="_6nRTVkrLEeqms7VTPZBVfQ" sourceX="32" sourceY="-345" targetX="430" targetY="20"/>
-    <bendpoints xmi:id="_6nR6YErLEeqms7VTPZBVfQ" sourceX="-398" sourceY="-345" targetY="20"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_1RKxUErLEeqms7VTPZBVfQ" sourceAnchor="0.0,28.0" targetAnchor="47.0,63.0" enclosingItem="_XS8ZIErCEeqzE6J998oZWg" containedItem="_KpfEoErKEeqms7VTPZBVfQ">
+    <bendpoints xmi:id="_LTLg4ErVEeqms7VTPZBVfQ" sourceX="-68" targetX="138" targetY="339"/>
+    <bendpoints xmi:id="_LTLg4UrVEeqms7VTPZBVfQ" sourceX="-68" sourceY="-319" targetX="138" targetY="20"/>
+    <bendpoints xmi:id="_LTLg4krVEeqms7VTPZBVfQ" sourceX="-206" sourceY="-319" targetY="20"/>
   </edges>
-  <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_2DdJ4ErLEeqms7VTPZBVfQ" sourceAnchor="0.0,10.0" targetAnchor="47.0,63.0" enclosingItem="_XS8ZIErCEeqzE6J998oZWg" containedItem="_LrzSsErJEeqms7VTPZBVfQ">
-    <bendpoints xmi:id="_6nRTUErLEeqms7VTPZBVfQ" sourceX="-18" targetX="-184" targetY="364"/>
-    <bendpoints xmi:id="_6nRTUUrLEeqms7VTPZBVfQ" sourceX="-18" sourceY="-344" targetX="-184" targetY="20"/>
-    <bendpoints xmi:id="_6nRTUkrLEeqms7VTPZBVfQ" sourceX="166" sourceY="-344" targetY="20"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_2DdJ4ErLEeqms7VTPZBVfQ" sourceAnchor="114.0,201.0" targetAnchor="47.0,63.0" enclosingItem="_XS8ZIErCEeqzE6J998oZWg" containedItem="_LrzSsErJEeqms7VTPZBVfQ">
+    <bendpoints xmi:id="_LTJrsErVEeqms7VTPZBVfQ" sourceY="195" targetX="-52" targetY="750"/>
+    <bendpoints xmi:id="_LTKSwErVEeqms7VTPZBVfQ" sourceX="482" sourceY="195" targetX="430" targetY="750"/>
+    <bendpoints xmi:id="_LTKSwUrVEeqms7VTPZBVfQ" sourceX="482" sourceY="-535" targetX="430" targetY="20"/>
+    <bendpoints xmi:id="_LTKSwkrVEeqms7VTPZBVfQ" sourceX="52" sourceY="-535" targetY="20"/>
   </edges>
-  <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_3spVQErLEeqms7VTPZBVfQ" sourceAnchor="33.0,0.0" targetAnchor="47.0,63.0" enclosingItem="_XS8ZIErCEeqzE6J998oZWg" containedItem="_fIVucUrKEeqms7VTPZBVfQ">
-    <bendpoints xmi:id="_6nRTU0rLEeqms7VTPZBVfQ" sourceY="-308" targetX="-467" targetY="20"/>
-    <bendpoints xmi:id="_6nRTVErLEeqms7VTPZBVfQ" sourceX="467" sourceY="-308" targetY="20"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_3spVQErLEeqms7VTPZBVfQ" sourceAnchor="32.0,0.0" targetAnchor="47.0,63.0" enclosingItem="_XS8ZIErCEeqzE6J998oZWg" containedItem="_fIVucUrKEeqms7VTPZBVfQ">
+    <bendpoints xmi:id="_LTK50ErVEeqms7VTPZBVfQ" sourceY="-308" targetX="-468" targetY="20"/>
+    <bendpoints xmi:id="_LTK50UrVEeqms7VTPZBVfQ" sourceX="468" sourceY="-308" targetY="20"/>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_ip7-MErQEeqms7VTPZBVfQ" source="_LrzSsErJEeqms7VTPZBVfQ">
+    <modelElement href="PetShelter-Backend.uml#_hpq0A0rQEeqms7VTPZBVfQ"/>
+    <nameVisual xmi:id="_ip7-MUrQEeqms7VTPZBVfQ" text=""/>
+    <sourceRole xmi:id="_ip7-MkrQEeqms7VTPZBVfQ" aggregationKind="NONE" name="user" navigable="true">
+      <modelElement href="PetShelter-Backend.uml#_hpktYErQEeqms7VTPZBVfQ"/>
+      <visibility xmi:id="_ip7-M0rQEeqms7VTPZBVfQ" label="+"/>
+      <cardinality xmi:id="_ip7-NErQEeqms7VTPZBVfQ" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_ip7-NUrQEeqms7VTPZBVfQ" aggregationKind="NONE" name="">
+      <modelElement href="PetShelter-Backend.uml#_hpq0AUrQEeqms7VTPZBVfQ"/>
+      <visibility xmi:id="_ip7-NkrQEeqms7VTPZBVfQ" label="+"/>
+      <cardinality xmi:id="_ip7-N0rQEeqms7VTPZBVfQ" label="1..*" max="-1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_iuMMEErQEeqms7VTPZBVfQ" sourceAnchor="95.0,0.0" targetAnchor="114.0,108.0" target="_PpE1QELhEeqsu8CCrtRz3Q" source="_KpfEoErKEeqms7VTPZBVfQ">
+    <modelElement href="PetShelter-Backend.uml#_iuJv0ErQEeqms7VTPZBVfQ"/>
+    <visualProperties xmi:id="_iuMMEUrQEeqms7VTPZBVfQ"/>
+    <nameVisual xmi:id="_iuMMEkrQEeqms7VTPZBVfQ" text="">
+      <visualProperties xmi:id="_i1BM0ErQEeqms7VTPZBVfQ" position="-18.0,-39.0"/>
+    </nameVisual>
+    <sourceRole xmi:id="_iuMME0rQEeqms7VTPZBVfQ" aggregationKind="NONE" name="adoptionApplication" navigable="true">
+      <modelElement href="PetShelter-Backend.uml#_iuKW4ErQEeqms7VTPZBVfQ"/>
+      <visualProperties xmi:id="_i1AlwUrQEeqms7VTPZBVfQ" position="-164.0,-88.0"/>
+      <visibility xmi:id="_iuMMFErQEeqms7VTPZBVfQ" label="+"/>
+      <cardinality xmi:id="_iuMMFUrQEeqms7VTPZBVfQ" label="*" max="-1"/>
+    </sourceRole>
+    <targetRole xmi:id="_iuMMFkrQEeqms7VTPZBVfQ" aggregationKind="NONE" name="advertisement" navigable="true">
+      <modelElement href="PetShelter-Backend.uml#_iuKW40rQEeqms7VTPZBVfQ"/>
+      <visualProperties xmi:id="_i1Bz4ErQEeqms7VTPZBVfQ" position="2.0,33.0"/>
+      <visibility xmi:id="_iuMMF0rQEeqms7VTPZBVfQ" label="+"/>
+      <cardinality xmi:id="_iuMMGErQEeqms7VTPZBVfQ" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_FRAYgErUEeqms7VTPZBVfQ" sourceAnchor="68.0,0.0" targetAnchor="47.0,63.0" enclosingItem="_XS8ZIErCEeqzE6J998oZWg" containedItem="_5KpDoErTEeqms7VTPZBVfQ">
+    <bendpoints xmi:id="_LTNWEErVEeqms7VTPZBVfQ" sourceY="-20" targetX="-240" targetY="20"/>
+    <bendpoints xmi:id="_LTNWEUrVEeqms7VTPZBVfQ" sourceX="240" sourceY="-20" targetY="20"/>
+  </edges>
+  <edges xsi:type="com.yattasolutions.diagrams:ContainmentVisual" xmi:id="_KPaWwErVEeqms7VTPZBVfQ" sourceAnchor="56.0,0.0" targetAnchor="47.0,63.0" enclosingItem="_XS8ZIErCEeqzE6J998oZWg" containedItem="_7ZcCAErJEeqms7VTPZBVfQ">
+    <bendpoints xmi:id="_LTN9IErVEeqms7VTPZBVfQ" sourceY="-26" targetX="-397" targetY="20"/>
+    <bendpoints xmi:id="_LTN9IUrVEeqms7VTPZBVfQ" sourceX="397" sourceY="-26" targetY="20"/>
   </edges>
   <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_yEUhcELhEeqsu8CCrtRz3Q" containment="_yzb4wEUnEeqzEM0-RgJSnQ" name="Pet" package="_XS8ZIErCEeqzE6J998oZWg" associationsIn="_CANckEU2EeqiQLhfP_8_1Q _4ARjQErIEeqms7VTPZBVfQ _ybHmsErKEeqms7VTPZBVfQ">
     <modelElement href="PetShelter-Backend.uml#_yET6YELhEeqsu8CCrtRz3Q"/>
@@ -359,9 +382,6 @@
       </stereotypes>
       <visibility xmi:id="_YZ6nUUUnEeqzEM0-RgJSnQ" label="+"/>
       <cardinality xmi:id="_YZ6nUkUnEeqzEM0-RgJSnQ" label="1" max="1" min="1"/>
-      <type xmi:id="_roaZQErJEeqms7VTPZBVfQ" name="Gender">
-        <modelElement href="PetShelter-Backend.uml#_e9wEgErJEeqms7VTPZBVfQ"/>
-      </type>
     </attributes>
     <attributes xmi:id="_CANcmUU2EeqiQLhfP_8_1Q" name="advertisement">
       <modelElement href="PetShelter-Backend.uml#_CALnYUU2EeqiQLhfP_8_1Q"/>
@@ -372,7 +392,7 @@
       </type>
     </attributes>
   </nodes>
-  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_PpE1QELhEeqsu8CCrtRz3Q" containment="_xzZYEEUnEeqzEM0-RgJSnQ" name="Advertisement" package="_XS8ZIErCEeqzE6J998oZWg" associationsIn="_UiMTUErDEeqzE6J998oZWg" associationsOut="_CANckEU2EeqiQLhfP_8_1Q">
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_PpE1QELhEeqsu8CCrtRz3Q" containment="_xzZYEEUnEeqzEM0-RgJSnQ" name="Advertisement" package="_XS8ZIErCEeqzE6J998oZWg" associationsIn="_UiMTUErDEeqzE6J998oZWg _iuMMEErQEeqms7VTPZBVfQ" associationsOut="_CANckEU2EeqiQLhfP_8_1Q">
     <modelElement href="PetShelter-Backend.uml#_PpEOMELhEeqsu8CCrtRz3Q"/>
     <visualProperties xmi:id="_PpE1QULhEeqsu8CCrtRz3Q" position="818.0,64.0" size="228.0,108.0"/>
     <visibility xmi:id="_PpE1QkLhEeqsu8CCrtRz3Q" label="+"/>
@@ -417,6 +437,14 @@
       <visibility xmi:id="_Zi57gUrAEeqzE6J998oZWg" label="+"/>
       <cardinality xmi:id="_Zi57gkrAEeqzE6J998oZWg" label="*" max="-1"/>
     </attributes>
+    <attributes xmi:id="_3WoPsErQEeqms7VTPZBVfQ" name="adoptionApplication">
+      <modelElement href="PetShelter-Backend.uml#_iuKW4ErQEeqms7VTPZBVfQ"/>
+      <visibility xmi:id="_3WoPsUrQEeqms7VTPZBVfQ" label="+"/>
+      <cardinality xmi:id="_3WoPskrQEeqms7VTPZBVfQ" label="*" max="-1"/>
+      <type xmi:id="_3WoPs0rQEeqms7VTPZBVfQ" name="AdoptionApplication">
+        <modelElement href="PetShelter-Backend.uml#_KpXv4ErKEeqms7VTPZBVfQ"/>
+      </type>
+    </attributes>
   </nodes>
   <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:PackageVisual" xmi:id="_Nn6eQErCEeqzE6J998oZWg" containments="_kWz4EErCEeqzE6J998oZWg" name="ca" nestedPackages="_OhGwEUrCEeqzE6J998oZWg">
     <modelElement href="PetShelter-Backend.uml#_Nn53MErCEeqzE6J998oZWg"/>
@@ -434,7 +462,7 @@
     <modelElement href="PetShelter-Backend.uml#_WPKn8ErCEeqzE6J998oZWg"/>
     <visualProperties xmi:id="_WPKn8krCEeqzE6J998oZWg" position="409.0,-59.0" size="-1.0,-1.0"/>
   </nodes>
-  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_LrzSsErJEeqms7VTPZBVfQ" containment="_2DdJ4ErLEeqms7VTPZBVfQ" name="User" package="_XS8ZIErCEeqzE6J998oZWg" associationsIn="_B8KSsErLEeqms7VTPZBVfQ _LCflEErLEeqms7VTPZBVfQ _dPhWMErLEeqms7VTPZBVfQ _gQLq0ErLEeqms7VTPZBVfQ" associationsOut="_ybHmsErKEeqms7VTPZBVfQ">
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_LrzSsErJEeqms7VTPZBVfQ" containment="_2DdJ4ErLEeqms7VTPZBVfQ" name="User" package="_XS8ZIErCEeqzE6J998oZWg" associationsIn="_B8KSsErLEeqms7VTPZBVfQ _LCflEErLEeqms7VTPZBVfQ _gQLq0ErLEeqms7VTPZBVfQ _q3yz4ELiEeqsu8CCrtRz3Q" associationsOut="_ybHmsErKEeqms7VTPZBVfQ _ip7-MErQEeqms7VTPZBVfQ">
     <modelElement href="PetShelter-Backend.uml#_LrtzIErJEeqms7VTPZBVfQ"/>
     <visualProperties xmi:id="_LrzSsUrJEeqms7VTPZBVfQ" position="465.0,368.0" size="-1.0,-1.0"/>
     <visibility xmi:id="_LrzSskrJEeqms7VTPZBVfQ" label="+"/>
@@ -505,6 +533,14 @@
         <modelElement href="PetShelter-Backend.uml#_yET6YELhEeqsu8CCrtRz3Q"/>
       </type>
     </attributes>
+    <attributes xmi:id="_ic6ugErTEeqms7VTPZBVfQ" name="applications">
+      <modelElement href="PetShelter-Backend.uml#_gQFkMErLEeqms7VTPZBVfQ"/>
+      <visibility xmi:id="_ic6ugUrTEeqms7VTPZBVfQ" label="+"/>
+      <cardinality xmi:id="_ic6ugkrTEeqms7VTPZBVfQ" label="*" max="-1"/>
+      <type xmi:id="_ic6ug0rTEeqms7VTPZBVfQ" name="AdoptionApplication">
+        <modelElement href="PetShelter-Backend.uml#_KpXv4ErKEeqms7VTPZBVfQ"/>
+      </type>
+    </attributes>
   </nodes>
   <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_fIVucUrKEeqms7VTPZBVfQ" containment="_3spVQErLEeqms7VTPZBVfQ" name="Comment" package="_XS8ZIErCEeqzE6J998oZWg" associationsOut="_LCflEErLEeqms7VTPZBVfQ _W3HpsErLEeqms7VTPZBVfQ">
     <modelElement href="PetShelter-Backend.uml#_fIVucErKEeqms7VTPZBVfQ"/>
@@ -554,7 +590,7 @@
       </type>
     </attributes>
   </nodes>
-  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_KpfEoErKEeqms7VTPZBVfQ" containment="_1RKxUErLEeqms7VTPZBVfQ" name="AdoptionApplication" package="_XS8ZIErCEeqzE6J998oZWg" associationsOut="_gQLq0ErLEeqms7VTPZBVfQ">
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_KpfEoErKEeqms7VTPZBVfQ" containment="_1RKxUErLEeqms7VTPZBVfQ" name="AdoptionApplication" package="_XS8ZIErCEeqzE6J998oZWg" associationsOut="_gQLq0ErLEeqms7VTPZBVfQ _iuMMEErQEeqms7VTPZBVfQ">
     <modelElement href="PetShelter-Backend.uml#_KpXv4ErKEeqms7VTPZBVfQ"/>
     <visualProperties xmi:id="_KpfEoUrKEeqms7VTPZBVfQ" position="837.0,325.0" size="-1.0,-1.0"/>
     <visibility xmi:id="_KpfEokrKEeqms7VTPZBVfQ" label="+"/>
@@ -588,9 +624,17 @@
     <attributes xmi:id="_gQPVMErLEeqms7VTPZBVfQ" name="user">
       <modelElement href="PetShelter-Backend.uml#_gQGLQErLEeqms7VTPZBVfQ"/>
       <visibility xmi:id="_gQPVMUrLEeqms7VTPZBVfQ" label="+"/>
-      <cardinality xmi:id="_gQPVMkrLEeqms7VTPZBVfQ" label="1" max="1" min="1"/>
+      <cardinality xmi:id="_gQPVMkrLEeqms7VTPZBVfQ" label="0..1" max="1"/>
       <type xmi:id="_gQPVM0rLEeqms7VTPZBVfQ" name="User">
         <modelElement href="PetShelter-Backend.uml#_LrtzIErJEeqms7VTPZBVfQ"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_OmS0QErREeqms7VTPZBVfQ" name="advertisement">
+      <modelElement href="PetShelter-Backend.uml#_iuKW40rQEeqms7VTPZBVfQ"/>
+      <visibility xmi:id="_OmS0QUrREeqms7VTPZBVfQ" label="+"/>
+      <cardinality xmi:id="_OmS0QkrREeqms7VTPZBVfQ" label="1" max="1" min="1"/>
+      <type xmi:id="_OmS0Q0rREeqms7VTPZBVfQ" name="Advertisement">
+        <modelElement href="PetShelter-Backend.uml#_PpEOMELhEeqsu8CCrtRz3Q"/>
       </type>
     </attributes>
   </nodes>
@@ -658,13 +702,16 @@
       </type>
     </attributes>
   </nodes>
-  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_GVPSYELhEeqsu8CCrtRz3Q" containment="_yQinEEUnEeqzEM0-RgJSnQ" name="Forum" associationsIn="_W3HpsErLEeqms7VTPZBVfQ" associationsOut="_q3yz4ELiEeqsu8CCrtRz3Q _dPhWMErLEeqms7VTPZBVfQ">
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_GVPSYELhEeqsu8CCrtRz3Q" containment="_yQinEEUnEeqzEM0-RgJSnQ" name="Forum" associationsIn="_W3HpsErLEeqms7VTPZBVfQ" associationsOut="_q3yz4ELiEeqsu8CCrtRz3Q">
     <modelElement href="PetShelter-Backend.uml#_GVMPEELhEeqsu8CCrtRz3Q"/>
     <visualProperties xmi:id="_GVPSYULhEeqsu8CCrtRz3Q" position="112.0,623.0" size="211.0,83.0"/>
     <visibility xmi:id="_GVPSYkLhEeqsu8CCrtRz3Q" label="+"/>
     <attributes xmi:id="_IoHT8ELhEeqsu8CCrtRz3Q" name="title">
       <modelElement href="PetShelter-Backend.uml#_IoGF0ELhEeqsu8CCrtRz3Q"/>
       <visualProperties xmi:id="_PFdGcEU0EeqiQLhfP_8_1Q"/>
+      <stereotypes xmi:id="_ikOXwErQEeqms7VTPZBVfQ" name="StyledElement">
+        <modelElement href="PetShelter-Backend.uml#_hoo5QErQEeqms7VTPZBVfQ"/>
+      </stereotypes>
       <visibility xmi:id="_IoHT8ULhEeqsu8CCrtRz3Q" label="+"/>
       <cardinality xmi:id="_IoHT8kLhEeqsu8CCrtRz3Q" label="1" max="1" min="1"/>
       <type xmi:id="_IoHT80LhEeqsu8CCrtRz3Q" name="String">
@@ -690,54 +737,18 @@
       <modelElement href="PetShelter-Backend.uml#_q3wXoULiEeqsu8CCrtRz3Q"/>
       <visibility xmi:id="_q3yz6kLiEeqsu8CCrtRz3Q" label="+"/>
       <cardinality xmi:id="_q3yz60LiEeqsu8CCrtRz3Q" label="*" max="-1"/>
+      <type xmi:id="_ikNJoErQEeqms7VTPZBVfQ" name="User">
+        <modelElement href="PetShelter-Backend.uml#_LrtzIErJEeqms7VTPZBVfQ"/>
+      </type>
     </attributes>
     <attributes xmi:id="_W3I30ErLEeqms7VTPZBVfQ" name="comments">
       <modelElement href="PetShelter-Backend.uml#_W3F0gUrLEeqms7VTPZBVfQ"/>
       <visibility xmi:id="_W3I30UrLEeqms7VTPZBVfQ" label="+"/>
       <cardinality xmi:id="_W3I30krLEeqms7VTPZBVfQ" label="1..*" max="-1" min="1"/>
-      <type xmi:id="_W3I300rLEeqms7VTPZBVfQ" name="Comment">
-        <modelElement href="PetShelter-Backend.uml#_fIVucErKEeqms7VTPZBVfQ"/>
+      <type xmi:id="_im-JwErQEeqms7VTPZBVfQ" name="Comment">
+        <modelElement href="PetShelter-Backend.uml#_how1EErQEeqms7VTPZBVfQ"/>
       </type>
     </attributes>
-    <attributes xmi:id="_dPlnoErLEeqms7VTPZBVfQ" name="subscribers">
-      <modelElement href="PetShelter-Backend.uml#_dPbPkErLEeqms7VTPZBVfQ"/>
-      <visibility xmi:id="_dPlnoUrLEeqms7VTPZBVfQ" label="+"/>
-      <cardinality xmi:id="_dPlnokrLEeqms7VTPZBVfQ" label="*" max="-1"/>
-      <type xmi:id="_dPlno0rLEeqms7VTPZBVfQ" name="User">
-        <modelElement href="PetShelter-Backend.uml#_LrtzIErJEeqms7VTPZBVfQ"/>
-      </type>
-    </attributes>
-  </nodes>
-  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:EnumerationVisual" xmi:id="_e9xSoErJEeqms7VTPZBVfQ" name="Gender">
-    <modelElement href="PetShelter-Backend.uml#_e9wEgErJEeqms7VTPZBVfQ"/>
-    <visualProperties xmi:id="_e9xSoUrJEeqms7VTPZBVfQ" position="27.0,51.0" size="112.0,106.0"/>
-    <visibility xmi:id="_e9xSokrJEeqms7VTPZBVfQ" label="+"/>
-    <attributes xmi:id="_uWgXMErJEeqms7VTPZBVfQ" name="NAME">
-      <modelElement href="PetShelter-Backend.uml#_uWfwIErJEeqms7VTPZBVfQ"/>
-      <visualProperties xmi:id="_yphEgErJEeqms7VTPZBVfQ" visible="false"/>
-      <visibility xmi:id="_uWgXMUrJEeqms7VTPZBVfQ" label="+"/>
-      <cardinality xmi:id="_uWgXMkrJEeqms7VTPZBVfQ" label="1" max="1" min="1"/>
-      <type xmi:id="_06UpgErJEeqms7VTPZBVfQ" name="String">
-        <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-      </type>
-    </attributes>
-    <literals xmi:id="_m_qFcErJEeqms7VTPZBVfQ" name="MALE">
-      <modelElement href="PetShelter-Backend.uml#_m_peYErJEeqms7VTPZBVfQ"/>
-    </literals>
-    <literals xmi:id="_3dZqQUrJEeqms7VTPZBVfQ" name="FEMALE">
-      <modelElement href="PetShelter-Backend.uml#_3dZqQErJEeqms7VTPZBVfQ"/>
-    </literals>
-  </nodes>
-  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:EnumerationVisual" xmi:id="_7ZcCAErJEeqms7VTPZBVfQ" name="UserType">
-    <modelElement href="PetShelter-Backend.uml#_7Zaz4ErJEeqms7VTPZBVfQ"/>
-    <visualProperties xmi:id="_7ZcCAUrJEeqms7VTPZBVfQ" position="179.0,52.0" size="-1.0,-1.0"/>
-    <visibility xmi:id="_7ZcCAkrJEeqms7VTPZBVfQ" label="+"/>
-    <literals xmi:id="_9sEzAErJEeqms7VTPZBVfQ" name="USER">
-      <modelElement href="PetShelter-Backend.uml#_9sDk4ErJEeqms7VTPZBVfQ"/>
-    </literals>
-    <literals xmi:id="__uRUQUrJEeqms7VTPZBVfQ" name="ADMIN">
-      <modelElement href="PetShelter-Backend.uml#__uRUQErJEeqms7VTPZBVfQ"/>
-    </literals>
   </nodes>
   <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:UMLDataTypeVisual" xmi:id="_0lu80EUnEeqzEM0-RgJSnQ" name="Date">
     <modelElement href="PetShelter-Backend.uml#_0luVwEUnEeqzEM0-RgJSnQ"/>
@@ -749,8 +760,30 @@
     <visualProperties xmi:id="_1k8-IUUnEeqzEM0-RgJSnQ" position="192.0,192.0" size="-1.0,-1.0"/>
     <visibility xmi:id="_1k8-IkUnEeqzEM0-RgJSnQ" label="+"/>
   </nodes>
-  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:PackageVisual" xmi:id="_XS8ZIErCEeqzE6J998oZWg" containment="_fRgLIErCEeqzE6J998oZWg" containments="_xzZYEEUnEeqzEM0-RgJSnQ _1RKxUErLEeqms7VTPZBVfQ _2DdJ4ErLEeqms7VTPZBVfQ _yzb4wEUnEeqzEM0-RgJSnQ _3spVQErLEeqms7VTPZBVfQ _xmUlYEUnEeqzEM0-RgJSnQ" classes="_PpE1QELhEeqsu8CCrtRz3Q _KpfEoErKEeqms7VTPZBVfQ _LrzSsErJEeqms7VTPZBVfQ _yEUhcELhEeqsu8CCrtRz3Q _fIVucUrKEeqms7VTPZBVfQ _WfukAELhEeqsu8CCrtRz3Q" name="model" nestingPackage="_WPKn8UrCEeqzE6J998oZWg">
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:PackageVisual" xmi:id="_XS8ZIErCEeqzE6J998oZWg" containment="_fRgLIErCEeqzE6J998oZWg" containments="_xzZYEEUnEeqzEM0-RgJSnQ _1RKxUErLEeqms7VTPZBVfQ _2DdJ4ErLEeqms7VTPZBVfQ _yzb4wEUnEeqzEM0-RgJSnQ _3spVQErLEeqms7VTPZBVfQ _xmUlYEUnEeqzEM0-RgJSnQ _FRAYgErUEeqms7VTPZBVfQ _KPaWwErVEeqms7VTPZBVfQ" classes="_PpE1QELhEeqsu8CCrtRz3Q _KpfEoErKEeqms7VTPZBVfQ _LrzSsErJEeqms7VTPZBVfQ _yEUhcELhEeqsu8CCrtRz3Q _fIVucUrKEeqms7VTPZBVfQ _WfukAELhEeqsu8CCrtRz3Q _5KpDoErTEeqms7VTPZBVfQ _7ZcCAErJEeqms7VTPZBVfQ" name="model" nestingPackage="_WPKn8UrCEeqzE6J998oZWg">
     <modelElement href="PetShelter-Backend.uml#_XS7yEErCEeqzE6J998oZWg"/>
     <visualProperties xmi:id="_XS8ZIUrCEeqzE6J998oZWg" position="584.0,-49.0" size="-1.0,-1.0"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:EnumerationVisual" xmi:id="_5KpDoErTEeqms7VTPZBVfQ" containment="_FRAYgErUEeqms7VTPZBVfQ" name="Gender" package="_XS8ZIErCEeqzE6J998oZWg">
+    <modelElement href="PetShelter-Backend.uml#_5KockErTEeqms7VTPZBVfQ"/>
+    <visualProperties xmi:id="_5KpDoUrTEeqms7VTPZBVfQ" position="323.0,54.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_5KpDokrTEeqms7VTPZBVfQ" label="+"/>
+    <literals xmi:id="_Abs2cUrUEeqms7VTPZBVfQ" name="MALE">
+      <modelElement href="PetShelter-Backend.uml#_Abs2cErUEeqms7VTPZBVfQ"/>
+    </literals>
+    <literals xmi:id="_B-Z_UUrUEeqms7VTPZBVfQ" name="FEMALE">
+      <modelElement href="PetShelter-Backend.uml#_B-Z_UErUEeqms7VTPZBVfQ"/>
+    </literals>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:EnumerationVisual" xmi:id="_7ZcCAErJEeqms7VTPZBVfQ" containment="_KPaWwErVEeqms7VTPZBVfQ" name="UserType" package="_XS8ZIErCEeqzE6J998oZWg">
+    <modelElement href="PetShelter-Backend.uml#_7Zaz4ErJEeqms7VTPZBVfQ"/>
+    <visualProperties xmi:id="_7ZcCAUrJEeqms7VTPZBVfQ" position="178.0,60.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_7ZcCAkrJEeqms7VTPZBVfQ" label="+"/>
+    <literals xmi:id="_9sEzAErJEeqms7VTPZBVfQ" name="USER">
+      <modelElement href="PetShelter-Backend.uml#_9sDk4ErJEeqms7VTPZBVfQ"/>
+    </literals>
+    <literals xmi:id="__uRUQUrJEeqms7VTPZBVfQ" name="ADMIN">
+      <modelElement href="PetShelter-Backend.uml#__uRUQErJEeqms7VTPZBVfQ"/>
+    </literals>
   </nodes>
 </com.yattasolutions.uml.diagrams.classifier:ClassDiagram>

@@ -83,13 +83,13 @@ public void setId(long value) {
 public long getId() {
     return this.id;
 }
-   private Gender gender;
+   private String/*No type specified!*/ gender;
    
-   public void setGender(Gender value) {
+   public void setGender(String/*No type specified!*/ value) {
       this.gender = value;
    }
    
-   public Gender getGender() {
+   public String/*No type specified!*/ getGender() {
       return this.gender;
    }
    

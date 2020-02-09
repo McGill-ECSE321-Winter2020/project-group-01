@@ -76,4 +76,15 @@ public Gender getGender() {
       this.pets = petss;
    }
    
+   private Set<AdoptionApplication> applications;
+   
+   @OneToMany(mappedBy="user" )
+   public Set<AdoptionApplication> getApplications() {
+      return this.applications;
+   }
+   
+   public void setApplications(Set<AdoptionApplication> applicationss) {
+      this.applications = applicationss;
+   }
+   
    }
