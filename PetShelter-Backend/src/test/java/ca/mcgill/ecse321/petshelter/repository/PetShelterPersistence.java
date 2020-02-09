@@ -171,56 +171,54 @@ public class PetShelterPersistence {
 		
 	}
 	
-//TODO: doesnt work
-//	@Test
-//	public void testPersistAndLoadAdvertisement() {
-//		String description = "myDescription";
-//		//String title = "myTitle";
-//		long id = 12345L;
-//		boolean isFulfiled = true;
-//
-//		Advertisement advertisement = new Advertisement();
-//
-//		advertisement.setDescription(description);
-//		advertisement.setId(id);
-//		advertisement.setIsFulfilled(isFulfiled);
-//		// advertisement.setTitle(title);
-//
-//		advertisementRepository.save(advertisement);
-//
-//		advertisement = advertisementRepository.findAdverstisementById(id);
-//		assertNotNull(advertisement);
-//		// assertEquals(title, advertisement.getTitle());
-//		assertEquals(id, advertisement.getId());
-//		assertEquals(isFulfiled, advertisement.isIsFulfilled());
-//	}
+	@Test
+	public void testPersistAndLoadAdvertisement() {
+		String description = "myDescription";
+		String title = "myTitle";
+		boolean isFulfiled = true;
+
+		Advertisement advertisement = new Advertisement();
+
+		advertisement.setDescription(description);
+		advertisement.setIsFulfilled(isFulfiled);
+		advertisement.setTitle(title);
+
+		advertisementRepository.save(advertisement);
+		advertisement = advertisementRepository.findAdvertisementByTitle(title);
+		
+		assertNotNull(advertisement);
+		assertEquals(title, advertisement.getTitle());
+		assertEquals(description, advertisement.getDescription());
+		assertEquals(isFulfiled, advertisement.isIsFulfilled());
+	}
 
 	
-//	
-//	@Test
-//	public void testPersistAndLoadApplication() {
-//		User applicant = createUser();
-//		String description = "myDescription";
-//		Advertisement advertisement = createAdvertisement();
-//		boolean isAccepted = false;
-//		long id = 123423L;
-//
-//		AdoptionApplication application = new AdoptionApplication();
-//		application.setIsAccepted(isAccepted);
-//		application.setAdvertisement(advertisement);
-//		// application.setApplicant(applicant);
-//		application.setDescription(description);
-//		application.setId(id);
-//
-//		applicationRepository.save(application);
-//
-//		application = applicationRepository.finApplicationByUserAndAdvertisement(applicant, advertisement);
-//		assertNotNull(application);
-//		// assertEquals(applicant,application.getApplicant());
-//		assertEquals(advertisement, application.getAdvertisement());
-//		assertEquals(description, application.getDescription());
-//		assertEquals(isAccepted, application.isIsAccepted());
-//	}
+	
+	@Test
+	public void testPersistAndLoadApplication() {
+		User applicant = createUser();
+		String description = "myDescription";
+		Advertisement advertisement = createAdvertisement();
+		boolean isAccepted = false;
+		long id = 123423L;
+
+		AdoptionApplication application = new AdoptionApplication();
+		application.setIsAccepted(isAccepted);
+		application.setAdvertisement(advertisement);
+		// application.setApplicant(applicant);
+		application.setDescription(description);
+		application.setId(id);
+
+		applicationRepository.save(application);
+
+		application = applicationRepository.finApplicationByUserAndAdvertisement(applicant, advertisement);
+		assertNotNull(application);
+		
+		// assertEquals(applicant,application.getApplicant());
+		assertEquals(advertisement, application.getAdvertisement());
+		assertEquals(description, application.getDescription());
+		assertEquals(isAccepted, application.isIsAccepted());
+	}
 
 	@Test
 	public void testPersistAndLoadPet() {
@@ -275,8 +273,10 @@ public class PetShelterPersistence {
 		assertNotNull(donation);
 		assertEquals(donationDate, donation.getDate());
 		//TODO: check why it doesnt work.
+		//we need something to check that the username are unique in the db.
 		//assertEquals(user, donation.getUser());
-	
+
+		assertEquals(user.getUserName(), donation.getUser().getUserName());
 		assertEquals(amount,donation.getAmount(),0.01);
 		
 	}
