@@ -262,8 +262,6 @@ public class PetShelterPersistence {
 		donation = donationRepository.findDonationByUserAndAmount(user, amount);
 		assertNotNull(donation);
 		assertEquals(donationDate, donation.getDate());
-		// TODO: check why it doesnt work.
-		// we need something to check that the username are unique in the db.
 		assertEquals(user.getUserName(), donation.getUser().getUserName());
 
 		assertEquals(user.getUserName(), donation.getUser().getUserName());
@@ -274,8 +272,6 @@ public class PetShelterPersistence {
 	@Test
 	public void testPersistAndLoadForum() {
 		String title = "myTitlee";
-		// lazy way of getting out but it will work because we are creating new objects
-		// everytime
 		Comment comment1 = createComment();
 		Comment comment2 = createComment();
 		Comment comment3 = createComment();
@@ -301,11 +297,6 @@ public class PetShelterPersistence {
 
 		forum = forumRepository.findForumByTitle(title);
 		assertNotNull(forum);
-		System.out.println(forum.getSubscribers().size());
-		System.out.println(forum.getSubscribers().iterator().next().getUserName());
-		// assertTrue(forum.getComments().containsAll(commentSet));
-		// assertTrue(forum.getSubscribers().contains(user2));
-		// assertTrue(forum.getSubscribers().containsAll(userSet));
 		assertEquals(title, forum.getTitle());
 	}
 }
