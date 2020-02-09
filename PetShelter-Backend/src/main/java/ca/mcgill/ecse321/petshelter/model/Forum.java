@@ -36,7 +36,7 @@ public class Forum {
 
 	private Set<Comment> comments;
 
-	@OneToMany(cascade = { CascadeType.ALL })
+	@OneToMany
 	public Set<Comment> getComments() {
 		return this.comments;
 	}
