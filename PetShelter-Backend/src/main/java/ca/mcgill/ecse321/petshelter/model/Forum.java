@@ -1,4 +1,5 @@
 package ca.mcgill.ecse321.petshelter.model;
+
 import javax.persistence.GeneratedValue;
 
 import javax.persistence.Entity;
@@ -10,45 +11,49 @@ import javax.persistence.CascadeType;
 import ca.mcgill.ecse321.petshelter.model.User;
 
 @Entity
-public class Forum{
-   private String title;
+public class Forum {
+	private String title;
 
-public void setTitle(String value) {
-    this.title = value;
-}
-public String getTitle() {
-    return this.title;
-}
-private long id;
+	public void setTitle(String value) {
+		this.title = value;
+	}
 
-public void setId(long value) {
-    this.id = value;
+	public String getTitle() {
+		return this.title;
+	}
+
+	private long id;
+
+	public void setId(long value) {
+		this.id = value;
+	}
+
+	@Id
+	@GeneratedValue()
+	public long getId() {
+		return this.id;
+	}
+
+	private Set<Comment> comments;
+
+	@OneToMany(cascade = { CascadeType.ALL })
+	public Set<Comment> getComments() {
+		return this.comments;
+	}
+
+	public void setComments(Set<Comment> commentss) {
+		this.comments = commentss;
+	}
+
+	private Set<User> subscribers;
+
+	@OneToMany
+	public Set<User> getSubscribers() {
+		return this.subscribers;
+	}
+
+	public void setSubscribers(Set<User> subscriberss) {
+		this.subscribers = subscriberss;
+	}
+
 }
-@Id
-@GeneratedValue()public long getId() {
-    return this.id;
-}
-   
-   private Set<Comment> comments;
-   
-   @OneToMany(cascade={CascadeType.ALL})
-   public Set<Comment> getComments() {
-      return this.comments;
-   }
-   
-   public void setComments(Set<Comment> commentss) {
-      this.comments = commentss;
-   }
-   
-   private Set<User> subscribers;
-   
-   @OneToMany
-   public Set<User> getSubscribers() {
-      return this.subscribers;
-   }
-   
-   public void setSubscribers(Set<User> subscriberss) {
-      this.subscribers = subscriberss;
-   }
-   
-   }
