@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,6 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ca.mcgill.ecse321.petshelter.PetShelterApplication;
 import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
+import ca.mcgill.ecse321.petshelter.model.Comment;
 import ca.mcgill.ecse321.petshelter.model.Gender;
 import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.model.User;
@@ -56,7 +58,8 @@ public class PetShelterPersistence {
 		petRepository.deleteAll();
 
 	}
-
+	
+	@BeforeEach
 	public User createUser() {
 		String name = "TestUserName";
 		String password = "myPassword";
@@ -74,7 +77,8 @@ public class PetShelterPersistence {
 		userRepository.save(user);
 		return user;
 	}
-
+	
+	@BeforeEach
 	public Advertisement createAdvertisement() {
 		String description = "myDescription";
 		String title = "myTitle";
@@ -120,12 +124,37 @@ public class PetShelterPersistence {
 		assertEquals(emailValid, user.isIsEmailValidated());
 		assertEquals(apiToken, user.getApiToken());
 	}
-
+	
+	@Test
+	public void testPersistAndLoadComment() {
+		Date postedDate = new Date(123);
+		String commentText = "this is a comment";
+		Time time = new Time(111);
+		
+		User user = createUser();
+		Comment comment = new Comment();
+		
+		comment.setDatePosted(postedDate);
+		comment.setText(commentText);
+		comment.setTime(time);
+		comment.setUser(user);
+		
+		commentRepository.save(comment);
+		
+		comment = null;
+		comment = commentRepository.findCommentByUserAndText(user, commentText);
+		
+		assertNotNull(comment);
+		assertEquals(commentText,comment.getText());
+		
+	}
+	
+//TODO: doesnt work
 //	@Test
 //	public void testPersistAndLoadAdvertisement() {
 //		String description = "myDescription";
-//		String title = "myTitle";
-//		long id = 12345;
+//		//String title = "myTitle";
+//		long id = 12345L;
 //		boolean isFulfiled = true;
 //
 //		Advertisement advertisement = new Advertisement();
@@ -137,13 +166,15 @@ public class PetShelterPersistence {
 //
 //		advertisementRepository.save(advertisement);
 //
-//		advertisement = advertisementRepository.findAdvertisementByName(title);
+//		advertisement = advertisementRepository.findAdverstisementById(id);
 //		assertNotNull(advertisement);
 //		// assertEquals(title, advertisement.getTitle());
 //		assertEquals(id, advertisement.getId());
 //		assertEquals(isFulfiled, advertisement.isIsFulfilled());
 //	}
-//
+
+	
+//	
 //	@Test
 //	public void testPersistAndLoadApplication() {
 //		User applicant = createUser();
@@ -168,38 +199,33 @@ public class PetShelterPersistence {
 //		assertEquals(description, application.getDescription());
 //		assertEquals(isAccepted, application.isIsAccepted());
 //	}
-//
-//	@Test
-//	public void testPersistAndLoadPet() {
-//		// user info
-//		String name = "TestUserName";
-//		String email = "test@email.com";
-//		User user = new User();
-//		user.setUserName(name);
-//		user.setEmail(email);
-//		userRepository.save(user);
-//
-//		// pet info
-//		String petName = "TestPetName";
-//		Date birthDate = Date.valueOf("2015-03-31");
-//		String species = "Dog";
-//		String breed = "Labrador";
-//		Pet pet = new Pet();
-//		pet.setDateOfBirth(birthDate);
-//		pet.setName(petName);
-//		pet.setSpecies(species);
-//		pet.setBreed(breed);
-//		pet.setGender(Gender.FEMALE);
-//		HashSet<Pet> pets = new HashSet<Pet>();
-//		user.setPets(pets);
-//		userRepository.save(user);
-//		petRepository.save(pet);
-//
-//		pet = null;
-//
-//		pet = petRepository.findPetByName(petName);
-//		assertNotNull(pet);
-//		assertEquals(petName, pet.getName());
-//
-//	}
+
+	@Test
+	public void testPersistAndLoadPet() {
+		// user info
+		User user = createUser();
+
+		// pet info
+		String petName = "TestPetName";
+		Date birthDate = Date.valueOf("2015-03-31");
+		String species = "Dog";
+		String breed = "Labrador";
+		Pet pet = new Pet();
+		pet.setDateOfBirth(birthDate);
+		pet.setName(petName);
+		pet.setSpecies(species);
+		pet.setBreed(breed);
+		pet.setGender(Gender.FEMALE);
+		HashSet<Pet> pets = new HashSet<Pet>();
+		user.setPets(pets);
+		userRepository.save(user);
+		petRepository.save(pet);
+
+		pet = null;
+
+		pet = petRepository.findPetByName(petName);
+		assertNotNull(pet);
+		assertEquals(petName, pet.getName());
+
+	}
 }
