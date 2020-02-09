@@ -92,7 +92,7 @@ public class PetShelterPersistence {
 		advertisement.setDescription(description);
 		advertisement.setId(id);
 		advertisement.setIsFulfilled(isFulfiled);
-		// advertisement.setTitle(title);
+		advertisement.setTitle(title);
 
 		advertisementRepository.save(advertisement);
 		return advertisement;
