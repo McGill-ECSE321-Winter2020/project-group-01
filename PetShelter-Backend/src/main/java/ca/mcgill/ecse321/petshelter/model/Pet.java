@@ -1,6 +1,8 @@
 package ca.mcgill.ecse321.petshelter.model;
 
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+
 import java.sql.Date;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
@@ -66,13 +68,13 @@ public class Pet {
 		return this.description;
 	}
 
-	private byte picture;
+	private byte[] picture;
 
-	public void setPicture(byte value) {
+	public void setPicture(byte[] value) {
 		this.picture = value;
 	}
 
-	public byte getPicture() {
+	public byte[] getPicture() {
 		return this.picture;
 	}
 
@@ -88,13 +90,14 @@ public class Pet {
 		return this.id;
 	}
 
-	private String/* No type specified! */ gender;
+	@Enumerated
+	private Gender gender;
 
-	public void setGender(String/* No type specified! */ value) {
+	public void setGender(Gender value) {
 		this.gender = value;
 	}
 
-	public String/* No type specified! */ getGender() {
+	public Gender getGender() {
 		return this.gender;
 	}
 

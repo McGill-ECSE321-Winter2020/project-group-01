@@ -1,7 +1,7 @@
 package ca.mcgill.ecse321.petshelter.model;
 
 import javax.persistence.GeneratedValue;
-
+import javax.persistence.GenerationType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Set;
@@ -29,7 +29,7 @@ public class Forum {
 	}
 
 	@Id
-	@GeneratedValue()
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public long getId() {
 		return this.id;
 	}
