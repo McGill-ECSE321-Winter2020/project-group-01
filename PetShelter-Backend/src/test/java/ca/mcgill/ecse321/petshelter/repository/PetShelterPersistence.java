@@ -114,8 +114,8 @@ public class PetShelterPersistence {
 	}
 
 	@Test
-	public void testWriteUser() {
-		String name = "TestUserName";
+	public void testPersistAndLoadUser() {
+		String name = "TestUserNamee";
 		String password = "myPassword";
 		boolean emailValid = true;
 		String email = "TestUserName@gmail.com";
@@ -141,38 +141,8 @@ public class PetShelterPersistence {
 		assertEquals(emailValid, user.isIsEmailValidated());
 		assertEquals(apiToken, user.getApiToken());
 	}
-
 	@Test
-	public void testReadUser() {
-		String name = "TestUserName";
-		String password = "myPassword";
-		boolean emailValid = true;
-		String email = "TestUserName@gmail.com";
-		String apiToken = "token112";
-
-		User user = new User();
-
-		// sets everything
-		user.setUserName(name);
-		user.setPassword(password);
-		user.setIsEmailValidated(emailValid);
-		user.setEmail(email);
-		user.setApiToken(apiToken);
-
-		userRepository.save(user);
-
-		user = null;
-
-		user = userRepository.findUserByUserName(name);
-		assertNotNull(user);
-		assertEquals(name, user.getUserName());
-		assertEquals(password, user.getPassword());
-		assertEquals(emailValid, user.isIsEmailValidated());
-		assertEquals(apiToken, user.getApiToken());
-	}
-
-	@Test
-	public void testWriteComment() {
+	public void testPersistAndLoadComment() {
 		Date postedDate = Date.valueOf("2015-03-21");
 		String commentText = "this is a comment";
 		Time time = Time.valueOf("10:22:03");
@@ -196,33 +166,9 @@ public class PetShelterPersistence {
 	}
 
 	@Test
-	public void testReadComment() {
-		Date postedDate = Date.valueOf("2015-03-21");
-		String commentText = "this is a comment";
-		Time time = Time.valueOf("10:22:03");
-
-		User user = createUser();
-		Comment comment = new Comment();
-
-		comment.setDatePosted(postedDate);
-		comment.setText(commentText);
-		comment.setTime(time);
-		comment.setUser(user);
-
-		commentRepository.save(comment);
-
-		comment = null;
-		comment = commentRepository.findCommentByUserAndText(user, commentText);
-
-		assertNotNull(comment);
-		assertEquals(commentText, comment.getText());
-
-	}
-
-	@Test
-	public void testWriteAdvertisement() {
+	public void testPersistAndLoadAdvertisement() {
 		String description = "myDescription";
-		String title = "myTitle";
+		String title = "myTitlee";
 		boolean isFulfiled = true;
 
 		Advertisement advertisement = new Advertisement();
@@ -239,30 +185,8 @@ public class PetShelterPersistence {
 		assertEquals(description, advertisement.getDescription());
 		assertEquals(isFulfiled, advertisement.isIsFulfilled());
 	}
-
 	@Test
-	public void testReadAdvertisement() {
-		String description = "myDescription";
-		String title = "myTitle";
-		boolean isFulfiled = true;
-
-		Advertisement advertisement = new Advertisement();
-
-		advertisement.setDescription(description);
-		advertisement.setIsFulfilled(isFulfiled);
-		advertisement.setTitle(title);
-
-		advertisementRepository.save(advertisement);
-		advertisement = advertisementRepository.findAdvertisementByTitle(title);
-
-		assertNotNull(advertisement);
-		assertEquals(title, advertisement.getTitle());
-		assertEquals(description, advertisement.getDescription());
-		assertEquals(isFulfiled, advertisement.isIsFulfilled());
-	}
-
-	@Test
-	public void testWriteApplication() {
+	public void testPersistAndLoadApplication() {
 		User applicant = createUser();
 		String description = "myDescription";
 
@@ -286,35 +210,8 @@ public class PetShelterPersistence {
 		assertEquals(description, application.getDescription());
 		assertEquals(isAccepted, application.isIsAccepted());
 	}
-
 	@Test
-	public void testReadApplication() {
-		User applicant = createUser();
-		String description = "myDescription";
-
-		Advertisement ad = new Advertisement();
-		advertisementRepository.save(ad);
-		boolean isAccepted = false;
-
-		AdoptionApplication application = new AdoptionApplication();
-		application.setIsAccepted(isAccepted);
-		application.setAdvertisement(ad);
-		application.setUser(applicant);
-		application.setDescription(description);
-
-		applicationRepository.save(application);
-		application = applicationRepository.findApplicationByUserAndAdvertisement(applicant, ad);
-
-		assertNotNull(application);
-
-		assertEquals(applicant.getUserName(), application.getUser().getUserName());
-		assertEquals(ad.getTitle(), application.getAdvertisement().getTitle());
-		assertEquals(description, application.getDescription());
-		assertEquals(isAccepted, application.isIsAccepted());
-	}
-
-	@Test
-	public void testWritePet() {
+	public void testPersistAndLoadPet() {
 		// user info
 		User user = createUser();
 
@@ -343,36 +240,7 @@ public class PetShelterPersistence {
 	}
 
 	@Test
-	public void testReadPet() {
-		// user info
-		User user = createUser();
-
-		// pet info
-		String petName = "TestPetName";
-		Date birthDate = Date.valueOf("2015-03-31");
-		String species = "Dog";
-		String breed = "Labrador";
-		Pet pet = new Pet();
-		pet.setDateOfBirth(birthDate);
-		pet.setName(petName);
-		pet.setSpecies(species);
-		pet.setBreed(breed);
-		pet.setGender(Gender.FEMALE);
-		HashSet<Pet> pets = new HashSet<Pet>();
-		user.setPets(pets);
-		userRepository.save(user);
-		petRepository.save(pet);
-
-		pet = null;
-
-		pet = petRepository.findPetByName(petName);
-		assertNotNull(pet);
-		assertEquals(petName, pet.getName());
-
-	}
-
-	@Test
-	public void testWriteDonation() {
+	public void testPersistAndLoadDonation() {
 
 		User user = createUser();
 		Date donationDate = Date.valueOf("2015-03-31");
@@ -404,40 +272,8 @@ public class PetShelterPersistence {
 	}
 
 	@Test
-	public void testReadDonation() {
-
-		User user = createUser();
-		Date donationDate = Date.valueOf("2015-03-31");
-		Time donationTime = Time.valueOf("10:22:03");
-		double amount = 122.2;
-
-		Donation donation = new Donation();
-
-		donation.setAmount(amount);
-		donation.setDate(donationDate);
-		donation.setTime(donationTime);
-		donation.setUser(user);
-
-		// userRepository.save(user);
-		donationRepository.save(donation);
-
-		donation = null;
-
-		donation = donationRepository.findDonationByUserAndAmount(user, amount);
-		assertNotNull(donation);
-		assertEquals(donationDate, donation.getDate());
-		// TODO: check why it doesnt work.
-		// we need something to check that the username are unique in the db.
-		assertEquals(user.getUserName(), donation.getUser().getUserName());
-
-		assertEquals(user.getUserName(), donation.getUser().getUserName());
-		assertEquals(amount, donation.getAmount(), 0.01);
-
-	}
-
-	@Test
-	public void testReadForum() {
-		String title = "myTitle";
+	public void testPersistAndLoadForum() {
+		String title = "myTitlee";
 		// lazy way of getting out but it will work because we are creating new objects
 		// everytime
 		Comment comment1 = createComment();
@@ -472,43 +308,4 @@ public class PetShelterPersistence {
 		// assertTrue(forum.getSubscribers().containsAll(userSet));
 		assertEquals(title, forum.getTitle());
 	}
-	
-	@Test
-	public void testWriteForum() {
-		String title = "myTitle";
-		// lazy way of getting out but it will work because we are creating new objects
-		// everytime
-		Comment comment1 = createComment();
-		Comment comment2 = createComment();
-		Comment comment3 = createComment();
-		Set<Comment> commentSet = new HashSet<>();
-		commentSet.add(comment1);
-		commentSet.add(comment2);
-		commentSet.add(comment3);
-
-		User user1 = createUser();
-		User user2 = createUser();
-		HashSet<User> userSet = new HashSet<>();
-		userSet.add(user1);
-		userSet.add(user2);
-
-		Forum forum = new Forum();
-		forum.setComments(commentSet);
-		forum.setSubscribers(userSet);
-		forum.setTitle(title);
-
-		forumRepository.save(forum);
-
-		forum = null;
-
-		forum = forumRepository.findForumByTitle(title);
-		assertNotNull(forum);
-		System.out.println(forum.getSubscribers().size());
-		System.out.println(forum.getSubscribers().iterator().next().getUserName());
-		// assertTrue(forum.getComments().containsAll(commentSet));
-		// assertTrue(forum.getSubscribers().contains(user2));
-		// assertTrue(forum.getSubscribers().containsAll(userSet));
-		assertEquals(title, forum.getTitle());
-	}
-
 }
