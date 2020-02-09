@@ -24,6 +24,7 @@ import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Comment;
 import ca.mcgill.ecse321.petshelter.model.Donation;
+import ca.mcgill.ecse321.petshelter.model.Forum;
 import ca.mcgill.ecse321.petshelter.model.Gender;
 import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.model.User;
@@ -97,6 +98,26 @@ public class PetShelterPersistence {
 		return advertisement;
 	}
 
+	
+	@BeforeEach
+	public Comment createComment() {
+		Date postedDate = Date.valueOf("2015-03-21");
+		String commentText = "this is a comment";
+		Time time = Time.valueOf("10:22:03");
+		
+		User user = createUser();
+		Comment comment = new Comment();
+		
+		comment.setDatePosted(postedDate);
+		comment.setText(commentText);
+		comment.setTime(time);
+		comment.setUser(user);
+		
+		commentRepository.save(comment);
+		return comment;
+	}
+	
+	
 	@Test
 	public void testPersistAndLoadUser() {
 		String name = "TestUserName";
@@ -128,9 +149,9 @@ public class PetShelterPersistence {
 	
 	@Test
 	public void testPersistAndLoadComment() {
-		Date postedDate = new Date(123);
+		Date postedDate = Date.valueOf("2015-03-21");
 		String commentText = "this is a comment";
-		Time time = new Time(111);
+		Time time = Time.valueOf("10:22:03");
 		
 		User user = createUser();
 		Comment comment = new Comment();
@@ -245,7 +266,7 @@ public class PetShelterPersistence {
 		donation.setTime(donationTime);
 		donation.setUser(user);
 		
-		userRepository.save(user);
+	//	userRepository.save(user);
 		donationRepository.save(donation);
 		
 		donation = null;
@@ -259,4 +280,42 @@ public class PetShelterPersistence {
 		assertEquals(amount,donation.getAmount(),0.01);
 		
 	}
+	
+//	@Test
+//	public void testPersistAndLoadForum() {
+//		String title = "myTitle";
+//		//lazy way of getting out but it will work because we are creating new objects everytime
+//		Comment comment1 = createComment();
+//		Comment comment2 = createComment();
+//		Comment comment3 = createComment();
+//		Set<Comment> commentSet = new HashSet<>();
+//		commentSet.add(comment1);
+//		commentSet.add(comment2);
+//		commentSet.add(comment3);
+//		
+//		
+//		User user1 = createUser();
+//		User user2 = createUser();
+//		Set<User> userSet = new HashSet<>();
+//		userSet.add(user1);
+//		userSet.add(user2);
+//		
+//		Forum forum = new Forum();
+//		forum.setComments(commentSet);
+//		forum.setSubscribers(userSet);
+//		forum.setTitle(title);
+//		
+//		forumRepository.save(forum);
+//		
+//		forum = null;
+//		
+//		forum = forumRepository.findForumByUserSetAndCommentSet(userSet,commentSet);
+//		assertNotNull(forum);
+//		
+//		assertEquals(commentSet, forum.getComments());
+//		assertEquals(userSet,forum.getSubscribers());
+//		assertEquals(title, forum.getTitle());
+//	}
+//	
+	
 }
