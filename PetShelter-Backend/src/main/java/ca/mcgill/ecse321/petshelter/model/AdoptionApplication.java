@@ -33,13 +33,24 @@ public boolean isIsAccepted() {
 }
    private User user;
    
-   @ManyToOne(optional=false)
+   @ManyToOne
    public User getUser() {
       return this.user;
    }
    
    public void setUser(User user) {
       this.user = user;
+   }
+   
+   private Advertisement advertisement;
+   
+   @ManyToOne(optional=false)
+   public Advertisement getAdvertisement() {
+      return this.advertisement;
+   }
+   
+   public void setAdvertisement(Advertisement advertisement) {
+      this.advertisement = advertisement;
    }
    
    }
