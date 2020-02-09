@@ -39,7 +39,7 @@ public class Forum {
 
 	private Set<Comment> comments;
 
-	@OneToMany(cascade = { CascadeType.ALL })
+	@OneToMany
 	public Set<Comment> getComments() {
 		return this.comments;
 	}
@@ -53,6 +53,11 @@ public class Forum {
 	@OneToMany
 	public Set<User> getSubscribers() {
 		return this.subscribers;
+	}
+
+	@Override
+	public String toString() {
+		return "Forum [title=" + title + ", id=" + id + ", comments=" + comments + ", subscribers=" + subscribers + "]";
 	}
 
 	public void setSubscribers(Set<User> subscriberss) {
