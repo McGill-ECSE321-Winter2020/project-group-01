@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import java.sql.Date;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+
 import java.sql.Time;
 import javax.persistence.ManyToOne;
 
@@ -26,7 +28,7 @@ public class Comment {
 	}
 
 	@Id
-	@GeneratedValue()
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	public long getId() {
 		return this.id;
 	}
