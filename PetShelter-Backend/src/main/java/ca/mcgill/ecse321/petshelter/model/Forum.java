@@ -52,6 +52,11 @@ public class Forum {
 		return this.subscribers;
 	}
 
+	@Override
+	public String toString() {
+		return "Forum [title=" + title + ", id=" + id + ", comments=" + comments + ", subscribers=" + subscribers + "]";
+	}
+
 	public void setSubscribers(Set<User> subscriberss) {
 		this.subscribers = subscriberss;
 	}

@@ -15,6 +15,8 @@ import ca.mcgill.ecse321.petshelter.model.User;
 public interface ForumRepository extends JpaRepository<Forum, Long>{
 
 	//TODO: this is breaking the tests
-//	Forum findForumByUserSetAndCommentSet(Set<User> userSet, Set<Comment> commentSet);
+	//Forum findForumByUserSetAndCommentSet(Set<User> userSet, Set<Comment> commentSet);
+
+	Forum findForumByTitle(String title);
 
 }
