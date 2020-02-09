@@ -3,6 +3,10 @@ package ca.mcgill.ecse321.petshelter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +14,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
+import ca.mcgill.ecse321.petshelter.model.Gender;
+import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.*;
 
@@ -30,28 +37,72 @@ class PetShelterApplicationTests {
 	private PetRepository petRepository;
 	@Autowired
 	private UserRepository userRepository;
-	
-//	@BeforeEach
-//	public void clearDatabase() {
+
+	@BeforeEach
+	public void clearDatabase() {
 //		advertisementRepository.deleteAll();
 //		applicationRepository.deleteAll();
 //		commentRepository.deleteAll();
 //		donationRepository.deleteAll();
 //		forumRepository.deleteAll();
-//		petRepository.deleteAll();
-//		userRepository.deleteAll();
-//	}
+		petRepository.deleteAll();
+		userRepository.deleteAll();
+	}
+
 	@Test
 	public void testPersistAndLoadUser() {
+		// user info
 		String name = "TestUserName";
+		String email = "test@email.com";
 		User user = new User();
 		user.setUserName(name);
+		user.setEmail(email);
+		user.setApiToken("10");
+		user.setApplications(new HashSet<AdoptionApplication>());
+		user.setGender(Gender.FEMALE);
+		user.setIsEmailValidated(true);
+		user.setPassword("123");
+		user.setPets(new HashSet<Pet>());
+		System.out.println(user.getEmail());
 		userRepository.save(user);
-		
-		user = null;
-		
+
+		//user = null;
+
 		user = userRepository.findUserByUserName(name);
 		assertNotNull(user);
 		assertEquals(name, user.getUserName());
+	}
+
+	@Test
+	public void testPersistAndLoadPet() {
+		// user info
+		String name = "TestUserName";
+		String email = "test@email.com";
+		User user = new User();
+		user.setUserName(name);
+		user.setEmail(email);
+		userRepository.save(user);
+
+		// pet info
+		String petName = "TestPetName";
+		Date birthDate = Date.valueOf("2015-03-31");
+		String species = "Dog";
+		String breed = "Labrador";
+		Pet pet = new Pet();
+		pet.setDateOfBirth(birthDate);
+		pet.setName(petName);
+		pet.setSpecies(species);
+		pet.setBreed(breed);
+		Set pets = new HashSet<Pet>();
+		user.setPets(pets);
+		petRepository.save(pet);
+		userRepository.save(user);
+
+		pet = null;
+
+		pet = petRepository.findPetByName(petName);
+		assertNotNull(pet);
+		assertEquals(petName, pet.getName());
+
 	}
 }

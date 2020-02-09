@@ -5,10 +5,8 @@ import javax.persistence.Id;
 import ca.mcgill.ecse321.petshelter.model.Gender;
 import java.util.Set;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 @Entity
-@Table(name="users")
 public class User{
    private String userName;
 

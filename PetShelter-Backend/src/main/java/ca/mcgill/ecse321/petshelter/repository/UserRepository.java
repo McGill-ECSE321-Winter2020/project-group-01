@@ -9,7 +9,7 @@ import ca.mcgill.ecse321.petshelter.model.User;
  * @author Katrina
  *
  */
-public interface UserRepository extends CrudRepository<User, Long>{
+public interface UserRepository extends CrudRepository<User, String>{
 
 	User findUserByUserName(String name);
 }

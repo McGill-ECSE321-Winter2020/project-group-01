@@ -37,7 +37,16 @@ public void setId(long value) {
       return this.isFulfilled;
    }
    
-
+   private Set<String/*No type specified*/> adoptionApplication;
+   
+   @OneToMany
+   public Set<String/*No type specified*/> getAdoptionApplication() {
+      return this.adoptionApplication;
+   }
+   
+   public void setAdoptionApplication(Set<String/*No type specified*/> adoptionApplications) {
+      this.adoptionApplication = adoptionApplications;
+   }
    
    private Set<AdoptionApplication> adoptionApplication;
    
