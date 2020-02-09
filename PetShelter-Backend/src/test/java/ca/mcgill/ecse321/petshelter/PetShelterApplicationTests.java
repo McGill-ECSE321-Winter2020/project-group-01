@@ -72,7 +72,7 @@ class PetShelterApplicationTests {
 
 		//user = null;
 
-		user = userRepository.findUserById(new Long(0));
+		user = userRepository.findUserByUserName(name);
 		assertNotNull(user);
 		assertEquals(name, user.getUserName());
 	}
@@ -97,6 +97,7 @@ class PetShelterApplicationTests {
 		pet.setName(petName);
 		pet.setSpecies(species);
 		pet.setBreed(breed);
+		pet.setGender(Gender.FEMALE);
 		Set pets = new HashSet<Pet>();
 		user.setPets(pets);
 		userRepository.save(user);
