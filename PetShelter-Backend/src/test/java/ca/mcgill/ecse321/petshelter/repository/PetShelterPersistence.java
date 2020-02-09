@@ -281,41 +281,41 @@ public class PetShelterPersistence {
 		
 	}
 	
-//	@Test
-//	public void testPersistAndLoadForum() {
-//		String title = "myTitle";
-//		//lazy way of getting out but it will work because we are creating new objects everytime
-//		Comment comment1 = createComment();
-//		Comment comment2 = createComment();
-//		Comment comment3 = createComment();
-//		Set<Comment> commentSet = new HashSet<>();
-//		commentSet.add(comment1);
-//		commentSet.add(comment2);
-//		commentSet.add(comment3);
-//		
-//		
-//		User user1 = createUser();
-//		User user2 = createUser();
-//		Set<User> userSet = new HashSet<>();
-//		userSet.add(user1);
-//		userSet.add(user2);
-//		
-//		Forum forum = new Forum();
-//		forum.setComments(commentSet);
-//		forum.setSubscribers(userSet);
-//		forum.setTitle(title);
-//		
-//		forumRepository.save(forum);
-//		
-//		forum = null;
-//		
-//		forum = forumRepository.findForumByUserSetAndCommentSet(userSet,commentSet);
-//		assertNotNull(forum);
-//		
-//		assertEquals(commentSet, forum.getComments());
-//		assertEquals(userSet,forum.getSubscribers());
-//		assertEquals(title, forum.getTitle());
-//	}
-//	
+	@Test
+	public void testPersistAndLoadForum() {
+		String title = "myTitle";
+		//lazy way of getting out but it will work because we are creating new objects everytime
+		Comment comment1 = createComment();
+		Comment comment2 = createComment();
+		Comment comment3 = createComment();
+		Set<Comment> commentSet = new HashSet<>();
+		commentSet.add(comment1);
+		commentSet.add(comment2);
+		commentSet.add(comment3);
+		
+		
+		User user1 = createUser();
+		User user2 = createUser();
+		Set<User> userSet = new HashSet<>();
+		userSet.add(user1);
+		userSet.add(user2);
+		
+		Forum forum = new Forum();
+		forum.setComments(commentSet);
+		forum.setSubscribers(userSet);
+		forum.setTitle(title);
+		
+		forumRepository.save(forum);
+		
+		forum = null;
+		
+		forum = forumRepository.findForumByTitle(title);
+		assertNotNull(forum);
+		
+		assertEquals(commentSet, forum.getComments());
+		assertEquals(userSet,forum.getSubscribers());
+		assertEquals(title, forum.getTitle());
+	}
+	
 	
 }
