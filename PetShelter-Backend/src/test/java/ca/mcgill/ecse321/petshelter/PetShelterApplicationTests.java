@@ -31,16 +31,16 @@ class PetShelterApplicationTests {
 	@Autowired
 	private UserRepository userRepository;
 	
-	@BeforeEach
-	public void clearDatabase() {
-		advertisementRepository.deleteAll();
-		applicationRepository.deleteAll();
-		commentRepository.deleteAll();
-		donationRepository.deleteAll();
-		forumRepository.deleteAll();
-		petRepository.deleteAll();
-		userRepository.deleteAll();
-	}
+//	@BeforeEach
+//	public void clearDatabase() {
+//		advertisementRepository.deleteAll();
+//		applicationRepository.deleteAll();
+//		commentRepository.deleteAll();
+//		donationRepository.deleteAll();
+//		forumRepository.deleteAll();
+//		petRepository.deleteAll();
+//		userRepository.deleteAll();
+//	}
 	@Test
 	public void testPersistAndLoadUser() {
 		String name = "TestUserName";
