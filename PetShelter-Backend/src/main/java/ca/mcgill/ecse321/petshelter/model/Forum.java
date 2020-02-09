@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Set;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+
 import ca.mcgill.ecse321.petshelter.model.Comment;
 import javax.persistence.CascadeType;
 import ca.mcgill.ecse321.petshelter.model.User;
@@ -14,6 +16,7 @@ import ca.mcgill.ecse321.petshelter.model.User;
 public class Forum {
 	private String title;
 
+	@NotNull
 	public void setTitle(String value) {
 		this.title = value;
 	}

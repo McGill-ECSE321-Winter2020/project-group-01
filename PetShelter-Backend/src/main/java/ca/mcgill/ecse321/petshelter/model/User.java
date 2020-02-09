@@ -9,12 +9,15 @@ import ca.mcgill.ecse321.petshelter.model.Gender;
 import java.util.Set;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
 public class User {
 	private String userName;
 
+	@NotNull
 	public void setUserName(String value) {
 		this.userName = value;
 	}
@@ -25,6 +28,7 @@ public class User {
 
 	private String password;
 
+	@NotNull
 	public void setPassword(String value) {
 		this.password = value;
 	}
@@ -43,8 +47,11 @@ public class User {
 		return this.isEmailValidated;
 	}
 
+	
 	private String email;
 
+	@Email
+	@NotNull
 	public void setEmail(String value) {
 		this.email = value;
 	}
@@ -73,17 +80,6 @@ public class User {
 
 	public String getApiToken() {
 		return this.apiToken;
-	}
-
-	@Enumerated
-	private Gender gender;
-
-	public void setGender(Gender value) {
-		this.gender = value;
-	}
-
-	public Gender getGender() {
-		return this.gender;
 	}
 
 	private Set<Pet> pets;
@@ -119,7 +115,7 @@ public class User {
 	}
 	
 	@Enumerated
-	private UserType userType;
+	private UserType userType = UserType.USER;
 
 	public void setUserType(UserType value) {
 		this.userType = value;
