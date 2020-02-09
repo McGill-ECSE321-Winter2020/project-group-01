@@ -68,7 +68,6 @@ class PetShelterApplicationTests {
 		user.setIsEmailValidated(true);
 		user.setPassword("123");
 		user.setPets(new HashSet<Pet>());
-		System.out.println(user.getEmail());
 		userRepository.save(user);
 
 		//user = null;
