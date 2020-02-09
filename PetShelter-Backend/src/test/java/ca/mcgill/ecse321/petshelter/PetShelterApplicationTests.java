@@ -7,7 +7,9 @@ import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +24,6 @@ import ca.mcgill.ecse321.petshelter.repository.*;
 
 @SpringBootTest
 class PetShelterApplicationTests {
-
 	@Autowired
 	private AdvertisementRepository advertisementRepository;
 	@Autowired
@@ -39,14 +40,16 @@ class PetShelterApplicationTests {
 	private UserRepository userRepository;
 
 	@BeforeEach
+	@AfterEach
 	public void clearDatabase() {
 //		advertisementRepository.deleteAll();
 //		applicationRepository.deleteAll();
 //		commentRepository.deleteAll();
 //		donationRepository.deleteAll();
 //		forumRepository.deleteAll();
-		petRepository.deleteAll();
 		userRepository.deleteAll();
+		petRepository.deleteAll();
+
 	}
 
 	@Test
@@ -68,7 +71,7 @@ class PetShelterApplicationTests {
 
 		//user = null;
 
-		user = userRepository.findUserByUserName(name);
+		user = userRepository.findUserById(new Long(0));
 		assertNotNull(user);
 		assertEquals(name, user.getUserName());
 	}
@@ -95,8 +98,9 @@ class PetShelterApplicationTests {
 		pet.setBreed(breed);
 		Set pets = new HashSet<Pet>();
 		user.setPets(pets);
-		petRepository.save(pet);
 		userRepository.save(user);
+		petRepository.save(pet);
+
 
 		pet = null;
 
