@@ -9,4 +9,6 @@ import ca.mcgill.ecse321.petshelter.model.Advertisement;
  */
 public interface AdvertisementRepository extends JpaRepository<Advertisement, Long>{
 
+	Advertisement findAdvertisementByName(String title);
+
 }
