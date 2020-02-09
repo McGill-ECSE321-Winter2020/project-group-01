@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import java.sql.Date;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -82,8 +81,7 @@ public void setId(long value) {
     this.id = value;
 }
 @Id
-@GeneratedValue(strategy = GenerationType.AUTO)
-public long getId() {
+@GeneratedValue()public long getId() {
     return this.id;
 }
    private String/*No type specified!*/ gender;

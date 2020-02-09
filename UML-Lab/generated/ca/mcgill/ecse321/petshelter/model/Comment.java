@@ -1,10 +1,10 @@
 package ca.mcgill.ecse321.petshelter.model;
 
 import javax.persistence.Entity;
-import java.sql.Date;
+import ca.mcgill.ecse321.petshelter.model.java.sql.Date;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
-import java.sql.Time;
+import ca.mcgill.ecse321.petshelter.model.java.sql.Time;
 import javax.persistence.ManyToOne;
 
 @Entity
