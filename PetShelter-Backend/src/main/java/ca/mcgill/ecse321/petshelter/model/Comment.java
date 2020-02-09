@@ -4,48 +4,53 @@ import java.sql.Date;
 import java.sql.Time;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.ManyToOne;
 
-/**
- * @author louis
- *
- */
 @Entity
-public class Comment {
-	@Getter
-	@Setter
-	private Date datePosted;
+public class Comment{
+   private Date datePosted;
 
-	@Getter
-	@Setter
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
-
-	@Getter
-	@Setter
-	private String text;
-
-	@Getter
-	@Setter
-	private Time comment;
-
-	@OneToOne(optional = false)
-	@Getter
-	@Setter
-	private User userPoster;
-
-	@ManyToOne(optional = false)
-	@Getter
-	@Setter
-	private Forum forum;
-
+public void setDatePosted(Date value) {
+    this.datePosted = value;
 }
+public Date getDatePosted() {
+    return this.datePosted;
+}
+private long id;
+
+public void setId(long value) {
+    this.id = value;
+}
+@Id
+public long getId() {
+    return this.id;
+}
+private String text;
+
+public void setText(String value) {
+    this.text = value;
+}
+public String getText() {
+    return this.text;
+}
+private Time time;
+
+public void setTime(Time value) {
+    this.time = value;
+}
+public Time getTime() {
+    return this.time;
+}
+   private User user;
+   
+   @ManyToOne(optional=false)
+   public User getUser() {
+      return this.user;
+   }
+   
+   public void setUser(User user) {
+      this.user = user;
+   }
+   
+   }
