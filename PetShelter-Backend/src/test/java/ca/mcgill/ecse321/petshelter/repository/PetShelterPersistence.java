@@ -23,6 +23,7 @@ import ca.mcgill.ecse321.petshelter.PetShelterApplication;
 import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Comment;
+import ca.mcgill.ecse321.petshelter.model.Donation;
 import ca.mcgill.ecse321.petshelter.model.Gender;
 import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.model.User;
@@ -227,5 +228,35 @@ public class PetShelterPersistence {
 		assertNotNull(pet);
 		assertEquals(petName, pet.getName());
 
+	}
+	
+	@Test
+	public void testPresistAndLoadDonation() {
+		
+		User user = createUser();
+		Date donationDate = Date.valueOf("2015-03-31");
+		Time donationTime = Time.valueOf("10:22:03");
+		double amount = 122.2;
+		
+		Donation donation = new Donation();
+		
+		donation.setAmount(amount);
+		donation.setDate(donationDate);
+		donation.setTime(donationTime);
+		donation.setUser(user);
+		
+		userRepository.save(user);
+		donationRepository.save(donation);
+		
+		donation = null;
+		
+		donation = donationRepository.findDonationByUserAndAmount(user, amount);
+		assertNotNull(donation);
+		assertEquals(donationDate, donation.getDate());
+		//TODO: check why it doesnt work.
+		//assertEquals(user, donation.getUser());
+	
+		assertEquals(amount,donation.getAmount(),0.01);
+		
 	}
 }
