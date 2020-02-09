@@ -192,34 +192,32 @@ public class PetShelterPersistence {
 		assertEquals(isFulfiled, advertisement.isIsFulfilled());
 	}
 
+	@Test
+	public void testPersistAndLoadApplication() {
+		User applicant = createUser();
+		String description = "myDescription";
+		Advertisement advertisement = createAdvertisement();
+		boolean isAccepted = false;
 	
+
+		AdoptionApplication application = new AdoptionApplication();
+		application.setIsAccepted(isAccepted);
+		application.setAdvertisement(advertisement);
+		// application.setApplicant(applicant);
+		application.setDescription(description);
 	
-//	@Test
-//	public void testPersistAndLoadApplication() {
-//		User applicant = createUser();
-//		String description = "myDescription";
-//		Advertisement advertisement = createAdvertisement();
-//		boolean isAccepted = false;
-//	
-//
-//		AdoptionApplication application = new AdoptionApplication();
-//		application.setIsAccepted(isAccepted);
-//		application.setAdvertisement(advertisement);
-//		// application.setApplicant(applicant);
-//		application.setDescription(description);
-//	
-//
-//		applicationRepository.save(application);
-//
-//		application = applicationRepository.finApplicationByUserAndAdvertisement(applicant, advertisement);
-//		assertNotNull(application);
-//		
-//		// assertEquals(applicant,application.getApplicant());
-//		assertEquals(applicant, application.getUser());
-//		assertEquals(advertisement, application.getAdvertisement());
-//		assertEquals(description, application.getDescription());
-//		assertEquals(isAccepted, application.isIsAccepted());
-//	}
+
+		applicationRepository.save(application);
+
+		application = applicationRepository.findApplicationByUserAndAdvertisement(applicant, advertisement);
+		assertNotNull(application);
+		
+		// assertEquals(applicant,application.getApplicant());
+		assertEquals(applicant, application.getUser());
+		assertEquals(advertisement, application.getAdvertisement());
+		assertEquals(description, application.getDescription());
+		assertEquals(isAccepted, application.isIsAccepted());
+	}
 
 	@Test
 	public void testPersistAndLoadPet() {
