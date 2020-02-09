@@ -1,30 +1,54 @@
 package ca.mcgill.ecse321.petshelter.model;
 
-import java.util.Set;
-
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.GeneratedValue;
+import java.util.Set;
+import javax.persistence.OneToMany;
 
-import lombok.Data;
-
-/**
- * @author louis
- *
- */
 @Entity
-@Data
-@Table(name = "Advertisements")
 public class Advertisement {
 	private String description;
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+
+	public void setDescription(String value) {
+		this.description = value;
+	}
+
+	public String getDescription() {
+		return this.description;
+	}
+
 	private long id;
+
+	public void setId(long value) {
+		this.id = value;
+	}
+
+	@Id
+	@GeneratedValue()
+	public long getId() {
+		return this.id;
+	}
+
 	private boolean isFulfilled;
-	@ManyToMany
-	private Set<Application> applications;
+
+	public void setIsFulfilled(boolean value) {
+		this.isFulfilled = value;
+	}
+
+	public boolean isIsFulfilled() {
+		return this.isFulfilled;
+	}
+
+	private Set<AdoptionApplication> adoptionApplication;
+
+	@OneToMany(mappedBy = "advertisement")
+	public Set<AdoptionApplication> getAdoptionApplication() {
+		return this.adoptionApplication;
+	}
+
+	public void setAdoptionApplication(Set<AdoptionApplication> adoptionApplications) {
+		this.adoptionApplication = adoptionApplications;
+	}
 
 }
