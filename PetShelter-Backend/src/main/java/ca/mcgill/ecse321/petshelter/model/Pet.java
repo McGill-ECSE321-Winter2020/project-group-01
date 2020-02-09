@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Pet {
@@ -30,6 +31,7 @@ public class Pet {
 
 	private String name;
 
+	@NotNull
 	public void setName(String value) {
 		this.name = value;
 	}
@@ -38,6 +40,7 @@ public class Pet {
 		return this.name;
 	}
 
+	@NotNull
 	private String species;
 
 	public void setSpecies(String value) {
