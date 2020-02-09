@@ -1,61 +1,112 @@
 package ca.mcgill.ecse321.petshelter.model;
 
-import java.sql.Date;
-
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
+import java.sql.Date;
+import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import lombok.Getter;
-import lombok.Setter;
-
-/**
- * @author louis
- *
- */
 @Entity
 public class Pet {
-	@Getter
-	@Setter
+	/**
+	 * <pre>
+	 *           1..1     1..1
+	 * Pet ------------------------> Date
+	 *           &lt;       dateOfBirth
+	 * </pre>
+	 */
 	private Date dateOfBirth;
 
-	@Getter
-	@Setter
+	public void setDateOfBirth(Date value) {
+		this.dateOfBirth = value;
+	}
+
+	public Date getDateOfBirth() {
+		return this.dateOfBirth;
+	}
+
 	private String name;
 
-	@Getter
-	@Setter
+	public void setName(String value) {
+		this.name = value;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
 	private String species;
 
-	@Getter
-	@Setter
+	public void setSpecies(String value) {
+		this.species = value;
+	}
+
+	public String getSpecies() {
+		return this.species;
+	}
+
 	private String breed;
 
-	@Getter
-	@Setter
+	public void setBreed(String value) {
+		this.breed = value;
+	}
+
+	public String getBreed() {
+		return this.breed;
+	}
+
 	private String description;
 
-	@Getter
-	@Setter
-	private byte[] picture;
+	public void setDescription(String value) {
+		this.description = value;
+	}
 
-	@Getter
-	@Setter
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	public String getDescription() {
+		return this.description;
+	}
+
+	private byte picture;
+
+	public void setPicture(byte value) {
+		this.picture = value;
+	}
+
+	public byte getPicture() {
+		return this.picture;
+	}
+
 	private long id;
 
-	@Getter
-	@Setter
-	@Enumerated
-	private Gender gender;
+	public void setId(long value) {
+		this.id = value;
+	}
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	public long getId() {
+		return this.id;
+	}
+
+	private String/* No type specified! */ gender;
+
+	public void setGender(String/* No type specified! */ value) {
+		this.gender = value;
+	}
+
+	public String/* No type specified! */ getGender() {
+		return this.gender;
+	}
+
+	private Advertisement advertisement;
 
 	@ManyToOne
-	@Getter
-	@Setter
-	private Advertisement advertisement;
+	public Advertisement getAdvertisement() {
+		return this.advertisement;
+	}
+
+	public void setAdvertisement(Advertisement advertisement) {
+		this.advertisement = advertisement;
+	}
 
 }

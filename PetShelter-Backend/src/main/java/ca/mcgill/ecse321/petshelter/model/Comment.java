@@ -1,51 +1,65 @@
 package ca.mcgill.ecse321.petshelter.model;
 
-import java.sql.Date;
-import java.sql.Time;
-
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import java.sql.Date;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-
-import lombok.Getter;
-import lombok.Setter;
-
+import javax.persistence.GeneratedValue;
+import java.sql.Time;
 import javax.persistence.ManyToOne;
 
-/**
- * @author louis
- *
- */
 @Entity
 public class Comment {
-	@Getter
-	@Setter
 	private Date datePosted;
 
-	@Getter
-	@Setter
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	public void setDatePosted(Date value) {
+		this.datePosted = value;
+	}
+
+	public Date getDatePosted() {
+		return this.datePosted;
+	}
+
 	private long id;
 
-	@Getter
-	@Setter
+	public void setId(long value) {
+		this.id = value;
+	}
+
+	@Id
+	@GeneratedValue()
+	public long getId() {
+		return this.id;
+	}
+
 	private String text;
 
-	@Getter
-	@Setter
-	private Time comment;
+	public void setText(String value) {
+		this.text = value;
+	}
 
-	@OneToOne(optional = false)
-	@Getter
-	@Setter
-	private User userPoster;
+	public String getText() {
+		return this.text;
+	}
 
-	@ManyToOne(optional = false)
-	@Getter
-	@Setter
-	private Forum forum;
+	private Time time;
+
+	public void setTime(Time value) {
+		this.time = value;
+	}
+
+	public Time getTime() {
+		return this.time;
+	}
+
+	private User user;
+
+	@ManyToOne
+	public User getUser() {
+		return this.user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
 
 }

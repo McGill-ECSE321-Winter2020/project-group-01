@@ -1,43 +1,79 @@
 package ca.mcgill.ecse321.petshelter.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
 import java.sql.Date;
 import java.sql.Time;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import lombok.Getter;
-import lombok.Setter;
-
-/**
- * @author louis
- *
- */
 @Entity
 public class Donation {
-	@Getter
-	@Setter
 	private double amount;
 
-	@Getter
-	@Setter
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	public void setAmount(double value) {
+		this.amount = value;
+	}
+
+	public double getAmount() {
+		return this.amount;
+	}
+
 	private long id;
 
-	@Getter
-	@Setter
+	public void setId(long value) {
+		this.id = value;
+	}
+
+	@Id
+	@GeneratedValue()
+	public long getId() {
+		return this.id;
+	}
+
+	/**
+	 * <pre>
+	 *           1..1     1..1
+	 * Donation ------------------------> Date
+	 *           &lt;       date
+	 * </pre>
+	 */
 	private Date date;
 
-	@ManyToOne(optional=true)
-	@Getter
-	@Setter
+	public void setDate(Date value) {
+		this.date = value;
+	}
+
+	public Date getDate() {
+		return this.date;
+	}
+
+	/**
+	 * <pre>
+	 *           1..1     1..1
+	 * Donation ------------------------> Time
+	 *           &lt;       time
+	 * </pre>
+	 */
+	private Time time;
+
+	public void setTime(Time value) {
+		this.time = value;
+	}
+
+	public Time getTime() {
+		return this.time;
+	}
+
 	private User user;
 
-	@Getter
-	@Setter
-	private Time time;
+	@ManyToOne
+	public User getUser() {
+		return this.user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 }
