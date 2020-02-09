@@ -84,13 +84,13 @@ public class PetShelterPersistence {
 	public Advertisement createAdvertisement() {
 		String description = "myDescription";
 		String title = "myTitle";
-		long id = 12345;
+		//long id = 12345;
 		boolean isFulfiled = true;
 
 		Advertisement advertisement = new Advertisement();
 
 		advertisement.setDescription(description);
-		advertisement.setId(id);
+	//	advertisement.setId(id);
 		advertisement.setIsFulfilled(isFulfiled);
 		advertisement.setTitle(title);
 
@@ -196,8 +196,7 @@ public class PetShelterPersistence {
 	public void testPersistAndLoadApplication() {
 		User applicant = createUser();
 		String description = "myDescription";
-		//Advertisement advertisement = createAdvertisement();
-		//System.out.println(advertisement.getId());
+		
 		Advertisement ad = new Advertisement();
 		advertisementRepository.save(ad);
 		boolean isAccepted = false;
@@ -206,18 +205,17 @@ public class PetShelterPersistence {
 		AdoptionApplication application = new AdoptionApplication();
 		application.setIsAccepted(isAccepted);
 		application.setAdvertisement(ad);
-		// application.setApplicant(applicant);
+		application.setUser(applicant);
 		application.setDescription(description);
 	
-
+		
 		applicationRepository.save(application);
-
 		application = applicationRepository.findApplicationByUserAndAdvertisement(applicant, ad);
+		
 		assertNotNull(application);
 		
-		// assertEquals(applicant,application.getApplicant());
-		assertEquals(applicant, application.getUser());
-		assertEquals(ad, application.getAdvertisement());
+		assertEquals(applicant.getUserName(),application.getUser().getUserName());
+		assertEquals(ad.getTitle(), application.getAdvertisement().getTitle());
 		assertEquals(description, application.getDescription());
 		assertEquals(isAccepted, application.isIsAccepted());
 	}

@@ -62,4 +62,10 @@ public class AdoptionApplication {
 		this.advertisement = advertisement;
 	}
 
+	@Override
+	public String toString() {
+		return "AdoptionApplication [description=" + description + ", id=" + id + ", isAccepted=" + isAccepted
+				+ ", user=" + user + ", advertisement=" + advertisement + "]";
+	}
+
 }
