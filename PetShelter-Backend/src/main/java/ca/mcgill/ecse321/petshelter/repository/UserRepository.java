@@ -9,4 +9,5 @@ import ca.mcgill.ecse321.petshelter.model.User;
  */
 public interface UserRepository extends JpaRepository<User, Long>{
 
+	User findUserByName(String name);
 }

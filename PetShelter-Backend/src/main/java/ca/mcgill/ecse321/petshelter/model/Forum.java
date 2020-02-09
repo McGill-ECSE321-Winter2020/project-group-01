@@ -1,41 +1,53 @@
 package ca.mcgill.ecse321.petshelter.model;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Set;
 import javax.persistence.OneToMany;
-
-import lombok.Getter;
-import lombok.Setter;
-
+import ca.mcgill.ecse321.petshelter.model.Comment;
 import javax.persistence.CascadeType;
+import ca.mcgill.ecse321.petshelter.model.User;
 
-/**
- * @author louis
- *
- */
 @Entity
-public class Forum {
-	@Getter
-	@Setter
-	private String title;
+public class Forum{
+   private String title;
 
-	@Getter
-	@Setter
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
-	
-	@OneToMany
-	@Getter
-	@Setter
-	private Set<User> subscribers;
-
-	@OneToMany(mappedBy = "forum", cascade = { CascadeType.ALL })
-	@Getter
-	@Setter
-	private Set<Comment> comments;
-
+public void setTitle(String value) {
+    this.title = value;
 }
+public String getTitle() {
+    return this.title;
+}
+private long id;
+
+public void setId(long value) {
+    this.id = value;
+}
+@Id
+public long getId() {
+    return this.id;
+}
+   
+   private Set<Comment> comments;
+   
+   @OneToMany(cascade={CascadeType.ALL})
+   public Set<Comment> getComments() {
+      return this.comments;
+   }
+   
+   public void setComments(Set<Comment> commentss) {
+      this.comments = commentss;
+   }
+   
+   private Set<User> subscribers;
+   
+   @OneToMany
+   public Set<User> getSubscribers() {
+      return this.subscribers;
+   }
+   
+   public void setSubscribers(Set<User> subscriberss) {
+      this.subscribers = subscriberss;
+   }
+   
+   }
