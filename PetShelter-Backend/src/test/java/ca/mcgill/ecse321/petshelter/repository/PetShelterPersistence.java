@@ -196,25 +196,28 @@ public class PetShelterPersistence {
 	public void testPersistAndLoadApplication() {
 		User applicant = createUser();
 		String description = "myDescription";
-		Advertisement advertisement = createAdvertisement();
+		//Advertisement advertisement = createAdvertisement();
+		//System.out.println(advertisement.getId());
+		Advertisement ad = new Advertisement();
+		advertisementRepository.save(ad);
 		boolean isAccepted = false;
 	
 
 		AdoptionApplication application = new AdoptionApplication();
 		application.setIsAccepted(isAccepted);
-		application.setAdvertisement(advertisement);
+		application.setAdvertisement(ad);
 		// application.setApplicant(applicant);
 		application.setDescription(description);
 	
 
 		applicationRepository.save(application);
 
-		application = applicationRepository.findApplicationByUserAndAdvertisement(applicant, advertisement);
+		application = applicationRepository.findApplicationByUserAndAdvertisement(applicant, ad);
 		assertNotNull(application);
 		
 		// assertEquals(applicant,application.getApplicant());
 		assertEquals(applicant, application.getUser());
-		assertEquals(advertisement, application.getAdvertisement());
+		assertEquals(ad, application.getAdvertisement());
 		assertEquals(description, application.getDescription());
 		assertEquals(isAccepted, application.isIsAccepted());
 	}
