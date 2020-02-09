@@ -5,7 +5,8 @@ import org.springframework.data.repository.CrudRepository;
 import ca.mcgill.ecse321.petshelter.model.User;
 
 /**
- * @author louis
+ * @author Louis
+ * @author Katrina
  *
  */
 public interface UserRepository extends CrudRepository<User, Long>{

@@ -52,6 +52,6 @@ class PetShelterApplicationTests {
 		
 		user = userRepository.findUserByUserName(name);
 		assertNotNull(user);
-		assertEquals(name, user.getUserName());	
+		assertEquals(name, user.getUserName());
 	}
 }
