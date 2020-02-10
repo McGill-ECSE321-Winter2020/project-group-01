@@ -1,8 +1,7 @@
 package ca.mcgill.ecse321.petshelter.repository;
 
-import org.springframework.data.repository.CrudRepository;
-
 import ca.mcgill.ecse321.petshelter.model.User;
+import org.springframework.data.repository.CrudRepository;
 
 /**
  * @author Louis

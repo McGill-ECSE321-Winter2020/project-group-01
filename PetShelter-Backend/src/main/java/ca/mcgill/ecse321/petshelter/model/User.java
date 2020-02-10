@@ -1,14 +1,8 @@
 package ca.mcgill.ecse321.petshelter.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import ca.mcgill.ecse321.petshelter.model.Gender;
+import javax.persistence.*;
+import java.util.Arrays;
 import java.util.Set;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
@@ -107,26 +101,42 @@ public class User {
 	public void setApplications(Set<AdoptionApplication> applicationss) {
 		this.applications = applicationss;
 	}
-	
-	private byte[] picture;
-
-	public void setPicture(byte[] value) {
-		this.picture = value;
-	}
-
-	public byte[] getPicture() {
-		return this.picture;
-	}
-	
-	@Enumerated
-	private UserType userType;
-
-	public void setUserType(UserType value) {
-		this.userType = value;
-	}
-
-	public UserType getUserType() {
-		return this.userType;
-	}
-
+    
+    private byte[] picture;
+    
+    public void setPicture(byte[] value) {
+        this.picture = value;
+    }
+    
+    public byte[] getPicture() {
+        return this.picture;
+    }
+    
+    @Enumerated
+    private UserType userType;
+    
+    public UserType getUserType() {
+        return this.userType;
+    }
+    
+    public void setUserType(UserType value) {
+        this.userType = value;
+    }
+    
+    @Override
+    public String toString() {
+        return "User{" +
+                "userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", isEmailValidated=" + isEmailValidated +
+                ", email='" + email + '\'' +
+                ", id=" + id +
+                ", apiToken='" + apiToken + '\'' +
+                ", gender=" + gender +
+                ", pets=" + pets +
+                ", applications=" + applications +
+                ", picture=" + Arrays.toString(picture) +
+                ", userType=" + userType +
+                '}';
+    }
 }

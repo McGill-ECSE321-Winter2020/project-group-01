@@ -1,24 +1,21 @@
 package ca.mcgill.ecse321.petshelter.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class AdoptionApplication {
-	private String description;
-
-	public void setDescription(String value) {
-		this.description = value;
-	}
-
-	public String getDescription() {
-		return this.description;
-	}
-
-	private long id;
+    
+    private String description;
+    
+    public void setDescription(String value) {
+        this.description = value;
+    }
+    
+    public String getDescription() {
+        return this.description;
+    }
+    
+    private long id;
 
 	public void setId(long value) {
 		this.id = value;
@@ -50,22 +47,26 @@ public class AdoptionApplication {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
-	private Advertisement advertisement;
-
-	@ManyToOne(optional = false)
-	public Advertisement getAdvertisement() {
-		return this.advertisement;
-	}
-
-	public void setAdvertisement(Advertisement advertisement) {
-		this.advertisement = advertisement;
-	}
-
-	@Override
-	public String toString() {
-		return "AdoptionApplication [description=" + description + ", id=" + id + ", isAccepted=" + isAccepted
-				+ ", user=" + user + ", advertisement=" + advertisement + "]";
-	}
-
+    
+    private Advertisement advertisement;
+    
+    @ManyToOne(optional = false)
+    public Advertisement getAdvertisement() {
+        return this.advertisement;
+    }
+    
+    public void setAdvertisement(Advertisement advertisement) {
+        this.advertisement = advertisement;
+    }
+    
+    @Override
+    public String toString() {
+        return "AdoptionApplication{" +
+                "description='" + description + '\'' +
+                ", id=" + id +
+                ", isAccepted=" + isAccepted +
+                ", user=" + user +
+                ", advertisement=" + advertisement +
+                '}';
+    }
 }

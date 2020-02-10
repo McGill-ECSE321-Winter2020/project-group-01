@@ -1,13 +1,8 @@
 package ca.mcgill.ecse321.petshelter.model;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.sql.Date;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-
 import java.sql.Time;
-import javax.persistence.ManyToOne;
 
 @Entity
 public class Comment {
@@ -42,26 +37,36 @@ public class Comment {
 	public String getText() {
 		return this.text;
 	}
-
-	private Time time;
-
-	public void setTime(Time value) {
-		this.time = value;
-	}
-
-	public Time getTime() {
-		return this.time;
-	}
-
-	private User user;
-
-	@ManyToOne
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
+    
+    private Time time;
+    
+    public void setTime(Time value) {
+        this.time = value;
+    }
+    
+    public Time getTime() {
+        return this.time;
+    }
+    
+    private User user;
+    
+    @ManyToOne
+    public User getUser() {
+        return this.user;
+    }
+    
+    public void setUser(User user) {
+        this.user = user;
+    }
+    
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "datePosted=" + datePosted +
+                ", id=" + id +
+                ", text='" + text + '\'' +
+                ", time=" + time +
+                ", user=" + user +
+                '}';
+    }
 }

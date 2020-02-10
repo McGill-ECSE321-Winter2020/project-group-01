@@ -1,13 +1,8 @@
 package ca.mcgill.ecse321.petshelter.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-
+import javax.persistence.*;
 import java.sql.Date;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.ManyToOne;
+import java.util.Arrays;
 
 @Entity
 public class Pet {
@@ -89,27 +84,41 @@ public class Pet {
 	public long getId() {
 		return this.id;
 	}
-
-	@Enumerated
-	private Gender gender;
-
-	public void setGender(Gender value) {
-		this.gender = value;
-	}
-
-	public Gender getGender() {
-		return this.gender;
-	}
-
-	private Advertisement advertisement;
-
-	@ManyToOne
-	public Advertisement getAdvertisement() {
-		return this.advertisement;
-	}
-
-	public void setAdvertisement(Advertisement advertisement) {
-		this.advertisement = advertisement;
-	}
-
+    
+    @Enumerated
+    private Gender gender;
+    
+    public void setGender(Gender value) {
+        this.gender = value;
+    }
+    
+    public Gender getGender() {
+        return this.gender;
+    }
+    
+    private Advertisement advertisement;
+    
+    @ManyToOne
+    public Advertisement getAdvertisement() {
+        return this.advertisement;
+    }
+    
+    public void setAdvertisement(Advertisement advertisement) {
+        this.advertisement = advertisement;
+    }
+    
+    @Override
+    public String toString() {
+        return "Pet{" +
+                "dateOfBirth=" + dateOfBirth +
+                ", name='" + name + '\'' +
+                ", species='" + species + '\'' +
+                ", breed='" + breed + '\'' +
+                ", description='" + description + '\'' +
+                ", picture=" + Arrays.toString(picture) +
+                ", id=" + id +
+                ", gender=" + gender +
+                ", advertisement=" + advertisement +
+                '}';
+    }
 }
