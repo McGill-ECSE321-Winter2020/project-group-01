@@ -23,6 +23,6 @@ The project report for this deliverable can be found [here](https://github.com/M
 | Louis Barrette-Vanasse | Domain model, UML code generation, Gradle, Travis CI, Spring and Heroku setup, Requirements, Repositories creation, Lombok annotations, Detailed use cases, Persistence layer tests | 21.5 |
 | Mathieu Bissonnette |Requirements, Persistence layer testing | ∞ |
 | Christopher Boustros | Gradle, Spring and Heroku setup, Requirements, Wiki setup | ∞ |
-| Ding Ma | UML code generation, Requirements, Persistence layer testing | ∞ |
+| Ding Ma | UML code generation, Requirements, Persistence layer testing, Travis CI, Detailed use cases | 18 |
 | Katrina Poulin | Requirements, Use Case diagrams, Detailed use cases, Documentation, Persistence layer testing | ∞ |
 
