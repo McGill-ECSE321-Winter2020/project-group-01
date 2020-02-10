@@ -39,4 +39,4 @@ The project report for this deliverable can be found [here](https://github.com/M
 | Ding Ma | UML code generation, Requirements, Persistence layer testing, Travis CI, Detailed use cases | 18 |
 | Katrina Poulin | Requirements, Use Case diagrams, Detailed use cases, Documentation, Persistence layer testing | 16 |
 
-(*) *From ECSE321_Project_Description written by M. Kanaan, posted on myCourses.*
+(*) *From ECSE321_Project_Description.pdf written by M. Kanaan, posted on myCourses.*
