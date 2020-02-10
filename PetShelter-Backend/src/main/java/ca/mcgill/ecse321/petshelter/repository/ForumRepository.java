@@ -1,12 +1,7 @@
 package ca.mcgill.ecse321.petshelter.repository;
 
-import java.util.Set;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import ca.mcgill.ecse321.petshelter.model.Comment;
 import ca.mcgill.ecse321.petshelter.model.Forum;
-import ca.mcgill.ecse321.petshelter.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * @author louis

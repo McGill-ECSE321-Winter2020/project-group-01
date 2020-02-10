@@ -1,12 +1,7 @@
 package ca.mcgill.ecse321.petshelter.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-
+import javax.persistence.*;
 import java.util.Set;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Advertisement {
@@ -41,26 +36,37 @@ public class Advertisement {
 	public boolean isIsFulfilled() {
 		return this.isFulfilled;
 	}
-
-	private Set<AdoptionApplication> adoptionApplication;
-
-	@OneToMany(mappedBy = "advertisement")
-	public Set<AdoptionApplication> getAdoptionApplication() {
-		return this.adoptionApplication;
-	}
-
-	public void setAdoptionApplication(Set<AdoptionApplication> adoptionApplications) {
-		this.adoptionApplication = adoptionApplications;
-	}
-	
-	
-	private String title;
-	
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	public String getTitle() {
-		return this.title;
-	}
-
+    
+    private Set<AdoptionApplication> adoptionApplication;
+    
+    @OneToMany(mappedBy = "advertisement")
+    public Set<AdoptionApplication> getAdoptionApplication() {
+        return this.adoptionApplication;
+    }
+    
+    public void setAdoptionApplication(Set<AdoptionApplication> adoptionApplications) {
+        this.adoptionApplication = adoptionApplications;
+    }
+    
+    
+    private String title;
+    
+    public String getTitle() {
+        return this.title;
+    }
+    
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
+    @Override
+    public String toString() {
+        return "Advertisement{" +
+                "description='" + description + '\'' +
+                ", id=" + id +
+                ", isFulfilled=" + isFulfilled +
+                ", adoptionApplication=" + adoptionApplication +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }
