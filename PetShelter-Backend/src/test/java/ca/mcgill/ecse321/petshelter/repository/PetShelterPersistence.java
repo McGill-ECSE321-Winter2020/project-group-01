@@ -1,11 +1,14 @@
 package ca.mcgill.ecse321.petshelter.repository;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.junit.Test;
@@ -235,7 +238,11 @@ public class PetShelterPersistence {
 
 		pet = petRepository.findPetByName(petName);
 		assertNotNull(pet);
+		
+	
 		assertEquals(petName, pet.getName());
+		assertEquals(birthDate, pet.getDateOfBirth());
+		assertEquals(breed, pet.getBreed());
 
 	}
 
@@ -254,7 +261,6 @@ public class PetShelterPersistence {
 		donation.setTime(donationTime);
 		donation.setUser(user);
 
-		// userRepository.save(user);
 		donationRepository.save(donation);
 
 		donation = null;
@@ -262,10 +268,6 @@ public class PetShelterPersistence {
 		donation = donationRepository.findDonationByUserAndAmount(user, amount);
 		assertNotNull(donation);
 		assertEquals(donationDate, donation.getDate());
-		// TODO: check why it doesnt work.
-		// we need something to check that the username are unique in the db.
-		assertEquals(user.getUserName(), donation.getUser().getUserName());
-
 		assertEquals(user.getUserName(), donation.getUser().getUserName());
 		assertEquals(amount, donation.getAmount(), 0.01);
 
@@ -284,6 +286,7 @@ public class PetShelterPersistence {
 		commentSet.add(comment2);
 		commentSet.add(comment3);
 
+		
 		User user1 = createUser();
 		User user2 = createUser();
 		HashSet<User> userSet = new HashSet<>();
@@ -301,11 +304,6 @@ public class PetShelterPersistence {
 
 		forum = forumRepository.findForumByTitle(title);
 		assertNotNull(forum);
-		System.out.println(forum.getSubscribers().size());
-		System.out.println(forum.getSubscribers().iterator().next().getUserName());
-		// assertTrue(forum.getComments().containsAll(commentSet));
-		// assertTrue(forum.getSubscribers().contains(user2));
-		// assertTrue(forum.getSubscribers().containsAll(userSet));
 		assertEquals(title, forum.getTitle());
 	}
 }
