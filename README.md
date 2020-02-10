@@ -22,11 +22,11 @@ We are 5 McGill University students from the Faculty of Engineering
 ### Project
 | NAME                   | ROLE |  SPRINT 1 | SPRINT 2 | SPRINT 3 | SPRINT 4 |
 |------------------------|------|-----------|----------|----------|----------|
-| Louis Barrette-Vanasse |      | 25        |          |          |          |
-| Mathieu Bissonnette    |      | 16        |          |          |          |
-| Christopher Boustros   |      | 17        |          |          |          |
-| Ding Ma                |      | 18        |          |          |          |
-| Katrina Poulin         |      | 16        |          |          |          |
+| Louis Barrette-Vanasse |   All things code and domain model   | 25        |          |          |          |
+| Mathieu Bissonnette    | Requirements     | 10        |          |          |          |
+| Christopher Boustros   |  Documentation, Wiki and Heroku    | 17        |          |          |          |
+| Ding Ma                |   Testing   | 18        |          |          |          |
+| Katrina Poulin         | Documentation and Wiki     | 16        |          |          |          |
 ### Deliverable 1:
 
 The project report for this deliverable can be found [here](https://github.com/McGill-ECSE321-Winter2020/project-group-01/wiki/Project-Report:-Sprint-1).
@@ -34,7 +34,7 @@ The project report for this deliverable can be found [here](https://github.com/M
 | Name | Contributions | Hours |
 | ------------- | ------------- | ------------- |
 | Louis Barrette-Vanasse | Domain model, UML code generation, Gradle, Travis CI, Spring and Heroku setup, Requirements, Repositories creation, Lombok annotations, Detailed use cases, Persistence layer tests | 25 |
-| Mathieu Bissonnette |Requirements, Persistence layer testing | 16 |
+| Mathieu Bissonnette |Requirements, Persistence layer testing | 10 |
 | Christopher Boustros | Gradle, Spring and Heroku setup, Travis CI, requirements, user stories, Wiki setup, readme.md setup, meeting minutes, use case specification, backlog and kanban board setup (making sure each issue has an assignee, label, project, ...) | 17 |
 | Ding Ma | UML code generation, Requirements, Persistence layer testing, Travis CI, Detailed use cases | 18 |
 | Katrina Poulin | Requirements, Use Case diagrams, Detailed use cases, Documentation, Persistence layer testing | 16 |
