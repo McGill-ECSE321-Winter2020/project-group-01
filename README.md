@@ -22,11 +22,11 @@ We are 5 McGill University students from the Faculty of Engineering
 ### Project
 | NAME                   | ROLE |  SPRINT 1 | SPRINT 2 | SPRINT 3 | SPRINT 4 |
 |------------------------|------|-----------|----------|----------|----------|
-| Louis Barrette-Vanasse |   All things code and domain model   | 25        |          |          |          |
-| Mathieu Bissonnette    | Requirements     | 10        |          |          |          |
-| Christopher Boustros   |  Documentation, Wiki and Heroku    | 17        |          |          |          |
-| Ding Ma                |   Testing   | 18        |          |          |          |
-| Katrina Poulin         | Documentation and Wiki     | 16        |          |          |          |
+| Louis Barrette-Vanasse | Project Manager | 25        |          |          |          |
+| Mathieu Bissonnette    |Software Developer| 10        |          |          |          |
+| Christopher Boustros   | Backend Lead| 17        |          |          |          |
+| Ding Ma                |   Testing Lead | 18        |          |          |          |
+| Katrina Poulin         | Documentation Lead | 16        |          |          |          |
 ### Deliverable 1:
 
 The project report for this deliverable can be found [here](https://github.com/McGill-ECSE321-Winter2020/project-group-01/wiki/Project-Report:-Sprint-1).
