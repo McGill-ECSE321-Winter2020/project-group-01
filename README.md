@@ -14,6 +14,14 @@ We are 5 McGill University students from the Faculty of Engineering
 |Katrina Poulin | [katrinapoulin](https://github.com/katrinapoulin) | Computer Engineering | U2 |
 
 ## Overview Tables
+### Project
+| NAME                   | ROLE |  SPRINT 1 | SPRINT 2 | SPRINT 3 | SPRINT 4 |
+|------------------------|------|-----------|----------|----------|----------|
+| Louis Barrette-Vanasse |      | 25        |          |          |          |
+| Mathieu Bissonnette    |      | 16        |          |          |          |
+| Christopher Boustros   |      | 17        |          |          |          |
+| Ding Ma                |      | 18        |          |          |          |
+| Katrina Poulin         |      | 16        |          |          |          |
 ### Deliverable 1:
 
 The project report for this deliverable can be found [here](https://github.com/McGill-ECSE321-Winter2020/project-group-01/wiki/Project-Report:-Sprint-1).
