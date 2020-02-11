@@ -1,13 +1,17 @@
 package ca.mcgill.ecse321.petshelter.config;
 
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 //this config class allows all types of requests to be made to the back-end
 //without it, delete, put, patch, etc are denied access
+/**
+ * 
+ * @author louis
+ *
+ */
 @Configuration
 public class Cors implements WebMvcConfigurer{
 
