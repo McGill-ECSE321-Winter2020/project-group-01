@@ -51,6 +51,23 @@ dependencies {
 	testImplementation "junit:junit:4.12"
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
+	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
+	compile group: 'org.springframework.security', name: 'spring-security-web', version: '5.2.2.RELEASE'
+	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
+	compile group: 'org.springframework.security', name: 'spring-security-config', version: '5.2.2.RELEASE'
+	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-jwt
+	compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.9.RELEASE'
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.2.0.RELEASE'
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+	
+	
+	
+	
+	
 }
 
 task compile(type: JavaCompile) {

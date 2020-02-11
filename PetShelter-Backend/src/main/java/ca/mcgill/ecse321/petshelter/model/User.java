@@ -69,17 +69,6 @@ public class User {
 		return this.apiToken;
 	}
 
-	@Enumerated
-	private Gender gender;
-
-	public void setGender(Gender value) {
-		this.gender = value;
-	}
-
-	public Gender getGender() {
-		return this.gender;
-	}
-
 	private Set<Pet> pets;
 
 	@OneToMany
@@ -132,7 +121,6 @@ public class User {
                 ", email='" + email + '\'' +
                 ", id=" + id +
                 ", apiToken='" + apiToken + '\'' +
-                ", gender=" + gender +
                 ", pets=" + pets +
                 ", applications=" + applications +
                 ", picture=" + Arrays.toString(picture) +
