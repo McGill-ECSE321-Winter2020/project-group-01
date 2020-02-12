@@ -11,15 +11,24 @@ public class DonationDTO {
     private User user;
     private Date date;
     private Time time;
-    
+    private Double amount;
     //Empty constructor
     public DonationDTO() {
     }
     
-    public DonationDTO(User user, Date date, Time time) {
+    public DonationDTO(User user, Date date, Time time, Double amount) {
         this.user = user;
         this.date = date;
         this.time = time;
+        this.amount = amount;
+    }
+    
+    public Double getAmount() {
+        return amount;
+    }
+    
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
     
     public User getUser() {

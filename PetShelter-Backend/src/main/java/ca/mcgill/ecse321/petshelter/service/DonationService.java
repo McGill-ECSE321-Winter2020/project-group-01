@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.petshelter.service;
 
+import ca.mcgill.ecse321.petshelter.dto.DonationDTO;
 import ca.mcgill.ecse321.petshelter.model.Donation;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.DonationRepository;
@@ -50,12 +51,12 @@ public class DonationService {
     }
     
     
-    public Donation createDonation(double amount) {
-        if (amount < 0.00) {
+    public Donation createDonation(DonationDTO amount) {
+        if (amount.getAmount() < 0.00) {
             throw new IllegalArgumentException("Donation cannot be less than 0$");
         }
         Donation donation = new Donation();
-        donation.setAmount(amount);
+        donation.setAmount(amount.getAmount());
         donationRepository.save(donation);
         return donation;
     }
