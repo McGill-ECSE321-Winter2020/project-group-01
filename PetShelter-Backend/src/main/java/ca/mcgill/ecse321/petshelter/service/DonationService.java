@@ -51,7 +51,7 @@ public class DonationService {
     
     
     public Donation createDonation(double amount) {
-        if (amount < 0) {
+        if (amount < 0.00) {
             throw new IllegalArgumentException("Donation cannot be less than 0$");
         }
         Donation donation = new Donation();
