@@ -29,8 +29,8 @@ public class DonationController {
         return donationDTO;
     }
     
-    @PostMapping(value = {"/donation/{}"})
-    public DonationDTO createDonation(@PathVariable("donation") double amount) throws IllegalArgumentException {
+    @PostMapping(value = {"/donation/{amount}", "/donation/{amount}/"})
+    public DonationDTO createDonation(@PathVariable("amount") double amount) throws IllegalArgumentException {
         Donation donation = donationService.createDonation(amount);
         return convertToDto(donation);
     }
