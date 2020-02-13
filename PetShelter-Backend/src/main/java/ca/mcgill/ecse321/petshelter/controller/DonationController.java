@@ -27,12 +27,19 @@ public class DonationController {
         return donationService.getAllUsers().stream().map(this::convertToDto).collect(Collectors.toList());
     }
     
+    //todo, fix the dto somehow
+    //this is temp workaround. cannot find the user because it is not registered properly
     public DonationDTO convertToDto(Donation donation) {
         System.out.println(donation.toString());
         DonationDTO donationDTO = new DonationDTO();
         donationDTO.setDate(donation.getDate());
         donationDTO.setTime(donation.getTime());
-        donationDTO.setUser(donation.getUser().getUserName());
+        donationDTO.setAmount(donation.getAmount());
+        try {
+            donationDTO.setUser(donation.getUser().getUserName());
+        } catch (NullPointerException e) {
+            donationDTO.setUser("Anonymous");
+        }
         return donationDTO;
     }
     
@@ -40,7 +47,7 @@ public class DonationController {
     //also, we need to figure out how we can donate without having a user account. 
     @PostMapping(value = {"/donation"})
     public ResponseEntity<?> createDonation(@RequestBody DonationDTO amount) throws IllegalArgumentException {
-        System.out.println(amount.toString());
+        // System.out.println(amount.toString());
         Donation donation = donationService.createDonation(amount);
         try {
             amount.setUser(amount.getUser());

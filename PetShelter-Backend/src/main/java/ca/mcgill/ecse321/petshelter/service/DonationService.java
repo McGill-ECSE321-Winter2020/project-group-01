@@ -51,15 +51,25 @@ public class DonationService {
     }
     
     
-    public Donation createDonation(DonationDTO amount) {
-        if (amount.getAmount() < 0.00) {
+    public Donation createDonation(DonationDTO donationDTO) {
+        if (donationDTO.getAmount() < 0.00) {
             throw new IllegalArgumentException("Donation cannot be less than 0$");
         }
-     //   System.out.println(amount.toString());
+        System.out.println(donationDTO.toString());
+        User user = userRepository.findUserByUserName(donationDTO.getUser());
+        //have a form of detection if the user is null. if it is set it to anonymous
+//        if (user == null){
+//            user.setUserName("Anonymous");
+//            user.setEmail("None");
+//        }
         Donation donation = new Donation();
-        donation.setUser(userRepository.findUserByUserName(amount.getUser()));
-        donation.setAmount(amount.getAmount());
+        //todo, cant find the username bob
+        donation.setUser(user);
+        donation.setTime(donationDTO.getTime());
+        donation.setDate(donationDTO.getDate());
+        donation.setAmount(Math.round(donationDTO.getAmount() * 100.0) / 100.0);//trim it down to 2 decimal points
         donationRepository.save(donation);
+        System.out.println(donation.toString());
         return donation;
     }
 }
