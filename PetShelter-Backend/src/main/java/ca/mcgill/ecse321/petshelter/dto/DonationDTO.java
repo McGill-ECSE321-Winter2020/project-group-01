@@ -3,7 +3,6 @@ package ca.mcgill.ecse321.petshelter.dto;
 import java.sql.Date;
 import java.sql.Time;
 
-//Todo: DTO part 2.8.2-2
 
 public class DonationDTO {
     private String username;
@@ -30,7 +29,7 @@ public class DonationDTO {
         this.amount = amount;
     }
     
-    public String getUser() {
+    public String getUsername() {
         return username;
     }
     

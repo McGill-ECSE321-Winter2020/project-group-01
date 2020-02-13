@@ -56,14 +56,8 @@ public class DonationService {
             throw new IllegalArgumentException("Donation cannot be less than 0$");
         }
         System.out.println(donationDTO.toString());
-        User user = userRepository.findUserByUserName(donationDTO.getUser());
-        //have a form of detection if the user is null. if it is set it to anonymous
-//        if (user == null){
-//            user.setUserName("Anonymous");
-//            user.setEmail("None");
-//        }
+        User user = userRepository.findUserByUserName(donationDTO.getUsername());
         Donation donation = new Donation();
-        //todo, cant find the username bob
         donation.setUser(user);
         donation.setTime(donationDTO.getTime());
         donation.setDate(donationDTO.getDate());
