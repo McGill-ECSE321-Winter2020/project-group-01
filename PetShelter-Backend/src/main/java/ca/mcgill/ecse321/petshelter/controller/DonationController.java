@@ -54,7 +54,7 @@ public class DonationController {
         try {
             if (donation.getUser() != null) {
                 donationDTO.setUser(donation.getUser().getUserName());
-                emailingService.donationConfirmation(donationDTO);
+                emailingService.donationConfirmationEmail(donation.getUser().getEmail(), donationDTO.getUsername(), donationDTO.getAmount(), donationDTO.getTime(), donationDTO.getDate());
             }
             donationDTO.setTime(donation.getTime());
             donationDTO.setDate(donation.getDate());
