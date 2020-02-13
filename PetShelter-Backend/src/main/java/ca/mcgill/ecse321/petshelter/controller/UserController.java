@@ -4,6 +4,7 @@ import ca.mcgill.ecse321.petshelter.dto.PasswordChangeDTO;
 import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import ca.mcgill.ecse321.petshelter.service.EmailingService;
 import ca.mcgill.ecse321.petshelter.service.JWTTokenProvider;
 import ca.mcgill.ecse321.petshelter.service.RegisterException;
 import ca.mcgill.ecse321.petshelter.service.UserService;
@@ -12,8 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,24 +32,30 @@ import java.util.Set;
 @RestController
 @CrossOrigin(origins = "*")
 public class UserController {
-
+	
 	@Autowired
 	private UserService userService;
-
+	
 	@Autowired
 	private JWTTokenProvider jwtTokenProvider;
 	
 	@Autowired
 	private UserRepository userRepo;
 	
-	@Autowired
-	private JavaMailSender javaMailSender;
+	
+	private EmailingService emailingService;
+	
+	public UserController(EmailingService emailingService) {
+		this.emailingService = emailingService;
+	}
+	
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
 	@Value("${baseurldev}")
 	private String url;
+	
 	
 	// register
 	@PostMapping("/register")
@@ -131,12 +136,10 @@ public class UserController {
 		String tempPw = userService.generateRandomPassword();
 		ue.setPassword(passwordEncoder.encode(tempPw));
 		userRepo.save(ue);
-		SimpleMailMessage msg = new SimpleMailMessage();
-		msg.setTo(ue.getEmail());
-		msg.setSubject("Pet shelter password reset");
-		msg.setText("Here is your temporary password " + tempPw);
+
 		try {
-			javaMailSender.send(msg);
+			
+			emailingService.userForgotPasswordEmail(ue.getEmail(), tempPw, ue.getUserName());
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (MailException x) {
 			return new ResponseEntity<>(x.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

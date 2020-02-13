@@ -25,8 +25,12 @@ public class UserService {
     @Autowired
     private JWTTokenProvider jwtTokenProvider;
     
-    @Autowired
+    
     private EmailingService emailingService;
+    
+    public UserService(EmailingService emailingService) {
+        this.emailingService = emailingService;
+    }
     
     //TODO create helper methods to shorten the code here
     // register users
@@ -77,9 +81,8 @@ public class UserService {
         String combinedChars = upperCaseLetters.concat(lowerCaseLetters).concat(numbers).concat(totalChars);
         List<Character> pwdChars = combinedChars.chars().mapToObj(c -> (char) c).collect(Collectors.toList());
         Collections.shuffle(pwdChars);
-        String password = pwdChars.stream().collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+        return pwdChars.stream().collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
                 .toString();
-        return password;
     }
     
 }

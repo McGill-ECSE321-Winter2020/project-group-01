@@ -52,9 +52,14 @@ public class DonationService {
     
     @Transactional
     public Donation createDonation(DonationDTO donationDTO) {
+        //condition checks
         if (donationDTO.getAmount() < 0.00) {
-            throw new IllegalArgumentException("Donation cannot be less than 0$");
+            throw new IllegalArgumentException("Donation amount can't be less than 0$");
         }
+        if (donationDTO.getAmount() == null) {
+            throw new IllegalArgumentException("Donation can't be null!");
+        }
+    
         System.out.println(donationDTO.toString());
         User user = userRepository.findUserByUserName(donationDTO.getUsername());
         Donation donation = new Donation();
