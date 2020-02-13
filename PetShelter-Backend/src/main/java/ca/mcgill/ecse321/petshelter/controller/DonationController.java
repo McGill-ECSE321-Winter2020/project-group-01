@@ -28,7 +28,7 @@ public class DonationController {
     
     @GetMapping(value = {"/donation"})
     public List<DonationDTO> getAllDonations() {
-        return donationService.getAllUsers().stream().map(this::convertToDto).collect(Collectors.toList());
+        return donationService.getAllDonations().stream().map(this::convertToDto).collect(Collectors.toList());
     }
     
     public DonationDTO convertToDto(Donation donation) {
@@ -60,7 +60,6 @@ public class DonationController {
             donationDTO.setDate(donation.getDate());
             donationDTO.setAmount(donation.getAmount());
             return new ResponseEntity<>(donationDTO, HttpStatus.OK);
-            //todo, send email to the user
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

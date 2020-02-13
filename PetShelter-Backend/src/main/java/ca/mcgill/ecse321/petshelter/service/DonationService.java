@@ -22,12 +22,7 @@ public class DonationService {
     UserRepository userRepository;
     
     @Transactional
-    public User getUser(String name) {
-        return userRepository.findUserByUserName(name);
-    }
-    
-    @Transactional
-    public List<Donation> getAllUsers() {
+    public List<Donation> getAllDonations() {
         return toList(donationRepository.findAll());
     }
     
@@ -50,6 +45,7 @@ public class DonationService {
         return resultList;
     }
     
+    //todo, change the exception name
     @Transactional
     public Donation createDonation(DonationDTO donationDTO) {
         //condition checks
@@ -59,7 +55,7 @@ public class DonationService {
         if (donationDTO.getAmount() == null) {
             throw new IllegalArgumentException("Donation can't be null!");
         }
-    
+        
         System.out.println(donationDTO.toString());
         User user = userRepository.findUserByUserName(donationDTO.getUsername());
         Donation donation = new Donation();
