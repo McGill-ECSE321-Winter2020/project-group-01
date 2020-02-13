@@ -17,6 +17,7 @@ public class DonationService {
     
     @Autowired
     DonationRepository donationRepository;
+    
     @Autowired
     UserRepository userRepository;
     
@@ -35,7 +36,6 @@ public class DonationService {
         return donationRepository.findDonationByUserAndAmount(name, amount);
     }
     
-    
     @Transactional
     public List<Donation> getAllDonations(User name) {
         return toList(donationRepository.findAll());
@@ -50,7 +50,7 @@ public class DonationService {
         return resultList;
     }
     
-    
+    @Transactional
     public Donation createDonation(DonationDTO donationDTO) {
         if (donationDTO.getAmount() < 0.00) {
             throw new IllegalArgumentException("Donation cannot be less than 0$");

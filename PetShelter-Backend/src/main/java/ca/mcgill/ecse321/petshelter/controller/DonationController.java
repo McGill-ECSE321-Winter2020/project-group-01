@@ -27,7 +27,7 @@ public class DonationController {
         return donationService.getAllUsers().stream().map(this::convertToDto).collect(Collectors.toList());
     }
     
-    //todo, fix the dto somehow
+    //todo, fix the dto somehow haha
     //this is temp workaround. cannot find the user because it is not registered properly
     public DonationDTO convertToDto(Donation donation) {
         System.out.println(donation.toString());
@@ -38,7 +38,7 @@ public class DonationController {
         try {
             donationDTO.setUser(donation.getUser().getUserName());
         } catch (NullPointerException e) {
-            donationDTO.setUser("Anonymous");
+            donationDTO.setUser(null);
         }
         return donationDTO;
     }
@@ -47,14 +47,16 @@ public class DonationController {
     //also, we need to figure out how we can donate without having a user account. 
     @PostMapping(value = {"/donation"})
     public ResponseEntity<?> createDonation(@RequestBody DonationDTO amount) throws IllegalArgumentException {
-        // System.out.println(amount.toString());
+        //System.out.println(amount.toString());
         Donation donation = donationService.createDonation(amount);
         try {
-            amount.setUser(amount.getUser());
+            if (donation.getUser() != null) {
+                amount.setUser(donation.getUser().getUserName());
+            }
             amount.setTime(donation.getTime());
             amount.setDate(donation.getDate());
             amount.setAmount(donation.getAmount());
-            return new ResponseEntity<>("Thank you for donation", HttpStatus.OK);
+            return new ResponseEntity<>(amount, HttpStatus.OK);
             //todo, send email to the user
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
