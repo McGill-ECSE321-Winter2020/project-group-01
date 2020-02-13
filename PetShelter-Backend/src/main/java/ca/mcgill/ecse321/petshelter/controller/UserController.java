@@ -92,17 +92,17 @@ public class UserController {
 	}
 
 	// Verification through an email
-	@GetMapping("/regitrationConfirmation")
-	public ResponseEntity<?> confirmRegistration(@RequestParam("token") String token) {
-		// find a user by the verif. token; if none is found, the user does not exist
-		User user = userRepo.findUserByApiToken(token);
-		if (user == null) {
-			return new ResponseEntity<>("Token not found", HttpStatus.BAD_REQUEST);
-		}
-		if (user.isIsEmailValidated()) {
-			return new ResponseEntity<>("Account already validated", HttpStatus.BAD_REQUEST);
-		}
-		// check if the token is expired
+    @GetMapping("/registrationConfirmation")
+    public ResponseEntity<?> confirmRegistration(@RequestParam("token") String token) {
+        // find a user by the verif. token; if none is found, the user does not exist
+        User user = userRepo.findUserByApiToken(token);
+        if (user == null) {
+            return new ResponseEntity<>("Token not found", HttpStatus.BAD_REQUEST);
+        }
+        if (user.isIsEmailValidated()) {
+            return new ResponseEntity<>("Account already validated", HttpStatus.BAD_REQUEST);
+        }
+        // check if the token is expired
 		if (jwtTokenProvider.validateToken(token)) {
 			return new ResponseEntity<>("Token expired", HttpStatus.UNAUTHORIZED);
 		}

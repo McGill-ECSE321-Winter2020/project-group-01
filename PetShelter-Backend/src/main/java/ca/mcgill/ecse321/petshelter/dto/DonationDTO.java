@@ -1,23 +1,22 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
-import ca.mcgill.ecse321.petshelter.model.User;
-
 import java.sql.Date;
 import java.sql.Time;
 
 //Todo: DTO part 2.8.2-2
 
 public class DonationDTO {
-    private User user;
+    private String username;
     private Date date;
     private Time time;
     private Double amount;
+    
     //Empty constructor
     public DonationDTO() {
     }
     
-    public DonationDTO(User user, Date date, Time time, Double amount) {
-        this.user = user;
+    public DonationDTO(String username, Date date, Time time, Double amount) {
+        this.username = username;
         this.date = date;
         this.time = time;
         this.amount = amount;
@@ -31,12 +30,12 @@ public class DonationDTO {
         this.amount = amount;
     }
     
-    public User getUser() {
-        return user;
+    public String getUser() {
+        return username;
     }
     
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(String username) {
+        this.username = username;
     }
     
     public Date getDate() {
@@ -55,4 +54,13 @@ public class DonationDTO {
         this.time = time;
     }
     
+    @Override
+    public String toString() {
+        return "DonationDTO{" +
+                "user=" + username +
+                ", date=" + date +
+                ", time=" + time +
+                ", amount=" + amount +
+                '}';
+    }
 }
