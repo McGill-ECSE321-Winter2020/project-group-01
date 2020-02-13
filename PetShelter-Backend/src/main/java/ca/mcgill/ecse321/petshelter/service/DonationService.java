@@ -55,7 +55,9 @@ public class DonationService {
         if (amount.getAmount() < 0.00) {
             throw new IllegalArgumentException("Donation cannot be less than 0$");
         }
+     //   System.out.println(amount.toString());
         Donation donation = new Donation();
+        donation.setUser(userRepository.findUserByUserName(amount.getUser()));
         donation.setAmount(amount.getAmount());
         donationRepository.save(donation);
         return donation;
