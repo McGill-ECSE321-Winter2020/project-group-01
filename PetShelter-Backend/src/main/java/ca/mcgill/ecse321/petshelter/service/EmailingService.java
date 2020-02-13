@@ -2,7 +2,6 @@ package ca.mcgill.ecse321.petshelter.service;
 
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,10 +13,10 @@ import java.text.NumberFormat;
 
 @Service
 public class EmailingService {
-    
-    @Qualifier("mailSender")
+
     @Autowired
     private JavaMailSender javaMailSender;
+    
     @Autowired
     private UserRepository userRepository;
     
@@ -40,8 +39,8 @@ public class EmailingService {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setFrom(serviceEmail);
         msg.setTo(email);
-        
-        msg.setSubject("Donation Confirmation");
+    
+        msg.setSubject("Pet Shelter - Donation Confirmation");
         msg.setText("Hey " + username + " , \n\n" + "Thank you for your donation. We have successfully processed it at " +
                 time + " EST " + date + " for an amount of: " + currencyFormat.format(amount) + "\n\nYours, \nPetShelter");
         
@@ -59,8 +58,23 @@ public class EmailingService {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setFrom(serviceEmail);
         msg.setTo(email);
-        msg.setSubject("Account Creation Verification for " + username);
-        msg.setText("Hey " + username + " ,\n\n Please confirm your email here: " + url + "registrationConfirmation?token=" + token + "\n\nYours, \nPetShelter");
+        msg.setSubject("Pet Shelter - Account Creation Verification for " + username);
+        msg.setText("Hey " + username + " ,\n\nPlease confirm your email here: " + url + "registrationConfirmation?token=" + token + "\n\nYours, \nPetShelter");
+        javaMailSender.send(msg);
+    }
+    
+    /**
+     * Sends temporary password to user
+     *
+     * @param email    user's email
+     * @param tempPw   user's temporary password
+     * @param username user's username
+     */
+    public void userForgotPasswordEmail(String email, String tempPw, String username) {
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo(email);
+        msg.setSubject("Pet Shelter - Password Reset");
+        msg.setText("Hey " + username + " ,\n\nHere is your temporary password " + tempPw + "\n\nYours, \nPetShelter");
         javaMailSender.send(msg);
     }
 }

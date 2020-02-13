@@ -2,7 +2,6 @@ package ca.mcgill.ecse321.petshelter.controller;
 
 import ca.mcgill.ecse321.petshelter.dto.DonationDTO;
 import ca.mcgill.ecse321.petshelter.model.Donation;
-import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.DonationService;
 import ca.mcgill.ecse321.petshelter.service.EmailingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +19,12 @@ public class DonationController {
     @Autowired
     private DonationService donationService;
     
-    @Autowired
-    private UserRepository userRepository;
-    
-    @Autowired
+    //i dont understand why i need a constructor here and not autowired.... but it works
     private EmailingService emailingService;
+    
+    public DonationController(EmailingService emailingService) {
+        this.emailingService = emailingService;
+    }
     
     @GetMapping(value = {"/donation"})
     public List<DonationDTO> getAllDonations() {
