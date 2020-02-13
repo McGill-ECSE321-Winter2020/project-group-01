@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -35,13 +36,12 @@ public class TestDonationService {
         donationRepository.deleteAll();
     }
     
-    /**
-     * Creates a new user for the tests
-     *
-     * @return user with pre-filled values
-     */
-    public User createUser() {
-        String name = "TestUserName";
+    //todo, check if this is ok
+    private String name = "TestUserName";
+    
+    @Before
+    public void createUser() {
+        
         String password = "myPassword";
         boolean emailValid = true;
         String email = "TestUserName@gmail.com";
@@ -55,24 +55,28 @@ public class TestDonationService {
         user.setApiToken(apiToken);
         
         userRepository.save(user);
-        return user;
     }
     
     
     @Test
     public void testDonate() {
-        User user = createUser();
-        
         DonationDTO donationDTO = new DonationDTO();
-        donationDTO.setUser("bob");
-        donationDTO.setAmount(12.12);
-        donationDTO.setDate(Date.valueOf("2020-02-01"));
-        donationDTO.setTime(Time.valueOf("11:11:00"));
-        
-        Donation donation = donationService.createDonation(donationDTO);
-        
-        assertEquals(12.12, donation.getAmount());
-        
-        
+    
+        String userName = name;
+        Date date = Date.valueOf("2020-01-22");
+        Time time = Time.valueOf("11:22:00");
+        double amount = 11.22;
+        donationDTO.setUser(userName);
+        donationDTO.setAmount(amount);
+        donationDTO.setDate(date);
+        donationDTO.setTime(time);
+    
+        try {
+            donationService.createDonation(donationDTO);
+        } catch (IllegalArgumentException ignored) {
+        }
+    
+        List<Donation> allDonations = donationService.getAllDonations();
+        assertEquals(userName, allDonations.get(0).getUser().getUserName());
     }
 }

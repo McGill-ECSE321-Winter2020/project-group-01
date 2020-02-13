@@ -7,7 +7,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +33,18 @@ public class UserService {
     public UserService(EmailingService emailingService) {
         this.emailingService = emailingService;
     }
+    
+    @Transactional
+    public List<User> getAllUsers() {
+        return toList(userRepository.findAll());
+    }
+    
+    //todo, not to sure about this
+    @Transactional
+    public User findUser(String name) {
+        return userRepository.findUserByUserName(name);
+    }
+    
     
     //TODO create helper methods to shorten the code here
     // register users
@@ -85,4 +99,11 @@ public class UserService {
                 .toString();
     }
     
+    private <T> List<T> toList(Iterable<T> iterable) {
+        List<T> resultList = new ArrayList<T>();
+        for (T t : iterable) {
+            resultList.add(t);
+        }
+        return resultList;
+    }
 }
