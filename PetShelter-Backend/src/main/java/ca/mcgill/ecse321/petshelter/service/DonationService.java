@@ -38,24 +38,23 @@ public class DonationService {
     
     //From tutorial
     private <T> List<T> toList(Iterable<T> iterable) {
-        List<T> resultList = new ArrayList<T>();
+        List<T> resultList = new ArrayList<>();
         for (T t : iterable) {
             resultList.add(t);
         }
         return resultList;
     }
     
-    //todo, change the exception name
     @Transactional
     public Donation createDonation(DonationDTO donationDTO) {
         //condition checks
-        if (donationDTO.getAmount() < 0.00) {
-            throw new IllegalArgumentException("Donation amount can't be less than 0$");
-        }
         if (donationDTO.getAmount() == null) {
-            throw new IllegalArgumentException("Donation can't be null!");
+            throw new DonationException("Donation can't be null!");
         }
-        
+        if (donationDTO.getAmount() < 0.00) {
+            throw new DonationException("Donation amount can't be less than 0$");
+        }
+    
         System.out.println(donationDTO.toString());
         User user = userRepository.findUserByUserName(donationDTO.getUsername());
         Donation donation = new Donation();
