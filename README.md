@@ -27,7 +27,7 @@ We are 5 McGill University students from the Faculty of Engineering
 | Christopher Boustros   | Backend Lead| 17        |          |          |          |
 | Ding Ma                |   Testing Lead | 18        |          |          |          |
 | Katrina Poulin         | Documentation Lead | 16        |          |          |          |
-### Deliverable 1:
+### Deliverable 1
 
 The project report for this deliverable can be found [here](https://github.com/McGill-ECSE321-Winter2020/project-group-01/wiki/Project-Report:-Sprint-1).
 
@@ -38,5 +38,17 @@ The project report for this deliverable can be found [here](https://github.com/M
 | Christopher Boustros | Gradle, Spring and Heroku setup, Travis CI, requirements, user stories, Wiki setup, readme.md setup, meeting minutes, use case specification, backlog and kanban board setup (making sure each issue has an assignee, label, project, ...) | 17 |
 | Ding Ma | UML code generation, Requirements, Persistence layer testing, Travis CI, Detailed use cases | 18 |
 | Katrina Poulin | Requirements, Use Case diagrams, Detailed use cases, Documentation, Persistence layer testing | 16 |
+
+### Deliverable 2
+
+The project report for this deliverable can be found [here](https://github.com/McGill-ECSE321-Winter2020/project-group-01/wiki/Project-Report:-Sprint-2).
+
+| Name | Contributions | Hours |
+| ------------- | ------------- | ------------- |
+| Louis Barrette-Vanasse | ...| 0 |
+| Mathieu Bissonnette |... | 0 |
+| Christopher Boustros | ... | 0 |
+| Ding Ma | ... | 0 |
+| Katrina Poulin | ... | 0 |
 
 (*) *From ECSE321_Project_Description.pdf written by M. Kanaan, posted on myCourses.*
