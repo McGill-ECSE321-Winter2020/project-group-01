@@ -1,28 +1,38 @@
 package ca.mcgill.ecse321.petshelter.controller;
 
-import ca.mcgill.ecse321.petshelter.dto.PasswordChangeDTO;
-import ca.mcgill.ecse321.petshelter.dto.UserDTO;
-import ca.mcgill.ecse321.petshelter.model.User;
-import ca.mcgill.ecse321.petshelter.repository.UserRepository;
-import ca.mcgill.ecse321.petshelter.service.EmailingService;
-import ca.mcgill.ecse321.petshelter.service.JWTTokenProvider;
-import ca.mcgill.ecse321.petshelter.service.RegisterException;
-import ca.mcgill.ecse321.petshelter.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import ca.mcgill.ecse321.petshelter.dto.PasswordChangeDTO;
+import ca.mcgill.ecse321.petshelter.dto.UserDTO;
+import ca.mcgill.ecse321.petshelter.model.User;
+import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import ca.mcgill.ecse321.petshelter.service.JWTTokenProvider;
+import ca.mcgill.ecse321.petshelter.service.RegisterException;
+import ca.mcgill.ecse321.petshelter.service.UserService;
 
 /**
  * @author louis User controller class - allows for creation of users, login of
@@ -32,31 +42,25 @@ import java.util.Set;
 @RestController
 @CrossOrigin(origins = "*")
 public class UserController {
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private JWTTokenProvider jwtTokenProvider;
-	
+
 	@Autowired
 	private UserRepository userRepo;
-	
-	
-	private EmailingService emailingService;
-	
-	public UserController(EmailingService emailingService) {
-		this.emailingService = emailingService;
-	}
-	
-	
+
+	@Autowired
+	private JavaMailSender javaMailSender;
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
-	@Value("${baseurldev}")
+
+	@Value("${baseurl}")
 	private String url;
-	
-	
+
 	// register
 	@PostMapping("/register")
 	public ResponseEntity<?> createUser(@RequestBody(required = true) UserDTO user) {
@@ -97,17 +101,17 @@ public class UserController {
 	}
 
 	// Verification through an email
-    @GetMapping("/registrationConfirmation")
-    public ResponseEntity<?> confirmRegistration(@RequestParam("token") String token) {
-        // find a user by the verif. token; if none is found, the user does not exist
-        User user = userRepo.findUserByApiToken(token);
-        if (user == null) {
-            return new ResponseEntity<>("Token not found", HttpStatus.BAD_REQUEST);
-        }
-        if (user.isIsEmailValidated()) {
-            return new ResponseEntity<>("Account already validated", HttpStatus.BAD_REQUEST);
-        }
-        // check if the token is expired
+	@GetMapping("/regitrationConfirmation")
+	public ResponseEntity<?> confirmRegistration(@RequestParam("token") String token) {
+		// find a user by the verif. token; if none is found, the user does not exist
+		User user = userRepo.findUserByApiToken(token);
+		if (user == null) {
+			return new ResponseEntity<>("Token not found", HttpStatus.BAD_REQUEST);
+		}
+		if (user.isIsEmailValidated()) {
+			return new ResponseEntity<>("Account already validated", HttpStatus.BAD_REQUEST);
+		}
+		// check if the token is expired
 		if (jwtTokenProvider.validateToken(token)) {
 			return new ResponseEntity<>("Token expired", HttpStatus.UNAUTHORIZED);
 		}
@@ -136,10 +140,12 @@ public class UserController {
 		String tempPw = userService.generateRandomPassword();
 		ue.setPassword(passwordEncoder.encode(tempPw));
 		userRepo.save(ue);
-
+		SimpleMailMessage msg = new SimpleMailMessage();
+		msg.setTo(ue.getEmail());
+		msg.setSubject("Pet shelter password reset");
+		msg.setText("Here is your temporary password " + tempPw);
 		try {
-			
-			emailingService.userForgotPasswordEmail(ue.getEmail(), tempPw, ue.getUserName());
+			javaMailSender.send(msg);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (MailException x) {
 			return new ResponseEntity<>(x.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
