@@ -1,8 +1,9 @@
 package ca.mcgill.ecse321.petshelter.service;
 
 import ca.mcgill.ecse321.petshelter.dto.DonationDTO;
+import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.Donation;
-import ca.mcgill.ecse321.petshelter.model.User;
+import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.DonationRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import org.junit.Before;
@@ -17,6 +18,7 @@ import java.sql.Time;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -31,52 +33,138 @@ public class TestDonationService {
     @Autowired
     private UserRepository userRepository;
     
+    @Autowired
+    private UserService userService;
+    
     @Before
     public void clearDatabase() {
         donationRepository.deleteAll();
+        userRepository.deleteAll();
     }
     
-    //todo, check if this is ok
     private String name = "TestUserName";
     
-    @Before
     public void createUser() {
-        
+        UserDTO userDTO = new UserDTO();
         String password = "myPassword";
-        boolean emailValid = true;
         String email = "TestUserName@gmail.com";
-        String apiToken = "token112";
+        UserType userType = UserType.USER;
         
-        User user = new User();
-        user.setUserName(name);
-        user.setPassword(password);
-        user.setIsEmailValidated(emailValid);
-        user.setEmail(email);
-        user.setApiToken(apiToken);
-        
-        userRepository.save(user);
+        userDTO.setUsername(name);
+        userDTO.setUserType(userType);
+        userDTO.setPassword(password);
+        userDTO.setEmail(email);
+        userService.addUser(userDTO);
     }
     
-    
+    //Regular use case
     @Test
-    public void testDonate() {
+    public void testDonation() {
+        createUser();
         DonationDTO donationDTO = new DonationDTO();
-    
         String userName = name;
         Date date = Date.valueOf("2020-01-22");
         Time time = Time.valueOf("11:22:00");
         double amount = 11.22;
+        
         donationDTO.setUser(userName);
         donationDTO.setAmount(amount);
         donationDTO.setDate(date);
         donationDTO.setTime(time);
-    
+        
         try {
             donationService.createDonation(donationDTO);
-        } catch (IllegalArgumentException ignored) {
+        } catch (DonationException ignored) {
         }
-    
+        
         List<Donation> allDonations = donationService.getAllDonations();
         assertEquals(userName, allDonations.get(0).getUser().getUserName());
+        assertEquals(amount, allDonations.get(0).getAmount());
+        assertEquals(date, allDonations.get(0).getDate());
+    }
+    
+    //Anonymous donation
+    @Test
+    public void anonymousDonation() {
+        DonationDTO donationDTO = new DonationDTO();
+        String username = "bobby";
+        Date date = Date.valueOf("2020-01-22");
+        Time time = Time.valueOf("11:22:00");
+        double amount = 11.22;
+        
+        donationDTO.setUser(username);
+        donationDTO.setTime(time);
+        donationDTO.setDate(date);
+        donationDTO.setAmount(amount);
+        
+        try {
+            donationService.createDonation(donationDTO);
+        } catch (DonationException ignored) {
+        
+        }
+        
+        List<Donation> allDonations = donationService.getAllDonations();
+        assertNull(allDonations.get(0).getUser());
+    }
+    
+    //negative donation amount
+    @Test
+    public void negativeDonation() {
+        createUser();
+        DonationDTO donationDTO = new DonationDTO();
+        Date date = Date.valueOf("2020-01-22");
+        Time time = Time.valueOf("11:22:00");
+        double amount = -11.22;
+        
+        donationDTO.setUser(name);
+        donationDTO.setTime(time);
+        donationDTO.setDate(date);
+        donationDTO.setAmount(amount);
+        
+        try {
+            donationService.createDonation(donationDTO);
+        } catch (DonationException e) {
+            assertEquals("Donation amount can't be less than 0$", e.getMessage());
+        }
+    }
+    
+    //zero donation amount, edge case
+    @Test
+    public void zeroDonation() {
+        createUser();
+        DonationDTO donationDTO = new DonationDTO();
+        Date date = Date.valueOf("2020-01-22");
+        Time time = Time.valueOf("11:22:00");
+        double amount = 0;
+        
+        donationDTO.setUser(name);
+        donationDTO.setTime(time);
+        donationDTO.setDate(date);
+        donationDTO.setAmount(amount);
+        
+        try {
+            donationService.createDonation(donationDTO);
+        } catch (DonationException e) {
+            assertEquals("Donation amount can't be less than 0$", e.getMessage());
+        }
+    }
+    
+    //no donation amount
+    @Test
+    public void nullDonation() {
+        createUser();
+        DonationDTO donationDTO = new DonationDTO();
+        Date date = Date.valueOf("2020-01-22");
+        Time time = Time.valueOf("11:22:00");
+        
+        donationDTO.setUser(name);
+        donationDTO.setTime(time);
+        donationDTO.setDate(date);
+        donationDTO.setAmount(null);
+        try {
+            donationService.createDonation(donationDTO);
+        } catch (DonationException e) {
+            assertEquals("Donation can't be null!", e.getMessage());
+        }
     }
 }
