@@ -1,24 +1,20 @@
 package ca.mcgill.ecse321.petshelter.service;
 
-import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import java.sql.Date;
+import java.sql.Time;
+import java.text.NumberFormat;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.text.NumberFormat;
-
 @Service
 public class EmailingService {
 
     @Autowired
     private JavaMailSender javaMailSender;
-    
-    @Autowired
-    private UserRepository userRepository;
     
     private String serviceEmail = "${spring.mail.username}";
     
