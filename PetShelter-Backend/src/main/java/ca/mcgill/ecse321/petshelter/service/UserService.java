@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /*
@@ -54,6 +56,9 @@ public class UserService {
             throw new RegisterException("Email is already taken.");
         if (userRepository.findUserByUserName(user.getUsername()) != null)
             throw new RegisterException("Username is already taken.");
+        if (validateUserEmail(user.getEmail())) {
+            throw new RegisterException("Invalid Email.");
+        }
         //create the user and set its attributes
         User user1 = new User();
         user1.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -67,6 +72,21 @@ public class UserService {
         // Send email
         emailingService.userCreationEmail(user.getEmail(), user.getUsername(), token);
         return user1;
+    }
+    
+    /**
+     * Check if the email input is valid
+     * Credits to https://howtodoinjava.com/regex/java-regex-validate-email-address/, for regex.
+     *
+     * @param email user's email
+     * @return false if ok, true if invalid
+     */
+    private boolean validateUserEmail(String email) {
+        String regex = "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+        
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        return !matcher.matches();
     }
     
     // method that only checks if a user could be logged in
