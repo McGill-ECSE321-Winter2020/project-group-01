@@ -7,9 +7,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,17 +30,7 @@ public class UserService {
     public UserService(EmailingService emailingService) {
         this.emailingService = emailingService;
     }
-    
-    @Transactional
-    public List<User> getAllUsers() {
-        return toList(userRepository.findAll());
-    }
-    
-    //TODO, not to sure about this
-    @Transactional
-    public User findUser(String name) {
-        return userRepository.findUserByUserName(name);
-    }
+   
     
     
     //TODO create helper methods to shorten the code here
@@ -97,13 +84,5 @@ public class UserService {
         Collections.shuffle(pwdChars);
         return pwdChars.stream().collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
                 .toString();
-    }
-    
-    private <T> List<T> toList(Iterable<T> iterable) {
-        List<T> resultList = new ArrayList<T>();
-        for (T t : iterable) {
-            resultList.add(t);
-        }
-        return resultList;
     }
 }
