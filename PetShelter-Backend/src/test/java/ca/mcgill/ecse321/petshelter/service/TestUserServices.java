@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static ca.mcgill.ecse321.petshelter.model.UserType.USER;
@@ -52,7 +53,8 @@ public class TestUserServices {
         } catch (RegisterException e) {
             //ignored for now
         }
-        List<User> allUsers = userService.getAllUsers();
+        List<User> allUsers = new ArrayList<>();
+        userRepository.findAll().forEach(allUsers::add);
         assertEquals(username, allUsers.get(0).getUserName());
     }
 }
