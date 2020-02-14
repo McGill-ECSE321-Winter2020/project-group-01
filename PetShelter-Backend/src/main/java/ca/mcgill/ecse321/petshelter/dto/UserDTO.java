@@ -1,9 +1,9 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
+import ca.mcgill.ecse321.petshelter.model.UserType;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-
-import ca.mcgill.ecse321.petshelter.model.UserType;
 
 public class UserDTO {
 	
@@ -15,13 +15,25 @@ public class UserDTO {
 	private String password;
 	private UserType userType;
 	private byte[] picture;
+	
+	public UserDTO() {
+	}
+	
+	public UserDTO(@NotNull @Email String email, @NotNull String username, String password, UserType userType, byte[] picture) {
+		this.email = email;
+		this.username = username;
+		this.password = password;
+		this.userType = userType;
+		this.picture = picture;
+	}
+	
 	/**
 	 * @return the email
 	 */
 	public String getEmail() {
 		return email;
 	}
-
+	
 	/**
 	 * @param email the email to set
 	 */
