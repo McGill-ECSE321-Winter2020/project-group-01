@@ -39,7 +39,7 @@ public class UserService {
         return toList(userRepository.findAll());
     }
     
-    //todo, not to sure about this
+    //TODO, not to sure about this
     @Transactional
     public User findUser(String name) {
         return userRepository.findUserByUserName(name);
