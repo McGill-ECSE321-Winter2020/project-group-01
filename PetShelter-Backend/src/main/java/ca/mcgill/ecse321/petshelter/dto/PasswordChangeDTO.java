@@ -1,15 +1,23 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 /**
  * @author louis
  *
  */
 public class PasswordChangeDTO {
-	
+	@NotNull
+	@NotEmpty
 	private String oldPassword;
 	
+	@NotNull
+	@NotEmpty
 	private String newPassword;
 	
+	@NotNull
+	@NotEmpty
 	private String userName;
 
 	/**

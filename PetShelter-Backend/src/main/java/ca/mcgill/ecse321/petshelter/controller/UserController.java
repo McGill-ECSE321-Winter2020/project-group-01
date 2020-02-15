@@ -10,7 +10,6 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
@@ -30,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ca.mcgill.ecse321.petshelter.dto.PasswordChangeDTO;
 import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.User;
+import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.JWTTokenProvider;
 import ca.mcgill.ecse321.petshelter.service.RegisterException;
@@ -45,6 +45,7 @@ import ca.mcgill.ecse321.petshelter.service.UserService;
 @RequestMapping("/api/user")
 public class UserController {
 
+	// Declaration of needed services.
 	@Autowired
 	private UserService userService;
 
@@ -60,10 +61,16 @@ public class UserController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@Value("${baseurl}")
-	private String url;
-
-	// register
+	/**
+	 * Creates a user account. The Request body is a UserDTO aka email, password
+	 * username and UserType are provided. The method also validates if the
+	 * username/email are already in use and if the any of the input is empty. Also
+	 * checks if the email is an email. Upon registration, an email with an API
+	 * token is sent to the user's email.
+	 * 
+	 * @param user UserDTO
+	 * @return
+	 */
 	@PostMapping("/register")
 	public ResponseEntity<?> createUser(@RequestBody(required = true) UserDTO user) {
 		// check if input is valid (email is an email, email and username are not empty)
@@ -73,13 +80,11 @@ public class UserController {
 		for (ConstraintViolation<UserDTO> violation : violations) {
 			return new ResponseEntity<>(violation.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-		if (user.getPassword() == null || user.getPassword().length() == 0) {// password cannot be empty
-			return new ResponseEntity<>("Password cannot be null", HttpStatus.BAD_REQUEST);
-		}
 		try {
 			User user1 = userService.addUser(user);
 			user.setUserType(user1.getUserType());
-			return new ResponseEntity<>(user, HttpStatus.CREATED);
+			user.setToken(user1.getApiToken());
+			return new ResponseEntity<>(user, HttpStatus.CREATED); // return created HTTP status
 		}
 		// If one cannot log into the sender's email or if the message fails to be sent
 		catch (MailException x) {
@@ -91,18 +96,34 @@ public class UserController {
 		}
 	}
 
-	// login
+	/**
+	 * Checks if the user can be logged in. User's email must be verified, and the
+	 * account must exist.
+	 * 
+	 * @param user
+	 * @return
+	 */
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody UserDTO user) {
-		User ue = userService.loginUser(user);
-		user.setUserType(ue.getUserType());
-		user.setEmail(ue.getEmail());
-		user.setUsername(ue.getUserName());
-		user.setPassword(null);
-		return new ResponseEntity<>(user, HttpStatus.OK);
+		try {
+			User ue = userService.loginUser(user);
+			user.setUserType(ue.getUserType());
+			user.setEmail(ue.getEmail());
+			user.setUsername(ue.getUserName());
+			user.setPassword(null);
+			user.setToken(ue.getApiToken());
+			return new ResponseEntity<>(user, HttpStatus.OK);
+		} catch (ca.mcgill.ecse321.petshelter.service.LoginException ex) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 	}
 
-	// Verification through an email
+	/**
+	 * Verification of account through email.
+	 * 
+	 * @param token
+	 * @return
+	 */
 	@GetMapping("/regitrationConfirmation")
 	public ResponseEntity<?> confirmRegistration(@RequestParam("token") String token) {
 		// find a user by the verif. token; if none is found, the user does not exist
@@ -123,10 +144,12 @@ public class UserController {
 		return new ResponseEntity<>("Account validated", HttpStatus.OK);
 	}
 
-	// TODO add a temporary password field to the entity
-	// anyone could reset another one's password by just providing the
-	// email with the idea i have in mind, so a temporary password
-	// not ovewriting the current one would be a fix
+	/**
+	 * Resets the password and emails the user a link with the new password.
+	 * 
+	 * @param email
+	 * @return
+	 */
 	@PostMapping("/resetPassword")
 	public ResponseEntity<?> resetPassword(@RequestBody UserDTO email) {
 		User ue = userRepo.findUserByEmail(email.getEmail());
@@ -154,8 +177,21 @@ public class UserController {
 		}
 	}
 
+	/**
+	 * Allows users to change passwords.
+	 * 
+	 * @param passwords
+	 * @return
+	 */
 	@PostMapping("/changePassword")
 	public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDTO passwords) {
+		// check if new password is valid
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+		Validator validator = factory.getValidator();
+		Set<ConstraintViolation<PasswordChangeDTO>> violations = validator.validate(passwords);
+		for (ConstraintViolation<PasswordChangeDTO> violation : violations) {
+			return new ResponseEntity<>(violation.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 		User user = userRepo.findUserByUserName(passwords.getUserName());
 		if (user == null) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -166,31 +202,62 @@ public class UserController {
 		}
 		user.setPassword(passwordEncoder.encode(passwords.getNewPassword()));
 		userRepo.save(user);
-
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	/**
+	 * Deletes a user. The person making the request must be an admin.
+	 * 
+	 * @param userName
+	 * @return
+	 */
 	@DeleteMapping("/{userName}")
-	public ResponseEntity<?> deleteUser(@PathVariable String userName) {
-		// find a user by username
-		User user = userRepo.findUserByUserName(userName);
-		if (user != null) {
-			userRepo.delete(user);
-		}
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-
-	@GetMapping("/{username}")
-	public ResponseEntity<?> getUser(@PathVariable String userName) {
-		// find a user by username
-		User user = userRepo.findUserByUserName(userName);
-		if (user != null) {
-			return new ResponseEntity<>(userToDto(user), HttpStatus.OK);
+	public ResponseEntity<?> deleteUser(@PathVariable String userName, @RequestBody UserDTO admin) {
+		User requester = userRepo.findUserByUserName(admin.getUsername());
+		if (requester != null && requester.getUserType().equals(UserType.ADMIN)) {
+			// find the deleted user by username
+			User user = userRepo.findUserByUserName(userName);
+			if (user != null) {
+				userRepo.delete(user);
+			}
+			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // if the requester is not an admin
+		}
+
+	}
+
+	/**
+	 * Returns a specified user's information. The requester must be an admin.
+	 * 
+	 * @param userName
+	 * @param admin
+	 * @return
+	 */
+	@GetMapping("/{username}")
+	public ResponseEntity<?> getUser(@PathVariable String userName, @RequestBody UserDTO admin) {
+		User requester = userRepo.findUserByUserName(admin.getUsername());
+		if (requester != null && requester.getUserType().equals(UserType.ADMIN)) {
+			// find a user by username
+			User user = userRepo.findUserByUserName(userName);
+			if (user != null) {
+				return new ResponseEntity<>(userToDto(user), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			}
+		} else { // if user isnt an admin
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 
+	/**
+	 * Updates a specified user's information. Only the user tied to the account can
+	 * make the request.
+	 * 
+	 * @param userName
+	 * @param admin
+	 * @return
+	 */
 	@PutMapping("/{username}")
 	// note: the username and email cannot be changed
 	public ResponseEntity<?> updateUser(@PathVariable String userName, @RequestBody UserDTO userDto) {
@@ -207,18 +274,31 @@ public class UserController {
 		}
 	}
 
+	/**
+	 * Returns all users' information. The requester must be an admin.
+	 * 
+	 * @param userName
+	 * @param admin
+	 * @return
+	 */
 	@GetMapping("/all")
-	public ResponseEntity<?> getUsers() {
-		List<User> users = new ArrayList<>();
-		try {
-			Iterable<User> usersIterable = userRepo.findAll();
-			usersIterable.forEach(users::add);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	public ResponseEntity<?> getUsers(@RequestBody UserDTO admin) {
+		User requester = userRepo.findUserByUserName(admin.getUsername());
+		if (requester != null && requester.getUserType().equals(UserType.ADMIN)) {
+			List<User> users = new ArrayList<>();
+			try {
+				Iterable<User> usersIterable = userRepo.findAll();
+				usersIterable.forEach(users::add);
+			} catch (Exception e) {
+				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			return new ResponseEntity<>(users, HttpStatus.OK);
+		} else { // if user isnt an admin
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 
+	// converts a user into a userdto
 	private UserDTO userToDto(User user) {
 		UserDTO userDto = new UserDTO();
 		userDto.setEmail(user.getEmail());

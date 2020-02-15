@@ -54,7 +54,7 @@ public class UserService {
 	}
 
 	// method that only checks if a user could be logged in
-	public User loginUser(UserDTO user) throws LoginException {
+	public User loginUser(UserDTO user) throws LoginException{
 		// if no user is found by its username, it does not exist
 		User user1 = userRepository.findUserByUserName(user.getUsername());
 		if (user1 == null) {
