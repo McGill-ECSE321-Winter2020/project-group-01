@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
+import ca.mcgill.ca.ecse321.petshelter.passwordvalidator.ValidPassword;
 import ca.mcgill.ecse321.petshelter.model.UserType;
 
 import javax.validation.constraints.Email;
@@ -19,6 +20,7 @@ public class UserDTO {
 	private String username;
 	@NotNull(message = "Password cannot be empty.")
 	@NotEmpty(message = "Password cannot be empty.")
+	@ValidPassword
 	private String password;
 	private String token;
 	private UserType userType;
