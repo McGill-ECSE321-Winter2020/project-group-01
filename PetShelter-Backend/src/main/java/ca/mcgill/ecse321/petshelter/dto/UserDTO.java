@@ -5,18 +5,20 @@ import ca.mcgill.ecse321.petshelter.model.UserType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class UserDTO {
 	
-	@NotNull
-	@Email
-	@NotEmpty
+	@NotNull(message = "Email cannot be empty.")
+	@Email(message = "The provided email is not a valid email address.")
+	@NotEmpty(message = "Email cannot be empty.")
 	private String email;
-	@NotNull
-	@NotEmpty
+	@NotNull(message = "Username cannot be empty.")
+	@NotEmpty(message = "Username cannot be empty.")
+	@Size(min = 4, max = 20, message="Username must have between 4 and 20 characters.")
 	private String username;
-	@NotNull
-	@NotEmpty
+	@NotNull(message = "Password cannot be empty.")
+	@NotEmpty(message = "Password cannot be empty.")
 	private String password;
 	private String token;
 	private UserType userType;
