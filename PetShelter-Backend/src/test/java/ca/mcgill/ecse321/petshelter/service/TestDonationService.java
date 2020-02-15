@@ -46,7 +46,7 @@ public class TestDonationService {
     
     public void createUser() {
         UserDTO userDTO = new UserDTO();
-        String password = "myPassword";
+        String password = "myPassword1!";
         String email = "TestUserName@gmail.com";
         UserType userType = UserType.USER;
         
