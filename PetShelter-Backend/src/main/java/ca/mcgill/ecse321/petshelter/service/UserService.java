@@ -1,15 +1,24 @@
 package ca.mcgill.ecse321.petshelter.service;
 
+import ca.mcgill.ecse321.petshelter.dto.PasswordChangeDTO;
 import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 /*
  * Service to handle login and registration of users.
@@ -30,9 +39,18 @@ public class UserService {
 		this.emailingService = emailingService;
 	}
 
-	// TODO create helper methods to shorten the code here
-	// register users
+	/**
+	 * Creates a user if the input is valid and sends an email to the specified
+	 * email address.
+	 * 
+	 * @param user
+	 * @return
+	 */
 	public User addUser(UserDTO user) {
+		String validationError = isUserDtoValid(user);
+		if (validationError != null) {
+			throw new RegisterException(validationError);
+		}
 		// check that the email and username are unique
 		if (userRepository.findUserByEmail(user.getEmail()) != null)
 			throw new RegisterException("Email is already taken.");
@@ -77,6 +95,30 @@ public class UserService {
 		return user1;
 	}
 
+	public ResponseEntity<?> changeUserPassword(PasswordChangeDTO passwordDto) {
+		// check if new password is valid
+		String constraintViolation = isPasswordChangeValid(passwordDto);
+		if (constraintViolation != null) {
+			return new ResponseEntity<>(constraintViolation, HttpStatus.BAD_REQUEST);
+		}
+		User user = userRepository.findUserByUserName(passwordDto.getUserName());
+		if (user == null) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		// the old password must be correct 
+		if (!passwordEncoder.matches(passwordDto.getOldPassword(), user.getPassword())) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		user.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
+		userRepository.save(user);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	/**
+	 * Generates a strong temporary password to be used in case of password reset.
+	 * 
+	 * @return
+	 */
 	public String generateRandomPassword() {
 		String upperCaseLetters = RandomStringUtils.random(1, 65, 90, true, true);
 		String lowerCaseLetters = RandomStringUtils.random(1, 97, 122, true, true);
@@ -86,5 +128,42 @@ public class UserService {
 		List<Character> pwdChars = combinedChars.chars().mapToObj(c -> (char) c).collect(Collectors.toList());
 		Collections.shuffle(pwdChars);
 		return pwdChars.stream().collect(StringBuilder::new, StringBuilder::append, StringBuilder::append).toString();
+	}
+
+	/**
+	 * Validates the UserDto it is given. Email must be an email, and fields must
+	 * not be empty. Returns null if no error is found. Returns an error message if
+	 * a violation is found.
+	 * 
+	 * @param userDto
+	 * @return
+	 */
+	private String isUserDtoValid(UserDTO userDto) {
+		// check if input is valid (email is an email, email and username are not empty)
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+		Validator validator = factory.getValidator();
+		Set<ConstraintViolation<UserDTO>> violations = validator.validate(userDto);
+		for (ConstraintViolation<UserDTO> violation : violations) {
+			return violation.getMessage();
+		}
+		return null;
+	}
+
+	/**
+	 * Validates the PasswordChangeDto it is given. The new password must satisfy
+	 * constraitns. Returns null if no error is found.
+	 * 
+	 * @param passwordChangeDto
+	 * @return
+	 */
+	private String isPasswordChangeValid(PasswordChangeDTO passwordChangeDto) {
+		// check if input is valid (new password satisfies constraints)
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+		Validator validator = factory.getValidator();
+		Set<ConstraintViolation<PasswordChangeDTO>> violations = validator.validate(passwordChangeDto);
+		for (ConstraintViolation<PasswordChangeDTO> violation : violations) {
+			return violation.getMessage();
+		}
+		return null;
 	}
 }

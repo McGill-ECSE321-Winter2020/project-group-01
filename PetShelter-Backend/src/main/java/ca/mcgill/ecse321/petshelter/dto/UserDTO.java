@@ -1,20 +1,38 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
+import ca.mcgill.ca.ecse321.petshelter.passwordvalidator.ValidPassword;
 import ca.mcgill.ecse321.petshelter.model.UserType;
 
 import javax.validation.constraints.Email;
+<<<<<<< HEAD
 import javax.validation.constraints.NotBlank;
+=======
+>>>>>>> origin/master
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class UserDTO {
+<<<<<<< HEAD
 	@NotEmpty(message = "email cannot be empty")
 	@NotNull
 	@Email(message = "Invalid email")
+=======
+	
+	@NotNull(message = "Email cannot be empty.")
+	@Email(message = "The provided email is not a valid email address.")
+	@NotEmpty(message = "Email cannot be empty.")
+>>>>>>> origin/master
 	private String email;
-	@NotNull
+	@NotNull(message = "Username cannot be empty.")
+	@NotEmpty(message = "Username cannot be empty.")
+	@Size(min = 4, max = 20, message="Username must have between 4 and 20 characters.")
 	private String username;
+	@NotNull(message = "Password cannot be empty.")
+	@NotEmpty(message = "Password cannot be empty.")
+	@ValidPassword
 	private String password;
+	private String token;
 	private UserType userType;
 	private byte[] picture;
 	
@@ -97,5 +115,19 @@ public class UserDTO {
 	 */
 	public void setPicture(byte[] picture) {
 		this.picture = picture;
+	}
+
+	/**
+	 * @return the token
+	 */
+	public String getToken() {
+		return token;
+	}
+
+	/**
+	 * @param token the token to set
+	 */
+	public void setToken(String token) {
+		this.token = token;
 	}
 }
