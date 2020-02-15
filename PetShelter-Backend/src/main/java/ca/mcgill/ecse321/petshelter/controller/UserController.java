@@ -2,19 +2,10 @@ package ca.mcgill.ecse321.petshelter.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,6 +22,7 @@ import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import ca.mcgill.ecse321.petshelter.service.EmailingService;
 import ca.mcgill.ecse321.petshelter.service.JWTTokenProvider;
 import ca.mcgill.ecse321.petshelter.service.RegisterException;
 import ca.mcgill.ecse321.petshelter.service.UserService;
@@ -56,7 +48,7 @@ public class UserController {
 	private UserRepository userRepo;
 
 	@Autowired
-	private JavaMailSender javaMailSender;
+	private EmailingService emailingService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -73,13 +65,6 @@ public class UserController {
 	 */
 	@PostMapping("/register")
 	public ResponseEntity<?> createUser(@RequestBody(required = true) UserDTO user) {
-		// check if input is valid (email is an email, email and username are not empty)
-		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-		Validator validator = factory.getValidator();
-		Set<ConstraintViolation<UserDTO>> violations = validator.validate(user);
-		for (ConstraintViolation<UserDTO> violation : violations) {
-			return new ResponseEntity<>(violation.getMessage(), HttpStatus.BAD_REQUEST);
-		}
 		try {
 			User user1 = userService.addUser(user);
 			user.setUserType(user1.getUserType());
@@ -165,12 +150,8 @@ public class UserController {
 		String tempPw = userService.generateRandomPassword();
 		ue.setPassword(passwordEncoder.encode(tempPw));
 		userRepo.save(ue);
-		SimpleMailMessage msg = new SimpleMailMessage();
-		msg.setTo(ue.getEmail());
-		msg.setSubject("Pet shelter password reset");
-		msg.setText("Here is your temporary password " + tempPw);
 		try {
-			javaMailSender.send(msg);
+			emailingService.userForgotPasswordEmail(ue.getEmail(), tempPw, ue.getUserName());
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (MailException x) {
 			return new ResponseEntity<>(x.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -184,25 +165,9 @@ public class UserController {
 	 * @return
 	 */
 	@PostMapping("/changePassword")
-	public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDTO passwords) {
-		// check if new password is valid
-		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-		Validator validator = factory.getValidator();
-		Set<ConstraintViolation<PasswordChangeDTO>> violations = validator.validate(passwords);
-		for (ConstraintViolation<PasswordChangeDTO> violation : violations) {
-			return new ResponseEntity<>(violation.getMessage(), HttpStatus.BAD_REQUEST);
-		}
-		User user = userRepo.findUserByUserName(passwords.getUserName());
-		if (user == null) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-		}
-
-		if (!passwordEncoder.matches(passwords.getOldPassword(), user.getPassword())) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-		}
-		user.setPassword(passwordEncoder.encode(passwords.getNewPassword()));
-		userRepo.save(user);
-		return new ResponseEntity<>(HttpStatus.OK);
+	public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDTO passwordDto) {
+		
+		return userService.changeUserPassword(passwordDto);
 	}
 
 	/**
