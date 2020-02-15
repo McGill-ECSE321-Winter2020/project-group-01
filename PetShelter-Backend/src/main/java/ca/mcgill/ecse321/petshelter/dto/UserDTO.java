@@ -3,12 +3,14 @@ package ca.mcgill.ecse321.petshelter.dto;
 import ca.mcgill.ecse321.petshelter.model.UserType;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class UserDTO {
-	
+	@NotEmpty(message = "email cannot be empty")
 	@NotNull
-	@Email
+	@Email(message = "Invalid email")
 	private String email;
 	@NotNull
 	private String username;

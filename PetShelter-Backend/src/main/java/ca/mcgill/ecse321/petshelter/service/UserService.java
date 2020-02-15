@@ -38,6 +38,12 @@ public class UserService {
 			throw new RegisterException("Email is already taken.");
 		if (userRepository.findUserByUserName(user.getUsername()) != null)
 			throw new RegisterException("Username is already taken.");
+		if (user.getUsername() == null){
+			throw new RegisterException("Username can't be null.");
+		}
+		if(user.getPassword() == null){
+			throw new RegisterException("Password can't be null.");
+		}
 		// create the user and set its attributes
 		User user1 = new User();
 		user1.setPassword(passwordEncoder.encode(user.getPassword()));
