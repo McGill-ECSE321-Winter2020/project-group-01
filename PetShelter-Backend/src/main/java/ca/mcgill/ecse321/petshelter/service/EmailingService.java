@@ -73,4 +73,5 @@ public class EmailingService {
         msg.setText("Hey " + username + " ,\n\nHere is your temporary password " + tempPw + "\n\nYours, \nPetShelter");
         javaMailSender.send(msg);
     }
+
 }
