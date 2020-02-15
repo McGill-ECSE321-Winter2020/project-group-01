@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ca.mcgill.ecse321.petshelter.dto.PasswordChangeDTO;
@@ -41,6 +42,7 @@ import ca.mcgill.ecse321.petshelter.service.UserService;
 
 @RestController
 @CrossOrigin(origins = "*")
+@RequestMapping("/api/user")
 public class UserController {
 
 	@Autowired
@@ -168,7 +170,7 @@ public class UserController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@DeleteMapping("/user/{userName}")
+	@DeleteMapping("/{userName}")
 	public ResponseEntity<?> deleteUser(@PathVariable String userName) {
 		// find a user by username
 		User user = userRepo.findUserByUserName(userName);
@@ -178,7 +180,7 @@ public class UserController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@GetMapping("/user/{username}")
+	@GetMapping("/{username}")
 	public ResponseEntity<?> getUser(@PathVariable String userName) {
 		// find a user by username
 		User user = userRepo.findUserByUserName(userName);
@@ -189,7 +191,7 @@ public class UserController {
 		}
 	}
 
-	@PutMapping("/user/{username}")
+	@PutMapping("/{username}")
 	// note: the username and email cannot be changed
 	public ResponseEntity<?> updateUser(@PathVariable String userName, @RequestBody UserDTO userDto) {
 		// find a user by username
@@ -205,7 +207,7 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/users")
+	@GetMapping("/all")
 	public ResponseEntity<?> getUsers() {
 		List<User> users = new ArrayList<>();
 		try {
