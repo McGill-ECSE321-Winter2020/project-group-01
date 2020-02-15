@@ -14,19 +14,21 @@ import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RestController
+@RequestMapping("/api/donation")
 public class DonationController {
     
     @Autowired
     private DonationService donationService;
     
     //i dont understand why i need a constructor here and not autowired.... but it works
+    //@Ding, did you try it with @Autowired too?
     private EmailingService emailingService;
     
     public DonationController(EmailingService emailingService) {
         this.emailingService = emailingService;
     }
     
-    @GetMapping(value = {"/donation"})
+    @GetMapping
     public List<DonationDTO> getAllDonations() {
         return donationService.getAllDonations().stream().map(this::convertToDto).collect(Collectors.toList());
     }
@@ -45,11 +47,8 @@ public class DonationController {
         return donationDTO;
     }
     
-    
-    //also, we need to figure out how we can donate without having a user account. 
-    @PostMapping(value = {"/donation"})
+    @PostMapping
     public ResponseEntity<?> createDonation(@RequestBody DonationDTO donationDTO) throws IllegalArgumentException {
-        //System.out.println(amount.toString());
         Donation donation = donationService.createDonation(donationDTO);
         try {
             if (donation.getUser() != null) {
