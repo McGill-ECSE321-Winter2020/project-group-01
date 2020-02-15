@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 //exception when logging in: wrong pw, username not found, account not verified
 @SuppressWarnings("serial")
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-class LoginException extends RuntimeException {
+public class LoginException extends Exception {
 	public LoginException(String msg) {
 		super(msg);
 	}
