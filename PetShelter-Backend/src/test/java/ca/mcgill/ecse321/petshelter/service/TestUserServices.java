@@ -39,7 +39,7 @@ public class TestUserServices {
         UserDTO userDTO = new UserDTO();
         
         String email = "myEmail@gmail.com";
-        String password = "myPassword123";
+        String password = "myPassword12!3";
         String username = "myUsername";
         UserType userType = USER;
         
@@ -51,6 +51,7 @@ public class TestUserServices {
         try {
             userService.addUser(userDTO);
         } catch (RegisterException e) {
+        	System.out.println(e.getMessage());
             //ignored for now
         }
         List<User> allUsers = new ArrayList<>();
