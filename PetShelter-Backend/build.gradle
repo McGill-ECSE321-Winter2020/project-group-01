@@ -4,6 +4,7 @@ plugins {
 	id 'java'
 }
 apply plugin: 'java'
+apply plugin: 'idea'
 // This plugin has a predefined 'run' task that we can reuse to use Gradle to execute our application
 apply plugin: 'application'
 apply plugin: "org.springframework.boot" // Added this

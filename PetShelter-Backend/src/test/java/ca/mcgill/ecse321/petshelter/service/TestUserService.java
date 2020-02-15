@@ -42,7 +42,7 @@ public class TestUserService {
         UserDTO userDTO = new UserDTO();
         
         String email = "myEmail@gmail.com";
-        String password = "myPassword123";
+        String password = "myPassword123!";
         String username = "myUsername";
         UserType userType = USER;
         
