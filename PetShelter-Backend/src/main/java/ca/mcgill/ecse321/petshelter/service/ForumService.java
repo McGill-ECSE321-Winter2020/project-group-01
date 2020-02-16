@@ -64,11 +64,12 @@ public class ForumService {
 	 */
 	@Transactional
 	public Forum lockForum(long forumID) {
-		if (forumRepository.existsById(forumID)) {
-			Forum forum = forumRepository.getOne(forumID);
-			forum.setLocked(true);
-			forumRepository.save(forum);
-			return forum;
+		Optional<Forum> forum = forumRepository.findById(forumID);
+		if (forum.isPresent()) {
+			Forum newForum = forum.get();
+			newForum.setLocked(true);
+			forumRepository.save(newForum);
+			return newForum;
 		} else {
 			throw new NullPointerException("No such forum thread.");
 		}
@@ -82,11 +83,12 @@ public class ForumService {
 	 */
 	@Transactional
 	public Forum unlockForum(long forumID) {
-		if (forumRepository.existsById(forumID)) {
-			Forum forum = forumRepository.getOne(forumID);
-			forum.setLocked(false);
-			forumRepository.save(forum);
-			return forum;
+		Optional<Forum> forum = forumRepository.findById(forumID);
+		if (forum.isPresent()) {
+			Forum newForum = forum.get();
+			newForum.setLocked(false);
+			forumRepository.save(newForum);
+			return newForum;
 		} else {
 			throw new NullPointerException("No such forum thread.");
 		}
@@ -100,14 +102,16 @@ public class ForumService {
 	 */
 	@Transactional
 	public Forum subscribeTo(long forumID, long userID) {
-		if (userRepository.existsById(userID)) {
-			if (forumRepository.existsById(forumID)) {
-				Forum forum = forumRepository.findForumById(forumID);
-				Set<User> newUsers = forum.getSubscribers();
-				newUsers.add(userRepository.findUserById(userID));
-				forum.setSubscribers(newUsers);
-				forumRepository.save(forum);
-				return forum;
+		Optional<Forum> forum = forumRepository.findById(forumID);
+		Optional<User> user = userRepository.findById(userID);
+		if (user.isPresent()) {
+			if (forum.isPresent()) {
+				Forum newForum = forum.get();
+				Set<User> newUsers = newForum.getSubscribers();
+				newUsers.add(user.get());
+				newForum.setSubscribers(newUsers);
+				forumRepository.save(newForum);
+				return newForum;
 			} else {
 				throw new NullPointerException("No such forum thread.");
 			}
@@ -124,19 +128,16 @@ public class ForumService {
 	 */
 	@Transactional
 	public Forum unsubscribeFrom(long forumID, long userID) {
-		if (userRepository.existsById(userID)) {
-			if (forumRepository.existsById(forumID)) {
-				Forum forum = forumRepository.findForumById(forumID);
-				Set<User> newUsers = forum.getSubscribers();
-				newUsers.removeIf(u -> (u.getId() == userID));
-				forum.setSubscribers(newUsers);
-				forumRepository.save(forum);
-				return forum;
-			} else {
-				throw new NullPointerException("No such forum thread.");
-			}
+		Optional<Forum> forum = forumRepository.findById(forumID);
+		if (forum.isPresent()) {
+			Forum newForum = forum.get();
+			Set<User> newUsers = newForum.getSubscribers();
+			newUsers.removeIf(u -> (u.getId() == userID));
+			newForum.setSubscribers(newUsers);
+			forumRepository.save(newForum);
+			return newForum;
 		} else {
-			throw new NullPointerException("No such user.");
+			throw new NullPointerException("No such forum thread.");
 		}
 	}
 	
