@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.petshelter.service;
 
+import ca.mcgill.ecse321.petshelter.dto.PasswordChangeDTO;
 import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.model.UserType;
@@ -63,11 +64,10 @@ public class TestUserService {
     
     @Test
     public void testRegisterWithInvalidEmail(){
-        String error = "Could not parse mail; nested exception is javax.mail.internet.AddressException: Missing domain in string ``myEmail@''";
         UserDTO userDTO = new UserDTO();
     
         String email = "myEmail@";
-        String password = "myPassword123";
+        String password = "myPassword123!";
         String username = "myUsername";
         UserType userType = USER;
     
@@ -79,18 +79,16 @@ public class TestUserService {
         try{
             userService.addUser(userDTO);
         } catch (Exception e){
-            assertEquals(error, e.getMessage());
+            assertEquals("The provided email is not a valid email address.", e.getMessage());
         }
     }
     
     @Test
     public void testRegisterWithMissingAtEmail(){
-        String error = "Failed messages: javax.mail.SendFailedException: Invalid Addresses"; // can only pattern match on the error because of how the error is handled in spring
-        Pattern pattern = Pattern.compile(error);
         UserDTO userDTO = new UserDTO();
     
         String email = "myEmailgmail.com";
-        String password = "myPassword123";
+        String password = "myPassword123!";
         String username = "myUsername";
         UserType userType = USER;
     
@@ -102,8 +100,7 @@ public class TestUserService {
         try{
             userService.addUser(userDTO);
         } catch (Exception e){
-            Matcher matcher = pattern.matcher(e.getMessage());
-            assertTrue(matcher.find());
+            assertEquals("The provided email is not a valid email address.",e.getMessage());
         }
     }
     
@@ -112,7 +109,7 @@ public class TestUserService {
         UserDTO userDTO = new UserDTO();
     
         String email = "myEmail@gmail.com";
-        String password = "myPassword123";
+        String password = "myPassword123!";
         String username = null;
         UserType userType = USER;
     
@@ -124,10 +121,11 @@ public class TestUserService {
             userService.addUser(userDTO);
         } catch (RegisterException e) {
             //ignored for now
-            assertEquals("Username can't be null.",e.getMessage());
+            assertEquals("Username cannot be empty.",e.getMessage());
         }
     }
     
+    //Todo, when the password is null, it fails
     @Test
     public void testRegisterWithMissingPassword(){
         UserDTO userDTO = new UserDTO();
@@ -145,6 +143,7 @@ public class TestUserService {
         try {
             userService.addUser(userDTO);
         } catch (RegisterException e) {
+            System.out.println(e.getMessage());
             assertEquals("Password can't be null.",e.getMessage());
         }
     }
@@ -155,16 +154,25 @@ public class TestUserService {
     
         String email = "myEmail@gmail.com";
         String password = "myPassword123";
-        String username = "myUsername";
-        String newPassword = "newPassword123";
+        String username = "myUsername!";
+        String newPassword = "newPassword123!";
         UserType userType = USER;
     
+        PasswordChangeDTO passwordChangeDTO = new PasswordChangeDTO();
+        passwordChangeDTO.setUserName(username);
+        passwordChangeDTO.setNewPassword(newPassword);
+        passwordChangeDTO.setOldPassword(password);
         userDTO.setEmail(email);
         userDTO.setPassword(password);
         userDTO.setUsername(username);
         userDTO.setUserType(userType);
     
-        //todo
+        try{
+            userService.addUser(userDTO);
+            userService.changeUserPassword(passwordChangeDTO);
+        } catch (RegisterException e){
+        
+        }
     }
     
     @Test
@@ -177,12 +185,22 @@ public class TestUserService {
         String newPassword = null;
         UserType userType = USER;
     
+        PasswordChangeDTO passwordChangeDTO = new PasswordChangeDTO();
+        passwordChangeDTO.setUserName(username);
+        passwordChangeDTO.setNewPassword(newPassword);
+        passwordChangeDTO.setOldPassword(password);
+        
         userDTO.setEmail(email);
         userDTO.setPassword(password);
         userDTO.setUsername(username);
         userDTO.setUserType(userType);
     
-        //todo
+        try{
+            userService.addUser(userDTO);
+            userService.changeUserPassword(passwordChangeDTO);
+        } catch (RegisterException e){
+            assertEquals("Password must contain at least 1 special characters.",e.getMessage());
+        }
     }
     
     
@@ -193,15 +211,25 @@ public class TestUserService {
         String email = "myEmail@gmail.com";
         String password = "myPassword123";
         String username = "myUsername";
-        String newPassword = "123";
+        String newPassword = "1m3";
         UserType userType = USER;
-    
+        
+        PasswordChangeDTO passwordChangeDTO = new PasswordChangeDTO();
+        passwordChangeDTO.setUserName(username);
+        passwordChangeDTO.setNewPassword(newPassword);
+        passwordChangeDTO.setOldPassword(password);
+        
         userDTO.setEmail(email);
         userDTO.setPassword(password);
         userDTO.setUsername(username);
         userDTO.setUserType(userType);
     
-        //todo
+        try{
+            userService.addUser(userDTO);
+            userService.changeUserPassword(passwordChangeDTO);
+        } catch (RegisterException e){
+           assertEquals("Password must contain at least 1 special characters.", e.getMessage());
+        }
     }
     
 }
