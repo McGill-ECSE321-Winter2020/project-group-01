@@ -9,8 +9,17 @@ public class Forum {
     private long id;
     private Set<Comment> comments;
     private Set<User> subscribers;
+    private boolean isLocked;
     
-    public String getTitle() {
+    public boolean isLocked() {
+		return isLocked;
+	}
+
+	public void setLocked(boolean isLocked) {
+		this.isLocked = isLocked;
+	}
+
+	public String getTitle() {
         return this.title;
     }
     
