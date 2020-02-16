@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.petshelter.controller;
 
 import ca.mcgill.ecse321.petshelter.dto.DonationDTO;
 import ca.mcgill.ecse321.petshelter.model.Donation;
+import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.DonationService;
 import ca.mcgill.ecse321.petshelter.service.EmailingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class DonationController {
     @Autowired
     private DonationService donationService;
     
+    @Autowired
+    private UserRepository userRepository;
     //i dont understand why i need a constructor here and not autowired.... but it works
     //@Ding, did you try it with @Autowired too?
     private EmailingService emailingService;
@@ -28,13 +31,17 @@ public class DonationController {
         this.emailingService = emailingService;
     }
     
-    @GetMapping
+    @GetMapping("/all")
     public List<DonationDTO> getAllDonations() {
         return donationService.getAllDonations().stream().map(this::convertToDto).collect(Collectors.toList());
     }
     
+    @GetMapping("/{user}")
+    public List<DonationDTO> getUserDonation(@PathVariable String user) {
+        return donationService.getAllUserDonations(userRepository.findUserByUserName(user)).stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+    
     public DonationDTO convertToDto(Donation donation) {
-        System.out.println(donation.toString());
         DonationDTO donationDTO = new DonationDTO();
         donationDTO.setDate(donation.getDate());
         donationDTO.setTime(donation.getTime());
@@ -47,7 +54,7 @@ public class DonationController {
         return donationDTO;
     }
     
-    @PostMapping
+    @PostMapping("/donate")
     public ResponseEntity<?> createDonation(@RequestBody DonationDTO donationDTO) throws IllegalArgumentException {
         Donation donation = donationService.createDonation(donationDTO);
         try {
