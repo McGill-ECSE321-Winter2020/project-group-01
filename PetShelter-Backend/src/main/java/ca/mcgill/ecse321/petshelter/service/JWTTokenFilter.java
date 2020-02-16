@@ -1,16 +1,15 @@
 package ca.mcgill.ecse321.petshelter.service;
 
-import java.io.IOException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.GenericFilterBean;
+import java.io.IOException;
 
 //taken from Baeldung's tutorials, not 100% sure how it works
 /**
@@ -31,7 +30,6 @@ public class JWTTokenFilter extends GenericFilterBean {
 			    SecurityContextHolder.getContext().setAuthentication(auth);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         filterChain.doFilter(req, res);
