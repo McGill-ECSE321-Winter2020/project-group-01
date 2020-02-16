@@ -18,8 +18,6 @@ import java.util.List;
 import static ca.mcgill.ecse321.petshelter.model.UserType.USER;
 import static org.junit.Assert.assertEquals;
 
-//TODO, fill out the rest of the test cases
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TestUserService {
@@ -51,7 +49,7 @@ public class TestUserService {
         
         try {
             userService.addUser(userDTO);
-        } catch (RegisterException e) {
+        } catch (RegisterException ignored) {
             //ignored for now
         }
         List<User> allUsers = new ArrayList<>();
@@ -122,7 +120,6 @@ public class TestUserService {
         }
     }
     
-    //TODO: when the password is null, it fails
     @Test
     public void testRegisterWithMissingPassword(){
         UserDTO userDTO = new UserDTO();
@@ -221,12 +218,99 @@ public class TestUserService {
         userDTO.setUsername(username);
         userDTO.setUserType(userType);
     
-        try{
+        try {
             userService.addUser(userDTO);
             userService.changeUserPassword(passwordChangeDTO);
-        } catch (RegisterException e){
-           assertEquals("Password must contain at least 1 special characters.", e.getMessage());
+        } catch (RegisterException e) {
+            assertEquals("Password must contain at least 1 special characters.", e.getMessage());
         }
     }
     
+    @Test
+    public void registerWithSameUsername() {
+        UserDTO user1 = new UserDTO();
+        String email = "myEmail@gmail.com";
+        String password = "myPassword123!";
+        String username = "myUsername";
+        UserType userType = USER;
+        
+        user1.setEmail(email);
+        user1.setPassword(password);
+        user1.setUserType(userType);
+        user1.setUsername(username);
+        
+        userService.addUser(user1); //we know that the first one will register for sure
+        
+        UserDTO user2 = new UserDTO();
+        String email2 = "myEmail1234@gmail.com";
+        String password2 = "myPassword123!";
+        String username2 = "myUsername";
+        UserType userType2 = USER;
+        
+        user2.setUsername(username2);
+        user2.setUserType(userType2);
+        user2.setEmail(email2);
+        user2.setPassword(password2);
+        
+        try {
+            userService.addUser(user2);
+        } catch (RegisterException e) {
+            assertEquals("Username is already taken.", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void registerWithSameEmail() {
+        UserDTO user1 = new UserDTO();
+        String email = "myEmail@gmail.com";
+        String password = "myPassword123!";
+        String username = "myUsername";
+        UserType userType = USER;
+        
+        user1.setEmail(email);
+        user1.setPassword(password);
+        user1.setUserType(userType);
+        user1.setUsername(username);
+        
+        userService.addUser(user1); //we know that the first one will register for sure
+        
+        UserDTO user2 = new UserDTO();
+        String email2 = "myEmail@gmail.com";
+        String password2 = "myPassword123!";
+        String username2 = "myUsernameIsDiff";
+        UserType userType2 = USER;
+        
+        user2.setUsername(username2);
+        user2.setUserType(userType2);
+        user2.setEmail(email2);
+        user2.setPassword(password2);
+        
+        try {
+            userService.addUser(user2);
+        } catch (RegisterException e) {
+            assertEquals("Email is already taken.", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void passwordNotStrong() {
+        UserDTO userDTO = new UserDTO();
+        
+        String email = "myEmail@gmail.com";
+        String password = "myPasswo";
+        String username = "myUsername";
+        UserType userType = USER;
+        
+        userDTO.setEmail(email);
+        userDTO.setPassword(password);
+        userDTO.setUsername(username);
+        userDTO.setUserType(userType);
+        
+        try {
+            userService.addUser(userDTO);
+        } catch (RegisterException e) {
+            assertEquals("Password must contain at least 1 digit characters.,Password must contain at least 1 special characters.", e.getMessage());
+        }
+        
+    }
 }

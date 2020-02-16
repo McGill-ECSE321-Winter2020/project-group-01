@@ -10,15 +10,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /*
  * Service to handle login and registration of users.
@@ -47,6 +47,9 @@ public class UserService {
 	 * @return
 	 */
 	public User addUser(UserDTO user) {
+		if (user.getPassword() == null) {
+			throw new RegisterException("Password can't be null.");
+		}
 		String validationError = isUserDtoValid(user);
 		if (validationError != null) {
 			throw new RegisterException(validationError);
@@ -56,12 +59,7 @@ public class UserService {
 			throw new RegisterException("Email is already taken.");
 		if (userRepository.findUserByUserName(user.getUsername()) != null)
 			throw new RegisterException("Username is already taken.");
-		if (user.getUsername() == null){
-			throw new RegisterException("Username can't be null.");
-		}
-		if(user.getPassword() == null){
-			throw new RegisterException("Password can't be null.");
-		}
+		
 		// create the user and set its attributes
 		User user1 = new User();
 		user1.setPassword(passwordEncoder.encode(user.getPassword()));
