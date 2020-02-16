@@ -103,14 +103,12 @@ public class PetShelterPersistence {
     public Comment createComment() {
         Date postedDate = Date.valueOf("2015-03-21");
         String commentText = "this is a comment";
-        Time time = Time.valueOf("10:22:03");
         
         User user = createUser();
         Comment comment = new Comment();
         
         comment.setDatePosted(postedDate);
         comment.setText(commentText);
-        comment.setTime(time);
         comment.setUser(user);
         
         commentRepository.save(comment);
@@ -152,7 +150,6 @@ public class PetShelterPersistence {
         //comments details
         Date postedDate = Date.valueOf("2015-03-21");
         String commentText = "this is a comment";
-        Time time = Time.valueOf("10:22:03");
         
         User user = createUser();
         Comment comment = new Comment();
@@ -160,7 +157,7 @@ public class PetShelterPersistence {
         //sets everything
         comment.setDatePosted(postedDate);
         comment.setText(commentText);
-        comment.setTime(time);
+
         comment.setUser(user);
         
         commentRepository.save(comment);
