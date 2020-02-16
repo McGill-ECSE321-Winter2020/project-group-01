@@ -14,12 +14,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static ca.mcgill.ecse321.petshelter.model.UserType.USER;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 //TODO, fill out the rest of the test cases
 
@@ -125,7 +122,7 @@ public class TestUserService {
         }
     }
     
-    //Todo, when the password is null, it fails
+    //TODO: when the password is null, it fails
     @Test
     public void testRegisterWithMissingPassword(){
         UserDTO userDTO = new UserDTO();

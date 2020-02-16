@@ -32,8 +32,8 @@ public class DonationService {
     }
     
     @Transactional
-    public List<Donation> getAllDonations(User name) {
-        return toList(donationRepository.findAll());
+    public List<Donation> getAllUserDonations(User name) {
+        return toList(donationRepository.findAllByUser(name));
     }
     
     //From tutorial
