@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.petshelter.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.List;
@@ -40,7 +41,7 @@ public class CommentService {
 	 * @param userID ID of the author of the comment.
 	 * @return The created comment.
 	 */
-	
+	@Transactional
 	public Comment addComment(String text, long forumID, long userID) {
 		Optional<User> user = userRepository.findById(userID);
 		Optional<Forum> forum = forumRepository.findById(forumID);
@@ -74,7 +75,7 @@ public class CommentService {
 	 * @param comment Comment update.
 	 * @return
 	 */
-	
+	@Transactional
 	public Comment updateComment(long commentID, String comment) {
 		Optional<Comment> oldComment = commentRepository.findById(commentID);
 		if (oldComment.isPresent()) {
@@ -92,7 +93,7 @@ public class CommentService {
 	 * @param commentID The ID of the comment.
 	 * @return The deleted comment.
 	 */
-	
+	@Transactional
 	public Comment deleteComment(long commentID) {
 		Optional<Comment> oldComment = commentRepository.findById(commentID);
 		if (oldComment.isPresent()) {
@@ -107,7 +108,7 @@ public class CommentService {
 	 * Get the list of all comments.
 	 * @return The list of all comments.
 	 */
-	
+	@Transactional
 	public List<Comment> getComments() {
 		List<Comment> comments = commentRepository.findAll();
 		return comments;
@@ -118,7 +119,7 @@ public class CommentService {
 	 * @param userID The id of the user.
 	 * @return The list of all comments by the user.
 	 */
-
+	@Transactional
 	public List<Comment> getCommentsByUser(long userID) {
 		Optional<User> user = userRepository.findById(userID);
 		if (user.isPresent()) {
