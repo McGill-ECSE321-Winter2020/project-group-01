@@ -1,6 +1,9 @@
 package ca.mcgill.ecse321.petshelter.model;
 
 import javax.persistence.*;
+
+import ca.mcgill.ca.ecse321.petshelter.passwordvalidator.ValidPassword;
+
 import java.util.Arrays;
 import java.util.Set;
 
@@ -17,6 +20,7 @@ public class User {
 		return this.userName;
 	}
 
+	@ValidPassword
 	private String password;
 
 	public void setPassword(String value) {

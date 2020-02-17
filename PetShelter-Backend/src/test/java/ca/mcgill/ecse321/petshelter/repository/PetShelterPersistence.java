@@ -59,7 +59,7 @@ public class PetShelterPersistence {
      */
     public User createUser() {
         String name = "TestUserName";
-        String password = "myPassword";
+        String password = "myPassword1!";
         boolean emailValid = true;
         String email = "TestUserName@gmail.com";
         String apiToken = "token112";
@@ -119,7 +119,7 @@ public class PetShelterPersistence {
     public void testPersistAndLoadUser() {
         //parameters for users
         String name = "TestUserNamee";
-        String password = "myPassword";
+        String password = "myPassword1!";
         boolean emailValid = true;
         String email = "TestUserName@gmail.com";
         String apiToken = "token112";

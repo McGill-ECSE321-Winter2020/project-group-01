@@ -4,6 +4,7 @@ plugins {
 	id 'java'
 }
 apply plugin: 'java'
+apply plugin: 'idea'
 // This plugin has a predefined 'run' task that we can reuse to use Gradle to execute our application
 apply plugin: 'application'
 apply plugin: "org.springframework.boot" // Added this
@@ -63,11 +64,8 @@ dependencies {
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.2.0.RELEASE'
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
-	
-	
-	
-	
-	
+	// https://mvnrepository.com/artifact/org.passay/passay
+	compile group: 'org.passay', name: 'passay', version: '1.0'	
 }
 
 task compile(type: JavaCompile) {
