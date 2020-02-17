@@ -142,6 +142,25 @@ public class ForumService {
 	}
 	
 	/**
+	 * Modify a forum.
+	 * @param forumID The id of the forum to lock.
+	 * @param title The updated title.
+	 * @return The updated forum.
+	 */
+	@Transactional
+	public Forum modifyForum(long forumID, String title) {
+		Optional<Forum> forum = forumRepository.findById(forumID);
+		if (forum.isPresent()) {
+			Forum newForum = forum.get();
+			newForum.setTitle(title);
+			forumRepository.save(newForum);
+			return newForum;
+		} else {
+			throw new NullPointerException("No such forum thread.");
+		}
+	}
+
+	/**
 	 * Get the list of all the forum threads.
 	 * @return List of all forum threads.
 	 */
