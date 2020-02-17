@@ -113,4 +113,19 @@ public class CommentService {
 		return comments;
 	}
 
+	/**
+	 * Get all the comments of a user.
+	 * @param userID The id of the user.
+	 * @return The list of all comments by the user.
+	 */
+
+	public List<Comment> getCommentsByUser(long userID) {
+		Optional<User> user = userRepository.findById(userID);
+		if (user.isPresent()) {
+			List<Comment> comments = commentRepository.findCommentsByUser(user.get());
+			return comments;
+		} else {
+			throw new NullPointerException("No such user.");
+		}
+	}
 }
