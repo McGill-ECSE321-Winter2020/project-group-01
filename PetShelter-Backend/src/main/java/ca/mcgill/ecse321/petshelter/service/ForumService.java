@@ -52,7 +52,7 @@ public class ForumService {
 			forumRepository.deleteById(forumID);
 			return forum.get();
 		} else {
-			throw new NullPointerException("No such forum thread.");
+			throw new ForumException("No such forum thread.");
 		}
 		
 	}
@@ -71,7 +71,7 @@ public class ForumService {
 			forumRepository.save(newForum);
 			return newForum;
 		} else {
-			throw new NullPointerException("No such forum thread.");
+			throw new ForumException("No such forum thread.");
 		}
 		
 	}
@@ -90,7 +90,7 @@ public class ForumService {
 			forumRepository.save(newForum);
 			return newForum;
 		} else {
-			throw new NullPointerException("No such forum thread.");
+			throw new ForumException("No such forum thread.");
 		}
 	}
 	
@@ -113,10 +113,10 @@ public class ForumService {
 				forumRepository.save(newForum);
 				return newForum;
 			} else {
-				throw new NullPointerException("No such forum thread.");
+				throw new ForumException("No such forum thread.");
 			}
 		} else {
-			throw new NullPointerException("No such user.");
+			throw new ForumException("No such user.");
 		}
 	}
 	
@@ -137,7 +137,7 @@ public class ForumService {
 			forumRepository.save(newForum);
 			return newForum;
 		} else {
-			throw new NullPointerException("No such forum thread.");
+			throw new ForumException("No such forum thread.");
 		}
 	}
 	
@@ -156,7 +156,7 @@ public class ForumService {
 			forumRepository.save(newForum);
 			return newForum;
 		} else {
-			throw new NullPointerException("No such forum thread.");
+			throw new ForumException("No such forum thread.");
 		}
 	}
 

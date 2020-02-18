@@ -59,13 +59,13 @@ public class CommentService {
 					forumRepository.save(newForum);
 					return newComment;
 				} else {
-					throw new IllegalStateException("Forum thread is locked.");
+					throw new CommentException("Forum thread is locked.");
 				}
 			} else {
-				throw new NullPointerException("No such forum thread.");
+				throw new CommentException("No such forum thread.");
 			}
 		} else {
-			throw new NullPointerException("No such user.");
+			throw new CommentException("No such user.");
 		}
 	}
 	
@@ -84,7 +84,7 @@ public class CommentService {
 			commentRepository.save(updatedComment);
 			return updatedComment;
 		} else {
-			throw new NullPointerException("No such comment.");
+			throw new CommentException("No such comment.");
 		}
 	}
 	
@@ -100,7 +100,7 @@ public class CommentService {
 			commentRepository.deleteById(commentID);
 			return oldComment.get();
 		} else {
-			throw new NullPointerException("No such comment.");
+			throw new CommentException("No such comment.");
 		}
 	}
 	
@@ -126,7 +126,8 @@ public class CommentService {
 			List<Comment> comments = commentRepository.findCommentsByUser(user.get());
 			return comments;
 		} else {
-			throw new NullPointerException("No such user.");
+			throw new CommentException("No such user.");
 		}
 	}
+	
 }
