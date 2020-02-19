@@ -52,6 +52,7 @@ public class UserService {
 		}
 		String validationError = isUserDtoValid(user);
 		if (validationError != null) {
+			System.out.println(validationError);
 			throw new RegisterException(validationError);
 		}
 		// check that the email and username are unique
@@ -146,13 +147,13 @@ public class UserService {
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Validates the PasswordChangeDto it is given. The new password must satisfy
 	 * constraitns. Returns null if no error is found.
-	 * 
+	 *
 	 * @param passwordChangeDto
-	 * @return
+	 * @return errors if any
 	 */
 	private String isPasswordChangeValid(PasswordChangeDTO passwordChangeDto) {
 		// check if input is valid (new password satisfies constraints)
