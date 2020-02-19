@@ -164,4 +164,15 @@ public class UserService {
 		}
 		return null;
 	}
+	
+	public ResponseEntity<?> deleteUser(UserDTO userDTO) {
+		User user = userRepository.findUserByUserName(userDTO.getUsername());
+		try {
+			userRepository.deleteById(user.getId());
+		} catch (RuntimeException e) {
+			//todo i dont know what to return in case of failure
+			//return ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }

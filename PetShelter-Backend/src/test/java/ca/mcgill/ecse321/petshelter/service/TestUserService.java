@@ -17,6 +17,7 @@ import java.util.List;
 
 import static ca.mcgill.ecse321.petshelter.model.UserType.USER;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -227,7 +228,7 @@ public class TestUserService {
     }
     
     @Test
-    public void registerWithSameUsername() {
+    public void testRegisterWithSameUsername() {
         UserDTO user1 = new UserDTO();
         String email = "myEmail@gmail.com";
         String password = "myPassword123!";
@@ -260,7 +261,7 @@ public class TestUserService {
     }
     
     @Test
-    public void registerWithSameEmail() {
+    public void testRegisterWithSameEmail() {
         UserDTO user1 = new UserDTO();
         String email = "myEmail@gmail.com";
         String password = "myPassword123!";
@@ -293,7 +294,7 @@ public class TestUserService {
     }
     
     @Test
-    public void passwordNotStrong() {
+    public void testPasswordNotStrong() {
         UserDTO userDTO = new UserDTO();
         
         String email = "myEmail@gmail.com";
@@ -313,4 +314,40 @@ public class TestUserService {
         }
         
     }
+    
+    @Test
+    public void testDeleteUser() {
+        UserDTO userDTO = new UserDTO();
+        
+        String email = "myEmail@gmail.com";
+        String password = "myPassword123!";
+        String username = "myUsername";
+        UserType userType = USER;
+        
+        userDTO.setEmail(email);
+        userDTO.setPassword(password);
+        userDTO.setUsername(username);
+        userDTO.setUserType(userType);
+        
+        userService.addUser(userDTO);
+        
+        User dbUser = userRepository.findUserByUserName(username);
+        
+        assertEquals(userDTO.getUsername(), dbUser.getUserName());
+        
+        try {
+            userService.deleteUser(userDTO);
+        } catch (RuntimeException e) {
+        
+        }
+        assertNull(userRepository.findUserByUserName(username));
+    }
+    
+    //i dont know how this can happen though
+    @Test
+    public void testFailedDeleteUser() {
+    
+    }
+    //todo test edge cases for password
+    
 }
