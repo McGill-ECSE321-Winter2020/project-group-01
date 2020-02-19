@@ -85,13 +85,13 @@ public class TestDonationService {
     
     //Anonymous donation
     @Test
-    public void anonymousDonation() {
+    public void testAnonymousDonation() {
         DonationDTO donationDTO = new DonationDTO();
         String username = "bobby";
         Date date = Date.valueOf("2020-01-22");
         Time time = Time.valueOf("11:22:00");
         double amount = 11.22;
-        
+    
         donationDTO.setUser(username);
         donationDTO.setTime(time);
         donationDTO.setDate(date);
@@ -109,7 +109,7 @@ public class TestDonationService {
     
     //negative donation amount
     @Test
-    public void negativeDonation() {
+    public void testNegativeDonation() {
         createUser();
         DonationDTO donationDTO = new DonationDTO();
         Date date = Date.valueOf("2020-01-22");
@@ -130,7 +130,7 @@ public class TestDonationService {
     
     //zero donation amount, edge case
     @Test
-    public void zeroDonation() {
+    public void testZeroDonation() {
         createUser();
         DonationDTO donationDTO = new DonationDTO();
         Date date = Date.valueOf("2020-01-22");
@@ -149,9 +149,29 @@ public class TestDonationService {
         }
     }
     
+    @Test
+    public void testMinimumDonation() {
+        createUser();
+        DonationDTO donationDTO = new DonationDTO();
+        Date date = Date.valueOf("2020-01-22");
+        Time time = Time.valueOf("11:22:00");
+        double amount = 0.01;
+        
+        donationDTO.setUser(name);
+        donationDTO.setTime(time);
+        donationDTO.setDate(date);
+        donationDTO.setAmount(amount);
+        
+        try {
+            donationService.createDonation(donationDTO);
+        } catch (DonationException e) {
+            assertEquals("Donation amount can't be less than 0$", e.getMessage());
+        }
+    }
+    
     //no donation amount
     @Test
-    public void nullDonation() {
+    public void testNullDonation() {
         createUser();
         DonationDTO donationDTO = new DonationDTO();
         Date date = Date.valueOf("2020-01-22");
