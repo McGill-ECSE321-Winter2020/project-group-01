@@ -39,7 +39,7 @@ public class TestUserService {
         UserDTO userDTO = new UserDTO();
         
         String email = "myEmail@gmail.com";
-        String password = "myPassword123!";
+        String password = "myP1+abc";
         String username = "myUsername";
         UserType userType = USER;
         
@@ -293,12 +293,13 @@ public class TestUserService {
         }
     }
     
+    //@Size(min = 4, max = 20
     @Test
-    public void testPasswordNotStrong() {
+    public void testPasswordShorterThan8() {
         UserDTO userDTO = new UserDTO();
         
         String email = "myEmail@gmail.com";
-        String password = "myPasswo";
+        String password = "1A/c";
         String username = "myUsername";
         UserType userType = USER;
         
@@ -310,9 +311,73 @@ public class TestUserService {
         try {
             userService.addUser(userDTO);
         } catch (RegisterException e) {
-            assertEquals("Password must contain at least 1 digit characters.,Password must contain at least 1 special characters.", e.getMessage());
+            assertEquals("Password must be at least 8 characters in length.", e.getMessage());
         }
         
+    }
+    
+    @Test
+    public void testPasswordNoNumber() {
+        UserDTO userDTO = new UserDTO();
+        
+        String email = "myEmail@gmail.com";
+        String password = "/aAasdfg";
+        String username = "myUsername";
+        UserType userType = USER;
+        
+        userDTO.setEmail(email);
+        userDTO.setPassword(password);
+        userDTO.setUsername(username);
+        userDTO.setUserType(userType);
+        
+        try {
+            userService.addUser(userDTO);
+        } catch (RegisterException e) {
+            assertEquals("Password must contain at least 1 digit characters.", e.getMessage());
+        }
+        
+    }
+    
+    @Test
+    public void testPasswordNoUpperCase() {
+        UserDTO userDTO = new UserDTO();
+        
+        String email = "myEmail@gmail.com";
+        String password = "/1abcdasdasdasdqdqw";
+        String username = "myUsername";
+        UserType userType = USER;
+        
+        userDTO.setEmail(email);
+        userDTO.setPassword(password);
+        userDTO.setUsername(username);
+        userDTO.setUserType(userType);
+        
+        try {
+            userService.addUser(userDTO);
+        } catch (RegisterException e) {
+            assertEquals("Password must contain at least 1 uppercase characters.", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testPasswordNoSpecialCharacter() {
+        UserDTO userDTO = new UserDTO();
+        
+        String email = "myEmail@gmail.com";
+        String password = "ACSW1abcd";
+        String username = "myUsername";
+        UserType userType = USER;
+        
+        userDTO.setEmail(email);
+        userDTO.setPassword(password);
+        userDTO.setUsername(username);
+        userDTO.setUserType(userType);
+        
+        try {
+            userService.addUser(userDTO);
+        } catch (RegisterException e) {
+            assertEquals("Password must contain at least 1 special characters.", e.getMessage());
+        }
     }
     
     @Test
@@ -335,11 +400,8 @@ public class TestUserService {
         
         assertEquals(userDTO.getUsername(), dbUser.getUserName());
         
-        try {
-            userService.deleteUser(userDTO);
-        } catch (RuntimeException e) {
+        userService.deleteUser(userDTO);
         
-        }
         assertNull(userRepository.findUserByUserName(username));
     }
     
@@ -348,6 +410,5 @@ public class TestUserService {
     public void testFailedDeleteUser() {
     
     }
-    //todo test edge cases for password
     
 }
