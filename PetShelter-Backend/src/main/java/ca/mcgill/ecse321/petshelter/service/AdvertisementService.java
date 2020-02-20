@@ -41,6 +41,12 @@ public class AdvertisementService {
 		//TODO user or userDTO?
 		return null;
 	}
+	//TODO not sure if this goes in pet or ad service
+	@Transactional
+	public Pet getPetByAdvertisement(Advertisement ad) {
+		Pet pet = petRepository.findPetByAdvertisement(ad);
+		return pet;
+	}
 	@Transactional
 	public Advertisement createAdvertisement (AdvertisementDTO adDTO) {
 		if(adDTO.getTitle().trim() == "" || adDTO.getTitle()==null) {
@@ -99,7 +105,3 @@ public class AdvertisementService {
 		return null;
 	}
 }
-//delete
-//list
-//list all
-
