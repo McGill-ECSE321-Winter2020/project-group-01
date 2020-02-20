@@ -17,6 +17,7 @@ import java.util.List;
 
 import static ca.mcgill.ecse321.petshelter.model.UserType.USER;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -38,7 +39,7 @@ public class TestUserService {
         UserDTO userDTO = new UserDTO();
         
         String email = "myEmail@gmail.com";
-        String password = "myPassword123!";
+        String password = "myP1+abc";
         String username = "myUsername";
         UserType userType = USER;
         
@@ -227,7 +228,7 @@ public class TestUserService {
     }
     
     @Test
-    public void registerWithSameUsername() {
+    public void testRegisterWithSameUsername() {
         UserDTO user1 = new UserDTO();
         String email = "myEmail@gmail.com";
         String password = "myPassword123!";
@@ -260,7 +261,7 @@ public class TestUserService {
     }
     
     @Test
-    public void registerWithSameEmail() {
+    public void testRegisterWithSameEmail() {
         UserDTO user1 = new UserDTO();
         String email = "myEmail@gmail.com";
         String password = "myPassword123!";
@@ -292,12 +293,13 @@ public class TestUserService {
         }
     }
     
+    //@Size(min = 4, max = 20
     @Test
-    public void passwordNotStrong() {
+    public void testPasswordShorterThan8() {
         UserDTO userDTO = new UserDTO();
         
         String email = "myEmail@gmail.com";
-        String password = "myPasswo";
+        String password = "1A/c";
         String username = "myUsername";
         UserType userType = USER;
         
@@ -309,8 +311,104 @@ public class TestUserService {
         try {
             userService.addUser(userDTO);
         } catch (RegisterException e) {
-            assertEquals("Password must contain at least 1 digit characters.,Password must contain at least 1 special characters.", e.getMessage());
+            assertEquals("Password must be at least 8 characters in length.", e.getMessage());
         }
         
     }
+    
+    @Test
+    public void testPasswordNoNumber() {
+        UserDTO userDTO = new UserDTO();
+        
+        String email = "myEmail@gmail.com";
+        String password = "/aAasdfg";
+        String username = "myUsername";
+        UserType userType = USER;
+        
+        userDTO.setEmail(email);
+        userDTO.setPassword(password);
+        userDTO.setUsername(username);
+        userDTO.setUserType(userType);
+        
+        try {
+            userService.addUser(userDTO);
+        } catch (RegisterException e) {
+            assertEquals("Password must contain at least 1 digit characters.", e.getMessage());
+        }
+        
+    }
+    
+    @Test
+    public void testPasswordNoUpperCase() {
+        UserDTO userDTO = new UserDTO();
+        
+        String email = "myEmail@gmail.com";
+        String password = "/1abcdasdasdasdqdqw";
+        String username = "myUsername";
+        UserType userType = USER;
+        
+        userDTO.setEmail(email);
+        userDTO.setPassword(password);
+        userDTO.setUsername(username);
+        userDTO.setUserType(userType);
+        
+        try {
+            userService.addUser(userDTO);
+        } catch (RegisterException e) {
+            assertEquals("Password must contain at least 1 uppercase characters.", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testPasswordNoSpecialCharacter() {
+        UserDTO userDTO = new UserDTO();
+        
+        String email = "myEmail@gmail.com";
+        String password = "ACSW1abcd";
+        String username = "myUsername";
+        UserType userType = USER;
+        
+        userDTO.setEmail(email);
+        userDTO.setPassword(password);
+        userDTO.setUsername(username);
+        userDTO.setUserType(userType);
+        
+        try {
+            userService.addUser(userDTO);
+        } catch (RegisterException e) {
+            assertEquals("Password must contain at least 1 special characters.", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testDeleteUser() {
+        UserDTO userDTO = new UserDTO();
+        
+        String email = "myEmail@gmail.com";
+        String password = "myPassword123!";
+        String username = "myUsername";
+        UserType userType = USER;
+        
+        userDTO.setEmail(email);
+        userDTO.setPassword(password);
+        userDTO.setUsername(username);
+        userDTO.setUserType(userType);
+        
+        userService.addUser(userDTO);
+        
+        User dbUser = userRepository.findUserByUserName(username);
+        
+        assertEquals(userDTO.getUsername(), dbUser.getUserName());
+        
+        userService.deleteUser(userDTO);
+        
+        assertNull(userRepository.findUserByUserName(username));
+    }
+    
+    //i dont know how this can happen though
+    @Test
+    public void testFailedDeleteUser() {
+    
+    }
+    
 }

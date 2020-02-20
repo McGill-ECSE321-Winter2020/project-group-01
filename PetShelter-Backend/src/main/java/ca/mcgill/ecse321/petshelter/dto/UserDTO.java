@@ -17,7 +17,7 @@ public class UserDTO {
 	
 	@NotNull(message = "Username cannot be empty.")
 	@NotEmpty(message = "Username cannot be empty.")
-	@Size(min = 4, max = 20, message="Username must have between 4 and 20 characters.")
+	@Size(min = 8, message = "Username must have at least 8 characters.")
 	private String username;
 	
 	@NotNull(message = "Password cannot be empty.")

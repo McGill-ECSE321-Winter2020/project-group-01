@@ -12,9 +12,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(collectionResourceRel = "forum_data", path = "forum_data")
 public interface ForumRepository extends JpaRepository<Forum, Long>{
 
-	//TODO: this is breaking the tests
-	//Forum findForumByUserSetAndCommentSet(Set<User> userSet, Set<Comment> commentSet);
-
 	Forum findForumByTitle(String title);
-
+	
 }
