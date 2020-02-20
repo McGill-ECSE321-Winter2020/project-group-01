@@ -14,4 +14,5 @@ import ca.mcgill.ecse321.petshelter.model.Pet;
 public interface PetRepository extends CrudRepository<Pet, Long>{
 
 	Pet findPetByName(String name);
+	Pet findPetById(long id);
 }
