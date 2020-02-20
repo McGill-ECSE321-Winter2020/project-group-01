@@ -9,6 +9,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User {
+	@Column(unique=true)
 	private String userName;
 
 	public void setUserName(String value) {

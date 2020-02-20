@@ -326,7 +326,6 @@ public class PetShelterPersistence {
         assertEquals(title, forum.getTitle());
     }
     
-    //i dont know why but delete really needs to have a DISTINCT username. cannot be used in previous tests. possibility of a bug here later on.....
     @Test
     public void testDeleteUser() {
         String name = "TestUserNamee!1";
@@ -357,9 +356,7 @@ public class PetShelterPersistence {
         //now it should be null
         assertNull(userRepository.findUserByUserName(user.getUserName()));
     }
-    
-    
-    //advertisement deletion works, but this one doesnt....
+
     @Test
     public void testDeleteAdvertisement() {
         Advertisement advertisement = createAdvertisement();
@@ -443,8 +440,6 @@ public class PetShelterPersistence {
         
         assertNull(forumRepository.findForumByTitle(forum.getTitle()));
     }
-    
-    //same thing overhere, we are running into issues with the pet. they need to have UNIQUE name in order for the test to work
     @Test
     public void testDeletePet() {
         String name = "TestUserNamee!";
