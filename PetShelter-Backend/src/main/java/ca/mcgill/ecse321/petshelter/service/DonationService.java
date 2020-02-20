@@ -55,7 +55,7 @@ public class DonationService {
             throw new DonationException("Donation amount can't be less than 0$");
         }
     
-        System.out.println(donationDTO.toString());
+       // System.out.println(donationDTO.toString());
         User user = userRepository.findUserByUserName(donationDTO.getUsername());
         Donation donation = new Donation();
         donation.setUser(user);
@@ -63,7 +63,7 @@ public class DonationService {
         donation.setDate(donationDTO.getDate());
         donation.setAmount(Math.round(donationDTO.getAmount() * 100.0) / 100.0);//trim it down to 2 decimal points
         donationRepository.save(donation);
-        System.out.println(donation.toString());
+        //  System.out.println(donation.toString());
         return donation;
     }
 }
