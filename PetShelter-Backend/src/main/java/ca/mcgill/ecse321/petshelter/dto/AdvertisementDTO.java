@@ -12,11 +12,12 @@ public class AdvertisementDTO {
 	private Set<AdoptionApplication> adoptionApplication;
 	
 
-	public AdvertisementDTO(String des, boolean isfullfilled, Set<AdoptionApplication> adoptionApplication,
+	public AdvertisementDTO(String des, boolean isfullfilled, long id, Set<AdoptionApplication> adoptionApplication,
 			String title) {
 		this.title = title; 
 		this.description = des; 
 		this.isFulfilled = isfullfilled;
+		this.petId = id;
 		this.adoptionApplication.addAll(adoptionApplication);
 	}
 
