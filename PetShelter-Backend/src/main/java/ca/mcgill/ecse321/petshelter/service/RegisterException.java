@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 //exceptions on registration: username/email in use
 @ResponseStatus(value = HttpStatus.CONFLICT)
-public class RegisterException extends RuntimeException {
+public class RegisterException extends Exception {
 // default ID
 	private static final long serialVersionUID = 1L;
 
