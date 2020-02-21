@@ -3,6 +3,7 @@ package ca.mcgill.ecse321.petshelter.service;
 import java.sql.Date;
 
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,11 +32,27 @@ public class TestAdvertisementService {
 		advertisementRepository.deleteAll();
 		petRepository.deleteAll();
 	}
-	
+	//TODO
 	public void createPet() {
 	    
 	}
+	//TODO
 	public void createAdvertisement() {
 
 	}
+	@Test
+	public void testCreateAd() {
+		
+	}
+	@Test
+	public void testEmptyTitle() {
+		
+	}
+	/*TESTS
+	 * - empty title
+	 * - null title
+	 * - empty description
+	 * - null description
+	 * - 
+	 */
 }
