@@ -46,7 +46,7 @@ public class UserService {
 	 * @param user
 	 * @return
 	 */
-	public User addUser(UserDTO user) {
+	public User addUser(UserDTO user) throws RegisterException{
 		if (user.getPassword() == null) {
 			throw new RegisterException("Password can't be null.");
 		}
