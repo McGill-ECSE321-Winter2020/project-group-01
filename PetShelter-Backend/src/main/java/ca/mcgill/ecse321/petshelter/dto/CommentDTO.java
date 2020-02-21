@@ -12,6 +12,10 @@ public class CommentDTO {
 	@NotEmpty(message = "Text cannot be empty.")
 	private String text;
 	
+	@NotNull(message = "Username cannot be empty.")
+	@NotEmpty(message = "Username cannot be empty.")
+	private String username;
+	
 	private Date datePosted;
 	
 	private Time time;
@@ -19,8 +23,9 @@ public class CommentDTO {
 	public CommentDTO() {
 	}
 	
-	public CommentDTO(@NotNull @NotEmpty String text, Date datePosted, Time time) {
+	public CommentDTO(@NotNull @NotEmpty String username,@NotNull @NotEmpty String text, Date datePosted, Time time) {
 		this.text = text;
+		this.username = username;
 		this.datePosted = datePosted;
 		this.time = time;
 	}
@@ -37,6 +42,20 @@ public class CommentDTO {
 	 */
 	public void setText(String text) {
 		this.text = text;
+	}
+	
+	/**
+	 * @return the username
+	 */
+	public String getUsername() {
+		return username;
+	}
+	
+	/**
+	 * @param username the username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	/**
