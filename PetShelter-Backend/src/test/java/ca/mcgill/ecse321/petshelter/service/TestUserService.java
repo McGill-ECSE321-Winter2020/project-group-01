@@ -117,7 +117,6 @@ public class TestUserService {
 		try {
 			userService.addUser(userDTO);
 		} catch (RegisterException e) {
-			// ignored for now
 			assertEquals("Username cannot be empty.", e.getMessage());
 		}
 	}
@@ -167,7 +166,7 @@ public class TestUserService {
 			userService.addUser(userDTO);
 			userService.changeUserPassword(passwordChangeDTO);
 		} catch (RegisterException e) {
-
+			fail();
 		}
 	}
 
