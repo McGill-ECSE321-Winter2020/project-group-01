@@ -240,12 +240,7 @@ public class TestUserService {
         user1.setUserType(userType);
         user1.setUsername(username);
         
-        try {
-			userService.addUser(user1);
-		} catch (RegisterException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} //we know that the first one will register for sure
+        userService.addUser(user1); //we know that the first one will register for sure
         
         UserDTO user2 = new UserDTO();
         String email2 = "myEmail1234@gmail.com";
@@ -278,12 +273,7 @@ public class TestUserService {
         user1.setUserType(userType);
         user1.setUsername(username);
         
-        try {
-			User addUser = userService.addUser(user1);
-		} catch (RegisterException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} //we know that the first one will register for sure
+        userService.addUser(user1); //we know that the first one will register for sure
         
         UserDTO user2 = new UserDTO();
         String email2 = "myEmail@gmail.com";
@@ -404,12 +394,7 @@ public class TestUserService {
         userDTO.setUsername(username);
         userDTO.setUserType(userType);
         
-        try {
-			userService.addUser(userDTO);
-		} catch (RegisterException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        userService.addUser(userDTO);
         
         User dbUser = userRepository.findUserByUserName(username);
         
