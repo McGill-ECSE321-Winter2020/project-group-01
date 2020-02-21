@@ -27,7 +27,12 @@ public class AdvertisementService {
 	private PetRepository petRepository;
 	
 	@Transactional
-	public Advertisement getAdvertisement() {
+	public Advertisement getAdvertisement(long id) {
+	//TODO does this take attributes or DTO?
+		return null;
+	}
+	@Transactional
+	public List<Advertisement> getAdvertisement(String title) {
 	//TODO does this take attributes or DTO?
 		return null;
 	}
@@ -35,11 +40,6 @@ public class AdvertisementService {
 	public List<Advertisement> getAllAdvertisements(){
 		List<Advertisement> allAds = advertisementRepository.findAll();
 		return allAds;
-	}
-	@Transactional
-	public List<Advertisement> getAllUserAdvertisements(User user){
-		//TODO user or userDTO?
-		return null;
 	}
 	//TODO not sure if this goes in pet or ad service
 	@Transactional
