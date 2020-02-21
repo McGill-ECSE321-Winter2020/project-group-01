@@ -18,6 +18,7 @@ import java.util.List;
 import static ca.mcgill.ecse321.petshelter.model.UserType.USER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -243,8 +244,7 @@ public class TestUserService {
         try {
 			userService.addUser(user1);
 		} catch (RegisterException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+fail();
 		} //we know that the first one will register for sure
         
         UserDTO user2 = new UserDTO();
@@ -281,8 +281,7 @@ public class TestUserService {
         try {
 			User addUser = userService.addUser(user1);
 		} catch (RegisterException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+fail();
 		} //we know that the first one will register for sure
         
         UserDTO user2 = new UserDTO();
@@ -407,8 +406,7 @@ public class TestUserService {
         try {
 			userService.addUser(userDTO);
 		} catch (RegisterException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+fail();
 		}
         
         User dbUser = userRepository.findUserByUserName(username);
