@@ -31,7 +31,7 @@ public class AdvertisementController {
 
 	@Autowired
 	private AdvertisementService advertisementService;
-	
+
 	@GetMapping("/all")
 	public List<AdvertisementDTO> getAllAdvertisements(){
 		List<AdvertisementDTO> adDtos = new ArrayList<>();
@@ -40,22 +40,35 @@ public class AdvertisementController {
 		}
 		return adDtos;
 	}
-	
+
 	@GetMapping("/{pet}")
-	public AdvertisementDTO getPetAdvertisement(@PathVariable PetDTO pDto) {
+	public AdvertisementDTO getAdvertisementOfPet(@PathVariable PetDTO pDto) {
 		return pDto.getAdvertisementDTO();
 	}
-	//TODO
+
+	//TODO fix it
 	@PostMapping("/advertise")
 	public ResponseEntity<?> createAdvertisement(@RequestBody AdvertisementDTO adDTO){
+
 		try {
+			if(adDTO == null) {
+				throw new IllegalArgumentException("There must be an advertisement.");
+			}
 			Advertisement ad = advertisementService.createAdvertisement(adDTO);
+			if(ad == null) {	
+				return new ResponseEntity<>(adDTO, HttpStatus.BAD_REQUEST);
+			}
 			return new ResponseEntity<>(adDTO, HttpStatus.OK);
+
 		} catch(Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
 	public AdvertisementDTO convertToDto (Advertisement ad) {
+		if (ad == null) {
+			throw new IllegalArgumentException("There is no such advertisement.");
+		}
 		String DtoTitle = ad.getTitle();
 		long DtoPetId = advertisementService.getPetByAdvertisement(ad).getId();
 		String DtoDescription = ad.getDescription();
@@ -65,8 +78,11 @@ public class AdvertisementController {
 		AdvertisementDTO adDTO = new AdvertisementDTO(DtoDescription, DtoIsFulfilled,DtoPetId, DtoApplications, DtoTitle);
 		return adDTO;
 	}
-	
+
 	public PetDTO convertToDto (Pet p) {
+		if (p == null) {
+			throw new IllegalArgumentException("There is no such pet.");
+		}
 		Date DDate = p.getDateOfBirth();
 		String DName = p.getName();
 		String DSpecies = p.getSpecies();
@@ -74,9 +90,9 @@ public class AdvertisementController {
 		String DDescription = p.getDescription();
 		byte[] DPicture = p.getPicture();
 		long DId = p.getId();
-	    Gender DGender = p.getGender();
-	    AdvertisementDTO DAdvertisement = convertToDto(p.getAdvertisement());
-	    PetDTO pDto = new PetDTO(DDate, DName, DSpecies, DBreed, DDescription, DPicture, DId, DGender, DAdvertisement);
-	    return pDto;
+		Gender DGender = p.getGender();
+		AdvertisementDTO DAdvertisement = convertToDto(p.getAdvertisement());
+		PetDTO pDto = new PetDTO(DDate, DName, DSpecies, DBreed, DDescription, DPicture, DId, DGender, DAdvertisement);
+		return pDto;
 	}
 }
