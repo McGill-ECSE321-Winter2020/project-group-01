@@ -39,6 +39,9 @@ public class ForumController {
 	@Autowired
 	UserRepository userRepository;
 
+	@Autowired
+	ForumService forumService;
+
 	/**
 	 * Gets the desired forum and its associated comments.
 	 * 
@@ -73,12 +76,53 @@ public class ForumController {
 	}
 
 	/**
+	 * Create new forum thread.
+	 * @param title The title of the forum to create.
+	 * @param token The session token of the user.
+	 * @return The created forum.
+	 */
+	@PostMapping("/")
+	public ResponseEntity<?> createForum(@RequestBody String title, @RequestHeader String token) {
+		User user = userRepository.findUserByApiToken(token);
+		if (user != null && title != null && !title.trim().equals("")) {
+			Forum forum = forumService.addForum(title, user);
+			return new ResponseEntity<ForumDTO>(forumToDto(forum), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/**
+	 * Lock or unlock a given forum. By design, only admin are allowed to lock and unlock forums.
+	 * @param forumID The id of a given forum.
+	 * @param token The session token of a user.
+	 * @param isLocked The status to set the forum thread to.
+	 * @return The modified forum.
+	 */
+	@PutMapping("/{forumId}")
+	public ResponseEntity<?> setLockForum(@PathVariable long forumID, @RequestHeader String token,
+										  @RequestBody Boolean isLocked) {
+		User user = userRepository.findUserByApiToken(token);
+		if (user != null && user.getUserType() == UserType.ADMIN) {
+			Forum forum;
+			if (isLocked) {
+				forum = forumService.lockForum(forumID);
+			} else {
+				forum = forumService.unlockForum(forumID);
+			}
+			return new ResponseEntity<ForumDTO>(forumToDto(forum), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/**
 	 * Delete a forum thread from the database. By design, only an admin may delete a forum thread.
 	 * @param forumId Forum id of the forum to delete.
 	 * @param token Session token of the user.
 	 * @return The deleted forum.
 	 */
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{forumId}")
 	public ResponseEntity<?> deleteForum(@PathVariable long forumId, @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
 		Forum forum = forumRepository.findForumById(forumId);
