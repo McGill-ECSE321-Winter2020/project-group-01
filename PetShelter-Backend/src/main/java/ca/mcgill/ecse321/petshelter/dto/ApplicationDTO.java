@@ -3,9 +3,6 @@ package ca.mcgill.ecse321.petshelter.dto;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import java.sql.Date;
-import java.sql.Time;
-
 public class ApplicationDTO {
 	
 	@NotNull(message = "Description cannot be empty.")

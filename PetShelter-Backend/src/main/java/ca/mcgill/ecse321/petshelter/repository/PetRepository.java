@@ -1,14 +1,10 @@
 package ca.mcgill.ecse321.petshelter.repository;
 
-import ca.mcgill.ecse321.petshelter.model.Advertisement;
-import ca.mcgill.ecse321.petshelter.model.Donation;
-import ca.mcgill.ecse321.petshelter.model.Pet;
-import ca.mcgill.ecse321.petshelter.model.User;
-
-import java.util.List;
-
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
+import ca.mcgill.ecse321.petshelter.model.Advertisement;
+import ca.mcgill.ecse321.petshelter.model.Pet;
 
 /**
  * @author louis
