@@ -56,10 +56,21 @@ public class CommentController {
 		return new ResponseEntity<>(commentToDto(commentCreated), HttpStatus.CREATED);
 	}
 
-	@PutMapping("/")
-	public ResponseEntity<?> updateComment(@RequestBody CommentDTO commentDTO) {
-		return null; // TODO
+	@PutMapping("/{id}/{commentId}")
+	public ResponseEntity<?> updateComment(@RequestBody CommentDTO commentDTO, @PathVariable long id,
+			@RequestHeader String token, @PathVariable long commentId) {
+		User user = userRepository.findUserByApiToken(token);
+		// if the user updating the comment is the comment's author
+		if (commentRepository.findCommentById(commentId) != null
+				&& user.getUserName().equals(commentRepository.findCommentById(commentId).getUser().getUserName())) {
+			Comment comment = commentService.updateComment(commentId, commentDTO.getText());
+			return new ResponseEntity<>(commentToDto(comment), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 	}
+
+	// @DeleteMapping
 
 	/**
 	 * Convert a comment entity to a comment DTO.
