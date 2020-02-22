@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.petshelter.controller;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -19,10 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 import ca.mcgill.ecse321.petshelter.dto.CommentDTO;
 import ca.mcgill.ecse321.petshelter.dto.ForumDTO;
 import ca.mcgill.ecse321.petshelter.dto.UserDTO;
+import ca.mcgill.ecse321.petshelter.model.Comment;
 import ca.mcgill.ecse321.petshelter.model.Forum;
 import ca.mcgill.ecse321.petshelter.model.User;
+import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.ForumRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import ca.mcgill.ecse321.petshelter.service.ForumService;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -68,12 +72,24 @@ public class ForumController {
 		}
 		return new ResponseEntity<>(forumsDto, HttpStatus.OK);
 	}
-	
-	//TODO
+
+	// By design, only an admin may delete a forum thread.
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteForum(@PathVariable long forumId, @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
-		return null; //TODO
+		Forum forum = forumRepository.findForumById(forumId);
+		if (user != null && forum != null && user.getUserType().equals(UserType.ADMIN)) {
+			// delete all comments
+			
+			Set<Comment> comments = forum.getComments();
+			for (Iterator<Comment> it = comments.iterator(); it.hasNext();) {
+				it.next();
+				it.remove();
+			}
+			forumRepository.delete(forum);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
 	/**
