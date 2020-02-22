@@ -50,12 +50,24 @@ public class CommentController {
 				.map(CommentController::commentToDto).collect(Collectors.toList());
 	}
 
+	/**
+	 * Create a comment on a designated forum thread.
+	 * @param comment The comment DTO to add.
+	 * @param id The id of the forum thread to respond to.
+	 * @param token The user session token.
+	 * @return The comment added to the thread.
+	 */
 	@PostMapping("/{id}")
 	public ResponseEntity<?> createComment(@RequestBody CommentDTO comment, @PathVariable long id,
 			@RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
-		Comment commentCreated = commentService.addComment(comment.getText(), id, user.getId());
-		return new ResponseEntity<>(commentToDto(commentCreated), HttpStatus.CREATED);
+		// Check if the user posting the comment is actually the declared used.
+		if (user.getUserName().equals(comment.getUser().getUsername())) {
+			Comment commentCreated = commentService.addComment(comment.getText(), id, user.getId());
+			return new ResponseEntity<>(commentToDto(commentCreated), HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@PutMapping("/{id}/{commentId}")
