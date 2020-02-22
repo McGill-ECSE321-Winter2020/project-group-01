@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
-import ca.mcgill.ecse321.petshelter.model.Comment;
 import ca.mcgill.ecse321.petshelter.model.Forum;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.ForumRepository;
@@ -40,8 +38,6 @@ public class ForumService {
 		Set<User> user = new HashSet<>();
 		user.add(creator);
 		newForum.setSubscribers(user);
-		user.add(creator);
-		newForum.setSubscribers(user);
 		forumRepository.save(newForum);
 		return newForum;
 	}
@@ -52,13 +48,10 @@ public class ForumService {
 	 * @return The forum that was deleted. This value may be null;
 	 */
 	@Transactional
-	public Forum deleteForum(long forumID) {
+	public void deleteForum(long forumID) {
 		Optional<Forum> forum = forumRepository.findById(forumID);
 		if(forum.isPresent()) {
 			forumRepository.deleteById(forumID);
-			return forum.get();
-		} else {
-			throw new ForumException("No such forum thread.");
 		}
 		
 	}
@@ -175,5 +168,7 @@ public class ForumService {
 		List<Forum> forums = forumRepository.findAll();
 		return forums;
 	}
+	
+	//TODO update?? like remove comment is missing i guess
 	
 }
