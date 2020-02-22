@@ -28,7 +28,8 @@ public class ForumService {
 	
 	/**
 	 * Add a forum to the database. The creator is the only subscriber.
-	 * @param forum Forum to add.
+	 * @param creator Author of the thread.
+	 * @param title Title of the thread.
 	 * @return The forum that was added.
 	 */
 	@Transactional
