@@ -72,6 +72,12 @@ public class CommentController {
 		}
 	}
 
+	/**
+	 * Delete a comment from a forum thread.
+	 * @param token The user session token.
+	 * @param commentId The id of the comment.
+	 * @return The deleted comment.
+	 */
 	@DeleteMapping("/{id}/{commentId}")
 	public ResponseEntity<?> deleteComment(@PathVariable long id, @RequestHeader String token,
 			@PathVariable long commentId) {
