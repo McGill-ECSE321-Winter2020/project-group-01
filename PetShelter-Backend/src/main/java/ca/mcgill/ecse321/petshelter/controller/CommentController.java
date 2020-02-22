@@ -63,7 +63,7 @@ public class CommentController {
 			@RequestHeader String token, @PathVariable long commentId) {
 		User user = userRepository.findUserByApiToken(token);
 		// if the user updating the comment is the comment's author
-		if (commentRepository.findCommentById(commentId) != null
+		if (commentRepository.findCommentById(commentId) != null && user != null
 				&& user.getUserName().equals(commentRepository.findCommentById(commentId).getUser().getUserName())) {
 			Comment comment = commentService.updateComment(commentId, commentDTO.getText());
 			return new ResponseEntity<>(commentToDto(comment), HttpStatus.OK);
@@ -77,7 +77,7 @@ public class CommentController {
 			@PathVariable long commentId) {
 		User user = userRepository.findUserByApiToken(token);
 		// if the user updating the comment is the comment's author or an admin
-		if (commentRepository.findCommentById(commentId) != null
+		if (commentRepository.findCommentById(commentId) != null && user != null
 				&& (user.getUserName().equals(commentRepository.findCommentById(commentId).getUser().getUserName())
 						|| user.getUserType().equals(UserType.ADMIN))) {
 			commentService.deleteComment(commentId);
