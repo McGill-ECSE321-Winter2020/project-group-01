@@ -27,7 +27,7 @@ import ca.mcgill.ecse321.petshelter.service.CommentService;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/comment")
+@RequestMapping("/api/forum")
 public class CommentController {
 
 	@Autowired
