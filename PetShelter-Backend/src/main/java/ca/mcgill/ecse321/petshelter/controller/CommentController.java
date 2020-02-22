@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 import ca.mcgill.ecse321.petshelter.dto.CommentDTO;
 import ca.mcgill.ecse321.petshelter.model.Comment;
 import ca.mcgill.ecse321.petshelter.model.User;
+import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.CommentRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.CommentService;
@@ -70,7 +72,20 @@ public class CommentController {
 		}
 	}
 
-	// @DeleteMapping
+	@DeleteMapping("/{id}/{commentId}")
+	public ResponseEntity<?> deleteComment(@PathVariable long id, @RequestHeader String token,
+			@PathVariable long commentId) {
+		User user = userRepository.findUserByApiToken(token);
+		// if the user updating the comment is the comment's author or an admin
+		if (commentRepository.findCommentById(commentId) != null
+				&& (user.getUserName().equals(commentRepository.findCommentById(commentId).getUser().getUserName())
+						|| user.getUserType().equals(UserType.ADMIN))) {
+			commentService.deleteComment(commentId);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
 
 	/**
 	 * Convert a comment entity to a comment DTO.
