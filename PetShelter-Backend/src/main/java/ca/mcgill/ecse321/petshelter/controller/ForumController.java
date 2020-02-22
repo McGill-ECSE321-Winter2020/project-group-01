@@ -42,8 +42,8 @@ public class ForumController {
 	/**
 	 * Gets the desired forum and its associated comments.
 	 * 
-	 * @param id
-	 * @return
+	 * @param id Forum ID of the desired forum.
+	 * @return The forum DTO.
 	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getForum(@PathVariable(required = true) Long id) {
@@ -55,10 +55,9 @@ public class ForumController {
 	}
 
 	/**
-	 * Gets all existing forums.
-	 * 
-	 * @param id
-	 * @return
+	 * Gets all existing forums thread.
+	 *
+	 * @return List of all existing forum threads.
 	 */
 	@GetMapping("/all")
 	public ResponseEntity<?> getAllForums() {
@@ -73,7 +72,12 @@ public class ForumController {
 		return new ResponseEntity<>(forumsDto, HttpStatus.OK);
 	}
 
-	// By design, only an admin may delete a forum thread.
+	/**
+	 * Delete a forum thread from the database. By design, only an admin may delete a forum thread.
+	 * @param forumId Forum id of the forum to delete.
+	 * @param token Session token of the user.
+	 * @return The deleted forum.
+	 */
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteForum(@PathVariable long forumId, @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
@@ -98,7 +102,6 @@ public class ForumController {
 	 * @param forum The forum to convert.
 	 * @return A forum DTO.
 	 */
-
 	static ForumDTO forumToDto(Forum forum) {
 		ForumDTO forumDTO = new ForumDTO();
 		Set<UserDTO> subscribers = new HashSet<UserDTO>();
