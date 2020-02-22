@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse321.petshelter.dto.AdvertisementDTO;
@@ -27,45 +27,49 @@ import ca.mcgill.ecse321.petshelter.service.AdvertisementService;
 
 @CrossOrigin(origins = "*")
 @RestController
+@RequestMapping("/api/advertisement")
 public class AdvertisementController {
 
 	@Autowired
 	private AdvertisementService advertisementService;
 
 	@GetMapping("/all")
-	public List<AdvertisementDTO> getAllAdvertisements(){
+	public ResponseEntity<?> getAllAdvertisements() {
 		List<AdvertisementDTO> adDtos = new ArrayList<>();
 		for (Advertisement ad : advertisementService.getAllAdvertisements()) {
 			adDtos.add(convertToDto(ad));
 		}
-		return adDtos;
+		return new ResponseEntity<>(adDtos, HttpStatus.OK);
 	}
 
-	@GetMapping("/{pet}")
-	public AdvertisementDTO getAdvertisementOfPet(@PathVariable PetDTO pDto) {
-		return pDto.getAdvertisementDTO();
+	@GetMapping("/{adId}")
+	public ResponseEntity<?> getAdvertisementOfPet(@PathVariable long adId) {
+		Advertisement ad = advertisementService.getAdvertisement(adId);
+		if (ad != null)
+			return new ResponseEntity<>(convertToDto(ad), HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
-	//TODO fix it
-	@PostMapping("/advertise")
-	public ResponseEntity<?> createAdvertisement(@RequestBody AdvertisementDTO adDTO){
+	// TODO fix it
+	@PostMapping()
+	public ResponseEntity<?> createAdvertisement(@RequestBody AdvertisementDTO adDTO) {
 
 		try {
-			if(adDTO == null) {
+			if (adDTO == null) {
 				throw new IllegalArgumentException("There must be an advertisement.");
 			}
 			Advertisement ad = advertisementService.createAdvertisement(adDTO);
-			if(ad == null) {	
+			if (ad == null) {
 				return new ResponseEntity<>(adDTO, HttpStatus.BAD_REQUEST);
 			}
 			return new ResponseEntity<>(adDTO, HttpStatus.OK);
 
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-	
-	public AdvertisementDTO convertToDto (Advertisement ad) {
+
+	public AdvertisementDTO convertToDto(Advertisement ad) {
 		if (ad == null) {
 			throw new IllegalArgumentException("There is no such advertisement.");
 		}
@@ -75,11 +79,12 @@ public class AdvertisementController {
 		boolean DtoIsFulfilled = ad.isIsFulfilled();
 		Set<AdoptionApplication> DtoApplications = new HashSet<AdoptionApplication>();
 		DtoApplications.addAll(ad.getAdoptionApplication());
-		AdvertisementDTO adDTO = new AdvertisementDTO(DtoDescription, DtoIsFulfilled,DtoPetId, DtoApplications, DtoTitle);
+		AdvertisementDTO adDTO = new AdvertisementDTO(DtoDescription, DtoIsFulfilled, DtoPetId, DtoApplications,
+				DtoTitle);
 		return adDTO;
 	}
 
-	public PetDTO convertToDto (Pet p) {
+	public PetDTO convertToDto(Pet p) {
 		if (p == null) {
 			throw new IllegalArgumentException("There is no such pet.");
 		}
