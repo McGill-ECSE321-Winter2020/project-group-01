@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import ca.mcgill.ecse321.petshelter.model.Comment;
 import ca.mcgill.ecse321.petshelter.model.Forum;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.ForumRepository;
@@ -27,15 +29,19 @@ public class ForumService {
 	private UserRepository userRepository;
 	
 	/**
-	 * Add a forum to the database.
+	 * Add a forum to the database. The creator is the only subscriber.
 	 * @param forum Forum to add.
 	 * @return The forum that was added.
 	 */
 	@Transactional
-	public Forum addForum(String title) {
+	public Forum addForum(String title, User creator) {
 		Forum newForum = new Forum();
 		newForum.setTitle(title);
-		newForum.setLocked(false);
+		Set<User> user = new HashSet<>();
+		user.add(creator);
+		newForum.setSubscribers(user);
+		user.add(creator);
+		newForum.setSubscribers(user);
 		forumRepository.save(newForum);
 		return newForum;
 	}
