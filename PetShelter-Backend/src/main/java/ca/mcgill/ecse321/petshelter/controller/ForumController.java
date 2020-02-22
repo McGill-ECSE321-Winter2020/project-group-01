@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +20,7 @@ import ca.mcgill.ecse321.petshelter.dto.CommentDTO;
 import ca.mcgill.ecse321.petshelter.dto.ForumDTO;
 import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.Forum;
+import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.ForumRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 
@@ -64,6 +67,13 @@ public class ForumController {
 			forumsDto.add(forumToDto(f));
 		}
 		return new ResponseEntity<>(forumsDto, HttpStatus.OK);
+	}
+	
+	//TODO
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteForum(@PathVariable long forumId, @RequestHeader String token) {
+		User user = userRepository.findUserByApiToken(token);
+		return null; //TODO
 	}
 
 	/**
