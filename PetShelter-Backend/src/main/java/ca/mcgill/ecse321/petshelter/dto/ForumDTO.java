@@ -4,9 +4,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import ca.mcgill.ecse321.petshelter.model.Comment;
-
-import java.sql.Date;
-import java.sql.Time;
 import java.util.Set;
 
 public class ForumDTO {

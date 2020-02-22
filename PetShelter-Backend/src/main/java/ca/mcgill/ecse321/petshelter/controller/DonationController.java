@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
@@ -23,9 +21,7 @@ public class DonationController {
 
 	@Autowired
 	private UserRepository userRepository;
-	// i dont understand why i need a constructor here and not autowired.... but it
-	// works
-	// @Ding, did you try it with @Autowired too?
+
 	private EmailingService emailingService;
 
 	public DonationController(EmailingService emailingService) {
@@ -33,14 +29,16 @@ public class DonationController {
 	}
 
 	@GetMapping("/all")
-	public List<DonationDTO> getAllDonations() {
-		return donationService.getAllDonations().stream().map(this::convertToDto).collect(Collectors.toList());
+	public ResponseEntity<?> getAllDonations() {
+		return new ResponseEntity<>(
+				donationService.getAllDonations().stream().map(this::convertToDto).collect(Collectors.toList()),
+				HttpStatus.OK);
 	}
 
 	@GetMapping("/{user}")
-	public List<DonationDTO> getUserDonation(@PathVariable String user) {
-		return donationService.getAllUserDonations(userRepository.findUserByUserName(user)).stream()
-				.map(this::convertToDto).collect(Collectors.toList());
+	public ResponseEntity<?> getUserDonation(@PathVariable String user) {
+		return new ResponseEntity<>(donationService.getAllUserDonations(userRepository.findUserByUserName(user))
+				.stream().map(this::convertToDto).collect(Collectors.toList()), HttpStatus.OK);
 	}
 
 	public DonationDTO convertToDto(Donation donation) {
@@ -56,8 +54,8 @@ public class DonationController {
 		return donationDTO;
 	}
 
-	@PostMapping("/donate")
-	public ResponseEntity<?> createDonation(@RequestBody DonationDTO donationDTO) throws IllegalArgumentException {
+	@PostMapping()
+	public ResponseEntity<?> createDonation(@RequestBody DonationDTO donationDTO) {
 		Donation donation = donationService.createDonation(donationDTO);
 		try {
 			if (donation.getUser() != null) {

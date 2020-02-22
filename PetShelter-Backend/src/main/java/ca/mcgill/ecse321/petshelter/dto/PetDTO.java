@@ -37,7 +37,7 @@ public class PetDTO {
 		this.species = species;
 		this.breed = breed;
 		this.description = description;
-		this.dateOfBirth = dateOfBirth;
+		this.dateOfBirth = dateOfBrith;
 		this.gender = gender;
 		this.picture = picture;
 	}
