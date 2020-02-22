@@ -17,4 +17,5 @@ public interface PetRepository extends CrudRepository<Pet, Long>{
 	Pet findPetByName(String name);
 	Pet findPetById(long id);
 	Pet findPetByAdvertisement(Advertisement advertisement);
+	void deletePetById(long id);
 }
