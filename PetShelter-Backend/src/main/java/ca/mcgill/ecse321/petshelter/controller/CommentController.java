@@ -39,11 +39,20 @@ public class CommentController {
 	@Autowired
 	CommentService commentService;
 
+	/**
+	 * Get all the comments in the database and return them.
+	 * @return The list of all comments.
+	 */
 	@GetMapping("/comments/all")
 	public List<CommentDTO> getAllComments() {
 		return commentService.getComments().stream().map(CommentController::commentToDto).collect(Collectors.toList());
 	}
 
+	/**
+	 * Get all the comments of a user.
+	 * @param username The username of the user which is the author of all desired comments.
+	 * @return The list of all comments of a user.
+	 */
 	@GetMapping("/comments/{username}")
 	public List<CommentDTO> getUserComments(@PathVariable String username) {
 		return commentService.getCommentsByUser(userRepository.findUserByUserName(username).getId()).stream()
@@ -70,6 +79,14 @@ public class CommentController {
 		}
 	}
 
+	/**
+	 * Update a comment.
+	 * @param commentDTO The update to the existing comment.
+	 * @param id The forum thread id.
+	 * @param token The user session token.
+	 * @param commentId The comment id.
+	 * @return The modified comment.
+	 */
 	@PutMapping("/{id}/{commentId}")
 	public ResponseEntity<?> updateComment(@RequestBody CommentDTO commentDTO, @PathVariable long id,
 			@RequestHeader String token, @PathVariable long commentId) {
