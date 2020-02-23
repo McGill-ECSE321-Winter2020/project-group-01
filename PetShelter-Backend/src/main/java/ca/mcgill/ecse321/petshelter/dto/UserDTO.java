@@ -7,6 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Arrays;
 
 public class UserDTO {
 	
@@ -121,5 +122,17 @@ public class UserDTO {
 	 */
 	public void setToken(String token) {
 		this.token = token;
+	}
+	
+	@Override
+	public String toString() {
+		return "UserDTO{" +
+				"email='" + email + '\'' +
+				", username='" + username + '\'' +
+				", password='" + password + '\'' +
+				", token='" + token + '\'' +
+				", userType=" + userType +
+				", picture=" + Arrays.toString(picture) +
+				'}';
 	}
 }
