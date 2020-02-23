@@ -42,37 +42,37 @@ public class UserService {
 	/**
 	 * Creates a user if the input is valid and sends an email to the specified
 	 * email address.
-	 * 
-	 * @param user
+	 *
+	 * @param userDTO
 	 * @return
 	 */
-	public User addUser(UserDTO user) throws RegisterException{
-		if (user.getPassword() == null) {
+	public User addUser(UserDTO userDTO) throws RegisterException{
+		if (userDTO.getPassword() == null) {
 			throw new RegisterException("Password can't be null.");
 		}
-		String validationError = isUserDtoValid(user);
+		String validationError = isUserDtoValid(userDTO);
 		if (validationError != null) {
 			System.out.println(validationError);
 			throw new RegisterException(validationError);
 		}
 		// check that the email and username are unique
-		if (userRepository.findUserByEmail(user.getEmail()) != null)
+		if (userRepository.findUserByEmail(userDTO.getEmail()) != null)
 			throw new RegisterException("Email is already taken.");
-		if (userRepository.findUserByUserName(user.getUsername()) != null)
+		if (userRepository.findUserByUserName(userDTO.getUsername()) != null)
 			throw new RegisterException("Username is already taken.");
 		
 		// create the user and set its attributes
 		User user1 = new User();
-		user1.setPassword(passwordEncoder.encode(user.getPassword()));
-		user1.setEmail(user.getEmail());
-		user1.setUserName(user.getUsername());
-		user1.setUserType(user.getUserType());
+		user1.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+		user1.setEmail(userDTO.getEmail());
+		user1.setUserName(userDTO.getUsername());
+		user1.setUserType(userDTO.getUserType());
 		String token = jwtTokenProvider.createToken(user1.getUserName());
 		user1.setApiToken(token);
 		// save it
 		userRepository.save(user1);
 		// Send email
-		emailingService.userCreationEmail(user.getEmail(), user.getUsername(), token);
+		emailingService.userCreationEmail(userDTO.getEmail(), userDTO.getUsername(), token);
 		return user1;
 	}
 
@@ -115,7 +115,7 @@ public class UserService {
 
 	/**
 	 * Generates a strong temporary password to be used in case of password reset.
-	 * 
+	 *
 	 * @return
 	 */
 	public String generateRandomPassword() {
@@ -133,7 +133,7 @@ public class UserService {
 	 * Validates the UserDto it is given. Email must be an email, and fields must
 	 * not be empty. Returns null if no error is found. Returns an error message if
 	 * a violation is found.
-	 * 
+	 *
 	 * @param userDto
 	 * @return
 	 */
