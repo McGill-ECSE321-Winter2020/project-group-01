@@ -300,6 +300,7 @@ public class PetShelterPersistence {
         userSet.add(user2);
         
         Forum forum = new Forum();
+        forum.setAuthor(user1);
         forum.setComments(commentSet);
         forum.setSubscribers(userSet);
         forum.setTitle(title);
@@ -312,6 +313,7 @@ public class PetShelterPersistence {
         forum = forumRepository.findForumByTitle(title);
         assertNotNull(forum);
         assertEquals(title, forum.getTitle());
+        assertEquals(user1.getId(), forum.getAuthor().getId());
     }
 
 //	@Test

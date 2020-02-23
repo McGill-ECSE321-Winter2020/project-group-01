@@ -36,6 +36,7 @@ public class ForumService {
 	public Forum addForum(String title, User creator) {
 		Forum newForum = new Forum();
 		newForum.setTitle(title);
+		newForum.setAuthor(creator);
 		Set<User> user = new HashSet<>();
 		user.add(creator);
 		newForum.setSubscribers(user);
@@ -59,7 +60,7 @@ public class ForumService {
 	
 	/**
 	 * Lock a forum.
-	 * @param The id of the forum to lock.
+	 * @param forumID The id of the forum to lock.
 	 * @return The forum that was locked.
 	 */
 	@Transactional
@@ -78,7 +79,7 @@ public class ForumService {
 	
 	/**
 	 * Unlock a forum.
-	 * @param The id of the forum to unlock.
+	 * @param forumID The id of the forum to unlock.
 	 * @return The forum that was unlocked.
 	 */
 	@Transactional
@@ -142,13 +143,13 @@ public class ForumService {
 	}
 	
 	/**
-	 * Modify a forum.
+	 * Update a forum title.
 	 * @param forumID The id of the forum to lock.
 	 * @param title The updated title.
 	 * @return The updated forum.
 	 */
 	@Transactional
-	public Forum modifyForum(long forumID, String title) {
+	public Forum updateForum(long forumID, String title) {
 		Optional<Forum> forum = forumRepository.findById(forumID);
 		if (forum.isPresent()) {
 			Forum newForum = forum.get();
@@ -169,7 +170,5 @@ public class ForumService {
 		List<Forum> forums = forumRepository.findAll();
 		return forums;
 	}
-	
-	//TODO update?? like remove comment is missing i guess
 	
 }
