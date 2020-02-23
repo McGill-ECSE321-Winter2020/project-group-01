@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.petshelter.service;
 
+import ca.mcgill.ecse321.petshelter.model.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -169,6 +170,22 @@ public class ForumService {
 	public List<Forum> getForums() {
 		List<Forum> forums = forumRepository.findAll();
 		return forums;
+	}
+
+	/**
+	 * Get all the forums of a user.
+	 * @param userID The id of the user.
+	 * @return The list of all forums by the user.
+	 */
+	@Transactional
+	public List<Forum> getForumsByUser(long userID) {
+		Optional<User> user = userRepository.findById(userID);
+		if (user.isPresent()) {
+			List<Forum> forums = forumRepository.findForumsByAuthor(user.get());
+			return forums;
+		} else {
+			throw new ForumException("No such user.");
+		}
 	}
 	
 }
