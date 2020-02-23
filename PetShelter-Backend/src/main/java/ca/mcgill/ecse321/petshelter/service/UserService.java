@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -38,7 +39,7 @@ public class UserService {
 	public UserService(EmailingService emailingService) {
 		this.emailingService = emailingService;
 	}
-
+	
 	/**
 	 * Creates a user if the input is valid and sends an email to the specified
 	 * email address.
@@ -46,7 +47,8 @@ public class UserService {
 	 * @param userDTO
 	 * @return
 	 */
-	public User addUser(UserDTO userDTO) throws RegisterException{
+	@Transactional
+	public User addUser(UserDTO userDTO) throws RegisterException {
 		if (userDTO.getPassword() == null) {
 			throw new RegisterException("Password can't be null.");
 		}
