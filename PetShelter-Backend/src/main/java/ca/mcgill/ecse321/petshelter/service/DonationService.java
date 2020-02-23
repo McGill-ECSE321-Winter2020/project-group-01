@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,12 +57,12 @@ public class DonationService {
             throw new DonationException("Donation amount can't be less than 0$");
         }
     
-       // System.out.println(donationDTO.toString());
+        // System.out.println(donationDTO.toString());
         User user = userRepository.findUserByUserName(donationDTO.getUsername());
         Donation donation = new Donation();
         donation.setUser(user);
-        donation.setTime(donationDTO.getTime());
-        donation.setDate(donationDTO.getDate());
+        donation.setTime(new Time(System.currentTimeMillis()));
+        donation.setDate(new Date(System.currentTimeMillis()));
         donation.setAmount(Math.round(donationDTO.getAmount() * 100.0) / 100.0);//trim it down to 2 decimal points
         donationRepository.save(donation);
         //  System.out.println(donation.toString());
