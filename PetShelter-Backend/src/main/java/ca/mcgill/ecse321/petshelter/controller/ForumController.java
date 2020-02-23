@@ -167,6 +167,42 @@ public class ForumController {
 	}
 
 	/**
+	 * Subscribe to a forum.
+	 * @param forumID The id of the forum.
+	 * @param token The session token of the user.
+	 * @return The modify forum thread.
+	 */
+	@PutMapping("/subscribe/{forumID}")
+	public ResponseEntity<?> subscribeToForum(@PathVariable long forumID, @RequestHeader String token) {
+		User user = userRepository.findUserByApiToken(token);
+		Forum forum = forumRepository.findForumById(forumID);
+		if (user != null && forum != null) {
+			Forum newForum = forumService.subscribeTo(forumID, user.getId());
+			return new ResponseEntity<ForumDTO>(forumToDto(newForum), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/**
+	 * Unsubscribe to from a forum.
+	 * @param forumID The id of the forum.
+	 * @param token The session token of the user.
+	 * @return The modify forum thread.
+	 */
+	@PutMapping("/unsubscribe/{forumID}")
+	public ResponseEntity<?> unsubscribeFromForum(@PathVariable long forumID, @RequestHeader String token) {
+		User user = userRepository.findUserByApiToken(token);
+		Forum forum = forumRepository.findForumById(forumID);
+		if (user != null && forum != null) {
+			Forum newForum = forumService.unsubscribeFrom(forumID, user.getId());
+			return new ResponseEntity<ForumDTO>(forumToDto(newForum), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/**
 	 * Convert a forum thread to a forum DTO.
 	 * 
 	 * @param forum The forum to convert.
