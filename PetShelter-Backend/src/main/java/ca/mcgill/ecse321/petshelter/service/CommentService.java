@@ -28,6 +28,11 @@ public class CommentService {
     }
     
     @Transactional
+    public List<Comment> getAllUserComments(User user) {
+        return toList(commentRepository.findAllByUser(user));
+    }
+    
+    @Transactional
     public Comment getComment(User user, String text) {
         return commentRepository.findCommentByUserAndText(user, text);
     }

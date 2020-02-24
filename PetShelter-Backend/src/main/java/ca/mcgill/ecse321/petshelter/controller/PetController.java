@@ -1,11 +1,8 @@
 package ca.mcgill.ecse321.petshelter.controller;
 
-import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
 import ca.mcgill.ecse321.petshelter.dto.PetDTO;
-import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
 import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
-import ca.mcgill.ecse321.petshelter.service.ApplicationService;
 import ca.mcgill.ecse321.petshelter.service.PetService;
 
 import org.springframework.beans.factory.annotation.Autowired;
