@@ -32,10 +32,10 @@ public class PetService {
         return petRepository.findPetByNameAndAdvertisement(name, advertisement);
     }
     
-    /*@Transactional
+    @Transactional
     public List<Pet> getAllUserPets(User user) {
     	return petRepository.findAllByUser(user);
-    }*/
+    }
     
     //From tutorial
     private <T> List<T> toList(Iterable<T> iterable) {

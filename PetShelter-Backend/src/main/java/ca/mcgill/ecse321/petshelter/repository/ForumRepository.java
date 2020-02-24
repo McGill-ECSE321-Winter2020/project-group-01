@@ -18,7 +18,7 @@ public interface ForumRepository extends JpaRepository<Forum, Long>{
 
 	Forum findForumByTitle(String title);
 	
-	//List<Forum> findAllByUser(User user); // ADDED THIS. NEED TO ADD CORRESPONDING TEST CASE.
+	List<Forum> findAllByUser(User user); // ADDED THIS. NEED TO ADD CORRESPONDING TEST CASE.
 
 	
 }
