@@ -3,6 +3,7 @@ package ca.mcgill.ecse321.petshelter.service;
 import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
 import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
+import ca.mcgill.ecse321.petshelter.model.Donation;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import ca.mcgill.ecse321.petshelter.repository.ApplicationRepository;
@@ -35,6 +36,11 @@ public class ApplicationService {
     @Transactional
     public AdoptionApplication getApplication(User applicant, Advertisement advertisement) {
         return applicationRepository.findApplicationByUserAndAdvertisement(applicant, advertisement);
+    }
+    
+    @Transactional
+    public List<AdoptionApplication> getAllUserApplications(User name) {
+        return toList(applicationRepository.findAllByUser(name));
     }
     
     //From tutorial
