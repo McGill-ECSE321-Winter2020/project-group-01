@@ -27,10 +27,10 @@ public class CommentService {
         return toList(commentRepository.findAll());
     }
     
-    /*@Transactional
+    @Transactional
     public List<Comment> getAllUserComments(User user) {
         return toList(commentRepository.findAllByUser(user));
-    }*/
+    }
     
     @Transactional
     public Comment getComment(User user, String text) {

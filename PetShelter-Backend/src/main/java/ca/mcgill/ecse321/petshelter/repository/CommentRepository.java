@@ -18,6 +18,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long>{
 
 	Comment findCommentByUserAndText(User user, String commentText);
 	
-	//List<Comment> findAllByUser(User user); // ADDED THIS. NEED TO ADD CORRESPONDING TEST CASE.
+	List<Comment> findAllByUser(User user); // ADDED THIS. NEED TO ADD CORRESPONDING TEST CASE.
 
 }
