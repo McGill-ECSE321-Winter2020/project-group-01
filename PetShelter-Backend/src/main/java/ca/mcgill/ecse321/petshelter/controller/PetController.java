@@ -32,13 +32,13 @@ public class PetController {
 				HttpStatus.OK);
 	}
 
-	
+	/*
 	@GetMapping("/{user}")
 	public ResponseEntity<?> getUserPets(@PathVariable String user) {
 		return new ResponseEntity<>(petService.getAllUserPets(userRepository.findUserByUserName(user))
 				.stream().map(this::convertToDto).collect(Collectors.toList()), HttpStatus.OK);
 	}
-
+	*/
 	public PetDTO convertToDto(Pet pet) {
 		PetDTO petDTO = new PetDTO();
 		petDTO.setDateOfBirth(pet.getDateOfBirth());

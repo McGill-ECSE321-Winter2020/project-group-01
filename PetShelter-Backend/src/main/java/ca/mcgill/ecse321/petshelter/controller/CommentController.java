@@ -31,11 +31,13 @@ public class CommentController {
 				HttpStatus.OK);
 	}
 	
+	/*
 	@GetMapping("/{user}")
 	public ResponseEntity<?> getUserComments(@PathVariable String user) {
 		return new ResponseEntity<>(commentService.getAllUserComments(userRepository.findUserByUserName(user))
 				.stream().map(this::convertToDto).collect(Collectors.toList()), HttpStatus.OK);
 	}
+	*/
 
 	public CommentDTO convertToDto(Comment comment) {
 		CommentDTO commentDTO = new CommentDTO();

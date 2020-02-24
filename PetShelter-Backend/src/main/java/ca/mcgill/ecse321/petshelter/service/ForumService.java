@@ -32,10 +32,11 @@ public class ForumService {
         return forumRepository.findForumByTitle(title);
     }
     
-    @Transactional
+    /*@Transactional
     public List<Forum> getAllUserForums(User user) {
         return toList(forumRepository.findAllByUser(user));
     }
+    */
     
     //From tutorial
     private <T> List<T> toList(Iterable<T> iterable) {
