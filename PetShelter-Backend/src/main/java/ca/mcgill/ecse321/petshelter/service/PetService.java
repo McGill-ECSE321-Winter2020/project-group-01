@@ -37,6 +37,11 @@ public class PetService {
 		return toList(user.getPets());
 	}
 	
+	public Pet getPetsByAdvertisement(long adId) {
+		//TODO
+		return null;
+	}
+	
 	@Transactional
 	public List<Pet> getAllPets() {
 		return toList(petRepository.findAll());
@@ -49,18 +54,18 @@ public class PetService {
 		if (user == null) {
 			throw new IllegalArgumentException("User does not exist: a pet needs a user");
 		}
-		if (name.trim() == "") {
+		if (name.trim() == "" || name == null) {
 			throw new IllegalArgumentException("A pet needs a name");
 		}
-		if (species.trim() == "") {
+		if (species.trim() == "" || species == null) {
 			throw new IllegalArgumentException("A pet needs a species");
 		}
-		if (breed.trim() == "") {
+		if (breed.trim() == "" || breed == null) {
 			throw new IllegalArgumentException("A pet needs a breed");
 		}
-		if (description.trim() == "") {
+		if (description == null) {
 			//if the description is null we set it to empty
-			description = description.trim();
+			description = "";
 		}
 		if(gender == null) {
 			throw new IllegalArgumentException("A pet needs a gender");
@@ -97,7 +102,7 @@ public class PetService {
 	@Transactional
 	public Pet editPet (Date dateOfBirth, String name, String species, String breed, String description,
 			byte[] picture, Gender gender, long petId) {
-
+		
 		Pet pet = petRepository.findPetById(petId);
 		pet.setName(name);
 		pet.setDateOfBirth(dateOfBirth);
