@@ -81,7 +81,7 @@ public class ApplicationDTO {
 	/**
 	 * @param isAccepted the isAccepted to set
 	 */
-	public void setIsFulfilled(boolean isAccepted) {
+	public void setIsAccepted(boolean isAccepted) {
 		this.isAccepted = isAccepted;
 	}
 }
