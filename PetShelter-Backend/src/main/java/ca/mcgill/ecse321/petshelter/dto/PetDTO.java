@@ -29,14 +29,17 @@ public class PetDTO {
 	private Gender gender;
 	private byte[] picture;
 	
+	private String advertisementTitle; // Can be null
+	
 	public PetDTO() {
 	}
 	
-	public PetDTO(@NotNull @NotEmpty String name, @NotNull @NotEmpty String species, @NotNull @NotEmpty String breed, @NotNull @NotEmpty String description, Date dateOfBrith, Gender gender, byte[] picture) {
+	public PetDTO(@NotNull @NotEmpty String name, @NotNull @NotEmpty String species, @NotNull @NotEmpty String breed, @NotNull @NotEmpty String description, String advertisementTitle, Date dateOfBrith, Gender gender, byte[] picture) {
 		this.name = name;
 		this.species = species;
 		this.breed = breed;
 		this.description = description;
+		this.advertisementTitle = advertisementTitle;
 		this.dateOfBirth = dateOfBrith;
 		this.gender = gender;
 		this.picture = picture;
@@ -80,7 +83,7 @@ public class PetDTO {
 	/**
 	 * @param breed the breed to set
 	 */
-	public void setPassword(String breed) {
+	public void setBreed(String breed) {
 		this.breed = breed;
 	}
 
@@ -97,7 +100,21 @@ public class PetDTO {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	/**
+	 * @return the advertisementTitle
+	 */
+	public String getAdvertisementTitle() {
+		return advertisementTitle;
+	}
 
+	/**
+	 * @param advertisementTitle the advertisementTitle to set
+	 */
+	public void setAdvertisementTitle(String advertisementTitle) {
+		this.advertisementTitle = advertisementTitle;
+	}
+		
 	/**
 	 * @return the picture
 	 */
