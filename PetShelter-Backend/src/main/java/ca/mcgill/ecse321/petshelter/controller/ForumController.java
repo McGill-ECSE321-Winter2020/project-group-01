@@ -31,12 +31,13 @@ public class ForumController {
 				HttpStatus.OK);
 	}
 	
-	
+	/*
 	@GetMapping("/{user}")
 	public ResponseEntity<?> getUserForums(@PathVariable String user) {
 		return new ResponseEntity<>(forumService.getAllUserForums(userRepository.findUserByUserName(user))
 				.stream().map(this::convertToDto).collect(Collectors.toList()), HttpStatus.OK);
 	}
+	*/
 
 	public ForumDTO convertToDto(Forum forum) {
 		ForumDTO forumDTO = new ForumDTO();
