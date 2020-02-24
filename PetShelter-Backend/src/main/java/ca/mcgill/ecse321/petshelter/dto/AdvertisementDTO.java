@@ -12,8 +12,8 @@ public class AdvertisementDTO {
 	private Set<AdoptionApplication> adoptionApplication;
 	
 
-	public AdvertisementDTO(String des, boolean isfullfilled, long id, Set<AdoptionApplication> adoptionApplication,
-			String title) {
+	public AdvertisementDTO(String title, boolean isfullfilled, long id, Set<AdoptionApplication> adoptionApplication,
+			String des) {
 		this.title = title; 
 		this.description = des; 
 		this.isFulfilled = isfullfilled;
