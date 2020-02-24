@@ -1,15 +1,14 @@
 package ca.mcgill.ecse321.petshelter.service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ca.mcgill.ecse321.petshelter.dto.ForumDTO;
+import ca.mcgill.ecse321.petshelter.model.Comment;
 import ca.mcgill.ecse321.petshelter.model.Forum;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.ForumRepository;
@@ -34,6 +33,11 @@ public class ForumService {
         return forumRepository.findForumByTitle(title);
     }
     
+    @Transactional
+    public List<Forum> getAllUserForums(User user) {
+        return toList(forumRepository.findAllByUser(user));
+    }
+    
     //From tutorial
     private <T> List<T> toList(Iterable<T> iterable) {
         List<T> resultList = new ArrayList<>();
@@ -47,21 +51,16 @@ public class ForumService {
     public Forum createForum(ForumDTO forumDTO) {
         //condition checks
         if (forumDTO.getTitle() == null) {
-            throw new CommentException("Title can't be null!");
+            throw new ForumException("Title can't be null!");
         }
         if (forumDTO.getComments() == null || forumDTO.getComments().size() < 1) {
-        	throw new CommentException("A forum must have at least one comment");
+        	throw new ForumException("A forum must have at least one comment");
         }
         
         Forum forum = new Forum();
         forum.setTitle(forumDTO.getTitle());
         forum.setComments(forumDTO.getComments());
-        List<String> subscribersList = new ArrayList<>(forumDTO.getSubscribers());
-        Set<User> usersSet = new HashSet<User>();
-        for (String name : subscribersList) {
-        	usersSet.add(userRepository.findUserByUserName(name));
-        }
-        forum.setSubscribers(usersSet);
+        forum.setSubscribers(forumDTO.getSubscribers());
         
         forumRepository.save(forum);
         return forum;

@@ -4,6 +4,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import ca.mcgill.ecse321.petshelter.model.Comment;
+import ca.mcgill.ecse321.petshelter.model.User;
+
 import java.util.Set;
 
 public class ForumDTO {
@@ -16,12 +18,12 @@ public class ForumDTO {
 	@NotEmpty(message = "A forum must have at least one comment.")
 	private Set<Comment> comments;
 	
-	private Set<String> subscribers;
+	private Set<User> subscribers;
 		
 	public ForumDTO() {
 	}
 	
-	public ForumDTO(@NotNull @NotEmpty String title, @NotNull @NotEmpty Set<Comment> comments, Set<String> subscribers) {
+	public ForumDTO(@NotNull @NotEmpty String title, @NotNull @NotEmpty Set<Comment> comments, Set<User> subscribers) {
 		this.title = title;
 		this.comments = comments;
 		this.subscribers = subscribers;
@@ -58,14 +60,14 @@ public class ForumDTO {
 	/**
 	 * @return the subscribers
 	 */
-	public Set<String> getSubscribers() {
+	public Set<User> getSubscribers() {
 		return subscribers;
 	}
 	
 	/**
 	 * @param subscribers the subscribers to set
 	 */
-	public void setSubscribers(Set<String> subscribers) {
+	public void setSubscribers(Set<User> subscribers) {
 		this.subscribers = subscribers;
 	}
 }
