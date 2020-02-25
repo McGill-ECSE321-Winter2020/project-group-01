@@ -56,7 +56,7 @@ public class TestDonationService {
 		userDTO.setPassword(password);
 		userDTO.setEmail(email);
 		try {
-			userService.addUser(userDTO);
+			userService.createUser(userDTO);
 		} catch (RegisterException e) {
 			fail();
 		}
