@@ -1,10 +1,9 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
-import ca.mcgill.ca.ecse321.petshelter.passwordvalidator.ValidPassword;
 import ca.mcgill.ecse321.petshelter.model.UserType;
+import ca.mcgill.ecse321.petshelter.passwordvalidator.ValidPassword;
 
 import javax.validation.constraints.Email;
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -18,7 +17,7 @@ public class UserDTO {
 	
 	@NotNull(message = "Username cannot be empty.")
 	@NotEmpty(message = "Username cannot be empty.")
-	@Size(min = 4, max = 20, message="Username must have between 4 and 20 characters.")
+	@Size(min = 8, message = "Username must have at least 8 characters.")
 	private String username;
 	
 	@NotNull(message = "Password cannot be empty.")

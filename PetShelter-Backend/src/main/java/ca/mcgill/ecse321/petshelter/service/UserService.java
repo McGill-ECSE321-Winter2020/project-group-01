@@ -46,12 +46,13 @@ public class UserService {
 	 * @param user
 	 * @return
 	 */
-	public User addUser(UserDTO user) {
+	public User addUser(UserDTO user) throws RegisterException{
 		if (user.getPassword() == null) {
 			throw new RegisterException("Password can't be null.");
 		}
 		String validationError = isUserDtoValid(user);
 		if (validationError != null) {
+			System.out.println(validationError);
 			throw new RegisterException(validationError);
 		}
 		// check that the email and username are unique
@@ -146,13 +147,13 @@ public class UserService {
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Validates the PasswordChangeDto it is given. The new password must satisfy
 	 * constraitns. Returns null if no error is found.
-	 * 
+	 *
 	 * @param passwordChangeDto
-	 * @return
+	 * @return errors if any
 	 */
 	private String isPasswordChangeValid(PasswordChangeDTO passwordChangeDto) {
 		// check if input is valid (new password satisfies constraints)
@@ -163,5 +164,16 @@ public class UserService {
 			return violation.getMessage();
 		}
 		return null;
+	}
+	
+	public ResponseEntity<?> deleteUser(UserDTO userDTO) {
+		User user = userRepository.findUserByUserName(userDTO.getUsername());
+		try {
+			userRepository.deleteById(user.getId());
+		} catch (RuntimeException e) {
+			//todo i dont know what to return in case of failure
+			//return ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

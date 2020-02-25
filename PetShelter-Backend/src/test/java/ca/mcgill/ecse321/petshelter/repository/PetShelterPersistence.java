@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @RunWith(SpringRunner.class)
@@ -36,6 +37,14 @@ public class PetShelterPersistence {
     private PetRepository petRepository;
     @Autowired
     private UserRepository userRepository;
+    
+    /*
+    
+    NOTE: testDeleteDonation will not be implemented as previously discussed in our design meeting.
+    It is to keep as an audit purposes
+    
+    
+     */
     
     /**
      * clears the database before every run
@@ -243,10 +252,10 @@ public class PetShelterPersistence {
         petRepository.save(pet);
         userRepository.save(user);
         
-        pet = null;
+
         
         //asserts if everything can be retrieved from database
-        pet = petRepository.findPetByName(petName);
+        pet = petRepository.findPetByNameAndAdvertisement(petName, pet.getAdvertisement());
         assertNotNull(pet);
         assertEquals(petName, pet.getName());
         assertEquals(birthDate, pet.getDateOfBirth());
@@ -304,51 +313,175 @@ public class PetShelterPersistence {
         forum.setComments(commentSet);
         forum.setSubscribers(userSet);
         forum.setTitle(title);
-        
+    
         forumRepository.save(forum);
-        
+    
         forum = null;
-        
+    
         //asserts if everything can be retrieved from database
         forum = forumRepository.findForumByTitle(title);
         assertNotNull(forum);
         assertEquals(title, forum.getTitle());
         assertEquals(user1.getId(), forum.getAuthor().getId());
     }
+    
+    @Test
+    public void testDeleteUser() {
+        String name = "TestUserNamee!1";
+        String password = "myPassword1!";
+        boolean emailValid = true;
+        String email = "TestUserName@gmail.com";
+        String apiToken = "token112";
+        
+        User user = new User();
+        
+        // sets everything
+        user.setUserName(name);
+        user.setPassword(password);
+        user.setIsEmailValidated(emailValid);
+        user.setEmail(email);
+        user.setApiToken(apiToken);
+        
+        userRepository.save(user);
+        
+        User dbUser = userRepository.findUserByUserName(user.getUserName());
+        
+        //ensure the user is in the database
+        assertEquals(user.getUserName(), dbUser.getUserName());
+        
+        //delete the user by ID
+        // userRepository.deleteById(user.getId());
+        userRepository.deleteById(user.getId());
+        //now it should be null
+        assertNull(userRepository.findUserByUserName(user.getUserName()));
+    }
 
-//	@Test
-//	public void testPetAndUserAssociation() {
-//		User user = createUser();
-//		String name = user.getUserName();
-//		
-//		Set<Pet> pets = new HashSet<Pet>();
-//		// pet info
-//		String petName = "TestPetName";
-//		Date birthDate = Date.valueOf("2015-03-31");
-//		String species = "Dog";
-//		String breed = "Labrador";
-//		Pet pet = new Pet();
-//		pet.setDateOfBirth(birthDate);
-//		pet.setName(petName);
-//		pet.setSpecies(species);
-//		pet.setBreed(breed);
-//		pet.setGender(Gender.FEMALE);
-//		user.setPets(pets);
-//		pets.add(pet);
-//		
-//		
-//		petRepository.save(pet);
-//		userRepository.save(user);
-//		
-//		
-//		user = null;
-//		
-//		user = userRepository.findUserByUserName(name);
-    // assertNotNull(user);
-    //
-//		for(Pet p :user.getPets().stream().collect(Collectors.toList())) {
-//			assertEquals(pet.getId(), p.getId());
-//		}
-//		
-    // }
+    @Test
+    public void testDeleteAdvertisement() {
+        Advertisement advertisement = createAdvertisement();
+        
+        Advertisement dbAd = advertisementRepository.findAdvertisementByTitle(advertisement.getTitle());
+        
+        assertEquals(advertisement.getTitle(), dbAd.getTitle());
+        
+        advertisementRepository.deleteById(advertisement.getId());
+        
+        assertNull(advertisementRepository.findAdvertisementByTitle(advertisement.getTitle()));
+    }
+    
+    @Test
+    public void testDeleteAdoptionApplication() {
+        User applicant = createUser();
+        String description = "myDescription";
+        
+        Advertisement ad = new Advertisement();
+        advertisementRepository.save(ad);
+        boolean isAccepted = false;
+        
+        AdoptionApplication application = new AdoptionApplication();
+        application.setIsAccepted(isAccepted);
+        application.setAdvertisement(ad);
+        application.setUser(applicant);
+        application.setDescription(description);
+        
+        applicationRepository.save(application);
+        
+        AdoptionApplication dbApplication = applicationRepository.findApplicationByUserAndAdvertisement(applicant, ad);
+        
+        assertEquals(application.getUser().getUserName(), dbApplication.getUser().getUserName());
+        
+        applicationRepository.deleteById(application.getId());
+        
+        assertNull(applicationRepository.findApplicationByUserAndAdvertisement(applicant, ad));
+    }
+    
+    @Test
+    public void testDeleteComment() {
+        Comment comment = createComment();
+        Comment dbComment = commentRepository.findCommentByUserAndText(comment.getUser(), comment.getText());
+        
+        assertEquals(comment.getText(), dbComment.getText());
+        
+        commentRepository.deleteById(comment.getId());
+        
+        assertNull(commentRepository.findCommentByUserAndText(comment.getUser(), comment.getText()));
+    }
+    
+    @Test
+    public void testDeleteForum() {
+        String title = "myTitlee";
+        Comment comment1 = createComment();
+        Comment comment2 = createComment();
+        Comment comment3 = createComment();
+        Set<Comment> commentSet = new HashSet<>();
+        commentSet.add(comment1);
+        commentSet.add(comment2);
+        commentSet.add(comment3);
+        
+        User user1 = createUser();
+        User user2 = createUser();
+        HashSet<User> userSet = new HashSet<>();
+        userSet.add(user1);
+        userSet.add(user2);
+        
+        Forum forum = new Forum();
+        forum.setComments(commentSet);
+        forum.setSubscribers(userSet);
+        forum.setTitle(title);
+        
+        forumRepository.save(forum);
+        
+        Forum dbForum = forumRepository.findForumByTitle(title);
+        
+        assertEquals(title, dbForum.getTitle());
+        
+        forumRepository.deleteById(forum.getId());
+        
+        assertNull(forumRepository.findForumByTitle(forum.getTitle()));
+    }
+    @Test
+    public void testDeletePet() {
+        String name = "TestUserNamee!";
+        String password = "myPassword1!";
+        boolean emailValid = true;
+        String email = "TestUserName@gmail.com";
+        String apiToken = "token112";
+        
+        User user = new User();
+        
+        // sets everything
+        user.setUserName(name);
+        user.setPassword(password);
+        user.setIsEmailValidated(emailValid);
+        user.setEmail(email);
+        user.setApiToken(apiToken);
+        
+        userRepository.save(user);
+        
+        // pet info
+        String petName = "TestPetNameBob";
+        Date birthDate = Date.valueOf("2015-03-31");
+        String species = "Dog";
+        String breed = "Labrador";
+        Pet pet = new Pet();
+        pet.setDateOfBirth(birthDate);
+        pet.setName(petName);
+        pet.setSpecies(species);
+        pet.setBreed(breed);
+        pet.setGender(Gender.FEMALE);
+        HashSet<Pet> pets = new HashSet<Pet>();
+        user.setPets(pets);
+        petRepository.save(pet);
+        userRepository.save(user);
+        
+        
+        //asserts if everything can be retrieved from database
+        // Pet dbPet = petRepository.findPetByName(petName);
+        Pet dbPet = petRepository.findPetByNameAndAdvertisement(petName, pet.getAdvertisement());
+        assertEquals(pet.getName(), dbPet.getName());
+        
+        petRepository.deleteById(pet.getId());
+        
+        assertNull(petRepository.findPetByNameAndAdvertisement(petName, pet.getAdvertisement()));
+    }
 }
