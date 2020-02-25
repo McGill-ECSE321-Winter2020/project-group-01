@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import ca.mcgill.ecse321.petshelter.dto.CommentDTO;
@@ -91,9 +92,10 @@ public class CommentController {
 	public ResponseEntity<?> updateComment(@RequestBody CommentDTO commentDTO, @PathVariable long id,
 			@RequestHeader String token, @PathVariable long commentId) {
 		User user = userRepository.findUserByApiToken(token);
-		// if the user updating the comment is the comment's author
-		if (commentRepository.findCommentById(commentId) != null && user != null
-				&& user.getUserName().equals(commentRepository.findCommentById(commentId).getUser().getUserName())) {
+		Optional<Comment> oldComment = commentRepository.findById(commentId);
+		// if the user updating the comment is the comment's author.
+		if (oldComment.isPresent() && user != null
+				&& user.getUserName().equals(oldComment.get().getUser().getUserName())) {
 			Comment comment = commentService.updateComment(commentId, commentDTO.getText());
 			return new ResponseEntity<>(commentToDto(comment), HttpStatus.OK);
 		} else {
@@ -111,9 +113,10 @@ public class CommentController {
 	public ResponseEntity<?> deleteComment(@PathVariable long id, @RequestHeader String token,
 			@PathVariable long commentId) {
 		User user = userRepository.findUserByApiToken(token);
+		Optional<Comment> oldComment = commentRepository.findById(commentId);
 		// if the user updating the comment is the comment's author or an admin
-		if (commentRepository.findCommentById(commentId) != null && user != null
-				&& (user.getUserName().equals(commentRepository.findCommentById(commentId).getUser().getUserName())
+		if (oldComment.isPresent() && user != null
+				&& (user.getUserName().equals(oldComment.get().getUser().getUserName())
 						|| user.getUserType().equals(UserType.ADMIN))) {
 			commentService.deleteComment(commentId);
 			return new ResponseEntity<>(HttpStatus.OK);
