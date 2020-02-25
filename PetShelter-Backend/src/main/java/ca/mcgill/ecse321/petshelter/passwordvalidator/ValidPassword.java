@@ -1,13 +1,8 @@
-package ca.mcgill.ca.ecse321.petshelter.passwordvalidator;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-import java.lang.annotation.RetentionPolicy;
+package ca.mcgill.ecse321.petshelter.passwordvalidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
+import java.lang.annotation.*;
 
 /**
  * The constraints tied to having a strong password.

@@ -1,19 +1,11 @@
-package ca.mcgill.ca.ecse321.petshelter.passwordvalidator;
+package ca.mcgill.ecse321.petshelter.passwordvalidator;
 
-import java.util.Arrays;
+import com.google.common.base.Joiner;
+import org.passay.*;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-
-import org.passay.DigitCharacterRule;
-import org.passay.LengthRule;
-import org.passay.PasswordData;
-import org.passay.PasswordValidator;
-import org.passay.RuleResult;
-import org.passay.SpecialCharacterRule;
-import org.passay.UppercaseCharacterRule;
-
-import com.google.common.base.Joiner;
+import java.util.Arrays;
 
 /**
  * Class that validates a password to be strong. Taken from Baeldung tutorials.

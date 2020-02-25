@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -166,7 +167,6 @@ public class UserController {
 	 */
 	@PostMapping("/changePassword")
 	public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDTO passwordDto) {
-		
 		return userService.changeUserPassword(passwordDto);
 	}
 
@@ -177,8 +177,8 @@ public class UserController {
 	 * @return
 	 */
 	@DeleteMapping("/{userName}")
-	public ResponseEntity<?> deleteUser(@PathVariable String userName, @RequestBody UserDTO admin) {
-		User requester = userRepo.findUserByUserName(admin.getUsername());
+	public ResponseEntity<?> deleteUser(@PathVariable String userName, @RequestHeader String token) {
+		User requester = userRepo.findUserByApiToken(token);
 		if (requester != null && requester.getUserType().equals(UserType.ADMIN)) {
 			// find the deleted user by username
 			User user = userRepo.findUserByUserName(userName);
@@ -200,8 +200,8 @@ public class UserController {
 	 * @return
 	 */
 	@GetMapping("/{username}")
-	public ResponseEntity<?> getUser(@PathVariable String userName, @RequestBody UserDTO admin) {
-		User requester = userRepo.findUserByUserName(admin.getUsername());
+	public ResponseEntity<?> getUser(@PathVariable String userName, @RequestHeader String token) {
+		User requester = userRepo.findUserByApiToken(token);
 		if (requester != null && requester.getUserType().equals(UserType.ADMIN)) {
 			// find a user by username
 			User user = userRepo.findUserByUserName(userName);
@@ -225,10 +225,13 @@ public class UserController {
 	 */
 	@PutMapping("/{username}")
 	// note: the username and email cannot be changed
-	public ResponseEntity<?> updateUser(@PathVariable String userName, @RequestBody UserDTO userDto) {
+	public ResponseEntity<?> updateUser(@PathVariable String userName, @RequestBody UserDTO userDto,
+			@RequestHeader String token) {
 		// find a user by username
 		User user = userRepo.findUserByUserName(userName);
-		if (user != null) {
+		// the user updating the profile must be the requester, as in it should be his
+		// profile
+		if (user != null && token.equals(user.getApiToken())) {
 			// actually, only the picture is allowed to be updated (design decision)
 			if (userDto.getPicture() != null) {
 				user.setPicture(userDto.getPicture());
@@ -247,8 +250,8 @@ public class UserController {
 	 * @return
 	 */
 	@GetMapping("/all")
-	public ResponseEntity<?> getUsers(@RequestBody UserDTO admin) {
-		User requester = userRepo.findUserByUserName(admin.getUsername());
+	public ResponseEntity<?> getUsers(@RequestHeader String token) {
+		User requester = userRepo.findUserByApiToken(token);
 		if (requester != null && requester.getUserType().equals(UserType.ADMIN)) {
 			List<User> users = new ArrayList<>();
 			try {
