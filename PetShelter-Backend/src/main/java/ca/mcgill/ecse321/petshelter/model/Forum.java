@@ -9,8 +9,18 @@ public class Forum {
     private long id;
     private Set<Comment> comments;
     private Set<User> subscribers;
+    private boolean isLocked;
+    private User author;
     
-    public String getTitle() {
+    public boolean isLocked() {
+		return isLocked;
+	}
+
+	public void setLocked(boolean isLocked) {
+		this.isLocked = isLocked;
+	}
+
+	public String getTitle() {
         return this.title;
     }
     
@@ -45,6 +55,12 @@ public class Forum {
     public void setSubscribers(Set<User> subscriberss) {
         this.subscribers = subscriberss;
     }
+
+    @ManyToOne
+    public User getAuthor() { return this.author; }
+
+    public void setAuthor(User user) { this.author = user; }
+
     
     @Override
     public String toString() {
@@ -53,6 +69,7 @@ public class Forum {
                 ", id=" + id +
                 ", comments=" + comments +
                 ", subscribers=" + subscribers +
+                ", author=" + author +
                 '}';
     }
 }
