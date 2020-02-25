@@ -267,7 +267,7 @@ public class UserController {
 	}
 
 	// converts a user into a userdto
-	private UserDTO userToDto(User user) {
+	static UserDTO userToDto(User user) {
 		UserDTO userDto = new UserDTO();
 		userDto.setEmail(user.getEmail());
 		userDto.setUsername(user.getUserName());

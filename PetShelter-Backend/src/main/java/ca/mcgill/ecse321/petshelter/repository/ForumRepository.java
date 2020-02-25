@@ -3,10 +3,10 @@ package ca.mcgill.ecse321.petshelter.repository;
 import ca.mcgill.ecse321.petshelter.model.Forum;
 import ca.mcgill.ecse321.petshelter.model.User;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
+import java.util.List;
 
 /**
  * @author louis
@@ -20,5 +20,8 @@ public interface ForumRepository extends JpaRepository<Forum, Long>{
 	
 	//List<Forum> findAllByUser(User user); // ADDED THIS. NEED TO ADD CORRESPONDING TEST CASE.
 
-	
+	Forum findForumById(Long id);
+
+	List<Forum> findForumsByAuthor(User user);
+  
 }

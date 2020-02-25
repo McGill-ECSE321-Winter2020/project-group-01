@@ -1,10 +1,8 @@
-package ca.mcgill.ecse321.petshelter.model;
+package ca.mcgill.ecse321.petshelter.dto;
 
-import javax.persistence.*;
 import java.sql.Date;
 
-@Entity
-public class Comment {
+public class CommentDTO {
 	private Date datePosted;
 
 	public void setDatePosted(Date value) {
@@ -21,8 +19,6 @@ public class Comment {
 		this.id = value;
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	public long getId() {
 		return this.id;
 	}
@@ -37,14 +33,27 @@ public class Comment {
 		return this.text;
 	}
     
-    private User user;
+    /**
+     * Author of the comment.
+     */
     
-    @ManyToOne
-    public User getUser() {
+    private UserDTO user;
+    
+    /**
+     * Return the author of the comment.
+     * @return The author.
+     */
+    
+    public UserDTO getUser() {
         return this.user;
     }
     
-    public void setUser(User user) {
+    /**
+     * Set the author of the comment.
+     * @param user The new author.
+     */
+    
+    public void setUser(UserDTO user) {
         this.user = user;
     }
     
