@@ -41,11 +41,12 @@ public class ForumController {
 	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getForum(@PathVariable(required = true) Long id) {
-		Forum forum = forumRepository.findForumById(id);
-		if (forum == null) {
+		Optional<Forum> forum = forumRepository.findById(id);
+		if (forum.isPresent()) {
+			return new ResponseEntity<>(forumToDto(forum.get()), HttpStatus.OK);
+		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		} else
-			return new ResponseEntity<>(forumToDto(forum), HttpStatus.OK);
+		}
 	}
 
 	/**
@@ -144,23 +145,23 @@ public class ForumController {
 
 	/**
 	 * Delete a forum thread from the database. By design, only an admin may delete a forum thread.
-	 * @param forumId Forum id of the forum to delete.
+	 * @param forumID Forum id of the forum to delete.
 	 * @param token Session token of the user.
 	 * @return The deleted forum.
 	 */
-	@DeleteMapping("/{forumId}")
-	public ResponseEntity<?> deleteForum(@PathVariable long forumId, @RequestHeader String token) {
+	@DeleteMapping("/{forumID}")
+	public ResponseEntity<?> deleteForum(@PathVariable long forumID, @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
-		Forum forum = forumRepository.findForumById(forumId);
-		if (user != null && forum != null && user.getUserType().equals(UserType.ADMIN)) {
+		Optional<Forum> forum = forumRepository.findById(forumID);
+		if (user != null && forum.isPresent() && user.getUserType().equals(UserType.ADMIN)) {
 			// delete all comments
 			
-			Set<Comment> comments = forum.getComments();
+			Set<Comment> comments = forum.get().getComments();
 			for (Iterator<Comment> it = comments.iterator(); it.hasNext();) {
 				it.next();
 				it.remove();
 			}
-			forumRepository.delete(forum);
+			forumRepository.delete(forum.get());
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -175,8 +176,8 @@ public class ForumController {
 	@PutMapping("/subscribe/{forumID}")
 	public ResponseEntity<?> subscribeToForum(@PathVariable long forumID, @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
-		Forum forum = forumRepository.findForumById(forumID);
-		if (user != null && forum != null) {
+		Optional<Forum> forum = forumRepository.findById(forumID);
+		if (user != null && forum.isPresent()) {
 			Forum newForum = forumService.subscribeTo(forumID, user.getId());
 			return new ResponseEntity<ForumDTO>(forumToDto(newForum), HttpStatus.OK);
 		} else {
@@ -193,8 +194,8 @@ public class ForumController {
 	@PutMapping("/unsubscribe/{forumID}")
 	public ResponseEntity<?> unsubscribeFromForum(@PathVariable long forumID, @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
-		Forum forum = forumRepository.findForumById(forumID);
-		if (user != null && forum != null) {
+		Optional<Forum> forum = forumRepository.findById(forumID);
+		if (user != null && forum.isPresent()) {
 			Forum newForum = forumService.unsubscribeFrom(forumID, user.getId());
 			return new ResponseEntity<ForumDTO>(forumToDto(newForum), HttpStatus.OK);
 		} else {
