@@ -1,7 +1,5 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
-import ca.mcgill.ecse321.petshelter.model.User;
-
 import java.util.Set;
 
 public class ForumDTO {

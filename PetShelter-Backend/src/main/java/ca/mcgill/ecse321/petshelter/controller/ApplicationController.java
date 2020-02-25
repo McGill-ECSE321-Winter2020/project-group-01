@@ -2,7 +2,6 @@ package ca.mcgill.ecse321.petshelter.controller;
 
 import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
 import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
-import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +16,6 @@ public class ApplicationController {
 
 	@Autowired
 	private ApplicationService applicationService;
-
-	@Autowired
-	private UserRepository userRepository;
 
 	public ApplicationController() {
 	}
