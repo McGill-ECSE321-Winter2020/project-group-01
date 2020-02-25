@@ -62,7 +62,6 @@ public class UserService {
 			throw new RegisterException("Email is already taken.");
 		if (userRepository.findUserByUserName(userDTO.getUsername()) != null)
 			throw new RegisterException("Username is already taken.");
-		
 		// create the user and set its attributes
 		User user1 = new User();
 		user1.setPassword(passwordEncoder.encode(userDTO.getPassword()));
