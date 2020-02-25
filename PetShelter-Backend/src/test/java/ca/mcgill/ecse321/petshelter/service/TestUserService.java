@@ -50,7 +50,7 @@ public class TestUserService {
 		userDTO.setUserType(userType);
 
 		try {
-			userService.addUser(userDTO);
+			userService.createUser(userDTO);
 		} catch (RegisterException ignored) {
 			// ignored for now
 		}
@@ -74,7 +74,7 @@ public class TestUserService {
 		userDTO.setUserType(userType);
 
 		try {
-			userService.addUser(userDTO);
+			userService.createUser(userDTO);
 		} catch (Exception e) {
 			assertEquals("The provided email is not a valid email address.", e.getMessage());
 		}
@@ -95,7 +95,7 @@ public class TestUserService {
 		userDTO.setUserType(userType);
 
 		try {
-			userService.addUser(userDTO);
+			userService.createUser(userDTO);
 		} catch (Exception e) {
 			assertEquals("The provided email is not a valid email address.", e.getMessage());
 		}
@@ -115,7 +115,7 @@ public class TestUserService {
 		userDTO.setUsername(username);
 		userDTO.setUserType(userType);
 		try {
-			userService.addUser(userDTO);
+			userService.createUser(userDTO);
 		} catch (RegisterException e) {
 
 			assertEquals("Username cannot be empty.", e.getMessage());
@@ -137,7 +137,7 @@ public class TestUserService {
 		userDTO.setUserType(userType);
 
 		try {
-			userService.addUser(userDTO);
+			userService.createUser(userDTO);
 		} catch (RegisterException e) {
 			System.out.println(e.getMessage());
 			assertEquals("Password can't be null.", e.getMessage());
@@ -164,8 +164,8 @@ public class TestUserService {
 		userDTO.setUserType(userType);
 
 		try {
-			userService.addUser(userDTO);
-			userService.changeUserPassword(passwordChangeDTO);
+			userService.createUser(userDTO);
+			userService.updateUser(passwordChangeDTO);
 		} catch (RegisterException e) {
 		}
 	}
@@ -191,8 +191,8 @@ public class TestUserService {
 		userDTO.setUserType(userType);
 
 		try {
-			userService.addUser(userDTO);
-			userService.changeUserPassword(passwordChangeDTO);
+			userService.createUser(userDTO);
+			userService.updateUser(passwordChangeDTO);
 		} catch (RegisterException e) {
 			assertEquals("Password must contain at least 1 special characters.", e.getMessage());
 		}
@@ -219,8 +219,8 @@ public class TestUserService {
 		userDTO.setUserType(userType);
 
 		try {
-			userService.addUser(userDTO);
-			userService.changeUserPassword(passwordChangeDTO);
+			userService.createUser(userDTO);
+			userService.updateUser(passwordChangeDTO);
 		} catch (RegisterException e) {
 			assertEquals("Password must contain at least 1 special characters.", e.getMessage());
 		}
@@ -240,7 +240,7 @@ public class TestUserService {
 		user1.setUsername(username);
 
 		try {
-			userService.addUser(user1);
+			userService.createUser(user1);
 		} catch (RegisterException e1) {
 			fail();
 		} // we know that the first one will register for sure
@@ -257,7 +257,7 @@ public class TestUserService {
 		user2.setPassword(password2);
 
 		try {
-			userService.addUser(user2);
+			userService.createUser(user2);
 		} catch (RegisterException e) {
 			assertEquals("Username is already taken.", e.getMessage());
 		}
@@ -277,7 +277,7 @@ public class TestUserService {
 		user1.setUsername(username);
 
 		try {
-			userService.addUser(user1);
+			userService.createUser(user1);
 		} catch (RegisterException e1) {
 			fail();
 		} // we know that the first one will register for sure
@@ -294,7 +294,7 @@ public class TestUserService {
 		user2.setPassword(password2);
 
 		try {
-			userService.addUser(user2);
+			userService.createUser(user2);
 		} catch (RegisterException e) {
 			assertEquals("Email is already taken.", e.getMessage());
 		}
@@ -316,7 +316,7 @@ public class TestUserService {
 		userDTO.setUserType(userType);
 
 		try {
-			userService.addUser(userDTO);
+			userService.createUser(userDTO);
 		} catch (RegisterException e) {
 			assertEquals("Password must be at least 8 characters in length.", e.getMessage());
 		}
@@ -338,7 +338,7 @@ public class TestUserService {
 		userDTO.setUserType(userType);
 
 		try {
-			userService.addUser(userDTO);
+			userService.createUser(userDTO);
 		} catch (RegisterException e) {
 			assertEquals("Password must contain at least 1 digit characters.", e.getMessage());
 		}
@@ -360,7 +360,7 @@ public class TestUserService {
 		userDTO.setUserType(userType);
 
 		try {
-			userService.addUser(userDTO);
+			userService.createUser(userDTO);
 		} catch (RegisterException e) {
 			assertEquals("Password must contain at least 1 uppercase characters.", e.getMessage());
 		}
@@ -381,7 +381,7 @@ public class TestUserService {
 		userDTO.setUserType(userType);
 
 		try {
-			userService.addUser(userDTO);
+			userService.createUser(userDTO);
 		} catch (RegisterException e) {
 			assertEquals("Password must contain at least 1 special characters.", e.getMessage());
 		}
@@ -402,7 +402,7 @@ public class TestUserService {
 		userDTO.setUserType(userType);
 
 		try {
-			userService.addUser(userDTO);
+			userService.createUser(userDTO);
 		} catch (RegisterException e) {
 			fail();
 		}
