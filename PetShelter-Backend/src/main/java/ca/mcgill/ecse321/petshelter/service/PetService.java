@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import ca.mcgill.ecse321.petshelter.model.Gender;
 import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.model.User;
+import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import ca.mcgill.ecse321.petshelter.repository.PetRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 
@@ -25,6 +26,9 @@ public class PetService {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private AdvertisementRepository advertisementRepository;
+	
 	@Transactional
 	public Pet getPet(long petId) {
 		Pet pet = petRepository.findPetById(petId);
@@ -34,12 +38,22 @@ public class PetService {
 	@Transactional
 	public List<Pet> getPetsByUser(String userName) {
 		User user = userRepository.findUserByUserName(userName);
-		return toList(user.getPets());
+		if (user == null) {
+			throw new IllegalArgumentException("User does not exist");
+		}
+		else {
+			return toList(user.getPets());
+		}
 	}
 	
-	public Pet getPetsByAdvertisement(long adId) {
-		//TODO
-		return null;
+	public List<Pet> getPetsByAdvertisement(long adId) {
+		List<Pet> pets = petRepository.findPetByAdvertisement(advertisementRepository.findById(adId));
+		if (pets == null) {
+			throw new IllegalArgumentException("Advertisement does not exist");
+		}
+		else {
+			return pets;
+		}
 	}
 	
 	@Transactional
@@ -91,7 +105,7 @@ public class PetService {
 	public boolean deletePet (long petId) {
 		Pet pet = petRepository.findPetById(petId);
 		if (pet == null) {
-			throw new IllegalArgumentException("Pet does not exist");
+			throw new IllegalArgumentException("Cannot delete: Pet does not exist");
 		}
 		else {
 			petRepository.delete(pet);
@@ -104,6 +118,26 @@ public class PetService {
 			byte[] picture, Gender gender, long petId) {
 		
 		Pet pet = petRepository.findPetById(petId);
+		if(pet == null) {
+			throw new IllegalArgumentException("Cannot edit: Pet does not exist");
+
+		}
+		if (name.trim() == "" || name == null) {
+			throw new IllegalArgumentException("A pet needs a name");
+		}
+		if (species.trim() == "" || species == null) {
+			throw new IllegalArgumentException("A pet needs a species");
+		}
+		if (breed.trim() == "" || breed == null) {
+			throw new IllegalArgumentException("A pet needs a breed");
+		}
+		if (description == null) {
+			//if the description is null we set it to empty
+			description = "";
+		}
+		if(gender == null) {
+			throw new IllegalArgumentException("A pet needs a gender");
+		}
 		pet.setName(name);
 		pet.setDateOfBirth(dateOfBirth);
 		pet.setBreed(breed);
