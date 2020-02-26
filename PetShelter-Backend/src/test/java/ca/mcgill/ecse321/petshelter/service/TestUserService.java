@@ -25,8 +25,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
-public class TestUserServices {
-
+public class TestUserService {
+	
 	private static final String USER_NAME = "TestPerson";
 	private static final String USER_EMAIL = "TestPerson@email.com";
 	private static final String USER_PASSWORD = "myP1+abc";
@@ -34,7 +34,7 @@ public class TestUserServices {
 	private UserRepository userRepository;
 	@InjectMocks
 	private UserService userService;
-
+	
 	@BeforeEach
 	public void setMockOutput() {
 		MockitoAnnotations.initMocks(this);
@@ -60,6 +60,7 @@ public class TestUserServices {
 				return null;
 			}
 		});
+		
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> invocation.getArgument(0);
 		lenient().when(userRepository.save(any(User.class))).thenAnswer(returnParameterAsAnswer);
 

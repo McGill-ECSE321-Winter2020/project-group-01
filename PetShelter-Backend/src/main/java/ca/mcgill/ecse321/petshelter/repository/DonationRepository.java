@@ -16,5 +16,9 @@ public interface DonationRepository extends JpaRepository<Donation, Long> {
     
     Donation findDonationsByUserUserNameAndAmount(String username, double amount);
     
+    //find all by username doesnt work....
+    List<Donation> findAllByUserUserName(String username);
+    
+    
     List<Donation> findAllByUser(User user);
 }
