@@ -29,16 +29,16 @@ public class UserService {
 	private UserRepository userRepository;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private JWTTokenProvider jwtTokenProvider;
-	
+
 	private EmailingService emailingService;
-	
+
 	public UserService(EmailingService emailingService) {
 		this.emailingService = emailingService;
 	}
-	
+
 	// converts a user into a userdto
 	static UserDTO userToDto(User user) {
 		UserDTO userDto = new UserDTO();
@@ -48,7 +48,7 @@ public class UserService {
 		userDto.setPicture(user.getPicture());
 		return userDto;
 	}
-	
+
 	/**
 	 * Creates a user if the input is valid and sends an email to the specified
 	 * email address.
@@ -56,7 +56,7 @@ public class UserService {
 	 * @param user
 	 * @return
 	 */
-	
+
 	public UserDTO createUser(UserDTO user) throws RegisterException {
 		if (user.getPassword() == null) {
 			throw new RegisterException("Password can't be null.");
@@ -120,7 +120,7 @@ public class UserService {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Validates the PasswordChangeDto it is given. The new password must satisfy
 	 * constraitns. Returns null if no error is found.
@@ -138,14 +138,17 @@ public class UserService {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * This is the update method; only the password can be updated (design decision).
 	 *
 	 * @param passwordDto
 	 * @return
 	 */
-	public UserDTO updateUser(PasswordChangeDTO passwordDto) {
+	public UserDTO updateUser(PasswordChangeDTO passwordDto) throws IllegalArgumentException{
+		if(passwordDto.getNewPassword()==null || passwordDto.getNewPassword().trim().length()==0){
+			throw new IllegalArgumentException("Password cannot be null.");
+		}
 		// check if new password is valid
 		String constraintViolation = isPasswordChangeValid(passwordDto);
 		if (constraintViolation != null) {
@@ -163,7 +166,7 @@ public class UserService {
 		userRepository.save(user);
 		return userToDto(user);
 	}
-	
+
 	/**
 	 * Deletes a user.
 	 *
@@ -180,4 +183,3 @@ public class UserService {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
-
