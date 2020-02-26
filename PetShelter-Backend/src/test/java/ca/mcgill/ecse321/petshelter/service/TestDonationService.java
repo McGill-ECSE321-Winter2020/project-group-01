@@ -6,12 +6,12 @@ import ca.mcgill.ecse321.petshelter.model.Donation;
 import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.DonationRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -21,30 +21,30 @@ import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class TestDonationService {
-
-	@Autowired
+	
+	@InjectMocks
 	private DonationService donationService;
-
-	@Autowired
+	
+	@Mock
 	private DonationRepository donationRepository;
-
-	@Autowired
+	
+	@Mock
 	private UserRepository userRepository;
-
-	@Autowired
+	
+	@InjectMocks
 	private UserService userService;
-
-	@Before
-	public void clearDatabase() {
+	
+	//todo: use mockito here. I will work on it tomorrow
+	@BeforeEach
+	public void setMockOutput() {
 		donationRepository.deleteAll();
 		userRepository.deleteAll();
 	}
-
+	
 	private String name = "TestUserName";
-
+	
 	public void createUser() {
 		UserDTO userDTO = new UserDTO();
 		String password = "myPassword1!";
