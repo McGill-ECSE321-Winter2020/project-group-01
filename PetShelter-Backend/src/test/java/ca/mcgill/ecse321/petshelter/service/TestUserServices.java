@@ -77,7 +77,7 @@ public class TestUserServices {
         userDTO.setUserType(userType);
         
         try {
-            userService.addUser(userDTO);
+            userService.createUser(userDTO);
         } catch (RegisterException ignored) {
         }
         User e = userRepository.findUserByUserName(USER_NAME);
@@ -97,7 +97,7 @@ public class TestUserServices {
         userDTO.setUserType(userType);
         
         try {
-            userService.addUser(userDTO);
+            userService.createUser(userDTO);
         } catch (RegisterException e) {
             assertEquals("The provided email is not a valid email address.", e.getMessage());
         }
@@ -116,7 +116,7 @@ public class TestUserServices {
         userDTO.setUserType(userType);
         
         try {
-            userService.addUser(userDTO);
+            userService.createUser(userDTO);
         } catch (Exception e) {
             Assert.assertEquals("The provided email is not a valid email address.", e.getMessage());
         }
@@ -135,7 +135,7 @@ public class TestUserServices {
         userDTO.setUsername(username);
         userDTO.setUserType(userType);
         try {
-            userService.addUser(userDTO);
+            userService.createUser(userDTO);
         } catch (RegisterException e) {
             Assert.assertEquals("Username cannot be empty.", e.getMessage());
         }
@@ -154,7 +154,7 @@ public class TestUserServices {
         userDTO.setUserType(userType);
         
         try {
-            userService.addUser(userDTO);
+            userService.createUser(userDTO);
         } catch (RegisterException e) {
             Assert.assertEquals("Password can't be null.", e.getMessage());
         }
@@ -179,8 +179,8 @@ public class TestUserServices {
         userDTO.setUserType(userType);
         
         try {
-            userService.addUser(userDTO);
-            userService.changeUserPassword(passwordChangeDTO);
+            userService.createUser(userDTO);
+            userService.updateUser(passwordChangeDTO);
         } catch (RegisterException e) {
         }
         User user = userRepository.findUserByEmail(USER_EMAIL);
@@ -207,8 +207,8 @@ public class TestUserServices {
         userDTO.setUserType(userType);
         
         try {
-            userService.addUser(userDTO);
-            userService.changeUserPassword(passwordChangeDTO);
+            userService.createUser(userDTO);
+            userService.updateUser(passwordChangeDTO);
         } catch (RegisterException e) {
             Assert.assertEquals("Password must contain at least 1 special characters.", e.getMessage());
         }
@@ -232,8 +232,8 @@ public class TestUserServices {
         userDTO.setUserType(userType);
         
         try {
-            userService.addUser(userDTO);
-            userService.changeUserPassword(passwordChangeDTO);
+            userService.createUser(userDTO);
+            userService.updateUser(passwordChangeDTO);
         } catch (RegisterException e) {
             Assert.assertEquals("Password must contain at least 1 special characters.", e.getMessage());
         }
@@ -251,7 +251,7 @@ public class TestUserServices {
         user1.setUsername(USER_NAME);
         
         try {
-            userService.addUser(user1);
+            userService.createUser(user1);
         } catch (RegisterException ignored) {
             //fail(); this doesnt work idk why, it fails the test
         } // we know that the first one will register for sure
@@ -267,7 +267,7 @@ public class TestUserServices {
         user2.setPassword(USER_PASSWORD);
         
         try {
-            userService.addUser(user2);
+            userService.createUser(user2);
         } catch (RegisterException e) {
             Assert.assertEquals("Username is already taken.", e.getMessage());
         }
@@ -284,7 +284,7 @@ public class TestUserServices {
         user1.setUsername(USER_NAME);
         
         try {
-            userService.addUser(user1);
+            userService.createUser(user1);
         } catch (RegisterException ignore) {
             // Assert.fail();
         } // we know that the first one will register for sure
@@ -299,7 +299,7 @@ public class TestUserServices {
         user2.setPassword(USER_PASSWORD);
         
         try {
-            userService.addUser(user2);
+            userService.createUser(user2);
         } catch (RegisterException e) {
             Assert.assertEquals("Email is already taken.", e.getMessage());
         }
@@ -318,7 +318,7 @@ public class TestUserServices {
         userDTO.setUserType(userType);
         
         try {
-            userService.addUser(userDTO);
+            userService.createUser(userDTO);
         } catch (RegisterException e) {
             Assert.assertEquals("Password must be at least 8 characters in length.", e.getMessage());
         }
@@ -338,7 +338,7 @@ public class TestUserServices {
         userDTO.setUserType(userType);
         
         try {
-            userService.addUser(userDTO);
+            userService.createUser(userDTO);
         } catch (RegisterException e) {
             Assert.assertEquals("Password must contain at least 1 digit characters.", e.getMessage());
         }
@@ -358,7 +358,7 @@ public class TestUserServices {
         userDTO.setUserType(userType);
         
         try {
-            userService.addUser(userDTO);
+            userService.createUser(userDTO);
         } catch (RegisterException e) {
             Assert.assertEquals("Password must contain at least 1 uppercase characters.", e.getMessage());
         }
@@ -377,7 +377,7 @@ public class TestUserServices {
         userDTO.setUserType(userType);
         
         try {
-            userService.addUser(userDTO);
+            userService.createUser(userDTO);
         } catch (RegisterException e) {
             Assert.assertEquals("Password must contain at least 1 special characters.", e.getMessage());
         }
@@ -395,7 +395,7 @@ public class TestUserServices {
         userDTO.setUserType(userType);
         
         try {
-            userService.addUser(userDTO);
+            userService.createUser(userDTO);
         } catch (RegisterException ignored) {
             //Assert.fail();
         }

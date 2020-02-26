@@ -1,88 +1,69 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 import java.sql.Date;
-import java.sql.Time;
 
 public class CommentDTO {
-	
-	@NotNull(message = "Text cannot be empty.")
-	@NotEmpty(message = "Text cannot be empty.")
-	private String text;
-	
-	@NotNull(message = "Username cannot be empty.")
-	@NotEmpty(message = "Username cannot be empty.")
-	private String username;
-	
 	private Date datePosted;
 	
-	private Time time;
-	
-	public CommentDTO() {
-	}
-	
-	public CommentDTO(@NotNull @NotEmpty String username,@NotNull @NotEmpty String text, Date datePosted, Time time) {
-		this.text = text;
-		this.username = username;
-		this.datePosted = datePosted;
-		this.time = time;
-	}
-	
+	private long id;
+	private String text;
 	/**
-	 * @return the text
+	 * Author of the comment.
 	 */
-	public String getText() {
-		return text;
-	}
 	
-	/**
-	 * @param text the text to set
-	 */
-	public void setText(String text) {
-		this.text = text;
-	}
+	private UserDTO user;
 	
-	/**
-	 * @return the username
-	 */
-	public String getUsername() {
-		return username;
-	}
-	
-	/**
-	 * @param username the username to set
-	 */
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	/**
-	 * @return the datePosted
-	 */
 	public Date getDatePosted() {
-		return datePosted;
+		return this.datePosted;
 	}
-
-	/**
-	 * @param datePosted the datePosted to set
-	 */
-	public void setDatePosted(Date datePosted) {
-		this.datePosted = datePosted;
+	
+	public void setDatePosted(Date value) {
+		this.datePosted = value;
 	}
-
-	/**
-	 * @return the time
-	 */
-	public Time getTime() {
-		return time;
+	
+	public long getId() {
+		return this.id;
 	}
-
+	
+	public void setId(long value) {
+		this.id = value;
+	}
+	
+	public String getText() {
+		return this.text;
+	}
+	
+	public void setText(String value) {
+		this.text = value;
+	}
+	
 	/**
-	 * @param time the time to set
+	 * Return the author of the comment.
+	 *
+	 * @return The author.
 	 */
-	public void setTime(Time time) {
-		this.time = time;
+	
+	public UserDTO getUser() {
+		return this.user;
+	}
+	
+	/**
+	 * Set the author of the comment.
+	 *
+	 * @param user The new author.
+	 */
+	
+	public void setUser(UserDTO user) {
+		this.user = user;
+	}
+	
+	@Override
+	public String toString() {
+		return "Comment{" +
+				"datePosted=" + datePosted +
+				", id=" + id +
+				", text='" + text + '\'' +
+				", user=" + user +
+				'}';
 	}
 }

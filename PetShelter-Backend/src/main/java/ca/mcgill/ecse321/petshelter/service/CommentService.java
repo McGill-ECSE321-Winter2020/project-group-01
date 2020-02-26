@@ -1,70 +1,137 @@
 package ca.mcgill.ecse321.petshelter.service;
 
-import ca.mcgill.ecse321.petshelter.dto.CommentDTO;
 import ca.mcgill.ecse321.petshelter.model.Comment;
+import ca.mcgill.ecse321.petshelter.model.Forum;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.CommentRepository;
+import ca.mcgill.ecse321.petshelter.repository.ForumRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+/**
+ * Service for interacting with comments.
+ *
+ * @author mathieu
+ */
 
 @Service
 public class CommentService {
-    
-    @Autowired
-    CommentRepository commentRepository;
-    
-    @Autowired
-    UserRepository userRepository;
-    
-    @Transactional
-    public List<Comment> getAllComments() {
-        return toList(commentRepository.findAll());
-    }
-    
-    /*
-    @Transactional
-    public List<Comment> getAllUserComments(User user) {
-        return toList(commentRepository.findAllByUser(user));
-    }
-    */
-    
-    @Transactional
-    public Comment getComment(User user, String text) {
-        return commentRepository.findCommentByUserAndText(user, text);
-    }
-    
-    //From tutorial
-    private <T> List<T> toList(Iterable<T> iterable) {
-        List<T> resultList = new ArrayList<>();
-        for (T t : iterable) {
-            resultList.add(t);
-        }
-        return resultList;
-    }
-    
-    @Transactional
-    public Comment createComment(CommentDTO commentDTO) {
-        //condition checks
-        if (commentDTO.getText() == null) {
-            throw new CommentException("Text can't be null!");
-        }
-        if (commentDTO.getUsername() == null) {
-        	throw new CommentException("Username can't be null!");
-        }
-        
-        Comment comment = new Comment();
-        comment.setDatePosted(commentDTO.getDatePosted());
-        comment.setText(commentDTO.getText());
-        comment.setTime(commentDTO.getTime());
-        comment.setUser(userRepository.findUserByUserName(commentDTO.getUsername()));
-        
-        commentRepository.save(comment);
-        return comment;
-    }
+	
+	@Autowired
+	private CommentRepository commentRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private ForumRepository forumRepository;
+	
+	/**
+	 * Add a comment to a thread.
+	 *
+	 * @param text    Comment text.
+	 * @param forumID ID of the commented thread.
+	 * @param userID  ID of the author of the comment.
+	 * @return The created comment.
+	 */
+	@Transactional
+	public Comment addComment(String text, long forumID, long userID) {
+		Optional<User> user = userRepository.findById(userID);
+		Optional<Forum> forum = forumRepository.findById(forumID);
+		if (user.isPresent()) {
+			if (forum.isPresent()) {
+				Forum newForum = forum.get();
+				if (!newForum.isLocked()) {
+					Comment newComment = new Comment();
+					newComment.setText(text);
+					newComment.setDatePosted(new Date(System.currentTimeMillis()));
+					newComment.setUser(user.get());
+					Set<Comment> comments = newForum.getComments();
+					comments.add(newComment);
+					newForum.setComments(comments);
+					forumRepository.save(newForum);
+					return newComment;
+				} else {
+					throw new CommentException("Forum thread is locked.");
+				}
+			} else {
+				throw new CommentException("No such forum thread.");
+			}
+		} else {
+			throw new CommentException("No such user.");
+		}
+	}
+	
+	/**
+	 * Update a comment.
+	 *
+	 * @param commentID Comment ID.
+	 * @param comment   Comment update.
+	 * @return
+	 */
+	@Transactional
+	public Comment updateComment(long commentID, String comment) {
+		Optional<Comment> oldComment = commentRepository.findById(commentID);
+		if (oldComment.isPresent()) {
+			Comment updatedComment = oldComment.get();
+			updatedComment.setText(comment);
+			commentRepository.save(updatedComment);
+			return updatedComment;
+		} else {
+			throw new CommentException("No such comment.");
+		}
+	}
+	
+	/**
+	 * Delete the comment.
+	 *
+	 * @param commentID The ID of the comment.
+	 * @return The deleted comment.
+	 */
+	@Transactional
+	public Comment deleteComment(long commentID) {
+		Optional<Comment> oldComment = commentRepository.findById(commentID);
+		if (oldComment.isPresent()) {
+			commentRepository.deleteById(commentID);
+			return oldComment.get();
+		} else {
+			throw new CommentException("No such comment.");
+		}
+	}
+	
+	/**
+	 * Get the list of all comments.
+	 *
+	 * @return The list of all comments.
+	 */
+	@Transactional
+	public List<Comment> getComments() {
+		List<Comment> comments = commentRepository.findAll();
+		return comments;
+	}
+	
+	/**
+	 * Get all the comments of a user.
+	 *
+	 * @param userID The id of the user.
+	 * @return The list of all comments by the user.
+	 */
+	@Transactional
+	public List<Comment> getCommentsByUser(long userID) {
+		Optional<User> user = userRepository.findById(userID);
+		if (user.isPresent()) {
+			List<Comment> comments = commentRepository.findCommentsByUser(user.get());
+			return comments;
+		} else {
+			throw new CommentException("No such user.");
+		}
+	}
+	
 }
