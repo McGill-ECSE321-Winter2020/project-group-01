@@ -3,11 +3,16 @@ package ca.mcgill.ecse321.petshelter.service;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.CONFLICT)
-public class ForumException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
+/**
+ * Exception thrown when forum services fail.
+ *
+ * @author mathieu
+ */
 
+@SuppressWarnings("serial")
+@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+public class ForumException extends RuntimeException {
 	public ForumException(String msg) {
-        super(msg);
-    }
+		super(msg);
+	}
 }

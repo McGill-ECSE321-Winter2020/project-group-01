@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -30,88 +29,61 @@ public class UserService {
 	private UserRepository userRepository;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
+	
 	@Autowired
 	private JWTTokenProvider jwtTokenProvider;
-
+	
 	private EmailingService emailingService;
-
+	
 	public UserService(EmailingService emailingService) {
 		this.emailingService = emailingService;
+	}
+	
+	// converts a user into a userdto
+	static UserDTO userToDto(User user) {
+		UserDTO userDto = new UserDTO();
+		userDto.setEmail(user.getEmail());
+		userDto.setUsername(user.getUserName());
+		userDto.setUserType(user.getUserType());
+		userDto.setPicture(user.getPicture());
+		return userDto;
 	}
 	
 	/**
 	 * Creates a user if the input is valid and sends an email to the specified
 	 * email address.
 	 *
-	 * @param userDTO
+	 * @param user
 	 * @return
 	 */
-	@Transactional
-	public User addUser(UserDTO userDTO) throws RegisterException {
-		if (userDTO.getPassword() == null) {
+	
+	public UserDTO createUser(UserDTO user) throws RegisterException {
+		if (user.getPassword() == null) {
 			throw new RegisterException("Password can't be null.");
 		}
-		String validationError = isUserDtoValid(userDTO);
+		String validationError = isUserDtoValid(user);
 		if (validationError != null) {
 			System.out.println(validationError);
 			throw new RegisterException(validationError);
 		}
 		// check that the email and username are unique
-		if (userRepository.findUserByEmail(userDTO.getEmail()) != null)
+		if (userRepository.findUserByEmail(user.getEmail()) != null)
 			throw new RegisterException("Email is already taken.");
-		if (userRepository.findUserByUserName(userDTO.getUsername()) != null)
+		if (userRepository.findUserByUserName(user.getUsername()) != null)
 			throw new RegisterException("Username is already taken.");
 		// create the user and set its attributes
 		User user1 = new User();
-		user1.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-		user1.setEmail(userDTO.getEmail());
-		user1.setUserName(userDTO.getUsername());
-		user1.setUserType(userDTO.getUserType());
+		user1.setPassword(passwordEncoder.encode(user.getPassword()));
+		user1.setEmail(user.getEmail());
+		user1.setUserName(user.getUsername());
+		user1.setUserType(user.getUserType());
 		String token = jwtTokenProvider.createToken(user1.getUserName());
 		user1.setApiToken(token);
 		// save it
 		userRepository.save(user1);
 		// Send email
-		emailingService.userCreationEmail(userDTO.getEmail(), userDTO.getUsername(), token);
-		return user1;
-	}
-
-	// method that only checks if a user could be logged in
-	public User loginUser(UserDTO user) throws LoginException {
-		// if no user is found by its username, it does not exist
-		User user1 = userRepository.findUserByUserName(user.getUsername());
-		if (user1 == null) {
-			throw new LoginException("Username not found");
-		}
-		// if the password doesnt match the saved one
-		String expectedPW = user1.getPassword();
-		if (!passwordEncoder.matches(user.getPassword(), expectedPW)) {
-			throw new LoginException("Incorrect password");
-		}
-		// if the user has not verified their account through email
-		if (!user1.isIsEmailValidated())
-			throw new LoginException("Account not verified");
-		return user1;
-	}
-
-	public ResponseEntity<?> changeUserPassword(PasswordChangeDTO passwordDto) {
-		// check if new password is valid
-		String constraintViolation = isPasswordChangeValid(passwordDto);
-		if (constraintViolation != null) {
-			return new ResponseEntity<>(constraintViolation, HttpStatus.BAD_REQUEST);
-		}
-		User user = userRepository.findUserByUserName(passwordDto.getUserName());
-		if (user == null) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-		}
-		// the old password must be correct 
-		if (!passwordEncoder.matches(passwordDto.getOldPassword(), user.getPassword())) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-		}
-		user.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
-		userRepository.save(user);
-		return new ResponseEntity<>(HttpStatus.OK);
+		emailingService.userCreationEmail(user.getEmail(), user.getUsername(), token);
+		return userToDto(user1);
 	}
 
 	/**
@@ -167,14 +139,45 @@ public class UserService {
 		return null;
 	}
 	
+	/**
+	 * This is the update method; only the password can be updated (design decision).
+	 *
+	 * @param passwordDto
+	 * @return
+	 */
+	public UserDTO updateUser(PasswordChangeDTO passwordDto) {
+		// check if new password is valid
+		String constraintViolation = isPasswordChangeValid(passwordDto);
+		if (constraintViolation != null) {
+			throw new IllegalArgumentException(constraintViolation);
+		}
+		User user = userRepository.findUserByUserName(passwordDto.getUserName());
+		if (user == null) {
+			throw new IllegalArgumentException("No user was found");
+		}
+		// the old password must be correct
+		if (!passwordEncoder.matches(passwordDto.getOldPassword(), user.getPassword())) {
+			throw new IllegalArgumentException("Wrong password");
+		}
+		user.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
+		userRepository.save(user);
+		return userToDto(user);
+	}
+	
+	/**
+	 * Deletes a user.
+	 *
+	 * @param userDTO
+	 * @return
+	 */
 	public ResponseEntity<?> deleteUser(UserDTO userDTO) {
 		User user = userRepository.findUserByUserName(userDTO.getUsername());
 		try {
 			userRepository.deleteById(user.getId());
 		} catch (RuntimeException e) {
-			//todo i dont know what to return in case of failure
-			//return ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }
+
