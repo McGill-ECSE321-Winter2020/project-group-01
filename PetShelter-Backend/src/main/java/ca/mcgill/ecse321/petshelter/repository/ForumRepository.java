@@ -18,4 +18,5 @@ public interface ForumRepository extends JpaRepository<Forum, Long> {
 	
 	List<Forum> findForumsByAuthor(User user);
 	
+	List<Forum> findForumByAuthorUserName(String username);
 }

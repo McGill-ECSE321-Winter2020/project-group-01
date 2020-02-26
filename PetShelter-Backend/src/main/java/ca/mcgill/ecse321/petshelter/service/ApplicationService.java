@@ -32,8 +32,8 @@ public class ApplicationService {
     }
     
     @Transactional
-    public AdoptionApplication getApplication(User applicant, Advertisement advertisement) {
-        return applicationRepository.findApplicationByUserAndAdvertisement(applicant, advertisement);
+    public AdoptionApplication getApplication(String applicant, Advertisement advertisement) {
+        return applicationRepository.findApplicationByUserUserNameAndAdvertisement(applicant, advertisement);
     }
     
     /*
