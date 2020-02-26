@@ -14,8 +14,9 @@ import java.util.List;
 @RepositoryRestResource(collectionResourceRel = "comment_data", path = "comment_data")
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 	
-	Comment findCommentByUserAndText(User user, String commentText);
+	Comment findCommentByUserUserNameAndText(String username, String commentText);
 	
+	//Comment findCommentByUserUserNameAndText(String username, String commentText);
 	List<Comment> findCommentsByUser(User user);
 	
 }

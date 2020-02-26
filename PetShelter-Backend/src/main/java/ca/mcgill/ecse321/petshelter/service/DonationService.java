@@ -29,8 +29,8 @@ public class DonationService {
     }
     
     @Transactional
-    public Donation getDonation(User name, double amount) {
-        return donationRepository.findDonationByUserAndAmount(name, amount);
+    public Donation getDonation(String name, double amount) {
+        return donationRepository.findDonationsByUserUserNameAndAmount(name, amount);
     }
     
     @Transactional

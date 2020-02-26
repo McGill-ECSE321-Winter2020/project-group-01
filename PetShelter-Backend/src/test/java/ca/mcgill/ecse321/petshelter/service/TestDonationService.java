@@ -1,10 +1,8 @@
 package ca.mcgill.ecse321.petshelter.service;
 
 import ca.mcgill.ecse321.petshelter.dto.DonationDTO;
-import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.Donation;
 import ca.mcgill.ecse321.petshelter.model.User;
-import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.DonationRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import org.junit.Test;
@@ -20,16 +18,12 @@ import org.mockito.stubbing.Answer;
 import java.sql.Date;
 import java.sql.Time;
 
-import static ca.mcgill.ecse321.petshelter.model.UserType.USER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
 public class TestDonationService {
-	
-	@InjectMocks
-	private DonationService donationService;
 	
 	@Mock
 	private DonationRepository donationRepository;
@@ -38,15 +32,19 @@ public class TestDonationService {
 	private UserRepository userRepository;
 	
 	@InjectMocks
+	private DonationService donationService;
+	
+	@InjectMocks
 	private UserService userService;
 	
 	private static final String USER_NAME = "TestPerson";
 	private static final String USER_EMAIL = "TestPerson@email.com";
 	private static final String USER_PASSWORD = "myP1+abc";
-	private static final double DONATION_AMOUNT = 2.12;
 	
+	private static final double DONATION_AMOUNT = 2.12;
 	private static final Date DONATION_DATE = Date.valueOf("2020-01-22");
 	private static final Time DONATION_TIME = Time.valueOf("11:22:00");
+
 	
 	@BeforeEach
 	public void setMockOutput() {
@@ -62,21 +60,11 @@ public class TestDonationService {
 				return null;
 			}
 		});
-		lenient().when(userRepository.findUserByEmail(anyString())).thenAnswer((InvocationOnMock invocation) -> {
-			if (invocation.getArgument(0).equals(USER_EMAIL)) {
-				User user = new User();
-				user.setUserName(USER_NAME);
-				user.setEmail(USER_EMAIL);
-				user.setPassword(USER_PASSWORD);
-				return user;
-			} else {
-				return null;
-			}
-		});
-		
+//
 		//todo check this
-		lenient().when(donationRepository.findDonationByUserAndAmount(any(User.class), anyDouble())).thenAnswer((InvocationOnMock invocation) -> {
-			if (invocation.getArgument(0).equals(User.class)) {
+		lenient().when(donationRepository.findDonationsByUserUserNameAndAmount(anyString(), anyDouble())).thenAnswer((InvocationOnMock invocation) -> {
+			
+			if (invocation.getArgument(0).equals(USER_NAME)) {
 				User user = new User();
 				user.setUserName(USER_NAME);
 				user.setEmail(USER_EMAIL);
@@ -89,18 +77,7 @@ public class TestDonationService {
 					donation.setAmount(DONATION_AMOUNT);
 					return donation;
 				}
-			} else {
-				return null;
 			}
-//			if (invocation.getArgument(0).equals(DONATION_USER) && invocation.getArgument(1).equals(DONATION_AMOUNT)) {
-//				Donation donation = new Donation();
-//				donation.setTime(DONATION_TIME);
-//				donation.setDate(DONATION_DATE);
-//				donation.setAmount(DONATION_AMOUNT);
-//				return donation;
-//			} else {
-//				return null;
-//			}
 			return null;
 		});
 		
@@ -130,21 +107,7 @@ public class TestDonationService {
 	// Regular use case
 	@Test
 	public void testDonation() {
-		UserDTO userDTO = new UserDTO();
-		UserType userType = USER;
-		
-		userDTO.setEmail(USER_EMAIL);
-		userDTO.setPassword(USER_PASSWORD);
-		userDTO.setUsername(USER_NAME);
-		userDTO.setUserType(userType);
-		
-		try {
-			userService.createUser(userDTO);
-		} catch (RegisterException e) {
-			e.printStackTrace();
-		}
-		User User = userRepository.findUserByUserName(USER_NAME);
-		
+		assertEquals(0, donationService.getAllDonations().size());
 		DonationDTO donationDTO = new DonationDTO();
 		
 		donationDTO.setUser(USER_NAME);
@@ -158,7 +121,7 @@ public class TestDonationService {
 			e.printStackTrace();
 		}
 		
-		Donation donation = donationRepository.findDonationByUserAndAmount(User, DONATION_AMOUNT);
+		Donation donation = donationRepository.findDonationsByUserUserNameAndAmount(USER_NAME, DONATION_AMOUNT);
 		assertEquals(DONATION_AMOUNT, donation.getAmount());
 //		List<Donation> allDonations = donationService.getAllDonations();
 //		assertEquals(userName, allDonations.get(0).getUser().getUserName());

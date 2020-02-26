@@ -13,8 +13,8 @@ import java.util.List;
 //REST endpoint specification
 @RepositoryRestResource(collectionResourceRel = "donation_data", path = "donation_data")
 public interface DonationRepository extends JpaRepository<Donation, Long> {
-	
-	Donation findDonationByUserAndAmount(User user, double amount);
-	
-	List<Donation> findAllByUser(User user);
+    
+    Donation findDonationsByUserUserNameAndAmount(String username, double amount);
+    
+    List<Donation> findAllByUser(User user);
 }
