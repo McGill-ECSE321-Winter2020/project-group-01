@@ -77,7 +77,8 @@ public class TestUserServices {
 
 		try {
 			userService.createUser(userDTO);
-		} catch (RegisterException ignored) {
+		} catch (RegisterException e) {
+			e.printStackTrace();
 		}
 		User e = userRepository.findUserByUserName(USER_NAME);
 		assertEquals(userDTO.getEmail(), e.getEmail());

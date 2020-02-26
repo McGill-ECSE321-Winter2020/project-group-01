@@ -22,8 +22,7 @@ import java.sql.Time;
 
 import static ca.mcgill.ecse321.petshelter.model.UserType.USER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,10 +44,9 @@ public class TestDonationService {
 	private static final String USER_EMAIL = "TestPerson@email.com";
 	private static final String USER_PASSWORD = "myP1+abc";
 	private static final double DONATION_AMOUNT = 2.12;
+	
 	private static final Date DONATION_DATE = Date.valueOf("2020-01-22");
 	private static final Time DONATION_TIME = Time.valueOf("11:22:00");
-	//donation settings
-	private final User DONATION_USER = createUser();
 	
 	@BeforeEach
 	public void setMockOutput() {
@@ -75,24 +73,63 @@ public class TestDonationService {
 				return null;
 			}
 		});
+		
 		//todo check this
-		lenient().when(donationRepository.findDonationByUserAndAmount(DONATION_USER, DONATION_AMOUNT)).thenAnswer((InvocationOnMock invocation) -> {
-			if (invocation.getArgument(0).equals(DONATION_USER) && invocation.getArgument(1).equals(DONATION_AMOUNT)) {
-				Donation donation = new Donation();
-				donation.setTime(DONATION_TIME);
-				donation.setDate(DONATION_DATE);
-				donation.setAmount(DONATION_AMOUNT);
-				return donation;
+		lenient().when(donationRepository.findDonationByUserAndAmount(any(User.class), anyDouble())).thenAnswer((InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(User.class)) {
+				User user = new User();
+				user.setUserName(USER_NAME);
+				user.setEmail(USER_EMAIL);
+				user.setPassword(USER_PASSWORD);
+				if (invocation.getArgument(1).equals(DONATION_AMOUNT)) {
+					Donation donation = new Donation();
+					donation.setUser(user);
+					donation.setTime(DONATION_TIME);
+					donation.setDate(DONATION_DATE);
+					donation.setAmount(DONATION_AMOUNT);
+					return donation;
+				}
 			} else {
 				return null;
 			}
+//			if (invocation.getArgument(0).equals(DONATION_USER) && invocation.getArgument(1).equals(DONATION_AMOUNT)) {
+//				Donation donation = new Donation();
+//				donation.setTime(DONATION_TIME);
+//				donation.setDate(DONATION_DATE);
+//				donation.setAmount(DONATION_AMOUNT);
+//				return donation;
+//			} else {
+//				return null;
+//			}
+			return null;
 		});
+		
+		
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> invocation.getArgument(0);
 		lenient().when(userRepository.save(any(User.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(donationRepository.save(any(Donation.class))).thenAnswer(returnParameterAsAnswer);
 	}
+
+//	public User createUser() {
+//		UserDTO userDTO = new UserDTO();
+//		UserType userType = USER;
+//
+//		userDTO.setEmail(USER_EMAIL);
+//		userDTO.setPassword(USER_PASSWORD);
+//		userDTO.setUsername(USER_NAME);
+//		userDTO.setUserType(userType);
+//
+//		try {
+//			userService.createUser(userDTO);
+//		} catch (RegisterException e) {
+//			e.printStackTrace();
+//		}
+//		return userRepository.findUserByUserName(USER_NAME);
+//	}
 	
-	public User createUser() {
+	// Regular use case
+	@Test
+	public void testDonation() {
 		UserDTO userDTO = new UserDTO();
 		UserType userType = USER;
 		
@@ -103,14 +140,11 @@ public class TestDonationService {
 		
 		try {
 			userService.createUser(userDTO);
-		} catch (RegisterException ignored) {
+		} catch (RegisterException e) {
+			e.printStackTrace();
 		}
-		return userRepository.findUserByUserName(USER_NAME);
-	}
-
-	// Regular use case
-	@Test
-	public void testDonation() {
+		User User = userRepository.findUserByUserName(USER_NAME);
+		
 		DonationDTO donationDTO = new DonationDTO();
 		
 		donationDTO.setUser(USER_NAME);
@@ -120,10 +154,11 @@ public class TestDonationService {
 		
 		try {
 			donationService.createDonation(donationDTO);
-		} catch (DonationException ignored) {
+		} catch (DonationException e) {
+			e.printStackTrace();
 		}
 		
-		Donation donation = donationRepository.findDonationByUserAndAmount(DONATION_USER, DONATION_AMOUNT);
+		Donation donation = donationRepository.findDonationByUserAndAmount(User, DONATION_AMOUNT);
 		assertEquals(DONATION_AMOUNT, donation.getAmount());
 //		List<Donation> allDonations = donationService.getAllDonations();
 //		assertEquals(userName, allDonations.get(0).getUser().getUserName());
