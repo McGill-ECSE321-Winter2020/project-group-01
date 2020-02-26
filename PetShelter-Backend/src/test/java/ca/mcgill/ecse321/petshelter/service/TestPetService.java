@@ -101,8 +101,8 @@ public class TestPetService {
 			}
 		});
 		
-		lenient().when(petDao.findPetById(anyInt())).thenAnswer((InvocationOnMock invocation) -> {
-			if(invocation.getArgument(0).equals((int) petId)) {
+		lenient().when(petDao.findPetById(any(Long.class))).thenAnswer((InvocationOnMock invocation) -> {
+			if(invocation.getArgument(0).equals(petId)) {
 				return pet;
 			} else {
 				return null;
@@ -143,18 +143,14 @@ public class TestPetService {
 	 */
 	@Test
 	public void testCreatePet() {
-    	//clearDatabase();
-		//User user = createUser();
 		assertEquals(0, petService.getAllPets().size());
 		pet = null;
 		Date DOB = new Date (119, 10, 20);
 		byte[] pic = new byte[10];
 		pet = petService.createPet(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME, PET_GENDER);
-		petDao.save(pet);
 		petId = pet.getId();
 		assertNotNull(pet);
-		System.err.println(petDao.findAll());
- 		//assertNotNull(petDao.findPetById(petId));
+		assertNotNull(petDao.findPetById(petId));
 		assertEquals("testPettt",pet.getName());
 		assertEquals(new Date(119, 10, 20), DOB);
 		assertEquals("testSpecies", pet.getSpecies());
@@ -253,6 +249,7 @@ public class TestPetService {
 		pet = petService.createPet(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, "", PET_PICTURE, USER_NAME, PET_GENDER);
 		assertNotNull(pet);
 		assertEquals("", pet.getDescription());
+		assertNotNull(petDao.findPetById(pet.getId()));
 	}
 	
 	/**
@@ -272,5 +269,4 @@ public class TestPetService {
 		}
 		assertEquals(pet, null);
 	}
-	//TODO two owners one pet while editing
   }

@@ -1,5 +1,7 @@
 package ca.mcgill.ecse321.petshelter.service;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ca.mcgill.ecse321.petshelter.dto.AdvertisementDTO;
 import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
+import ca.mcgill.ecse321.petshelter.model.Gender;
 import ca.mcgill.ecse321.petshelter.model.Pet;
+import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import ca.mcgill.ecse321.petshelter.repository.PetRepository;
 
@@ -41,41 +45,45 @@ public class AdvertisementService {
 		List<Advertisement> allAds = advertisementRepository.findAll();
 		return allAds;
 	}
-
+	
 	@Transactional
-	public Advertisement createAdvertisement(String title, boolean fulfilled, List<Long> petIds, String description) {
-		if (title == "" || title == null) {
-			throw new IllegalArgumentException("Title cannot be empty.");
+	public Advertisement createAdvertisement( String title, boolean isFulfilled, String description, long[] petIds) {
+		int numOfPets = petIds.length;
+		if(numOfPets == 0) {
+			throw new IllegalArgumentException("A pet must be linked to an advertisement");
 		}
-		if (description == "" || description == null) {
-			throw new IllegalArgumentException("Description cannot be empty.");
-		}
-		if (petIds.size() == 0) {
-			throw new IllegalArgumentException("There has to be at least one pet.");
-		}
-		for (Long id : petIds) {
-			if (petRepository.findById(id) == null) {
-				throw new IllegalArgumentException("At least one of the pets specified do not exist.");
-			}
-			else if (petRepository.findPetById(id).getAdvertisement()!=null) {
-				throw new IllegalArgumentException("At least one of the pets specified already has an advertisement.");
-			}
-		}
-		Advertisement ad = new Advertisement();
-		Set<AdoptionApplication> applications = new HashSet<AdoptionApplication>();
-		ad.setTitle(title);
-		ad.setDescription(description);
-		ad.setIsFulfilled(fulfilled);
-		ad.setAdoptionApplication(applications);
+		//finding all pets that are on this ad
+		List<Pet> petsInAd = new ArrayList<Pet>();
+		for(int i = 0; i < numOfPets; i++) {
+			Pet pet = petRepository.findPetById(petIds[i]);
+			if (pet == null) {
+				throw new IllegalArgumentException("One or more pets do not exist.");
 
+			}
+			else if (pet.getAdvertisement()!=null) {
+				throw new IllegalArgumentException("One or more pets already have an advertisement.");
+			}
+			petsInAd.add(pet);
+		}
+
+		if (title.trim() == "" || title == null) {
+			throw new IllegalArgumentException("An advertisement needs a title");
+		}
+		if (description.trim() == "" || description == null) {
+			throw new IllegalArgumentException("An advertisement needs a description");
+		}
+		Set<AdoptionApplication> applications = new HashSet<AdoptionApplication>();
+		Advertisement ad = new Advertisement();
+		ad.setTitle(title);
+		ad.setIsFulfilled(isFulfilled);
+		ad.setDescription(description);
+		ad.setAdoptionApplication(applications);
 		advertisementRepository.save(ad);
-		for (Long id : petIds) {
-			Pet pet = petRepository.findPetById(id);
-			pet.setAdvertisement(ad); //TODO test case already has ad
+		for (Pet pet : petsInAd) {
+			pet.setAdvertisement(ad);
 			petRepository.save(pet);
 		}
-		return ad;
-
+		return ad;		
 	}
 	//TODO change
 	@Transactional
