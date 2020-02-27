@@ -182,4 +182,14 @@ public class UserService {
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	// converts a user into a userdto
+	static UserDTO userToDto(User user) {
+		UserDTO userDto = new UserDTO();
+		userDto.setEmail(user.getEmail());
+		userDto.setUsername(user.getUserName());
+		userDto.setUserType(user.getUserType());
+		userDto.setPicture(user.getPicture());
+		userDto.setToken(user.getApiToken());
+		return userDto;
+	}
 }
