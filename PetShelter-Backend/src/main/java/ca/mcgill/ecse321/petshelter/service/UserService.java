@@ -175,6 +175,7 @@ public class UserService {
 		userDto.setUsername(user.getUserName());
 		userDto.setUserType(user.getUserType());
 		userDto.setPicture(user.getPicture());
+		userDto.setToken(user.getApiToken());
 		return userDto;
 	}
 }
