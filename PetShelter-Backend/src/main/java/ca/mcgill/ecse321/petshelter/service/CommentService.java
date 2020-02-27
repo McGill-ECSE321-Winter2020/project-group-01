@@ -1,5 +1,11 @@
 package ca.mcgill.ecse321.petshelter.service;
 
+import ca.mcgill.ecse321.petshelter.model.Comment;
+import ca.mcgill.ecse321.petshelter.model.Forum;
+import ca.mcgill.ecse321.petshelter.model.User;
+import ca.mcgill.ecse321.petshelter.repository.CommentRepository;
+import ca.mcgill.ecse321.petshelter.repository.ForumRepository;
+import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,17 +15,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import ca.mcgill.ecse321.petshelter.model.Comment;
-import ca.mcgill.ecse321.petshelter.model.Forum;
-import ca.mcgill.ecse321.petshelter.model.User;
-import ca.mcgill.ecse321.petshelter.repository.CommentRepository;
-import ca.mcgill.ecse321.petshelter.repository.ForumRepository;
-import ca.mcgill.ecse321.petshelter.repository.UserRepository;
-
 /**
  * Service for interacting with comments.
- * @author mathieu
  *
+ * @author mathieu
  */
 
 @Service
@@ -36,9 +35,10 @@ public class CommentService {
 	
 	/**
 	 * Add a comment to a thread.
-	 * @param text Comment text.
+	 *
+	 * @param text    Comment text.
 	 * @param forumID ID of the commented thread.
-	 * @param userID ID of the author of the comment.
+	 * @param userID  ID of the author of the comment.
 	 * @return The created comment.
 	 */
 	@Transactional
@@ -71,8 +71,9 @@ public class CommentService {
 	
 	/**
 	 * Update a comment.
+	 *
 	 * @param commentID Comment ID.
-	 * @param comment Comment update.
+	 * @param comment   Comment update.
 	 * @return
 	 */
 	@Transactional
@@ -90,6 +91,7 @@ public class CommentService {
 	
 	/**
 	 * Delete the comment.
+	 *
 	 * @param commentID The ID of the comment.
 	 * @return The deleted comment.
 	 */
@@ -106,6 +108,7 @@ public class CommentService {
 	
 	/**
 	 * Get the list of all comments.
+	 *
 	 * @return The list of all comments.
 	 */
 	@Transactional
@@ -113,9 +116,10 @@ public class CommentService {
 		List<Comment> comments = commentRepository.findAll();
 		return comments;
 	}
-
+	
 	/**
 	 * Get all the comments of a user.
+	 *
 	 * @param userID The id of the user.
 	 * @return The list of all comments by the user.
 	 */

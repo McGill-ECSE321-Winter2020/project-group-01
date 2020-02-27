@@ -42,11 +42,12 @@ public class UserService {
 	/**
 	 * Creates a user if the input is valid and sends an email to the specified
 	 * email address.
-	 * 
+	 *
 	 * @param user
 	 * @return
 	 */
-	public User addUser(UserDTO user) throws RegisterException{
+
+	public UserDTO createUser(UserDTO user) throws RegisterException {
 		if (user.getPassword() == null) {
 			throw new RegisterException("Password can't be null.");
 		}
@@ -60,7 +61,6 @@ public class UserService {
 			throw new RegisterException("Email is already taken.");
 		if (userRepository.findUserByUserName(user.getUsername()) != null)
 			throw new RegisterException("Username is already taken.");
-		
 		// create the user and set its attributes
 		User user1 = new User();
 		user1.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -73,49 +73,12 @@ public class UserService {
 		userRepository.save(user1);
 		// Send email
 		emailingService.userCreationEmail(user.getEmail(), user.getUsername(), token);
-		return user1;
-	}
-
-	// method that only checks if a user could be logged in
-	public User loginUser(UserDTO user) throws LoginException {
-		// if no user is found by its username, it does not exist
-		User user1 = userRepository.findUserByUserName(user.getUsername());
-		if (user1 == null) {
-			throw new LoginException("Username not found");
-		}
-		// if the password doesnt match the saved one
-		String expectedPW = user1.getPassword();
-		if (!passwordEncoder.matches(user.getPassword(), expectedPW)) {
-			throw new LoginException("Incorrect password");
-		}
-		// if the user has not verified their account through email
-		if (!user1.isIsEmailValidated())
-			throw new LoginException("Account not verified");
-		return user1;
-	}
-
-	public ResponseEntity<?> changeUserPassword(PasswordChangeDTO passwordDto) {
-		// check if new password is valid
-		String constraintViolation = isPasswordChangeValid(passwordDto);
-		if (constraintViolation != null) {
-			return new ResponseEntity<>(constraintViolation, HttpStatus.BAD_REQUEST);
-		}
-		User user = userRepository.findUserByUserName(passwordDto.getUserName());
-		if (user == null) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-		}
-		// the old password must be correct 
-		if (!passwordEncoder.matches(passwordDto.getOldPassword(), user.getPassword())) {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-		}
-		user.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
-		userRepository.save(user);
-		return new ResponseEntity<>(HttpStatus.OK);
+		return userToDto(user1);
 	}
 
 	/**
 	 * Generates a strong temporary password to be used in case of password reset.
-	 * 
+	 *
 	 * @return
 	 */
 	public String generateRandomPassword() {
@@ -133,7 +96,7 @@ public class UserService {
 	 * Validates the UserDto it is given. Email must be an email, and fields must
 	 * not be empty. Returns null if no error is found. Returns an error message if
 	 * a violation is found.
-	 * 
+	 *
 	 * @param userDto
 	 * @return
 	 */
@@ -147,7 +110,7 @@ public class UserService {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Validates the PasswordChangeDto it is given. The new password must satisfy
 	 * constraitns. Returns null if no error is found.
@@ -165,15 +128,58 @@ public class UserService {
 		}
 		return null;
 	}
-	
+
+	/**
+	 * This is the update method; only the password can be updated (design decision).
+	 *
+	 * @param passwordDto
+	 * @return
+	 */
+	public UserDTO updateUser(PasswordChangeDTO passwordDto) throws IllegalArgumentException{
+		if(passwordDto.getNewPassword()==null || passwordDto.getNewPassword().trim().length()==0){
+			throw new IllegalArgumentException("Password cannot be null.");
+		}
+		// check if new password is valid
+		String constraintViolation = isPasswordChangeValid(passwordDto);
+		if (constraintViolation != null) {
+			throw new IllegalArgumentException(constraintViolation);
+		}
+		User user = userRepository.findUserByUserName(passwordDto.getUserName());
+		if (user == null) {
+			throw new IllegalArgumentException("No user was found");
+		}
+		// the old password must be correct
+		if (!passwordEncoder.matches(passwordDto.getOldPassword(), user.getPassword())) {
+			throw new IllegalArgumentException("Wrong password");
+		}
+		user.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
+		userRepository.save(user);
+		return userToDto(user);
+	}
+
+	/**
+	 * Deletes a user.
+	 *
+	 * @param userDTO
+	 * @return
+	 */
 	public ResponseEntity<?> deleteUser(UserDTO userDTO) {
 		User user = userRepository.findUserByUserName(userDTO.getUsername());
 		try {
 			userRepository.deleteById(user.getId());
 		} catch (RuntimeException e) {
-			//todo i dont know what to return in case of failure
-			//return ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	// converts a user into a userdto
+	static UserDTO userToDto(User user) {
+		UserDTO userDto = new UserDTO();
+		userDto.setEmail(user.getEmail());
+		userDto.setUsername(user.getUserName());
+		userDto.setUserType(user.getUserType());
+		userDto.setPicture(user.getPicture());
+		userDto.setToken(user.getApiToken());
+		return userDto;
 	}
 }
