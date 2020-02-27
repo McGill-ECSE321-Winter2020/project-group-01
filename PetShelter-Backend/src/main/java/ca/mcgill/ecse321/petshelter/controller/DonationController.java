@@ -21,12 +21,10 @@ public class DonationController {
 
 	@Autowired
 	private UserRepository userRepository;
-
+	
+	@Autowired
 	private EmailingService emailingService;
-
-	public DonationController(EmailingService emailingService) {
-		this.emailingService = emailingService;
-	}
+	
 
 	@GetMapping("/all")
 	public ResponseEntity<?> getAllDonations() {

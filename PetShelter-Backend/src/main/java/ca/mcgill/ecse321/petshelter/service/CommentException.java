@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * Exception thrown when comment services fail.
- * @author mathieu
  *
+ * @author mathieu
  */
 
 @SuppressWarnings("serial")

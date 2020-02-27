@@ -154,26 +154,41 @@ public class PetShelterPersistence {
         assertEquals(apiToken, user.getApiToken());
     }
     
+    //had to fix it with a complete new instance of user
     @Test
     public void testPersistAndLoadComment() {
         //comments details
         Date postedDate = Date.valueOf("2015-03-21");
         String commentText = "this is a comment";
         
-        User user = createUser();
+        User user = new User();
+        
+        String name = "TestUserName123";
+        String password = "myPassword1!";
+        boolean emailValid = true;
+        String email = "TestUserName123@gmail.com";
+        String apiToken = "token112";
+        
+        user.setUserName(name);
+        user.setPassword(password);
+        user.setIsEmailValidated(emailValid);
+        user.setEmail(email);
+        user.setApiToken(apiToken);
+        
+        userRepository.save(user);
         Comment comment = new Comment();
         
         //sets everything
         comment.setDatePosted(postedDate);
         comment.setText(commentText);
-
+        
         comment.setUser(user);
         
         commentRepository.save(comment);
         comment = null;
         
         //asserts if everything can be retrieved from database
-        comment = commentRepository.findCommentByUserAndText(user, commentText);
+        comment = commentRepository.findCommentByUserUserNameAndText(user.getUserName(), commentText);
         assertNotNull(comment);
         assertEquals(commentText, comment.getText());
         
@@ -223,7 +238,7 @@ public class PetShelterPersistence {
         applicationRepository.save(application);
         
         //asserts if everything can be retrieved from database
-        application = applicationRepository.findApplicationByUserAndAdvertisement(applicant, ad);
+        application = applicationRepository.findApplicationByUserUserNameAndAdvertisement(applicant.getUserName(), ad);
         assertNotNull(application);
         assertEquals(applicant.getUserName(), application.getUser().getUserName());
         assertEquals(ad.getTitle(), application.getAdvertisement().getTitle());
@@ -282,7 +297,7 @@ public class PetShelterPersistence {
         donation = null;
         
         //asserts if everything can be retrieved from database
-        donation = donationRepository.findDonationByUserAndAmount(user, amount);
+        donation = donationRepository.findDonationsByUserUserNameAndAmount(user.getUserName(), amount);
         assertNotNull(donation);
         assertEquals(donationDate, donation.getDate());
         assertEquals(user.getUserName(), donation.getUser().getUserName());
@@ -385,26 +400,27 @@ public class PetShelterPersistence {
         application.setDescription(description);
         
         applicationRepository.save(application);
-        
-        AdoptionApplication dbApplication = applicationRepository.findApplicationByUserAndAdvertisement(applicant, ad);
+    
+        AdoptionApplication dbApplication = applicationRepository.findApplicationByUserUserNameAndAdvertisement(applicant.getUserName(), ad);
         
         assertEquals(application.getUser().getUserName(), dbApplication.getUser().getUserName());
         
         applicationRepository.deleteById(application.getId());
-        
-        assertNull(applicationRepository.findApplicationByUserAndAdvertisement(applicant, ad));
+    
+        assertNull(applicationRepository.findApplicationByUserUserNameAndAdvertisement(applicant.getUserName(), ad));
     }
     
     @Test
     public void testDeleteComment() {
+        clearDatabase();
         Comment comment = createComment();
-        Comment dbComment = commentRepository.findCommentByUserAndText(comment.getUser(), comment.getText());
+        Comment dbComment = commentRepository.findCommentByUserUserNameAndText(comment.getUser().getUserName(), comment.getText());
         
         assertEquals(comment.getText(), dbComment.getText());
         
         commentRepository.deleteById(comment.getId());
-        
-        assertNull(commentRepository.findCommentByUserAndText(comment.getUser(), comment.getText()));
+    
+        assertNull(commentRepository.findCommentByUserUserNameAndText(comment.getUser().getUserName(), comment.getText()));
     }
     
     @Test

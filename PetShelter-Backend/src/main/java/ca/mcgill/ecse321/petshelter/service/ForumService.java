@@ -1,6 +1,9 @@
 package ca.mcgill.ecse321.petshelter.service;
 
-import ca.mcgill.ecse321.petshelter.model.Comment;
+import ca.mcgill.ecse321.petshelter.model.Forum;
+import ca.mcgill.ecse321.petshelter.model.User;
+import ca.mcgill.ecse321.petshelter.repository.ForumRepository;
+import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,15 +12,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import ca.mcgill.ecse321.petshelter.model.Forum;
-import ca.mcgill.ecse321.petshelter.model.User;
-import ca.mcgill.ecse321.petshelter.repository.ForumRepository;
-import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 
 /**
  * Services to handle the creation, modification and deletion of forum threads.
- * @author mathieu
  *
+ * @author mathieu
  */
 
 @Service
@@ -29,8 +28,9 @@ public class ForumService {
 	
 	/**
 	 * Add a forum to the database. The creator is the only subscriber.
+	 *
 	 * @param creator Author of the thread.
-	 * @param title Title of the thread.
+	 * @param title   Title of the thread.
 	 * @return The forum that was added.
 	 */
 	@Transactional
@@ -47,13 +47,14 @@ public class ForumService {
 	
 	/**
 	 * Delete the specified forum from the database.
+	 *
 	 * @param forumID The forum to delete.
 	 * @return The forum that was deleted. This value may be null;
 	 */
 	@Transactional
 	public void deleteForum(long forumID) {
 		Optional<Forum> forum = forumRepository.findById(forumID);
-		if(forum.isPresent()) {
+		if (forum.isPresent()) {
 			forumRepository.deleteById(forumID);
 		}
 		
@@ -61,6 +62,7 @@ public class ForumService {
 	
 	/**
 	 * Lock a forum.
+	 *
 	 * @param forumID The id of the forum to lock.
 	 * @return The forum that was locked.
 	 */
@@ -80,6 +82,7 @@ public class ForumService {
 	
 	/**
 	 * Unlock a forum.
+	 *
 	 * @param forumID The id of the forum to unlock.
 	 * @return The forum that was unlocked.
 	 */
@@ -98,8 +101,9 @@ public class ForumService {
 	
 	/**
 	 * Subscribe a user to a forum thread.
+	 *
 	 * @param forumID The forum to subscribe the user to.
-	 * @param userID The user to subscribe to the thread.
+	 * @param userID  The user to subscribe to the thread.
 	 * @return The forum to which the user was subscribed to.
 	 */
 	@Transactional
@@ -124,8 +128,9 @@ public class ForumService {
 	
 	/**
 	 * Unsubscribe a user to a forum thread.
+	 *
 	 * @param forumID The forum to unsubscribe the user from.
-	 * @param userID The user to unsubscribe from the thread.
+	 * @param userID  The user to unsubscribe from the thread.
 	 * @return The forum from which the user was unsubscribed.
 	 */
 	@Transactional
@@ -145,8 +150,9 @@ public class ForumService {
 	
 	/**
 	 * Update a forum title.
+	 *
 	 * @param forumID The id of the forum to lock.
-	 * @param title The updated title.
+	 * @param title   The updated title.
 	 * @return The updated forum.
 	 */
 	@Transactional
@@ -161,9 +167,10 @@ public class ForumService {
 			throw new ForumException("No such forum thread.");
 		}
 	}
-
+	
 	/**
 	 * Get the list of all the forum threads.
+	 *
 	 * @return List of all forum threads.
 	 */
 	@Transactional
@@ -171,9 +178,10 @@ public class ForumService {
 		List<Forum> forums = forumRepository.findAll();
 		return forums;
 	}
-
+	
 	/**
 	 * Get all the forums of a user.
+	 *
 	 * @param userID The id of the user.
 	 * @return The list of all forums by the user.
 	 */

@@ -1,7 +1,5 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
-import ca.mcgill.ecse321.petshelter.model.User;
-
 import java.util.Set;
 
 public class ForumDTO {
@@ -42,15 +40,15 @@ public class ForumDTO {
     public void setSubscribers(Set<UserDTO> subscriberss) {
         this.subscribers = subscriberss;
     }
-
+    
     public UserDTO getAuthor() {
         return author;
     }
-
+    
     public void setAuthor(UserDTO author) {
         this.author = author;
     }
-
+    
     public String toString() {
         return "Forum{" +
                 "title='" + title + '\'' +

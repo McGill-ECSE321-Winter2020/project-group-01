@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * Exception thrown when forum services fail.
- * @author mathieu
  *
+ * @author mathieu
  */
 
 @SuppressWarnings("serial")
