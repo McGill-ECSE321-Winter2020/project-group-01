@@ -20,9 +20,10 @@ public class PetDTO {
     private String userName;
 	
 
-	public PetDTO(Date date, String name, String spec, String breed, String desc, byte [] pic, Long id, Gender gen, Advertisement ad, String userName) {
+	public PetDTO(Date date, String name, String spec, String breed, String desc, byte [] pic, Gender gen, Advertisement ad, String userName) {
 		this.dateOfBirth = date;
 		this.name = name;
+		this.description = desc;
 		this.species = spec;
 		this.breed = breed;
 		this.picture = pic;

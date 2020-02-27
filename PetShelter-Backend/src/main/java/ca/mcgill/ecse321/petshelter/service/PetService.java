@@ -32,7 +32,7 @@ public class PetService {
 	public Pet getPet(long petId) {
 		Pet pet = petRepository.findPetById(petId);
 		if(pet == null) {
-			throw new IllegalArgumentException("Pet does not exist.");
+			throw new PetException("Pet does not exist.");
 		} else {
 			return pet;
 		}
@@ -42,7 +42,7 @@ public class PetService {
 	public Pet getPet(PetDTO petDTO) {
 		Pet pet = petRepository.findPetById(petDTO.getId());
 		if(pet == null) {
-			throw new IllegalArgumentException("Pet does not exist.");
+			throw new PetException("Pet does not exist.");
 		} else {
 			return pet;
 		}
@@ -52,7 +52,7 @@ public class PetService {
 	public Set<Pet> getPetsByUser(String userName) {
 		User user = userRepository.findUserByUserName(userName);
 		if (user == null) {
-			throw new IllegalArgumentException("User does not exist.");
+			throw new PetException("User does not exist.");
 		}
 		else {
 			return user.getPets();
@@ -62,7 +62,7 @@ public class PetService {
 	public List<Pet> getPetsByAdvertisement(long adId) {
 		List<Pet> pets = petRepository.findPetByAdvertisement(advertisementRepository.findById(adId));
 		if (pets == null) {
-			throw new IllegalArgumentException("Advertisement does not exist.");
+			throw new PetException("Advertisement does not exist.");
 		}
 		else {
 			return pets;
@@ -78,23 +78,23 @@ public class PetService {
 	public Pet createPet(PetDTO petDTO) {
 		User user = userRepository.findUserByUserName(petDTO.getUserName());
 		if (user == null) {
-			throw new IllegalArgumentException("Cannot add: User does not exist.");
+			throw new PetException("Cannot add: User does not exist.");
 		}
 		if (petDTO.getName().trim() == "" || petDTO.getName() == null) {
-			throw new IllegalArgumentException("Cannot add: A pet needs a name.");
+			throw new PetException("Cannot add: A pet needs a name.");
 		}
 		if (petDTO.getSpecies().trim() == "" || petDTO.getSpecies() == null) {
-			throw new IllegalArgumentException("Cannot add: A pet needs a species.");
+			throw new PetException("Cannot add: A pet needs a species.");
 		}
 		if (petDTO.getBreed().trim() == "" || petDTO.getBreed() == null) {
-			throw new IllegalArgumentException("Cannot add: A pet needs a breed.");
+			throw new PetException("Cannot add: A pet needs a breed.");
 		}
 		if (petDTO.getDescription() == null) {
 			//if the description is null we set it to empty
 			petDTO.setDescription("");
 		}
 		if(petDTO.getGender() == null) {
-			throw new IllegalArgumentException("Cannot add: A pet needs a gender.");
+			throw new PetException("Cannot add: A pet needs a gender.");
 		}
 		Pet pet = new Pet();
 		pet.setName(petDTO.getName());
@@ -118,31 +118,31 @@ public class PetService {
 	public Pet editPet (PetDTO petDTO ) {
 		Pet pet = petRepository.findPetById(petDTO.getId());
 		if(pet == null) {
-			throw new IllegalArgumentException("Cannot edit: Pet does not exist.");
+			throw new PetException("Cannot edit: Pet does not exist.");
 		}
 		if (petDTO.getName().trim() == "" || petDTO.getName() == null) {
-			throw new IllegalArgumentException("Cannot edit: A pet needs a name.");
+			throw new PetException("Cannot edit: A pet needs a name.");
 		}
 		if (petDTO.getSpecies().trim() == "" || petDTO.getSpecies() == null) {
-			throw new IllegalArgumentException("Cannot edit: A pet needs a species.");
+			throw new PetException("Cannot edit: A pet needs a species.");
 		}
 		if (petDTO.getBreed().trim() == "" || petDTO.getBreed() == null) {
-			throw new IllegalArgumentException("Cannot edit: A pet needs a breed.");
+			throw new PetException("Cannot edit: A pet needs a breed.");
 		}
 		if (petDTO.getDescription() == null) {
 			//if the description is null we set it to empty
 			petDTO.setDescription("");
 		}
 		if(petDTO.getGender() == null) {
-			throw new IllegalArgumentException("Cannot edit: A pet needs a gender.");
+			throw new PetException("Cannot edit: A pet needs a gender.");
 		}
 		User oldUser = userRepository.findUserByPet(pet);
 		if(oldUser == null) {
-			throw new IllegalArgumentException("Cannot edit: User not found.");
+			throw new PetException("Cannot edit: User not found.");
 		}
 		User newUser = userRepository.findUserByUserName(petDTO.getUserName());
 		if(newUser == null) {
-			throw new IllegalArgumentException("Cannot edit: User not found.");
+			throw new PetException("Cannot edit: User not found.");
 		}
 		else if(!(newUser.equals(oldUser))) {	//change ownership
 			Set<Pet> oldUserPets = oldUser.getPets();
@@ -172,7 +172,7 @@ public class PetService {
 	public boolean deletePet (PetDTO petDTO) {
 		Pet pet = petRepository.findPetById(petDTO.getId());
 		if (pet == null) {
-			throw new IllegalArgumentException("Cannot delete: Pet does not exist.");
+			throw new PetException("Cannot delete: Pet does not exist.");
 		}
 		else {
 			petRepository.delete(pet);
