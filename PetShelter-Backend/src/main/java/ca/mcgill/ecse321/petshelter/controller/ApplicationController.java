@@ -28,13 +28,11 @@ public class ApplicationController {
 				HttpStatus.OK);
 	}
 
-	/*
 	@GetMapping("/{user}")
 	public ResponseEntity<?> getUserApplication(@PathVariable String user) {
 		return new ResponseEntity<>(applicationService.getAllUserApplications(userRepository.findUserByUserName(user))
 				.stream().map(this::convertToDto).collect(Collectors.toList()), HttpStatus.OK);
 	}
-	*/
 
 	public ApplicationDTO convertToDto(AdoptionApplication application) {
 		ApplicationDTO applicationDTO = new ApplicationDTO();

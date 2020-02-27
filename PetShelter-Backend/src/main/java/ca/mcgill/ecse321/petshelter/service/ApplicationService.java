@@ -36,12 +36,12 @@ public class ApplicationService {
         return applicationRepository.findApplicationByUserUserNameAndAdvertisement(applicant, advertisement);
     }
     
-    /*
+    
     @Transactional
     public List<AdoptionApplication> getAllUserApplications(User name) {
-        return toList(applicationRepository.findAllByUser(name));
+        return toList(applicationRepository.findApplicationsByUser(name));
     }
-    */
+    
     
     //From tutorial
     private <T> List<T> toList(Iterable<T> iterable) {
