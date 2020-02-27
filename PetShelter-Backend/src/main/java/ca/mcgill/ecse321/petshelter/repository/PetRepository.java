@@ -17,5 +17,4 @@ import ca.mcgill.ecse321.petshelter.model.User;
 public interface PetRepository extends CrudRepository<Pet, Long> {
     
     Pet findPetByNameAndAdvertisement(String name, Advertisement advertisement);
-    //List<Pet> findAllByUser(User user); //ADDED THIS. NEED TO ADD CORRESPONDING TEST CASE.
 }
