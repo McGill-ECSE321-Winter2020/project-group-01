@@ -64,6 +64,7 @@ public class UserController {
 	 */
 	@PostMapping("/register")
 	public ResponseEntity<?> createUser(@RequestBody(required = true) UserDTO user) {
+		System.out.println("Registration "+user.toString());
 		try {
 			UserDTO user1 = userService.createUser(user);
 			return new ResponseEntity<>(user1, HttpStatus.CREATED); // return created HTTP status
@@ -84,7 +85,7 @@ public class UserController {
 	 * @param token randomly generated token
 	 * @return check if it was clicked within 24h
 	 */
-	@GetMapping("/regitrationConfirmation")
+	@GetMapping("/registrationConfirmation")
 	public ResponseEntity<?> confirmRegistration(@RequestParam("token") String token) {
 		// find a user by the verif. token; if none is found, the user does not exist
 		User user = userRepo.findUserByApiToken(token);
@@ -190,10 +191,9 @@ public class UserController {
 	
 	/**
 	 * Returns a specified user's information. The requester must be an admin.
-	 *
-	 * @param userName user targetted
-	 * @param admin is person that request admin
-	 * @return user profile
+	 * @param userName
+	 * @param token
+	 * @return
 	 */
 	@GetMapping("/{username}")
 	public ResponseEntity<?> getUser(@PathVariable String userName, @RequestHeader String token) {
@@ -213,11 +213,11 @@ public class UserController {
 	
 	/**
 	 * Updates a specified user's information. Only the user tied to the account can
-	 * make the request.
-	 *
-	 * @param userName user that we want to update
-	 * @param admin check if admin
-	 * @return response code
+	 * 	 * make the request.
+	 * @param userName
+	 * @param userDto
+	 * @param token
+	 * @return
 	 */
 	@PutMapping("/{username}")
 	// note: the username and email cannot be changed
@@ -240,10 +240,8 @@ public class UserController {
 	
 	/**
 	 * Returns all users' information. The requester must be an admin.
-	 *
-	 * @param userName usernamrs
-	 * @param admin check if user is admin
-	 * @return list of all username
+	 * @param token
+	 * @return
 	 */
 	@GetMapping("/all")
 	public ResponseEntity<?> getUsers(@RequestHeader String token) {
