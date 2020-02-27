@@ -1,16 +1,8 @@
 language: java
-env:
-  - NODE_VERSION=0.12
-  
 before_install:
 - chmod +x gradlew
-install:
-  - nvm install $NODE_VERSION
-  - npm install
-  - npm install newman
 script:
 - gradle build
-- newman run ./PetShelter-Backend/APItest/DonationAPI.json
 deploy:
   provider: heroku
   api_key: 03273874-ad50-428a-b7d2-d55ecd114926
