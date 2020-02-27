@@ -13,5 +13,4 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 public interface PetRepository extends CrudRepository<Pet, Long> {
     
     Pet findPetByNameAndAdvertisement(String name, Advertisement advertisement);
-    //List<Pet> findAllByUser(User user); //ADDED THIS. NEED TO ADD CORRESPONDING TEST CASE.
 }

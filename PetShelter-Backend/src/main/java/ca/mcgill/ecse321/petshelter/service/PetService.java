@@ -31,12 +31,13 @@ public class PetService {
         return petRepository.findPetByNameAndAdvertisement(name, advertisement);
     }
     
-    /*
+    
     @Transactional
     public List<Pet> getAllUserPets(User user) {
-    	return petRepository.findAllByUser(user);
+    	List<Pet> pets = new ArrayList<Pet>();
+    	pets.addAll(user.getPets());
+    	return pets;
     }
-    */
     
     //From tutorial
     private <T> List<T> toList(Iterable<T> iterable) {
