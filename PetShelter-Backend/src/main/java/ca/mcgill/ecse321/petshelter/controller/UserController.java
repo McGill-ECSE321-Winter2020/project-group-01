@@ -187,7 +187,7 @@ public class UserController {
 		}
 		
 	}
-	
+	//todo fix cette pisse @louismouisine
 	/**
 	 * Returns a specified user's information. The requester must be an admin.
 	 * @param userName
