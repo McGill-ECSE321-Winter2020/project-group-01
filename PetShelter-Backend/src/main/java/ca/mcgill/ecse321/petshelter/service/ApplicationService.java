@@ -7,7 +7,6 @@ import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import ca.mcgill.ecse321.petshelter.repository.ApplicationRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,8 +32,8 @@ public class ApplicationService {
     }
     
     @Transactional
-    public AdoptionApplication getApplication(User applicant, Advertisement advertisement) {
-        return applicationRepository.findApplicationByUserAndAdvertisement(applicant, advertisement);
+    public AdoptionApplication getApplication(String applicant, Advertisement advertisement) {
+        return applicationRepository.findApplicationByUserUserNameAndAdvertisement(applicant, advertisement);
     }
     
     /*

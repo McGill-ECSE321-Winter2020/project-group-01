@@ -40,15 +40,15 @@ public class ForumDTO {
     public void setSubscribers(Set<UserDTO> subscriberss) {
         this.subscribers = subscriberss;
     }
-
+    
     public UserDTO getAuthor() {
         return author;
     }
-
+    
     public void setAuthor(UserDTO author) {
         this.author = author;
     }
-
+    
     public String toString() {
         return "Forum{" +
                 "title='" + title + '\'' +
