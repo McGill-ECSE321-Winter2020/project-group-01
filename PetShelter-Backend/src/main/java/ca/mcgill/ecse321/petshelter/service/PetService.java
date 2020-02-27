@@ -32,14 +32,18 @@ public class PetService {
 	@Transactional
 	public Pet getPet(long petId) {
 		Pet pet = petRepository.findPetById(petId);
-		return pet;
+		if(pet == null) {
+			throw new IllegalArgumentException("Pet does not exist.");
+		} else {
+			return pet;
+		}
 	}
 	
 	@Transactional
 	public List<Pet> getPetsByUser(String userName) {
 		User user = userRepository.findUserByUserName(userName);
 		if (user == null) {
-			throw new IllegalArgumentException("User does not exist");
+			throw new IllegalArgumentException("User does not exist.");
 		}
 		else {
 			return toList(user.getPets());
@@ -49,7 +53,7 @@ public class PetService {
 	public List<Pet> getPetsByAdvertisement(long adId) {
 		List<Pet> pets = petRepository.findPetByAdvertisement(advertisementRepository.findById(adId));
 		if (pets == null) {
-			throw new IllegalArgumentException("Advertisement does not exist");
+			throw new IllegalArgumentException("Advertisement does not exist.");
 		}
 		else {
 			return pets;
@@ -66,23 +70,23 @@ public class PetService {
 			byte[] picture, String userName, Gender gender) {
 		User user = userRepository.findUserByUserName(userName);
 		if (user == null) {
-			throw new IllegalArgumentException("User does not exist: a pet needs a user");
+			throw new IllegalArgumentException("User does not exist: a pet needs a user.");
 		}
 		if (name.trim() == "" || name == null) {
-			throw new IllegalArgumentException("A pet needs a name");
+			throw new IllegalArgumentException("A pet needs a name.");
 		}
 		if (species.trim() == "" || species == null) {
-			throw new IllegalArgumentException("A pet needs a species");
+			throw new IllegalArgumentException("A pet needs a species.");
 		}
 		if (breed.trim() == "" || breed == null) {
-			throw new IllegalArgumentException("A pet needs a breed");
+			throw new IllegalArgumentException("A pet needs a breed.");
 		}
 		if (description == null) {
 			//if the description is null we set it to empty
 			description = "";
 		}
 		if(gender == null) {
-			throw new IllegalArgumentException("A pet needs a gender");
+			throw new IllegalArgumentException("A pet needs a gender.");
 		}
 		Pet pet = new Pet();
 		pet.setName(name);
@@ -105,7 +109,7 @@ public class PetService {
 	public boolean deletePet (long petId) {
 		Pet pet = petRepository.findPetById(petId);
 		if (pet == null) {
-			throw new IllegalArgumentException("Cannot delete: Pet does not exist");
+			throw new IllegalArgumentException("Cannot delete: Pet does not exist.");
 		}
 		else {
 			petRepository.delete(pet);
@@ -119,24 +123,24 @@ public class PetService {
 		
 		Pet pet = petRepository.findPetById(petId);
 		if(pet == null) {
-			throw new IllegalArgumentException("Cannot edit: Pet does not exist");
+			throw new IllegalArgumentException("Cannot edit: Pet does not exist.");
 
 		}
 		if (name.trim() == "" || name == null) {
-			throw new IllegalArgumentException("A pet needs a name");
+			throw new IllegalArgumentException("A pet needs a name.");
 		}
 		if (species.trim() == "" || species == null) {
-			throw new IllegalArgumentException("A pet needs a species");
+			throw new IllegalArgumentException("A pet needs a species.");
 		}
 		if (breed.trim() == "" || breed == null) {
-			throw new IllegalArgumentException("A pet needs a breed");
+			throw new IllegalArgumentException("A pet needs a breed.");
 		}
 		if (description == null) {
 			//if the description is null we set it to empty
 			description = "";
 		}
 		if(gender == null) {
-			throw new IllegalArgumentException("A pet needs a gender");
+			throw new IllegalArgumentException("A pet needs a gender.");
 		}
 		pet.setName(name);
 		pet.setDateOfBirth(dateOfBirth);
