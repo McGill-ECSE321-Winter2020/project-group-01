@@ -2,7 +2,7 @@ language: java
 before_install:
 - chmod +x gradlew
 install:
--npm install newman
+- npm install newman
 script:
 - gradle build
 - newman run project-group-01/PetShelter-Backend/APItest/DonationAPI.json
