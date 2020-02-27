@@ -39,16 +39,6 @@ public class UserService {
 		this.emailingService = emailingService;
 	}
 
-	// converts a user into a userdto
-	static UserDTO userToDto(User user) {
-		UserDTO userDto = new UserDTO();
-		userDto.setEmail(user.getEmail());
-		userDto.setUsername(user.getUserName());
-		userDto.setUserType(user.getUserType());
-		userDto.setPicture(user.getPicture());
-		return userDto;
-	}
-
 	/**
 	 * Creates a user if the input is valid and sends an email to the specified
 	 * email address.
