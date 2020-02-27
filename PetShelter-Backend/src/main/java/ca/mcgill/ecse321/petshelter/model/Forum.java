@@ -13,14 +13,14 @@ public class Forum {
     private User author;
     
     public boolean isLocked() {
-		return isLocked;
-	}
-
-	public void setLocked(boolean isLocked) {
-		this.isLocked = isLocked;
-	}
-
-	public String getTitle() {
+        return isLocked;
+    }
+    
+    public void setLocked(boolean isLocked) {
+        this.isLocked = isLocked;
+    }
+    
+    public String getTitle() {
         return this.title;
     }
     
@@ -55,12 +55,16 @@ public class Forum {
     public void setSubscribers(Set<User> subscriberss) {
         this.subscribers = subscriberss;
     }
-
+    
     @ManyToOne
-    public User getAuthor() { return this.author; }
-
-    public void setAuthor(User user) { this.author = user; }
-
+    public User getAuthor() {
+        return this.author;
+    }
+    
+    public void setAuthor(User user) {
+        this.author = user;
+    }
+    
     
     @Override
     public String toString() {

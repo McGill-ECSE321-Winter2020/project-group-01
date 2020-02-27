@@ -39,14 +39,25 @@ public class UserService {
 		this.emailingService = emailingService;
 	}
 
+	// converts a user into a userdto
+	static UserDTO userToDto(User user) {
+		UserDTO userDto = new UserDTO();
+		userDto.setEmail(user.getEmail());
+		userDto.setUsername(user.getUserName());
+		userDto.setUserType(user.getUserType());
+		userDto.setPicture(user.getPicture());
+		return userDto;
+	}
+
 	/**
 	 * Creates a user if the input is valid and sends an email to the specified
 	 * email address.
-	 * 
+	 *
 	 * @param user
 	 * @return
 	 */
-	public UserDTO createUser(UserDTO user) throws RegisterException{
+
+	public UserDTO createUser(UserDTO user) throws RegisterException {
 		if (user.getPassword() == null) {
 			throw new RegisterException("Password can't be null.");
 		}
@@ -60,7 +71,6 @@ public class UserService {
 			throw new RegisterException("Email is already taken.");
 		if (userRepository.findUserByUserName(user.getUsername()) != null)
 			throw new RegisterException("Username is already taken.");
-		
 		// create the user and set its attributes
 		User user1 = new User();
 		user1.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -76,34 +86,9 @@ public class UserService {
 		return userToDto(user1);
 	}
 
-
-	/**
-	 * This is the update method; only the password can be updated (design decision).
-	 * @param passwordDto
-	 * @return
-	 */
-	public UserDTO updateUser(PasswordChangeDTO passwordDto) {
-		// check if new password is valid
-		String constraintViolation = isPasswordChangeValid(passwordDto);
-		if (constraintViolation != null) {
-			throw new IllegalArgumentException(constraintViolation);
-		}
-		User user = userRepository.findUserByUserName(passwordDto.getUserName());
-		if (user == null) {
-			throw new IllegalArgumentException("No user was found");
-		}
-		// the old password must be correct 
-		if (!passwordEncoder.matches(passwordDto.getOldPassword(), user.getPassword())) {
-			throw new IllegalArgumentException("Wrong password");
-		}
-		user.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
-		userRepository.save(user);
-		return userToDto(user);
-	}
-
 	/**
 	 * Generates a strong temporary password to be used in case of password reset.
-	 * 
+	 *
 	 * @return
 	 */
 	public String generateRandomPassword() {
@@ -121,7 +106,7 @@ public class UserService {
 	 * Validates the UserDto it is given. Email must be an email, and fields must
 	 * not be empty. Returns null if no error is found. Returns an error message if
 	 * a violation is found.
-	 * 
+	 *
 	 * @param userDto
 	 * @return
 	 */
@@ -135,7 +120,7 @@ public class UserService {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Validates the PasswordChangeDto it is given. The new password must satisfy
 	 * constraitns. Returns null if no error is found.
@@ -153,9 +138,38 @@ public class UserService {
 		}
 		return null;
 	}
-	
+
+	/**
+	 * This is the update method; only the password can be updated (design decision).
+	 *
+	 * @param passwordDto
+	 * @return
+	 */
+	public UserDTO updateUser(PasswordChangeDTO passwordDto) throws IllegalArgumentException{
+		if(passwordDto.getNewPassword()==null || passwordDto.getNewPassword().trim().length()==0){
+			throw new IllegalArgumentException("Password cannot be null.");
+		}
+		// check if new password is valid
+		String constraintViolation = isPasswordChangeValid(passwordDto);
+		if (constraintViolation != null) {
+			throw new IllegalArgumentException(constraintViolation);
+		}
+		User user = userRepository.findUserByUserName(passwordDto.getUserName());
+		if (user == null) {
+			throw new IllegalArgumentException("No user was found");
+		}
+		// the old password must be correct
+		if (!passwordEncoder.matches(passwordDto.getOldPassword(), user.getPassword())) {
+			throw new IllegalArgumentException("Wrong password");
+		}
+		user.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
+		userRepository.save(user);
+		return userToDto(user);
+	}
+
 	/**
 	 * Deletes a user.
+	 *
 	 * @param userDTO
 	 * @return
 	 */
@@ -179,4 +193,3 @@ public class UserService {
 		return userDto;
 	}
 }
-

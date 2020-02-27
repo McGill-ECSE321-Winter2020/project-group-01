@@ -1,13 +1,5 @@
 package ca.mcgill.ecse321.petshelter.controller;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import ca.mcgill.ecse321.petshelter.dto.CommentDTO;
 import ca.mcgill.ecse321.petshelter.dto.ForumDTO;
 import ca.mcgill.ecse321.petshelter.dto.UserDTO;
@@ -18,24 +10,50 @@ import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.ForumRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.ForumService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/forum")
 public class ForumController {
-
+	
 	@Autowired
 	ForumRepository forumRepository;
-
+	
 	@Autowired
 	UserRepository userRepository;
-
+	
 	@Autowired
 	ForumService forumService;
-
+	
+	/**
+	 * Convert a forum thread to a forum DTO.
+	 *
+	 * @param forum The forum to convert.
+	 * @return A forum DTO.
+	 */
+	static ForumDTO forumToDto(Forum forum) {
+		ForumDTO forumDTO = new ForumDTO();
+		Set<UserDTO> subscribers = new HashSet<UserDTO>();
+		Set<CommentDTO> comments = new HashSet<CommentDTO>();
+		forum.getSubscribers().forEach(u -> subscribers.add(UserController.userToDto(u)));
+		forum.getComments().forEach(c -> comments.add(CommentController.commentToDto(c)));
+		forumDTO.setId(forum.getId());
+		forumDTO.setTitle(forum.getTitle());
+		forumDTO.setComments(comments);
+		forumDTO.setSubscribers(subscribers);
+		return forumDTO;
+	}
+	
 	/**
 	 * Gets the desired forum and its associated comments.
-	 * 
+	 *
 	 * @param id Forum ID of the desired forum.
 	 * @return The forum DTO.
 	 */
@@ -48,9 +66,10 @@ public class ForumController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
 	/**
 	 * Get all the forum threads of a user.
+	 *
 	 * @param username The username of the user which is the author of all desired comments.
 	 * @return The list of all forums of a user.
 	 */
@@ -59,7 +78,7 @@ public class ForumController {
 		return forumService.getForumsByUser(userRepository.findUserByUserName(username).getId()).stream()
 				.map(ForumController::forumToDto).collect(Collectors.toList());
 	}
-
+	
 	/**
 	 * Gets all existing forums thread.
 	 *
@@ -77,9 +96,10 @@ public class ForumController {
 		}
 		return new ResponseEntity<>(forumsDto, HttpStatus.OK);
 	}
-
+	
 	/**
 	 * Create new forum thread.
+	 *
 	 * @param title The title of the forum to create.
 	 * @param token The session token of the user.
 	 * @return The created forum.
@@ -94,12 +114,13 @@ public class ForumController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
 	/**
 	 * Update the title of a forum thread.
+	 *
 	 * @param forumId The id of a given forum.
-	 * @param title The new title of the forum.
-	 * @param token The session token of the user.
+	 * @param title   The new title of the forum.
+	 * @param token   The session token of the user.
 	 * @return The modified forum.
 	 */
 	@PutMapping("/{forumId}")
@@ -118,11 +139,12 @@ public class ForumController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
 	/**
 	 * Lock or unlock a given forum. By design, only admin are allowed to lock and unlock forums.
-	 * @param forumID The id of a given forum.
-	 * @param token The session token of a user.
+	 *
+	 * @param forumID  The id of a given forum.
+	 * @param token    The session token of a user.
 	 * @param isLocked The status to set the forum thread to.
 	 * @return The modified forum.
 	 */
@@ -142,11 +164,12 @@ public class ForumController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
 	/**
 	 * Delete a forum thread from the database. By design, only an admin may delete a forum thread.
+	 *
 	 * @param forumID Forum id of the forum to delete.
-	 * @param token Session token of the user.
+	 * @param token   Session token of the user.
 	 * @return The deleted forum.
 	 */
 	@DeleteMapping("/{forumID}")
@@ -157,7 +180,7 @@ public class ForumController {
 			// delete all comments
 			
 			Set<Comment> comments = forum.get().getComments();
-			for (Iterator<Comment> it = comments.iterator(); it.hasNext();) {
+			for (Iterator<Comment> it = comments.iterator(); it.hasNext(); ) {
 				it.next();
 				it.remove();
 			}
@@ -166,11 +189,12 @@ public class ForumController {
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
-
+	
 	/**
 	 * Subscribe to a forum.
+	 *
 	 * @param forumID The id of the forum.
-	 * @param token The session token of the user.
+	 * @param token   The session token of the user.
 	 * @return The modify forum thread.
 	 */
 	@PutMapping("/subscribe/{forumID}")
@@ -184,11 +208,12 @@ public class ForumController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
 	/**
 	 * Unsubscribe to from a forum.
+	 *
 	 * @param forumID The id of the forum.
-	 * @param token The session token of the user.
+	 * @param token   The session token of the user.
 	 * @return The modify forum thread.
 	 */
 	@PutMapping("/unsubscribe/{forumID}")
@@ -201,24 +226,5 @@ public class ForumController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-	}
-
-	/**
-	 * Convert a forum thread to a forum DTO.
-	 * 
-	 * @param forum The forum to convert.
-	 * @return A forum DTO.
-	 */
-	static ForumDTO forumToDto(Forum forum) {
-		ForumDTO forumDTO = new ForumDTO();
-		Set<UserDTO> subscribers = new HashSet<UserDTO>();
-		Set<CommentDTO> comments = new HashSet<CommentDTO>();
-		forum.getSubscribers().forEach(u -> subscribers.add(UserController.userToDto(u)));
-		forum.getComments().forEach(c -> comments.add(CommentController.commentToDto(c)));
-		forumDTO.setId(forum.getId());
-		forumDTO.setTitle(forum.getTitle());
-		forumDTO.setComments(comments);
-		forumDTO.setSubscribers(subscribers);
-		return forumDTO;
 	}
 }
