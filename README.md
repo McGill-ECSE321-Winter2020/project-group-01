@@ -7,6 +7,9 @@ posted by a user or by the shelter itself. The system is implemented in teams of
 requires requirements engineering, software development, validation of the system through unit testing and automation of the software
 delivery process.
 
+## Running the Project
+The backend is hosted at https://petshelter-backend.herokuapp.com/. The backend can be run locally by cloning this repository, and running the PetShelter-Backend repository as a Spring Boot App.
+
 ### About us
 We are 5 McGill University students from the Faculty of Engineering
 

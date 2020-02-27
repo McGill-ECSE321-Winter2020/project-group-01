@@ -7,6 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Arrays;
 
 public class UserDTO {
 	
@@ -17,7 +18,7 @@ public class UserDTO {
 	
 	@NotNull(message = "Username cannot be empty.")
 	@NotEmpty(message = "Username cannot be empty.")
-	@Size(min = 4, max = 20, message="Username must have between 4 and 20 characters.")
+	@Size(min = 8, message = "Username must have at least 8 characters.")
 	private String username;
 	
 	@NotNull(message = "Password cannot be empty.")
@@ -121,5 +122,17 @@ public class UserDTO {
 	 */
 	public void setToken(String token) {
 		this.token = token;
+	}
+	
+	@Override
+	public String toString() {
+		return "UserDTO{" +
+				"email='" + email + '\'' +
+				", username='" + username + '\'' +
+				", password='" + password + '\'' +
+				", token='" + token + '\'' +
+				", userType=" + userType +
+				", picture=" + Arrays.toString(picture) +
+				'}';
 	}
 }

@@ -21,7 +21,7 @@ public class PetShelterApplication {
 
   @RequestMapping("/")
   public String greeting(){
-    return "This is a test";
+    return "Does it actually deploy automatically with travis to heroku?";
   }
 
 }

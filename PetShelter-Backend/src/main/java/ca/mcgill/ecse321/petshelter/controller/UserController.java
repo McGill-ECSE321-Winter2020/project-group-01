@@ -1,31 +1,20 @@
 package ca.mcgill.ecse321.petshelter.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import ca.mcgill.ecse321.petshelter.dto.PasswordChangeDTO;
 import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
-import ca.mcgill.ecse321.petshelter.service.EmailingService;
-import ca.mcgill.ecse321.petshelter.service.JWTTokenProvider;
-import ca.mcgill.ecse321.petshelter.service.RegisterException;
-import ca.mcgill.ecse321.petshelter.service.UserService;
+import ca.mcgill.ecse321.petshelter.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author louis User controller class - allows for creation of users, login of
@@ -43,33 +32,41 @@ public class UserController {
 
 	@Autowired
 	private JWTTokenProvider jwtTokenProvider;
-
+	
 	@Autowired
 	private UserRepository userRepo;
-
+	
 	@Autowired
 	private EmailingService emailingService;
-
+	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
+	
+	// converts a user into a userdto
+	static UserDTO userToDto(User user) {
+		UserDTO userDto = new UserDTO();
+		userDto.setEmail(user.getEmail());
+		userDto.setUsername(user.getUserName());
+		userDto.setUserType(user.getUserType());
+		userDto.setPicture(user.getPicture());
+		return userDto;
+	}
+	
 	/**
 	 * Creates a user account. The Request body is a UserDTO aka email, password
 	 * username and UserType are provided. The method also validates if the
 	 * username/email are already in use and if the any of the input is empty. Also
 	 * checks if the email is an email. Upon registration, an email with an API
 	 * token is sent to the user's email.
-	 * 
+	 *
 	 * @param user UserDTO
-	 * @return
+	 * @return user's parameter
 	 */
 	@PostMapping("/register")
 	public ResponseEntity<?> createUser(@RequestBody(required = true) UserDTO user) {
 		try {
-			User user1 = userService.addUser(user);
-			user.setUserType(user1.getUserType());
-			user.setToken(user1.getApiToken());
-			return new ResponseEntity<>(user, HttpStatus.CREATED); // return created HTTP status
+			UserDTO user1 = userService.createUser(user);
+			return new ResponseEntity<>(user1, HttpStatus.CREATED); // return created HTTP status
 		}
 		// If one cannot log into the sender's email or if the message fails to be sent
 		catch (MailException x) {
@@ -80,36 +77,14 @@ public class UserController {
 			return new ResponseEntity<>(x.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-
-	/**
-	 * Checks if the user can be logged in. User's email must be verified, and the
-	 * account must exist.
-	 * 
-	 * @param user
-	 * @return
-	 */
-	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody UserDTO user) {
-		try {
-			User ue = userService.loginUser(user);
-			user.setUserType(ue.getUserType());
-			user.setEmail(ue.getEmail());
-			user.setUsername(ue.getUserName());
-			user.setPassword(null);
-			user.setToken(ue.getApiToken());
-			return new ResponseEntity<>(user, HttpStatus.OK);
-		} catch (ca.mcgill.ecse321.petshelter.service.LoginException ex) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-	}
-
+	
 	/**
 	 * Verification of account through email.
-	 * 
-	 * @param token
-	 * @return
+	 *
+	 * @param token randomly generated token
+	 * @return check if it was clicked within 24h
 	 */
-	@GetMapping("/regitrationConfirmation")
+	@GetMapping("/registrationConfirmation")
 	public ResponseEntity<?> confirmRegistration(@RequestParam("token") String token) {
 		// find a user by the verif. token; if none is found, the user does not exist
 		User user = userRepo.findUserByApiToken(token);
@@ -128,12 +103,12 @@ public class UserController {
 		userRepo.save(user);
 		return new ResponseEntity<>("Account validated", HttpStatus.OK);
 	}
-
+	
 	/**
 	 * Resets the password and emails the user a link with the new password.
-	 * 
-	 * @param email
-	 * @return
+	 *
+	 * @param email user's email to reset password
+	 * @return confirmation that email has been sent
 	 */
 	@PostMapping("/resetPassword")
 	public ResponseEntity<?> resetPassword(@RequestBody UserDTO email) {
@@ -157,28 +132,49 @@ public class UserController {
 			return new ResponseEntity<>(x.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
 	/**
-	 * Allows users to change passwords.
-	 * 
-	 * @param passwords
-	 * @return
+	 * Checks if the user can be logged in. User's email must be verified, and the
+	 * account must exist.
+	 *
+	 * @param user user's login credentials
+	 * @return logged in or not
 	 */
-	@PostMapping("/changePassword")
-	public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDTO passwordDto) {
-		
-		return userService.changeUserPassword(passwordDto);
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@RequestBody UserDTO user) {
+		try {
+			User ue = userRepo.findUserByUserName(user.getUsername());
+			if (ue == null) {
+				throw new LoginException("Username not found");
+			}
+			// if the password doesnt match the saved one
+			String expectedPW = ue.getPassword();
+			if (!passwordEncoder.matches(user.getPassword(), expectedPW)) {
+				throw new LoginException("Incorrect password");
+			}
+			// if the user has not verified their account through email
+			if (!ue.isIsEmailValidated())
+				throw new LoginException("Account not verified");
+			user.setUserType(ue.getUserType());
+			user.setEmail(ue.getEmail());
+			user.setUsername(ue.getUserName());
+			user.setPassword(null);
+			user.setToken(ue.getApiToken());
+			return new ResponseEntity<>(user, HttpStatus.OK);
+		} catch (ca.mcgill.ecse321.petshelter.service.LoginException ex) {
+			return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
-
+	
 	/**
 	 * Deletes a user. The person making the request must be an admin.
-	 * 
-	 * @param userName
-	 * @return
+	 *
+	 * @param userName user's account to delete
+	 * @return delete was successful or not
 	 */
 	@DeleteMapping("/{userName}")
-	public ResponseEntity<?> deleteUser(@PathVariable String userName, @RequestBody UserDTO admin) {
-		User requester = userRepo.findUserByUserName(admin.getUsername());
+	public ResponseEntity<?> deleteUser(@PathVariable String userName, @RequestHeader String token) {
+		User requester = userRepo.findUserByApiToken(token);
 		if (requester != null && requester.getUserType().equals(UserType.ADMIN)) {
 			// find the deleted user by username
 			User user = userRepo.findUserByUserName(userName);
@@ -189,19 +185,18 @@ public class UserController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // if the requester is not an admin
 		}
-
+		
 	}
-
+	//todo fix cette pisse @louismouisine
 	/**
 	 * Returns a specified user's information. The requester must be an admin.
-	 * 
 	 * @param userName
-	 * @param admin
+	 * @param token
 	 * @return
 	 */
 	@GetMapping("/{username}")
-	public ResponseEntity<?> getUser(@PathVariable String userName, @RequestBody UserDTO admin) {
-		User requester = userRepo.findUserByUserName(admin.getUsername());
+	public ResponseEntity<?> getUser(@PathVariable String userName, @RequestHeader String token) {
+		User requester = userRepo.findUserByApiToken(token);
 		if (requester != null && requester.getUserType().equals(UserType.ADMIN)) {
 			// find a user by username
 			User user = userRepo.findUserByUserName(userName);
@@ -214,21 +209,24 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
 	/**
 	 * Updates a specified user's information. Only the user tied to the account can
-	 * make the request.
-	 * 
+	 * 	 * make the request.
 	 * @param userName
-	 * @param admin
+	 * @param userDto
+	 * @param token
 	 * @return
 	 */
 	@PutMapping("/{username}")
 	// note: the username and email cannot be changed
-	public ResponseEntity<?> updateUser(@PathVariable String userName, @RequestBody UserDTO userDto) {
+	public ResponseEntity<?> updateUser(@PathVariable String userName, @RequestBody UserDTO userDto,
+			@RequestHeader String token) {
 		// find a user by username
 		User user = userRepo.findUserByUserName(userName);
-		if (user != null) {
+		// the user updating the profile must be the requester, as in it should be his
+		// profile
+		if (user != null && token.equals(user.getApiToken())) {
 			// actually, only the picture is allowed to be updated (design decision)
 			if (userDto.getPicture() != null) {
 				user.setPicture(userDto.getPicture());
@@ -238,17 +236,15 @@ public class UserController {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
 	/**
 	 * Returns all users' information. The requester must be an admin.
-	 * 
-	 * @param userName
-	 * @param admin
+	 * @param token
 	 * @return
 	 */
 	@GetMapping("/all")
-	public ResponseEntity<?> getUsers(@RequestBody UserDTO admin) {
-		User requester = userRepo.findUserByUserName(admin.getUsername());
+	public ResponseEntity<?> getUsers(@RequestHeader String token) {
+		User requester = userRepo.findUserByApiToken(token);
 		if (requester != null && requester.getUserType().equals(UserType.ADMIN)) {
 			List<User> users = new ArrayList<>();
 			try {
@@ -262,14 +258,21 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-
-	// converts a user into a userdto
-	private UserDTO userToDto(User user) {
-		UserDTO userDto = new UserDTO();
-		userDto.setEmail(user.getEmail());
-		userDto.setUsername(user.getUserName());
-		userDto.setUserType(user.getUserType());
-		userDto.setPicture(user.getPicture());
-		return userDto;
+	
+	/**
+	 * Allows users to change passwords.
+	 *
+	 * @param passwordDto password transfer obj
+	 * @return changed password response
+	 */
+	@PostMapping("/changePassword")
+	public ResponseEntity<?> changePassword(@RequestBody PasswordChangeDTO passwordDto) {
+		try {
+			UserDTO user = userService.updateUser(passwordDto);
+			user.setPassword(null);
+			return new ResponseEntity<>(user, HttpStatus.OK);
+		} catch (IllegalArgumentException ex) {
+			return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 }

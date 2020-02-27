@@ -36,7 +36,7 @@ public class Donation {
 	 * </pre>
 	 */
 	private Date date;
-
+	
 	public void setDate(Date value) {
 		this.date = value;
 	}
@@ -44,29 +44,29 @@ public class Donation {
 	public Date getDate() {
 		return this.date;
 	}
-
+	
 	/**
 	 * <pre>
 	 *           1..1     1..1
 	 * Donation ------------------------> Time
 	 *           &lt;       time
 	 * </pre>
-     */
-    private Time time;
-    
-    public void setTime(Time value) {
-        this.time = value;
-    }
-    
-    public Time getTime() {
-        return this.time;
-    }
-    
-    private User user;
-    
-    @ManyToOne
-    public User getUser() {
-        return this.user;
+	 */
+	private Time time;
+	
+	public void setTime(Time value) {
+		this.time = value;
+	}
+	
+	public Time getTime() {
+		return this.time;
+	}
+	
+	private User user;
+	
+	@ManyToOne
+	public User getUser() {
+		return this.user;
     }
     
     public void setUser(User user) {
