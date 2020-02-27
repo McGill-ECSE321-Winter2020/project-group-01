@@ -1,0 +1,3 @@
+To run the tests, use newman
+`newman run FILE`
+UserAndDonationAPI.json is the most up to date one. The contain assertion and token get/set.
