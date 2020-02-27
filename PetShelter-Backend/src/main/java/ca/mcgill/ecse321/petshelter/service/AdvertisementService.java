@@ -16,6 +16,7 @@ import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import ca.mcgill.ecse321.petshelter.repository.PetRepository;
 
+//TODO Javadoc
 @Service
 public class AdvertisementService {
 	@Autowired
@@ -101,8 +102,7 @@ public class AdvertisementService {
 		adDTO.setAdId((long)ad.getId());
 		return ad;		
 	}
-	
-	//TODO change
+
 	@Transactional
 	public Advertisement editAdvertisement(AdvertisementDTO adDTO) {
 		Advertisement ad = advertisementRepository.findAdvertisementById(adDTO.getAdId());

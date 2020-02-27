@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.petshelter.repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -22,4 +23,5 @@ public interface PetRepository extends CrudRepository<Pet, Long>{
 	Pet findPetById(long id);
 	List<Pet> findPetByAdvertisement(Advertisement advertisement);
 	List<Pet> findPetByAdvertisement(Optional<Advertisement> advertisement);
+	Set<Pet> findAll();
 }

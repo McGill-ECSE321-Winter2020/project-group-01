@@ -186,12 +186,12 @@ public class PetShelterPersistence {
         advertisement.setDescription(description);
         advertisement.setIsFulfilled(isFulfiled);
         advertisement.setTitle(title);
-        
+        long advertisementId = advertisement.getId();
         advertisementRepository.save(advertisement);
         advertisement = null;
         
         //asserts if everything can be retrieved from database
-        advertisement = advertisementRepository.findAdvertisementByTitle(title);
+        advertisement = advertisementRepository.findAdvertisementById(advertisementId);
         assertNotNull(advertisement);
         assertEquals(title, advertisement.getTitle());
         assertEquals(description, advertisement.getDescription());

@@ -1,7 +1,5 @@
 package ca.mcgill.ecse321.petshelter.service;
 
-import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -10,13 +8,14 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ca.mcgill.ecse321.petshelter.model.Gender;
+import ca.mcgill.ecse321.petshelter.dto.PetDTO;
 import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import ca.mcgill.ecse321.petshelter.repository.PetRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 
+//TODO Javadoc
 @Service
 public class PetService {
 
@@ -40,16 +39,26 @@ public class PetService {
 	}
 	
 	@Transactional
-	public List<Pet> getPetsByUser(String userName) {
+	public Pet getPet(PetDTO petDTO) {
+		Pet pet = petRepository.findPetById(petDTO.getId());
+		if(pet == null) {
+			throw new IllegalArgumentException("Pet does not exist.");
+		} else {
+			return pet;
+		}
+	}
+	
+	@Transactional
+	public Set<Pet> getPetsByUser(String userName) {
 		User user = userRepository.findUserByUserName(userName);
 		if (user == null) {
 			throw new IllegalArgumentException("User does not exist.");
 		}
 		else {
-			return toList(user.getPets());
+			return user.getPets();
 		}
 	}
-	
+	@Transactional
 	public List<Pet> getPetsByAdvertisement(long adId) {
 		List<Pet> pets = petRepository.findPetByAdvertisement(advertisementRepository.findById(adId));
 		if (pets == null) {
@@ -61,53 +70,107 @@ public class PetService {
 	}
 	
 	@Transactional
-	public List<Pet> getAllPets() {
-		return toList(petRepository.findAll());
+	public Set<Pet> getAllPets() {
+		return petRepository.findAll();
 	}
 	
 	@Transactional
-	public Pet createPet(Date dateOfBirth, String name, String species, String breed, String description,
-			byte[] picture, String userName, Gender gender) {
-		User user = userRepository.findUserByUserName(userName);
+	public Pet createPet(PetDTO petDTO) {
+		User user = userRepository.findUserByUserName(petDTO.getUserName());
 		if (user == null) {
-			throw new IllegalArgumentException("User does not exist: a pet needs a user.");
+			throw new IllegalArgumentException("Cannot add: User does not exist.");
 		}
-		if (name.trim() == "" || name == null) {
-			throw new IllegalArgumentException("A pet needs a name.");
+		if (petDTO.getName().trim() == "" || petDTO.getName() == null) {
+			throw new IllegalArgumentException("Cannot add: A pet needs a name.");
 		}
-		if (species.trim() == "" || species == null) {
-			throw new IllegalArgumentException("A pet needs a species.");
+		if (petDTO.getSpecies().trim() == "" || petDTO.getSpecies() == null) {
+			throw new IllegalArgumentException("Cannot add: A pet needs a species.");
 		}
-		if (breed.trim() == "" || breed == null) {
-			throw new IllegalArgumentException("A pet needs a breed.");
+		if (petDTO.getBreed().trim() == "" || petDTO.getBreed() == null) {
+			throw new IllegalArgumentException("Cannot add: A pet needs a breed.");
 		}
-		if (description == null) {
+		if (petDTO.getDescription() == null) {
 			//if the description is null we set it to empty
-			description = "";
+			petDTO.setDescription("");
 		}
-		if(gender == null) {
-			throw new IllegalArgumentException("A pet needs a gender.");
+		if(petDTO.getGender() == null) {
+			throw new IllegalArgumentException("Cannot add: A pet needs a gender.");
 		}
 		Pet pet = new Pet();
-		pet.setName(name);
-		pet.setDateOfBirth(dateOfBirth);
-		pet.setBreed(breed);
-		pet.setSpecies(species);
-		pet.setDescription(description);
-		pet.setGender(gender);
-		pet.setPicture(picture);
-		Set <Pet> pets = user.getPets();
-		pets.add(pet);
-		user.setPets(pets);
+		pet.setName(petDTO.getName());
+		pet.setDateOfBirth(petDTO.getDateOfBirth());
+		pet.setBreed(petDTO.getBreed());
+		pet.setSpecies(petDTO.getSpecies());
+		pet.setDescription(petDTO.getDescription());
+		pet.setGender(petDTO.getGender());
+		pet.setPicture(petDTO.getPicture());
+		pet.setAdvertisement(petDTO.getAdvertisement());
+		Set<Pet> allUserPets = getPetsByUser(petDTO.getUserName());
+		allUserPets.add(pet);
 		petRepository.save(pet);
 		userRepository.save(user);
+		petDTO.setId(pet.getId());
 	
 		return pet;		
 	}
 	
 	@Transactional
-	public boolean deletePet (long petId) {
-		Pet pet = petRepository.findPetById(petId);
+	public Pet editPet (PetDTO petDTO ) {
+		Pet pet = petRepository.findPetById(petDTO.getId());
+		if(pet == null) {
+			throw new IllegalArgumentException("Cannot edit: Pet does not exist.");
+		}
+		if (petDTO.getName().trim() == "" || petDTO.getName() == null) {
+			throw new IllegalArgumentException("Cannot edit: A pet needs a name.");
+		}
+		if (petDTO.getSpecies().trim() == "" || petDTO.getSpecies() == null) {
+			throw new IllegalArgumentException("Cannot edit: A pet needs a species.");
+		}
+		if (petDTO.getBreed().trim() == "" || petDTO.getBreed() == null) {
+			throw new IllegalArgumentException("Cannot edit: A pet needs a breed.");
+		}
+		if (petDTO.getDescription() == null) {
+			//if the description is null we set it to empty
+			petDTO.setDescription("");
+		}
+		if(petDTO.getGender() == null) {
+			throw new IllegalArgumentException("Cannot edit: A pet needs a gender.");
+		}
+		User oldUser = userRepository.findUserByPet(pet);
+		if(oldUser == null) {
+			throw new IllegalArgumentException("Cannot edit: User not found.");
+		}
+		User newUser = userRepository.findUserByUserName(petDTO.getUserName());
+		if(newUser == null) {
+			throw new IllegalArgumentException("Cannot edit: User not found.");
+		}
+		else if(!(newUser.equals(oldUser))) {	//change ownership
+			Set<Pet> oldUserPets = oldUser.getPets();
+			oldUserPets.remove(pet);
+			oldUser.setPets(oldUserPets);
+			
+			Set<Pet> newUserPets = newUser.getPets();
+			newUserPets.add(pet);
+			newUser.setPets(newUserPets);
+			
+			userRepository.save(oldUser);
+			userRepository.save(newUser);	
+		}
+		pet.setName(petDTO.getName());
+		pet.setDateOfBirth(petDTO.getDateOfBirth());
+		pet.setBreed(petDTO.getBreed());
+		pet.setSpecies(petDTO.getSpecies());
+		pet.setDescription(petDTO.getDescription());
+		pet.setGender(petDTO.getGender());
+		pet.setPicture(petDTO.getPicture());
+		petRepository.save(pet);
+	
+		return pet;
+	}
+	
+	@Transactional
+	public boolean deletePet (PetDTO petDTO) {
+		Pet pet = petRepository.findPetById(petDTO.getId());
 		if (pet == null) {
 			throw new IllegalArgumentException("Cannot delete: Pet does not exist.");
 		}
@@ -116,56 +179,4 @@ public class PetService {
 			return true;
 		}
 	}
-	
-	@Transactional
-	public Pet editPet (Date dateOfBirth, String name, String species, String breed, String description,
-			byte[] picture, Gender gender, long petId) {
-		
-		Pet pet = petRepository.findPetById(petId);
-		if(pet == null) {
-			throw new IllegalArgumentException("Cannot edit: Pet does not exist.");
-
-		}
-		if (name.trim() == "" || name == null) {
-			throw new IllegalArgumentException("A pet needs a name.");
-		}
-		if (species.trim() == "" || species == null) {
-			throw new IllegalArgumentException("A pet needs a species.");
-		}
-		if (breed.trim() == "" || breed == null) {
-			throw new IllegalArgumentException("A pet needs a breed.");
-		}
-		if (description == null) {
-			//if the description is null we set it to empty
-			description = "";
-		}
-		if(gender == null) {
-			throw new IllegalArgumentException("A pet needs a gender.");
-		}
-		pet.setName(name);
-		pet.setDateOfBirth(dateOfBirth);
-		pet.setBreed(breed);
-		pet.setSpecies(species);
-		pet.setDescription(description);
-		pet.setGender(gender);
-		pet.setPicture(picture);
-		petRepository.save(pet);
-	
-		return pet;
-	}
-	
-	/**
-	 * From ECSE321 Tutorial
-	 * @param <T>
-	 * @param iterable
-	 * @return
-	 */
-	private <T> List<T> toList(Iterable<T> iterable){
-		List<T> resultList = new ArrayList<T>();
-		for (T t : iterable) {
-			resultList.add(t);
-		}
-		return resultList;
-	}
-
 }

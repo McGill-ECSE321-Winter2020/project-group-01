@@ -14,20 +14,22 @@ public class PetDTO {
 	private String breed;
 	private String description;
 	private byte[] picture;
-	private long id;
+	private Long id;
     private Gender gender;
-    private AdvertisementDTO advertisement;
+    private Advertisement advertisement;
+    private String userName;
 	
 
-	public PetDTO(Date date, String name, String spec, String breed, String desc, byte [] pic, long id, Gender gen, AdvertisementDTO ad) {
+	public PetDTO(Date date, String name, String spec, String breed, String desc, byte [] pic, Long id, Gender gen, Advertisement ad, String userName) {
 		this.dateOfBirth = date;
 		this.name = name;
 		this.species = spec;
 		this.breed = breed;
 		this.picture = pic;
-		this.id = id;
+		id = null;
 		this.gender = gen;
 		this.advertisement = ad;
+		this.userName = userName;
 	}
 
 
@@ -91,13 +93,15 @@ public class PetDTO {
 	}
 
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
 
-	public void setId(long id) {
-		this.id = id;
+	public void setId(Long id) {
+		if(this.id == null) {
+			this.id = id;
+		}
 	}
 
 
@@ -111,12 +115,22 @@ public class PetDTO {
 	}
 
 
-	public AdvertisementDTO getAdvertisementDTO() {
+	public Advertisement getAdvertisement() {
 		return advertisement;
 	}
 
 
-	public void setAdvertisementDTO(AdvertisementDTO advertisement) {
+	public void setAdvertisement(Advertisement advertisement) {
 		this.advertisement = advertisement;
 	}
+	
+	public String getUserName() {
+		return userName;
+	}
+	
+	public void SetUserName(String userName) {
+		this.userName = userName;
+	}
+	
+	
 }
