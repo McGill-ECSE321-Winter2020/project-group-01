@@ -41,6 +41,7 @@ public class CommentController {
 		commentDTO.setDatePosted(comment.getDatePosted());
 		commentDTO.setId(comment.getId());
 		commentDTO.setText(comment.getText());
+		commentDTO.setTime(comment.getTime());
 		commentDTO.setUser(UserController.userToDto(comment.getUser()));
 		return commentDTO;
 	}
