@@ -12,10 +12,14 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
  */
 //REST endpoint specification
 @RepositoryRestResource(collectionResourceRel = "user_data", path = "user_data")
-public interface UserRepository extends CrudRepository<User, Long>{
+public interface UserRepository extends CrudRepository<User, Long> {
 	
 	User findUserByUserName(String name);
+	
 	User findUserByEmail(String email);
+	
 	User findUserByApiToken(String token);
-	User findUserByPet(Pet pet);
+	
+	User findUserByPets(Pet pet);
+//	User findUserByPet(Pet pet);
 }

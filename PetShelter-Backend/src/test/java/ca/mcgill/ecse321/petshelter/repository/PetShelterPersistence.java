@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
@@ -202,21 +203,21 @@ public class PetShelterPersistence {
         boolean isFulfiled = true;
         
         Advertisement advertisement = new Advertisement();
-        
+    
         //sets advertisement
         advertisement.setDescription(description);
         advertisement.setIsFulfilled(isFulfiled);
         advertisement.setTitle(title);
-        long advertisementId = advertisement.getId();
+        //   long advertisementId = advertisement.getId();
         advertisementRepository.save(advertisement);
         advertisement = null;
-        
+    
         //asserts if everything can be retrieved from database
-        advertisement = advertisementRepository.findAdvertisementById(advertisementId);
-        assertNotNull(advertisement);
-        assertEquals(title, advertisement.getTitle());
-        assertEquals(description, advertisement.getDescription());
-        assertEquals(isFulfiled, advertisement.isIsFulfilled());
+        List<Advertisement> advertisementsDB = advertisementRepository.findAdvertisementByTitle(title);
+        assertNotNull(advertisementsDB);
+        assertEquals(title, advertisementsDB.get(0).getTitle());
+        assertEquals(description, advertisementsDB.get(0).getDescription());
+        assertEquals(isFulfiled, advertisementsDB.get(0).isIsFulfilled());
     }
     
     @Test
@@ -380,8 +381,8 @@ public class PetShelterPersistence {
         assertEquals(advertisement.getTitle(), dbAd.getTitle());
         
         advertisementRepository.deleteById(advertisement.getId());
-        
-        assertNull(advertisementRepository.findAdvertisementByTitle(advertisement.getTitle()));
+    
+        assertEquals(0, advertisementRepository.findAdvertisementByTitle(advertisement.getTitle()).size());
     }
     
     @Test

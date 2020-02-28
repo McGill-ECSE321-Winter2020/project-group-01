@@ -1,19 +1,17 @@
 package ca.mcgill.ecse321.petshelter.service;
 
-import java.util.List;
-import java.util.Set;
-
-import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import ca.mcgill.ecse321.petshelter.dto.PetDTO;
 import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import ca.mcgill.ecse321.petshelter.repository.PetRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Set;
 
 //TODO Javadoc
 @Service
@@ -133,18 +131,17 @@ public class PetService {
 			//if the description is null we set it to empty
 			petDTO.setDescription("");
 		}
-		if(petDTO.getGender() == null) {
+		if (petDTO.getGender() == null) {
 			throw new PetException("Cannot edit: A pet needs a gender.");
 		}
-		User oldUser = userRepository.findUserByPet(pet);
-		if(oldUser == null) {
+		User oldUser = userRepository.findUserByPets(pet);
+		if (oldUser == null) {
 			throw new PetException("Cannot edit: User not found.");
 		}
 		User newUser = userRepository.findUserByUserName(petDTO.getUserName());
-		if(newUser == null) {
+		if (newUser == null) {
 			throw new PetException("Cannot edit: User not found.");
-		}
-		else if(!(newUser.equals(oldUser))) {	//change ownership
+		} else if (!(newUser.equals(oldUser))) {    //change ownership
 			Set<Pet> oldUserPets = oldUser.getPets();
 			oldUserPets.remove(pet);
 			oldUser.setPets(oldUserPets);
