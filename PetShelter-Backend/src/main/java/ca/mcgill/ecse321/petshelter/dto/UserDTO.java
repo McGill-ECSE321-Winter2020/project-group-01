@@ -1,7 +1,7 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
 import ca.mcgill.ecse321.petshelter.model.UserType;
-import ca.mcgill.ecse321.petshelter.passwordvalidator.ValidPassword;
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.ValidPassword;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;

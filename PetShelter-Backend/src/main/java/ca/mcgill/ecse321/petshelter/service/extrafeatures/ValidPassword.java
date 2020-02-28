@@ -1,7 +1,8 @@
-package ca.mcgill.ecse321.petshelter.passwordvalidator;
+package ca.mcgill.ecse321.petshelter.service.extrafeatures;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
+
 import java.lang.annotation.*;
 
 /**

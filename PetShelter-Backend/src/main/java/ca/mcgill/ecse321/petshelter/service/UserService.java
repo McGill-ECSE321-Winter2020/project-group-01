@@ -3,11 +3,14 @@ package ca.mcgill.ecse321.petshelter.service;
 import ca.mcgill.ecse321.petshelter.dto.PasswordChangeDTO;
 import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.User;
+import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import ca.mcgill.ecse321.petshelter.service.exception.RegisterException;
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.EmailingService;
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.JWTTokenProvider;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -48,12 +51,11 @@ public class UserService {
 	 */
 
 	public UserDTO createUser(UserDTO user) throws RegisterException {
-		if (user.getPassword() == null) {
+		if (user.getPassword() == null || user.getPassword().trim().length() == 0) {
 			throw new RegisterException("Password can't be null.");
 		}
 		String validationError = isUserDtoValid(user);
 		if (validationError != null) {
-			System.out.println(validationError);
 			throw new RegisterException(validationError);
 		}
 		// check that the email and username are unique
@@ -69,10 +71,16 @@ public class UserService {
 		user1.setUserType(user.getUserType());
 		String token = jwtTokenProvider.createToken(user1.getUserName());
 		user1.setApiToken(token);
+		// if the user is an admin, no need to validate (there is only one admin)
+		if (user.getUserType().equals(UserType.ADMIN)) {
+			user1.setIsEmailValidated(true);
+		}
+		// otherwise a validation email must be sent to the user
+		else {
+			emailingService.userCreationEmail(user.getEmail(), user.getUsername(), token);
+		}
 		// save it
 		userRepository.save(user1);
-		// Send email
-		emailingService.userCreationEmail(user.getEmail(), user.getUsername(), token);
 		return userToDto(user1);
 	}
 
@@ -130,13 +138,14 @@ public class UserService {
 	}
 
 	/**
-	 * This is the update method; only the password can be updated (design decision).
+	 * This is the update method; only the password can be updated (design
+	 * decision).
 	 *
 	 * @param passwordDto
 	 * @return
 	 */
-	public UserDTO updateUser(PasswordChangeDTO passwordDto) throws IllegalArgumentException{
-		if(passwordDto.getNewPassword()==null || passwordDto.getNewPassword().trim().length()==0){
+	public UserDTO updateUser(PasswordChangeDTO passwordDto) throws IllegalArgumentException {
+		if (passwordDto.getNewPassword() == null || passwordDto.getNewPassword().trim().length() == 0) {
 			throw new IllegalArgumentException("Password cannot be null.");
 		}
 		// check if new password is valid
@@ -158,20 +167,21 @@ public class UserService {
 	}
 
 	/**
-	 * Deletes a user.
+	 * Deletes a user. Returns false if the user could not be deleted.
 	 *
 	 * @param userDTO
 	 * @return
 	 */
-	public ResponseEntity<?> deleteUser(UserDTO userDTO) {
-		User user = userRepository.findUserByUserName(userDTO.getUsername());
+	public boolean deleteUser(String username) {
+		User user = userRepository.findUserByUserName(username);
 		try {
 			userRepository.deleteById(user.getId());
 		} catch (RuntimeException e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return false;
 		}
-		return new ResponseEntity<>(HttpStatus.OK);
+		return true;
 	}
+
 	// converts a user into a userdto
 	static UserDTO userToDto(User user) {
 		UserDTO userDto = new UserDTO();
