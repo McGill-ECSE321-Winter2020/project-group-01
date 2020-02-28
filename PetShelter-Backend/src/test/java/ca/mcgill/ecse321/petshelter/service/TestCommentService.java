@@ -40,7 +40,7 @@ public class TestCommentService {
     private static final long COMMENT_ID = 42;
     private static final String COMMENT_TEXT = "My comment. Hewwo~!";
     private static final Date COMMENT_DATE = Date.valueOf("2006-12-30");
-    private static final Time COMMENT_TIME = Time.valueOf("00:38:54.840");
+    private static final Time COMMENT_TIME = Time.valueOf("00:38:54");
 
     private static final long FORUM_ID = 343;
     private static final long FORUM_LOCKED_ID = 345;
@@ -70,10 +70,9 @@ public class TestCommentService {
                 user.setUserName(USER_NAME);
                 user.setEmail(USER_EMAIL);
                 user.setPassword(USER_PASSWORD);
-                Optional<User> userWrapper = Optional.of(user);
-                return userWrapper;
+                return Optional.of(user);
             } else {
-                return null;
+                return Optional.empty();
             }
         });
 
@@ -101,8 +100,7 @@ public class TestCommentService {
                 forum.setComments(comments);
                 forum.setLocked(false);
                 forum.setSubscribers(subscribers);
-                Optional<Forum> forumWrapper = Optional.of(forum);
-                return forumWrapper;
+                return Optional.of(forum);
             } else if (invocation.getArgument(0).equals(FORUM_LOCKED_ID)) {
                 User user = new User();
                 user.setId(USER_ID);
@@ -126,10 +124,9 @@ public class TestCommentService {
                 forum.setComments(comments);
                 forum.setLocked(true);
                 forum.setSubscribers(subscribers);
-                Optional<Forum> forumWrapper = Optional.of(forum);
-                return forumWrapper;
+                return Optional.of(forum);
             } else {
-                return null;
+                return Optional.empty();
             }
         });
 
@@ -146,10 +143,9 @@ public class TestCommentService {
                 comment.setId(COMMENT_ID);
                 comment.setText(COMMENT_TEXT);
                 comment.setUser(user);
-                Optional<Comment> commentWrapper = Optional.of(comment);
-                return commentWrapper;
+                return Optional.of(comment);
             }
-            return null;
+            return Optional.empty();
         });
 
         lenient().when(commentRepository.findCommentsByUser(any(User.class))).thenAnswer((InvocationOnMock invocation) -> {
@@ -169,7 +165,7 @@ public class TestCommentService {
                 comments.add(comment);
                 return comments;
             }
-            return null;
+            return new ArrayList<Comment>();
         });
 
         lenient().when(commentRepository.findAll()).thenAnswer((InvocationOnMock invocation) -> {
@@ -202,7 +198,7 @@ public class TestCommentService {
     public void testAddComment() { ;
         Comment comment = commentService.addComment(COMMENT_TEXT, FORUM_ID, USER_ID);
         assertEquals(USER_ID, comment.getUser().getId());
-        assertEquals(COMMENT_ID, comment.getId());
+        assertEquals(0, comment.getId());
         assertEquals(COMMENT_TEXT, comment.getText());
     }
 
