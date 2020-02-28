@@ -48,6 +48,7 @@ public class ForumController {
 		forumDTO.setTitle(forum.getTitle());
 		forumDTO.setComments(comments);
 		forumDTO.setSubscribers(subscribers);
+		forumDTO.setAuthor(UserController.userToDto(forum.getAuthor()));
 		return forumDTO;
 	}
 	
