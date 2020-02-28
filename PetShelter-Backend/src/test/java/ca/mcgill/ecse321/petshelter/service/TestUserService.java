@@ -2,11 +2,9 @@ package ca.mcgill.ecse321.petshelter.service;
 
 import ca.mcgill.ecse321.petshelter.dto.PasswordChangeDTO;
 import ca.mcgill.ecse321.petshelter.dto.UserDTO;
-import ca.mcgill.ecse321.petshelter.model.User;
-import ca.mcgill.ecse321.petshelter.model.UserType;
-import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import ca.mcgill.ecse321.petshelter.model.*;
+import ca.mcgill.ecse321.petshelter.repository.*;
 import ca.mcgill.ecse321.petshelter.service.exception.RegisterException;
-
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +15,9 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+
+import java.sql.Date;
+import java.sql.Time;
 
 import static ca.mcgill.ecse321.petshelter.model.UserType.USER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,8 +31,32 @@ public class TestUserService {
 	private static final String USER_NAME = "TestPerson";
 	private static final String USER_EMAIL = "TestPerson@email.com";
 	private static final String USER_PASSWORD = "myP1+abc";
+	
+	private static final double DONATION_AMOUNT = 2.12;
+	private static final Date DONATION_DATE = Date.valueOf("2020-01-22");
+	private static final Time DONATION_TIME = Time.valueOf("11:22:00");
+	
 	@Mock
 	private UserRepository userRepository;
+	
+	@Mock
+	private AdvertisementRepository advertisementRepository;
+	
+	@Mock
+	private ApplicationRepository applicationRepository;
+	
+	@Mock
+	private CommentRepository commentRepository;
+	
+	@Mock
+	private ForumRepository forumRepository;
+	
+	@Mock
+	private PetRepository petRepository;
+	
+	@Mock
+	private DonationRepository donationRepository;
+	
 	@InjectMocks
 	private UserService userService;
 	
@@ -63,7 +88,14 @@ public class TestUserService {
 		
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> invocation.getArgument(0);
 		lenient().when(userRepository.save(any(User.class))).thenAnswer(returnParameterAsAnswer);
-
+		
+		//these are needed to pass the delete methods
+		lenient().when(donationRepository.save(any(Donation.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(advertisementRepository.save(any(Advertisement.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(applicationRepository.save(any(AdoptionApplication.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(petRepository.save(any(Pet.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(commentRepository.save(any(Comment.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(forumRepository.save(any(Forum.class))).thenAnswer(returnParameterAsAnswer);
 	}
 
 	@Test
