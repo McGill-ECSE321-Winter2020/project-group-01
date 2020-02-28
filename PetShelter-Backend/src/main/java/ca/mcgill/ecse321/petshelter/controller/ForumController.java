@@ -67,6 +67,9 @@ public class ForumController {
 		}
 	}
 	
+	
+	//todo, check if the user exists else, it will give a null pointer
+	
 	/**
 	 * Get all the forum threads of a user.
 	 *
@@ -97,6 +100,8 @@ public class ForumController {
 		return new ResponseEntity<>(forumsDto, HttpStatus.OK);
 	}
 	
+	//todo doesnt work with body, only with Header. maybe JSON problem?
+	
 	/**
 	 * Create new forum thread.
 	 *
@@ -104,12 +109,13 @@ public class ForumController {
 	 * @param token The session token of the user.
 	 * @return The created forum.
 	 */
-	@PostMapping("/")
-	public ResponseEntity<?> createForum(@RequestBody String title, @RequestHeader String token) {
+	@PostMapping()
+	public ResponseEntity<?> createForum(@RequestHeader String title, @RequestHeader String token) {
+		System.out.println(title + "  " + token);
 		User user = userRepository.findUserByApiToken(token);
 		if (user != null && title != null && !title.trim().equals("")) {
 			Forum forum = forumService.addForum(title, user);
-			return new ResponseEntity<ForumDTO>(forumToDto(forum), HttpStatus.OK);
+			return new ResponseEntity<>(forumToDto(forum), HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -125,7 +131,7 @@ public class ForumController {
 	 */
 	@PutMapping("/{forumId}")
 	public ResponseEntity<?> updateForum(@PathVariable long forumId, @RequestBody String title,
-										 @RequestHeader String token) {
+										 @RequestBody String token) {
 		User user = userRepository.findUserByApiToken(token);
 		Optional<Forum> oldForum = forumRepository.findById(forumId);
 		if (user != null
