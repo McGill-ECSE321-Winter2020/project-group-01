@@ -6,6 +6,7 @@ import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.CommentRepository;
 import ca.mcgill.ecse321.petshelter.repository.ForumRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -118,7 +119,7 @@ public class TestCommentService {
                 Set<Comment> comments = new HashSet<>();
                 comments.add(comment);
                 Forum forum = new Forum();
-                forum.setId(FORUM_ID);
+                forum.setId(FORUM_LOCKED_ID);
                 forum.setTitle(FORUM_TITLE);
                 forum.setAuthor(user);
                 forum.setComments(comments);
@@ -146,6 +147,26 @@ public class TestCommentService {
                 comment.setUser(user);
                 Optional<Comment> commentWrapper = Optional.of(comment);
                 return commentWrapper;
+            }
+            return null;
+        });
+
+        lenient().when(commentRepository.findCommentsByUser(any(User.class))).thenAnswer((InvocationOnMock invocation) -> {
+            if (((User)invocation.getArgument(0)).getId() == (USER_ID)) {
+                User user = new User();
+                user.setId(USER_ID);
+                user.setUserName(USER_NAME);
+                user.setEmail(USER_EMAIL);
+                user.setPassword(USER_PASSWORD);
+                Comment comment = new Comment();
+                comment.setTime(COMMENT_TIME);
+                comment.setDatePosted(COMMENT_DATE);
+                comment.setId(COMMENT_ID);
+                comment.setText(COMMENT_TEXT);
+                comment.setUser(user);
+                List<Comment> comments = new ArrayList<>();
+                comments.add(comment);
+                return comments;
             }
             return null;
         });
