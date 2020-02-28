@@ -36,7 +36,7 @@ public class CommentController {
 	 * @param comment The comment to convert.
 	 * @return A comment DTO.
 	 */
-	static CommentDTO commentToDto(Comment comment) {
+	public static CommentDTO commentToDto(Comment comment) {
 		CommentDTO commentDTO = new CommentDTO();
 		commentDTO.setDatePosted(comment.getDatePosted());
 		commentDTO.setId(comment.getId());

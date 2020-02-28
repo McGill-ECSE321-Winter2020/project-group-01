@@ -1,9 +1,12 @@
 package ca.mcgill.ecse321.petshelter.service;
 
+import ca.mcgill.ecse321.petshelter.model.Comment;
 import ca.mcgill.ecse321.petshelter.model.Forum;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.ForumRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import ca.mcgill.ecse321.petshelter.service.exception.ForumException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +44,8 @@ public class ForumService {
 		Set<User> user = new HashSet<>();
 		user.add(creator);
 		newForum.setSubscribers(user);
+		Set<Comment> comments = new HashSet<>();
+		newForum.setComments(comments);
 		forumRepository.save(newForum);
 		return newForum;
 	}

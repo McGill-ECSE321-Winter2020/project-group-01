@@ -15,6 +15,7 @@ import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import ca.mcgill.ecse321.petshelter.repository.PetRepository;
+import ca.mcgill.ecse321.petshelter.service.exception.AdvertisementException;
 
 //TODO Javadoc
 @Service

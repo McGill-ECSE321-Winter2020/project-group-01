@@ -1,7 +1,6 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
 import java.sql.Date;
-import java.util.Set;
 
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Gender;
