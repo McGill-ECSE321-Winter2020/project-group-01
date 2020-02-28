@@ -289,5 +289,15 @@ public class TestCommentService {
         assertTrue(thrown.getMessage().contains("No such comment."));
     }
 
+    /**
+     * This test verifies get all comments works.
+     */
+    @Test
+    public void testGetAllComments() {
+        List<Comment> comments = commentService.getComments();
+        assertEquals(1, comments.size()); // List contains a single element.
+        assertEquals(COMMENT_ID, comments.get(0).getId()); // List contains the only comment.
+    }
+
 }
 
