@@ -60,7 +60,7 @@ public class PetService {
 	}
 	@Transactional
 	public List<Pet> getPetsByAdvertisement(long adId) {
-		List<Pet> pets = petRepository.findPetByAdvertisement(advertisementRepository.findById(adId));
+		List<Pet> pets = petRepository.findPetByAdvertisement(advertisementRepository.findAdvertisementById(adId));
 		if (pets == null) {
 			throw new PetException("Advertisement does not exist.");
 		}
