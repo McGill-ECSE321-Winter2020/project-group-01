@@ -47,7 +47,7 @@ public class Forum {
         this.comments = commentss;
     }
     
-    @OneToMany
+    @ManyToMany
     public Set<User> getSubscribers() {
         return this.subscribers;
     }
@@ -56,7 +56,7 @@ public class Forum {
         this.subscribers = subscriberss;
     }
     
-    @ManyToOne
+    @ManyToOne(optional = true)
     public User getAuthor() {
         return this.author;
     }

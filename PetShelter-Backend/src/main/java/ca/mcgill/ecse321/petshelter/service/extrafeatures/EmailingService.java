@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.petshelter.service;
+package ca.mcgill.ecse321.petshelter.service.extrafeatures;
 
 import java.sql.Date;
 import java.sql.Time;

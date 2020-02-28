@@ -1,8 +1,9 @@
 package ca.mcgill.ecse321.petshelter.model;
 
-import ca.mcgill.ecse321.petshelter.passwordvalidator.ValidPassword;
-
 import javax.persistence.*;
+
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.ValidPassword;
+
 import java.util.Arrays;
 import java.util.Set;
 

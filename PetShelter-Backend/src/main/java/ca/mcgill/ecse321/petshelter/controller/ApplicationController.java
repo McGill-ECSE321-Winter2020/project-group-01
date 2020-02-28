@@ -15,39 +15,39 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/application")
 public class ApplicationController {
-
+	
 	@Autowired
 	private ApplicationService applicationService;
 	
 	@Autowired
 	private UserRepository userRepository;
-
-	public ApplicationController() {
-	}
-
+	
+	/**
+	 * @return the list of all applications
+	 */
 	@GetMapping("/all")
 	public ResponseEntity<?> getAllApplications() {
 		return new ResponseEntity<>(
 				applicationService.getAllApplications().stream().map(this::convertToDto).collect(Collectors.toList()),
 				HttpStatus.OK);
 	}
-
+	
+	/**
+	 * @param user user targeted
+	 * @return that user's applications
+	 */
 	@GetMapping("/{user}")
 	public ResponseEntity<?> getUserApplication(@PathVariable String user) {
 		return new ResponseEntity<>(applicationService.getAllUserApplications(userRepository.findUserByUserName(user))
 				.stream().map(this::convertToDto).collect(Collectors.toList()), HttpStatus.OK);
 	}
-
-	public ApplicationDTO convertToDto(AdoptionApplication application) {
-		ApplicationDTO applicationDTO = new ApplicationDTO();
-		applicationDTO.setDescription(application.getDescription());
-		applicationDTO.setUsername(application.getUser().getUserName());
-		applicationDTO.setAdvertisementTitle(application.getAdvertisement().getTitle());
-		applicationDTO.setIsAccepted(application.isIsAccepted());
-
-		return applicationDTO;
-	}
-
+	
+	/**
+	 * Creates an application with the DTO
+	 *
+	 * @param applicationDTO JSON passed by the request body
+	 * @return check if all the fields are good
+	 */
 	@PostMapping()
 	public ResponseEntity<?> createApplication(@RequestBody ApplicationDTO applicationDTO) {
 		AdoptionApplication application = applicationService.createApplication(applicationDTO);
@@ -61,5 +61,14 @@ public class ApplicationController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
+	public ApplicationDTO convertToDto(AdoptionApplication application) {
+		ApplicationDTO applicationDTO = new ApplicationDTO();
+		applicationDTO.setDescription(application.getDescription());
+		applicationDTO.setUsername(application.getUser().getUserName());
+		applicationDTO.setAdvertisementTitle(application.getAdvertisement().getTitle());
+		applicationDTO.setIsAccepted(application.isIsAccepted());
+		
+		return applicationDTO;
+	}
 }
