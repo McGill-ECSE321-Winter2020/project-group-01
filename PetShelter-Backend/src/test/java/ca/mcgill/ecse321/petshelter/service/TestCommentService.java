@@ -1,7 +1,6 @@
 package ca.mcgill.ecse321.petshelter.service;
 
 import ca.mcgill.ecse321.petshelter.model.Comment;
-import ca.mcgill.ecse321.petshelter.model.Donation;
 import ca.mcgill.ecse321.petshelter.model.Forum;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.CommentRepository;
@@ -21,10 +20,11 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.*;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
@@ -171,6 +171,53 @@ public class TestCommentService {
         Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> invocation.getArgument(0);
         lenient().when(commentRepository.save(any(Comment.class))).thenAnswer(returnParameterAsAnswer);
 
+    }
+
+    /**
+     * This test verifies the operation of addComment().
+     */
+    @Test
+    public void testAddComment() { ;
+        Comment comment = commentService.addComment(COMMENT_TEXT, FORUM_ID, USER_ID);
+        assertEquals(USER_ID, comment.getUser().getId());
+        assertEquals(COMMENT_ID, comment.getId());
+        assertEquals(COMMENT_TEXT, comment.getText());
+    }
+
+    /**
+     * This test verifies that comment creation is prevented by the isLocked() flag.
+     */
+    @Test
+    public void testLockedThreadComment() {
+        CommentException thrown = assertThrows(
+                CommentException.class,
+                () -> commentService.addComment(COMMENT_TEXT, FORUM_LOCKED_ID, USER_ID)
+        );
+        assertTrue(thrown.getMessage().contains("Forum thread is locked."));
+    }
+
+    /**
+     * This test verifies that you need a valid forum to create a comment.
+     */
+    @Test
+    public void testMissingThreadComment() {
+        CommentException thrown = assertThrows(
+                CommentException.class,
+                () -> commentService.addComment(COMMENT_TEXT, 0, USER_ID)
+        );
+        assertTrue(thrown.getMessage().contains("No such forum thread."));
+    }
+
+    /**
+     * This test verifies that you need a valid user to create a comment.
+     */
+    @Test
+    public void testMissingUserComment() {
+        CommentException thrown = assertThrows(
+                CommentException.class,
+                () -> commentService.addComment(COMMENT_TEXT, FORUM_ID, 0)
+        );
+        assertTrue(thrown.getMessage().contains("No such user."));
     }
 
 }
