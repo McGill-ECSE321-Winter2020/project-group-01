@@ -6,6 +6,7 @@ import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.CommentRepository;
 import ca.mcgill.ecse321.petshelter.repository.ForumRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import ca.mcgill.ecse321.petshelter.service.exception.CommentException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
