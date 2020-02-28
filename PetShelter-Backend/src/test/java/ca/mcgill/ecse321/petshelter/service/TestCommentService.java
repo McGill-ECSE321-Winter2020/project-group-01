@@ -265,5 +265,29 @@ public class TestCommentService {
         assertTrue(thrown.getMessage().contains("No such comment."));
     }
 
+    /**
+     * This test verify comment deletion works.
+     */
+    @Test
+    public void testCommentDelete() {
+        Comment comment = commentService.deleteComment(COMMENT_ID);
+        assertEquals(USER_ID, comment.getUser().getId());
+        assertEquals(COMMENT_ID, comment.getId());
+        assertEquals(COMMENT_TEXT, comment.getText());
+    }
+
+    /**
+     * This test verifies that an invalid comment ID raises an exception when deleting.
+     */
+    @Test
+    public void testMissingCommentDelete() {
+        String newText = "This is an updated comment text.";
+        CommentException thrown = assertThrows(
+                CommentException.class,
+                () -> commentService.deleteComment(0)
+        );
+        assertTrue(thrown.getMessage().contains("No such comment."));
+    }
+
 }
 
