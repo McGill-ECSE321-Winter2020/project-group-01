@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.petshelter.service;
 
+import ca.mcgill.ecse321.petshelter.model.Comment;
 import ca.mcgill.ecse321.petshelter.model.Forum;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.ForumRepository;
@@ -41,6 +42,8 @@ public class ForumService {
 		Set<User> user = new HashSet<>();
 		user.add(creator);
 		newForum.setSubscribers(user);
+		Set<Comment> comments = new HashSet<>();
+		newForum.setComments(comments);
 		forumRepository.save(newForum);
 		return newForum;
 	}
