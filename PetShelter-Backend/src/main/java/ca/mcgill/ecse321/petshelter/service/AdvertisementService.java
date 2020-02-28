@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ca.mcgill.ecse321.petshelter.dto.AdvertisementDTO;
+import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
 import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Pet;
@@ -25,6 +26,9 @@ public class AdvertisementService {
 
 	@Autowired
 	private PetRepository petRepository;
+	
+	@Autowired
+	private ApplicationService applicationService;
 	
 	@Transactional
 	public Advertisement getAdvertisement(AdvertisementDTO adDTO) {
@@ -89,7 +93,6 @@ public class AdvertisementService {
 			throw new AdvertisementException("An advertisement needs a description");
 		}
 		Set<AdoptionApplication> applications = new HashSet<AdoptionApplication>();
-		applications.addAll(adDTO.getAdoptionApplication());
 		Advertisement ad = new Advertisement();
 		ad.setTitle(adDTO.getTitle());
 		ad.setIsFulfilled(adDTO.isFulfilled());
@@ -132,7 +135,11 @@ public class AdvertisementService {
 			}
 		}
 		Set<AdoptionApplication> applications = new HashSet<AdoptionApplication>();
-		applications.addAll(adDTO.getAdoptionApplication());
+		for (ApplicationDTO app : adDTO.getApplicationDTO()) {
+		  
+		}
+		//TODO change with fixed master 
+		//applications.addAll(adDTO.getAdoptionApplication());
 		ad.setAdoptionApplication(applications);
 		ad.setTitle(adDTO.getTitle());
 		ad.setDescription(adDTO.getDescription());
@@ -148,6 +155,10 @@ public class AdvertisementService {
 	@Transactional 
 	Advertisement deleteAdvertisement(AdvertisementDTO adDTO) {
 		Advertisement ad = getAdvertisement(adDTO);
+		Set<AdoptionApplication> apps = ad.getAdoptionApplication();
+		for(AdoptionApplication app : apps) {
+		    applicationService.deleteApplication(app);
+		}
 		advertisementRepository.delete(ad);
 		return ad;
 	}
@@ -155,7 +166,11 @@ public class AdvertisementService {
 	@Transactional
     public void deleteAdvertisement(Advertisement ad) {
         if(advertisementRepository.findAdvertisementById(ad.getId())!=null) {
-	    advertisementRepository.delete(ad);
+            Set<AdoptionApplication> apps = ad.getAdoptionApplication();
+            for(AdoptionApplication app : apps) {
+                applicationService.deleteApplication(app);
+            }
+            advertisementRepository.delete(ad);
         }
         else {
             throw new AdvertisementException("Cannot delete: Advertisement does not exist.");
