@@ -2,9 +2,8 @@ package ca.mcgill.ecse321.petshelter.service;
 
 import ca.mcgill.ecse321.petshelter.dto.PasswordChangeDTO;
 import ca.mcgill.ecse321.petshelter.dto.UserDTO;
-import ca.mcgill.ecse321.petshelter.model.User;
-import ca.mcgill.ecse321.petshelter.model.UserType;
-import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import ca.mcgill.ecse321.petshelter.model.*;
+import ca.mcgill.ecse321.petshelter.repository.*;
 import ca.mcgill.ecse321.petshelter.service.exception.RegisterException;
 import ca.mcgill.ecse321.petshelter.service.extrafeatures.EmailingService;
 import ca.mcgill.ecse321.petshelter.service.extrafeatures.JWTTokenProvider;
@@ -29,10 +28,19 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 	@Autowired
+	private ApplicationRepository applicationRepository;
+	@Autowired
+	private PetRepository petRepository;
+	@Autowired
+	private CommentRepository commentRepository;
+	@Autowired
 	private UserRepository userRepository;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
+	@Autowired
+	private DonationRepository donationRepository;
+	@Autowired
+	private ForumRepository forumRepository;
 	@Autowired
 	private JWTTokenProvider jwtTokenProvider;
 
@@ -169,11 +177,28 @@ public class UserService {
 	/**
 	 * Deletes a user. Returns false if the user could not be deleted.
 	 *
-	 * @param userDTO
-	 * @return
+	 * @param username username to delete
+	 * @return if we can find the user
 	 */
 	public boolean deleteUser(String username) {
 		User user = userRepository.findUserByUserName(username);
+		List<Donation> donations = donationRepository.findAllByUser(user);
+		for (Donation donation: donations){
+			donation.setUser(null);
+		}
+		List<Forum> forumList = forumRepository.findForumByAuthorUserName(username);
+		for (Forum forum:forumList){
+			forum.setAuthor(null );
+			Set<User> subs = forum.getSubscribers();
+			subs.remove(user);
+		}
+		List<Comment> commentList = commentRepository.findCommentByUserUserName(username);
+		for (Comment comment: commentList){
+			comment.setUser(null);
+		}
+		applicationRepository.deleteAdoptionApplicationsByUserUserName(username);
+		//petRepository.deletePetsByUserUserName(username);
+		user.getPets().clear(); //check if this will work
 		try {
 			userRepository.deleteById(user.getId());
 		} catch (RuntimeException e) {

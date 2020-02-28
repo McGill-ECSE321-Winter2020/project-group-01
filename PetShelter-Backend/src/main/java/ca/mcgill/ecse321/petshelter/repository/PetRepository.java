@@ -20,4 +20,6 @@ public interface PetRepository extends CrudRepository<Pet, Long>{
 	List<Pet> findPetByAdvertisement(Advertisement advertisement);
 	Set<Pet> findAll();
     Pet findPetByNameAndAdvertisement(String petName, Advertisement advertisement);
+  //doesnt work  void deletePetsByUserUserName(String username);
+	
 }

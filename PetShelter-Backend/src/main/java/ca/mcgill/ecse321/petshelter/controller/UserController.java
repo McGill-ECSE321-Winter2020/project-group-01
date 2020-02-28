@@ -284,7 +284,7 @@ public class UserController {
 	
 	/**
 	 * Deletes the user's token from the database. The user is now seen as logged out.
-	 * @param The user's token
+	 * @param token user's token
 	 * @return 
 	 */
 	@GetMapping("/logout")
