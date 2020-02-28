@@ -37,6 +37,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import ca.mcgill.ecse321.petshelter.dto.AdvertisementDTO;
+import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
 import ca.mcgill.ecse321.petshelter.dto.PetDTO;
 import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
@@ -47,6 +48,7 @@ import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import ca.mcgill.ecse321.petshelter.repository.PetRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import ca.mcgill.ecse321.petshelter.service.exception.AdvertisementException;
 
 //TODO Javadoc
 @RunWith(MockitoJUnitRunner.class)
@@ -109,7 +111,7 @@ public class TestAdvertisementService {
     private static final String AD_DESCRIPTION = "testDescription";
     private static final boolean AD_FULLFILLED = false;
     private static List<Long> AD_PET_IDS = new ArrayList<Long>();
-    private static final Set<AdoptionApplication> AD_APPLICATIONS = new HashSet<AdoptionApplication>();
+    private static final Set<ApplicationDTO> AD_APPLICATIONS = new HashSet<ApplicationDTO>();
 
 
     
@@ -127,7 +129,7 @@ public class TestAdvertisementService {
         lenient().when(adDao.findAdvertisementById(any(Long.class))).thenAnswer((InvocationOnMock invocation) -> {
             if(invocation.getArgument(0).equals(adId)) {
                 ad = new Advertisement();
-                ad.setAdoptionApplication(AD_APPLICATIONS);
+               // ad.setAdoptionApplication(AD_APPLICATIONS);
                 ad.setDescription(AD_DESCRIPTION);
                 ad.setIsFulfilled(AD_FULLFILLED);
                 ad.setTitle(AD_TITLE);
@@ -255,7 +257,7 @@ public class TestAdvertisementService {
     }
 
     /**
-     * Creates a pet with no user. Expects PetException with
+     * Creates a pet with no user. Expects AdvertisementException with
      * message "User does not exist: a pet needs a user".
      * @author Katrina
      */
@@ -280,7 +282,7 @@ public class TestAdvertisementService {
     }
 
     /**
-     * Creates a pet with no name. Expects PetException with
+     * Creates a pet with no name. Expects AdvertisementException with
      * message "A pet needs a name".
      * @author Katrina
      */
@@ -288,7 +290,7 @@ public class TestAdvertisementService {
     public void testCreateAdNoTitle() {
         clearDatabase();
         assertEquals(0, petService.getAllPets().size());
-        AD_PET_IDS.clear();
+        
         pet = null;
         petDto = null;
         ad = null;
@@ -306,7 +308,7 @@ public class TestAdvertisementService {
     }
 
     /**
-     * Creates a pet with no species. Expects PetException with
+     * Creates a pet with no species. Expects AdvertisementException with
      * message "A pet needs a species".
      * @author Katrina
      */
@@ -319,7 +321,7 @@ public class TestAdvertisementService {
         try{
             petDto = createPetDto(PET_DOB, PET_NAME, "", PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
             pet = petService.createPet(petDto);
-        } catch(PetException e) {
+        } catch(AdvertisementException e) {
             assertEquals(e.getMessage(), "Cannot add: A pet needs a species.");
         }
         assertEquals(pet, null);
@@ -339,7 +341,7 @@ public class TestAdvertisementService {
         try{
             petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, "", PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
             pet = petService.createPet(petDto);
-        } catch(PetException e) {
+        } catch(AdvertisementException e) {
             assertEquals(e.getMessage(), "Cannot add: A pet needs a breed.");
         }
         assertEquals(pet, null);
@@ -376,7 +378,7 @@ public class TestAdvertisementService {
         try{
             petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, null);
             pet = petService.createPet(petDto);
-        } catch(PetException e) {
+        } catch(AdvertisementException e) {
             assertEquals(e.getMessage(), "Cannot add: A pet needs a gender.");
         }
         assertEquals(pet, null);
@@ -432,7 +434,7 @@ public class TestAdvertisementService {
     }
 
     /**
-     * Creates a pet with no user. Expects PetException with
+     * Creates a pet with no user. Expects AdvertisementException with
      * message "User does not exist: a pet needs a user".
      * @author Katrina
      */
@@ -449,14 +451,14 @@ public class TestAdvertisementService {
             oldPet = pet;
             petDto.SetUserName("");
             pet = petService.editPet(petDto);
-        } catch(PetException e) {
+        } catch(AdvertisementException e) {
             assertEquals(e.getMessage(), "Cannot edit: User not found.");
         }
         assertEquals(pet, oldPet);
     }
 
     /**
-     * Creates a pet with no name. Expects PetException with
+     * Creates a pet with no name. Expects AdvertisementException with
      * message "A pet needs a name".
      * @author Katrina
      */
@@ -473,14 +475,14 @@ public class TestAdvertisementService {
             oldPet = pet;
             petDto.setName("");
             pet = petService.editPet(petDto);
-        } catch(PetException e) {
+        } catch(AdvertisementException e) {
             assertEquals(e.getMessage(), "Cannot edit: A pet needs a name.");
         }
         assertEquals(pet, oldPet);
     }
 
     /**
-     * Creates a pet with no species. Expects PetException with
+     * Creates a pet with no species. Expects AdvertisementException with
      * message "A pet needs a species".
      * @author Katrina
      */
@@ -497,7 +499,7 @@ public class TestAdvertisementService {
             oldPet = pet;
             petDto.setSpecies("");
             pet = petService.editPet(petDto);
-        } catch(PetException e) {
+        } catch(AdvertisementException e) {
             assertEquals(e.getMessage(), "Cannot edit: A pet needs a species.");
         }
         assertEquals(pet, oldPet);
@@ -521,7 +523,7 @@ public class TestAdvertisementService {
             oldPet = pet;
             petDto.setBreed("");
             pet = petService.editPet(petDto);
-        } catch(PetException e) {
+        } catch(AdvertisementException e) {
             assertEquals(e.getMessage(), "Cannot edit: A pet needs a breed.");
         }
         assertEquals(pet, oldPet);
@@ -569,7 +571,7 @@ public class TestAdvertisementService {
             oldPet = pet;
             petDto.setGender(null);
             pet = petService.editPet(petDto);
-        } catch(PetException e) {
+        } catch(AdvertisementException e) {
             assertEquals(e.getMessage(), "Cannot edit: A pet needs a gender.");
         }
         assertEquals(pet, oldPet);
@@ -607,7 +609,7 @@ public class TestAdvertisementService {
         petDto.SetUserName("");
         pet = petService.editPet(petDto);
         assertTrue(user2.getPets().contains(pet));
-        } catch (PetException e) {
+        } catch (AdvertisementException e) {
             assertEquals(e.getMessage(), "Cannot edit: User not found.");
         }
     }
@@ -618,8 +620,8 @@ public class TestAdvertisementService {
         return dto;
     }
     
-    private AdvertisementDTO createAdDto (String title, boolean isfulfilled, List<Long> aD_PET_IDS2, Set<AdoptionApplication> adoptionApplication, String description) {
-        AdvertisementDTO dto = new AdvertisementDTO(title, isfulfilled, aD_PET_IDS2, adoptionApplication, description);
+    private AdvertisementDTO createAdDto (String title, boolean isfulfilled, List<Long> aD_PET_IDS, Set<ApplicationDTO> adoptionApplication, String description) {
+        AdvertisementDTO dto = new AdvertisementDTO(title, isfulfilled, aD_PET_IDS, adoptionApplication, description);
         return dto;
     }
 }

@@ -87,4 +87,9 @@ public class ApplicationService {
         advertisementRepository.save(advertisement);
         return application;
     }
+
+    public void deleteApplication(AdoptionApplication app) {
+        // TODO Auto-generated method stub
+        
+    }
 }
