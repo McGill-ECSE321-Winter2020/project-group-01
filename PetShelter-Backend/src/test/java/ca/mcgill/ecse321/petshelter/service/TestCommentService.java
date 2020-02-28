@@ -220,5 +220,29 @@ public class TestCommentService {
         assertTrue(thrown.getMessage().contains("No such user."));
     }
 
+    /**
+     * This test verifies that comment update works.
+     */
+    @Test
+    public void testCommentUpdate() {
+        String newText = "This is an updated comment text.";
+        Comment comment = commentService.updateComment(COMMENT_ID, newText);
+        assertEquals(newText, comment.getText());
+        assertEquals(COMMENT_ID, comment.getId());
+    }
+
+    /**
+     * This test verifies that an invalid comment ID results in an exception when updating.
+     */
+    @Test
+    public void testMissingCommentUpdate() {
+        String newText = "This is an updated comment text.";
+        CommentException thrown = assertThrows(
+                CommentException.class,
+                () -> commentService.updateComment(0, newText)
+        );
+        assertTrue(thrown.getMessage().contains("No such comment."));
+    }
+
 }
 
