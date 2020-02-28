@@ -63,7 +63,7 @@ public class UserController {
 	 * @return user's parameter
 	 */
 	@PostMapping("/register")
-	public ResponseEntity<?> createUser(@RequestBody(required = true) UserDTO user) {
+	public ResponseEntity<?> register(@RequestBody(required = true) UserDTO user) {
 		try {
 			UserDTO user1 = userService.createUser(user);
 			return new ResponseEntity<>(user1, HttpStatus.CREATED); // return created HTTP status
@@ -176,19 +176,17 @@ public class UserController {
 	public ResponseEntity<?> deleteUser(@PathVariable String userName, @RequestHeader String token) {
 		User requester = userRepo.findUserByApiToken(token);
 		if (requester != null && requester.getUserType().equals(UserType.ADMIN)) {
-			// find the deleted user by username
-			User user = userRepo.findUserByUserName(userName);
-			if (user != null) {
-				userRepo.delete(user);
+			if (userService.deleteUser(userName)) { // if the user is successfully deleted
+				return new ResponseEntity<>(HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // if the requester is not an admin
 		}
 
 	}
 
-	// todo fix cette pisse @louismouisine
 	/**
 	 * Returns a specified user's information. The requester must be an admin.
 	 * 
@@ -211,8 +209,6 @@ public class UserController {
 		}
 	}
 
-	// todo doesnt work
-
 	/**
 	 * Updates a specified user's information. Only the user tied to the account can
 	 * * make the request.
@@ -224,10 +220,10 @@ public class UserController {
 	 */
 	@PutMapping("/{username}")
 	// note: the username and email cannot be changed
-	public ResponseEntity<?> updateUserPicture(@PathVariable String userName, @RequestBody UserDTO userDto,
+	public ResponseEntity<?> updateUserPicture(@PathVariable String username, @RequestBody UserDTO userDto,
 			@RequestHeader String token) {
 		// find a user by username
-		User user = userRepo.findUserByUserName(userName);
+		User user = userRepo.findUserByUserName(username);
 		// the user updating the profile must be the requester, as in it should be his
 		// profile
 		if (user != null && token.equals(user.getApiToken())) {

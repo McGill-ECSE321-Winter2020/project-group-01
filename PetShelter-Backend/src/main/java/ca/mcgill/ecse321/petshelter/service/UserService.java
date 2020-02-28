@@ -158,19 +158,19 @@ public class UserService {
 	}
 
 	/**
-	 * Deletes a user.
+	 * Deletes a user. Returns false if the user could not be deleted.
 	 *
 	 * @param userDTO
 	 * @return
 	 */
-	public ResponseEntity<?> deleteUser(UserDTO userDTO) {
-		User user = userRepository.findUserByUserName(userDTO.getUsername());
+	public boolean deleteUser(String username) {
+		User user = userRepository.findUserByUserName(username);
 		try {
 			userRepository.deleteById(user.getId());
 		} catch (RuntimeException e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return false;
 		}
-		return new ResponseEntity<>(HttpStatus.OK);
+		return true;
 	}
 	// converts a user into a userdto
 	static UserDTO userToDto(User user) {
