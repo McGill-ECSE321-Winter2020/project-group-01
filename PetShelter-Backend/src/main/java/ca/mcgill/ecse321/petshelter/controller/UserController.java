@@ -43,7 +43,7 @@ public class UserController {
 	private PasswordEncoder passwordEncoder;
 	
 	// converts a user into a userdto
-	static UserDTO userToDto(User user) {
+	public static UserDTO userToDto(User user) {
 		UserDTO userDto = new UserDTO();
 		userDto.setEmail(user.getEmail());
 		userDto.setUsername(user.getUserName());
@@ -85,7 +85,7 @@ public class UserController {
 	 * @return check if it was clicked within 24h
 	 */
 	@GetMapping("/registrationConfirmation")
-	public ResponseEntity<?> confirmRegistration(@RequestParam("token") String token) {
+	public ResponseEntity<?> confirmRegistration(@RequestHeader String token) {
 		// find a user by the verif. token; if none is found, the user does not exist
 		User user = userRepo.findUserByApiToken(token);
 		if (user == null) {
