@@ -6,6 +6,11 @@ import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.*;
+import ca.mcgill.ecse321.petshelter.service.exception.LoginException;
+import ca.mcgill.ecse321.petshelter.service.exception.RegisterException;
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.EmailingService;
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.JWTTokenProvider;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

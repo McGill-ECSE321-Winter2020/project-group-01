@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.petshelter.service;
+package ca.mcgill.ecse321.petshelter.service.exception;
 
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.http.HttpStatus;

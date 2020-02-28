@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-import ca.mcgill.ecse321.petshelter.service.JWTTokenProvider;
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.JWTTokenProvider;
 
 //class that applies JWT to the application, and allows all routes to be accessed
 /**
