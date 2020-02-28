@@ -7,8 +7,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import ca.mcgill.ecse321.petshelter.service.JWTTokenFilter;
-import ca.mcgill.ecse321.petshelter.service.JWTTokenProvider;
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.JWTTokenFilter;
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.JWTTokenProvider;
 //this class configures the jwt
 /**
  * 

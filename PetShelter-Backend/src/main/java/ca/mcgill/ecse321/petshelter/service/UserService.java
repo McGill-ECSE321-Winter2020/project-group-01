@@ -5,6 +5,10 @@ import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import ca.mcgill.ecse321.petshelter.service.exception.RegisterException;
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.EmailingService;
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.JWTTokenProvider;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

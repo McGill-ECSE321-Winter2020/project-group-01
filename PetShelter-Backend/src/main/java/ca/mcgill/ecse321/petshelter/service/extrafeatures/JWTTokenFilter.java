@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.petshelter.service;
+package ca.mcgill.ecse321.petshelter.service.extrafeatures;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

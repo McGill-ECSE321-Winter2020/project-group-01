@@ -4,7 +4,8 @@ import ca.mcgill.ecse321.petshelter.dto.DonationDTO;
 import ca.mcgill.ecse321.petshelter.model.Donation;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.DonationService;
-import ca.mcgill.ecse321.petshelter.service.EmailingService;
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.EmailingService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
