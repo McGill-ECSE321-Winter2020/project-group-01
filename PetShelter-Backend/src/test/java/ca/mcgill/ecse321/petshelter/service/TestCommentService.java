@@ -299,5 +299,28 @@ public class TestCommentService {
         assertEquals(COMMENT_ID, comments.get(0).getId()); // List contains the only comment.
     }
 
+    /**
+     * This test verifies get comments by user works.
+     */
+    @Test
+    public void testGetUserComments() {
+        List<Comment> comments = commentService.getCommentsByUser(USER_ID);
+        assertEquals(1, comments.size()); // List contains a single element.
+        assertEquals(COMMENT_ID, comments.get(0).getId()); // List contains the correct comment.
+        assertEquals(USER_ID, comments.get(0).getUser().getId()); // Comment has the correct author.
+    }
+
+    /**
+     * This test verifies get comments raises an exception when called with a non-existent user.
+     */
+    @Test
+    public void testGetMissingUserComments() {
+        CommentException thrown = assertThrows(
+                CommentException.class,
+                () -> commentService.getCommentsByUser(0)
+        );
+        assertTrue(thrown.getMessage().contains("No such user."));
+    }
+
 }
 
