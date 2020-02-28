@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.petshelter.service;
 
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.any;
 
 import static org.junit.Assert.assertEquals;
@@ -35,31 +36,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import ca.mcgill.ecse321.petshelter.dto.AdvertisementDTO;
 import ca.mcgill.ecse321.petshelter.dto.PetDTO;
+import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Gender;
 import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.model.UserType;
+import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import ca.mcgill.ecse321.petshelter.repository.PetRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 
 //TODO Javadoc
 @RunWith(MockitoJUnitRunner.class)
 @SuppressWarnings("deprecation")
-public class TestPetService {
+public class TestAdvertisementService {
 
     @Mock
     private PetRepository petDao;
 
     @Mock
     private UserRepository userDao;
+    
+    @Mock
+    private AdvertisementRepository adDao;
 
     @InjectMocks
     private UserService userService;
 
     @InjectMocks
     private PetService petService;
+    
+    @InjectMocks
+    private AdvertisementService advertisementService;
 
     //User1 parameters
     private static final String USER_NAME1 = "testUN";
@@ -84,11 +94,25 @@ public class TestPetService {
     private static final Set<Pet> USER1_PETS = new HashSet<Pet>();
     private static final Set<Pet> USER2_PETS = new HashSet<Pet>();
     private long petId;
+    private long adId;
     private Pet pet;
+    private Advertisement ad;
     private User user1;
     private User user2;
     private PetDTO petDto;
+    private AdvertisementDTO adDto;
 
+
+
+    //Ad parameters
+    private static final String AD_TITLE = "testTitle";
+    private static final String AD_DESCRIPTION = "testDescription";
+    private static final boolean AD_FULLFILLED = false;
+    private static List<Long> AD_PET_IDS = new ArrayList<Long>();
+    private static final Set<AdoptionApplication> AD_APPLICATIONS = new HashSet<AdoptionApplication>();
+
+
+    
     //TODO this is not called
     @AfterEach
     @BeforeEach
@@ -99,7 +123,21 @@ public class TestPetService {
 
     @Before
     public void setMockOutput() {
-        //user mock
+        //ad Id mock
+        lenient().when(adDao.findAdvertisementById(any(Long.class))).thenAnswer((InvocationOnMock invocation) -> {
+            if(invocation.getArgument(0).equals(adId)) {
+                ad = new Advertisement();
+                ad.setAdoptionApplication(AD_APPLICATIONS);
+                ad.setDescription(AD_DESCRIPTION);
+                ad.setIsFulfilled(AD_FULLFILLED);
+                ad.setTitle(AD_TITLE);
+
+                return ad;
+               } else {
+                return null;
+            }
+        });
+        
         lenient().when(userDao.findUserByUserName(anyString())).thenAnswer((InvocationOnMock invocation) -> {
             if(invocation.getArgument(0).equals(USER_NAME1)) {
                 user1 = new User();
@@ -143,6 +181,7 @@ public class TestPetService {
 
         lenient().when(petDao.findPetById(any(Long.class))).thenAnswer((InvocationOnMock invocation) -> {
             if(invocation.getArgument(0).equals(petId)) {
+                pet.setAdvertisement(ad);
                 return pet;
             } else {
                 return null;
@@ -181,33 +220,38 @@ public class TestPetService {
     }
 
 
-    ////////////////////////////// CREATE PET //////////////////////////////
+    ////////////////////////////// CREATE AD //////////////////////////////
 
     /**
      * Normal test case. Creates a pet. Should not throw any exception".
      * @author Katrina
      */
     @Test
-    public void testCreatePet() {
-        assertEquals(0, petService.getAllPets().size());
+    public void testCreateAd() {
+        assertEquals(0, advertisementService.getAllAdvertisements().size());
         pet = null;
         petDto = null;
+        ad = null;
+        adDto = null;
+        user1 = userDao.findUserByUserName(USER_NAME1);
         petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
-        Date DOB = new Date (119, 10, 20);
         pet = petService.createPet(petDto);
-        petId = pet.getId();
         assertNotNull(pet);
-        assertNotNull(petDao.findPetById(petId));
-        assertEquals("testPettt",pet.getName());
-        assertEquals(new Date(119, 10, 20), DOB);
-        assertEquals("testSpecies", pet.getSpecies());
-        assertEquals("testBreed", pet.getBreed());
-        assertEquals("testDesc", pet.getDescription());
-        assertEquals(PET_PICTURE, pet.getPicture());
-        User fetchedUser = userDao.findUserByUserName(USER_NAME1);
-        Pet fetchedPet = (Pet) fetchedUser.getPets().toArray()[0];
-        assertTrue(fetchedPet.getId() == petId);
-        assertEquals(Gender.FEMALE, pet.getGender());	
+        AD_PET_IDS.add(pet.getId());
+        adDto = createAdDto(AD_TITLE, AD_FULLFILLED, AD_PET_IDS, AD_APPLICATIONS, AD_DESCRIPTION);
+        ad = advertisementService.createAdvertisement(adDto);
+        adId = ad.getId();
+        assertNotNull(ad);
+        assertNotNull(adDao.findAdvertisementById(adId));
+        assertEquals(AD_TITLE ,ad.getTitle());
+        assertEquals(AD_DESCRIPTION, ad.getDescription());
+        assertEquals(AD_FULLFILLED, ad.isIsFulfilled());
+        assertEquals(AD_APPLICATIONS, ad.getAdoptionApplication());
+
+        for(Long id : AD_PET_IDS) {
+            Pet pet = petDao.findPetById(id);
+            assertTrue(pet.getAdvertisement().equals(ad));
+        }
     }
 
     /**
@@ -216,18 +260,23 @@ public class TestPetService {
      * @author Katrina
      */
     @Test
-    public void testCreatePetNoUser() {
+    public void testCreateAdNoPet() {
         clearDatabase();
         assertEquals(0, petService.getAllPets().size());
+        AD_PET_IDS.clear();
         pet = null;
         petDto = null;
+        ad = null;
+        adDto = null;
+        petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
+        pet = petService.createPet(petDto);
         try {
-            petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, "", PET_GENDER);
-            pet = petService.createPet(petDto);
-        } catch(PetException e) {
-            assertEquals(e.getMessage(), "Cannot add: User does not exist.");
+            adDto = createAdDto(AD_TITLE, AD_FULLFILLED, AD_PET_IDS, AD_APPLICATIONS, AD_DESCRIPTION);
+            ad = advertisementService.createAdvertisement(adDto);
+        } catch(AdvertisementException e) {
+            assertEquals(e.getMessage(), "A pet must be linked to an advertisement.");
         }
-        assertEquals(pet, null);
+        assertEquals(ad, null);
     }
 
     /**
@@ -236,18 +285,24 @@ public class TestPetService {
      * @author Katrina
      */
     @Test
-    public void testCreatePetNoName() {
+    public void testCreateAdNoTitle() {
         clearDatabase();
         assertEquals(0, petService.getAllPets().size());
+        AD_PET_IDS.clear();
         pet = null;
         petDto = null;
+        ad = null;
+        adDto = null;
+        petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
+        pet = petService.createPet(petDto);
+        AD_PET_IDS.add(pet.getId());
         try {
-            petDto = createPetDto(PET_DOB, "", PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
-            pet = petService.createPet(petDto);
-        } catch(PetException e) {
-            assertEquals(e.getMessage(), "Cannot add: A pet needs a name.");
+            adDto = createAdDto("", AD_FULLFILLED, AD_PET_IDS, AD_APPLICATIONS, AD_DESCRIPTION);
+            ad = advertisementService.createAdvertisement(adDto);
+        } catch(AdvertisementException e) {
+            assertEquals(e.getMessage(), "An advertisement needs a title");
         }
-        assertEquals(pet, null);
+        assertEquals(ad, null);
     }
 
     /**
@@ -352,7 +407,7 @@ public class TestPetService {
         User fetchedUser = userDao.findUserByUserName(USER_NAME1);
         Pet fetchedPet = (Pet) fetchedUser.getPets().toArray()[0];
         assertTrue(fetchedPet.getId() == petId);
-        assertEquals(Gender.FEMALE, pet.getGender());	
+        assertEquals(Gender.FEMALE, pet.getGender());   
 
         petDto.setName("newName");
         petDto.setSpecies("newSpecies");
@@ -373,7 +428,7 @@ public class TestPetService {
         fetchedUser = userDao.findUserByUserName(USER_NAME1);
         fetchedPet = (Pet) fetchedUser.getPets().toArray()[0];
         assertTrue(fetchedPet.getId() == petId);
-        assertEquals(Gender.MALE, pet.getGender());	
+        assertEquals(Gender.MALE, pet.getGender()); 
     }
 
     /**
@@ -556,10 +611,16 @@ public class TestPetService {
             assertEquals(e.getMessage(), "Cannot edit: User not found.");
         }
     }
+    
     private PetDTO createPetDto(Date petDob, String petName, String petSpecies, String petBreed, String petDescription,
             byte[] petPicture, String userName, Gender petGender) {
         PetDTO dto = new PetDTO(petDob, petName, petSpecies, petBreed, petDescription, petPicture, petGender, null, userName);
         return dto;
     }
-
+    
+    private AdvertisementDTO createAdDto (String title, boolean isfulfilled, List<Long> aD_PET_IDS2, Set<AdoptionApplication> adoptionApplication, String description) {
+        AdvertisementDTO dto = new AdvertisementDTO(title, isfulfilled, aD_PET_IDS2, adoptionApplication, description);
+        return dto;
+    }
 }
+
