@@ -32,16 +32,16 @@ public class UserController {
 
 	@Autowired
 	private JWTTokenProvider jwtTokenProvider;
-	
+
 	@Autowired
 	private UserRepository userRepo;
-	
+
 	@Autowired
 	private EmailingService emailingService;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	// converts a user into a userdto
 	public static UserDTO userToDto(User user) {
 		UserDTO userDto = new UserDTO();
@@ -51,7 +51,7 @@ public class UserController {
 		userDto.setPicture(user.getPicture());
 		return userDto;
 	}
-	
+
 	/**
 	 * Creates a user account. The Request body is a UserDTO aka email, password
 	 * username and UserType are provided. The method also validates if the
@@ -77,7 +77,7 @@ public class UserController {
 			return new ResponseEntity<>(x.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	/**
 	 * Verification of account through email.
 	 *
@@ -103,7 +103,7 @@ public class UserController {
 		userRepo.save(user);
 		return new ResponseEntity<>("Account validated", HttpStatus.OK);
 	}
-	
+
 	/**
 	 * Resets the password and emails the user a link with the new password.
 	 *
@@ -132,7 +132,7 @@ public class UserController {
 			return new ResponseEntity<>(x.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	/**
 	 * Checks if the user can be logged in. User's email must be verified, and the
 	 * account must exist.
@@ -165,7 +165,7 @@ public class UserController {
 			return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	/**
 	 * Deletes a user. The person making the request must be an admin.
 	 *
@@ -185,33 +185,34 @@ public class UserController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // if the requester is not an admin
 		}
-		
+
 	}
-	//todo fix cette pisse @louismouisine
+
+	// todo fix cette pisse @louismouisine
 	/**
 	 * Returns a specified user's information. The requester must be an admin.
+	 * 
 	 * @param userName
 	 * @param token
 	 * @return
 	 */
 	@GetMapping("/{username}")
-	public ResponseEntity<?> getUser(@PathVariable String userName, @RequestHeader String token) {
+	public ResponseEntity<?> getUser(@PathVariable String username, @RequestHeader String token) {
 		User requester = userRepo.findUserByApiToken(token);
-		if (requester != null && requester.getUserType().equals(UserType.ADMIN)) {
-			// find a user by username
-			User user = userRepo.findUserByUserName(userName);
-			if (user != null) {
-				return new ResponseEntity<>(userToDto(user), HttpStatus.OK);
-			} else {
-				return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-			}
-		} else { // if user isnt an admin
+		// find a user by username
+		User user = userRepo.findUserByUserName(username);
+		if (requester != null && user != null
+				&& (requester.getUserType().equals(UserType.ADMIN) || requester.getUserName().equals(username))) {
+			return new ResponseEntity<>(userToDto(user), HttpStatus.OK);
+			// if the user making the request is not an admin or the one we are searching
+			// for, bad request
+		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	
-	//todo doesnt work
-	
+
+	// todo doesnt work
+
 	/**
 	 * Updates a specified user's information. Only the user tied to the account can
 	 * * make the request.
@@ -224,7 +225,7 @@ public class UserController {
 	@PutMapping("/{username}")
 	// note: the username and email cannot be changed
 	public ResponseEntity<?> updateUserPicture(@PathVariable String userName, @RequestBody UserDTO userDto,
-											   @RequestHeader String token) {
+			@RequestHeader String token) {
 		// find a user by username
 		User user = userRepo.findUserByUserName(userName);
 		// the user updating the profile must be the requester, as in it should be his
@@ -239,9 +240,10 @@ public class UserController {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	/**
 	 * Returns all users' information. The requester must be an admin.
+	 * 
 	 * @param token
 	 * @return
 	 */
@@ -261,7 +263,7 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	/**
 	 * Allows users to change passwords.
 	 *
