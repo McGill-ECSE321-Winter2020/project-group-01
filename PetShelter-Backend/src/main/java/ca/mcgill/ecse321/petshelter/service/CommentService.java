@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -52,6 +53,7 @@ public class CommentService {
 					Comment newComment = new Comment();
 					newComment.setText(text);
 					newComment.setDatePosted(new Date(System.currentTimeMillis()));
+					newComment.setTime(new Time(System.currentTimeMillis()));
 					newComment.setUser(user.get());
 					Set<Comment> comments = newForum.getComments();
 					comments.add(newComment);
