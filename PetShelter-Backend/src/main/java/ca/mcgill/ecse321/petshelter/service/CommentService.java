@@ -76,7 +76,7 @@ public class CommentService {
 	 *
 	 * @param commentID Comment ID.
 	 * @param comment   Comment update.
-	 * @return
+	 * @return The updated comment.
 	 */
 	@Transactional
 	public Comment updateComment(long commentID, String comment) {
