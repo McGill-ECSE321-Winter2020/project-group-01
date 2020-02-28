@@ -375,7 +375,7 @@ public class PetShelterPersistence {
     public void testDeleteAdvertisement() {
         Advertisement advertisement = createAdvertisement();
         
-        Advertisement dbAd = advertisementRepository.findAdvertisementByTitle(advertisement.getTitle());
+        Advertisement dbAd = advertisementRepository.findAdvertisementById(advertisement.getId());
         
         assertEquals(advertisement.getTitle(), dbAd.getTitle());
         

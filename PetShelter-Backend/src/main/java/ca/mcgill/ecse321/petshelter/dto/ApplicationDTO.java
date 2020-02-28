@@ -18,15 +18,19 @@ public class ApplicationDTO {
 	private String username;
 	
 	private boolean isAccepted;
+	
+	@NotNull(message = "Advertisement cannot be empty.")
+	private Long adId;
 		
 	public ApplicationDTO() {
 	}
 	
-	public ApplicationDTO(@NotNull @NotEmpty String advertisementTitle,@NotNull @NotEmpty String description, @NotNull @NotEmpty String username, boolean isAccepted) {
+	public ApplicationDTO(@NotNull @NotEmpty String advertisementTitle,@NotNull @NotEmpty String description, @NotNull @NotEmpty String username, boolean isAccepted, Long adId) {
 		this.advertisementTitle = advertisementTitle;
 		this.description = description;
 		this.username = username;
 		this.isAccepted = isAccepted;
+		this.setAdId(adId);
 	}
 	
 	/**
@@ -84,4 +88,12 @@ public class ApplicationDTO {
 	public void setIsAccepted(boolean isAccepted) {
 		this.isAccepted = isAccepted;
 	}
+
+    public Long getAdId() {
+        return adId;
+    }
+
+    public void setAdId(Long adId) {
+        this.adId = adId;
+    }
 }
