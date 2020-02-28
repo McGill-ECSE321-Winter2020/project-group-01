@@ -79,7 +79,7 @@
 						"id": "e51489fa-15c8-42fc-82d7-749d9b20d443",
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);",
-							"pm.globals.set(\"UserToken\", jsonData.token);",
+							"pm.globals.set(\"RegisterUser\", jsonData.token);",
 							"",
 							"pm.test(\"Status code is 201\", function () {",
 							"    pm.response.to.have.status(201);",
@@ -133,7 +133,7 @@
 					"script": {
 						"id": "6e925581-0e9f-432e-9497-b128a5cff91c",
 						"exec": [
-							"pm.globals.get(\"UserToken\");"
+							"pm.globals.get(\"Register\");"
 						],
 						"type": "text/javascript"
 					}
@@ -160,7 +160,7 @@
 					{
 						"key": "token",
 						"type": "text",
-						"value": "{{UserToken}}"
+						"value": "{{RegisterUser}}"
 					}
 				],
 				"body": {
@@ -190,13 +190,16 @@
 			"response": []
 		},
 		{
-			"name": "Login",
+			"name": "Login User",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"id": "55f30c2c-1770-460c-af20-aef360377078",
 						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.globals.set(\"UserToken\", jsonData.token);",
+							"",
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});"
@@ -241,16 +244,20 @@
 			"response": []
 		},
 		{
-			"name": "Change Password",
+			"name": "Login User Admin",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "5a6c7919-1b9c-40bb-9b85-73a5f5fc7d09",
+						"id": "55f30c2c-1770-460c-af20-aef360377078",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
-							"});"
+							"});",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.globals.set(\"AdminToken\", jsonData.token);",
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -268,7 +275,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"userName\":\"Iamabaws\",\n\t\"oldPassword\":\"123!@#qweQWE\",\n\t\"newPassword\":\"qweQWE123!@#\"\n}",
+					"raw": "{\n\t\"username\":\"NeverUnlucky\",\n\t\"password\":\"123!@#qweQWE\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -276,7 +283,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/user/changePassword",
+					"raw": "http://localhost:8080/api/user/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -285,10 +292,9 @@
 					"path": [
 						"api",
 						"user",
-						"changePassword"
+						"login"
 					]
-				},
-				"description": "AdminCreation"
+				}
 			},
 			"response": []
 		},
@@ -455,7 +461,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/forum/2",
+					"raw": "http://localhost:8080/api/forum/3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -464,7 +470,7 @@
 					"path": [
 						"api",
 						"forum",
-						"2"
+						"3"
 					]
 				}
 			},
@@ -575,7 +581,7 @@
 					{
 						"key": "Content-Type",
 						"name": "Content-Type",
-						"value": "application/json",
+						"value": "text/plain",
 						"type": "text"
 					},
 					{
@@ -586,15 +592,15 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"title\":\"This is my new title\"\n}",
+					"raw": "This is my new title",
 					"options": {
 						"raw": {
-							"language": "json"
+							"language": "text"
 						}
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/forum/2",
+					"raw": "http://localhost:8080/api/forum/3",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -603,7 +609,7 @@
 					"path": [
 						"api",
 						"forum",
-						"2"
+						"3"
 					]
 				}
 			},
@@ -840,6 +846,58 @@
 			"response": []
 		},
 		{
+			"name": "Change Password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5a6c7919-1b9c-40bb-9b85-73a5f5fc7d09",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"userName\":\"Iamabaws\",\n\t\"oldPassword\":\"123!@#qweQWE\",\n\t\"newPassword\":\"qweQWE123!@#\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/user/changePassword",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"changePassword"
+					]
+				},
+				"description": "AdminCreation"
+			},
+			"response": []
+		},
+		{
 			"name": "Reset User password",
 			"event": [
 				{
@@ -885,6 +943,47 @@
 						"api",
 						"user",
 						"resetPassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "24aa7629-7bdd-4c92-b712-a92ef51d6cda",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "{{UserToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/user/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"logout"
 					]
 				}
 			},
