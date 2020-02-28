@@ -111,7 +111,7 @@ public class ForumController {
 	 * @return The created forum.
 	 */
 	@PostMapping()
-	public ResponseEntity<?> createForum(@RequestHeader String title, @RequestHeader String token) {
+	public ResponseEntity<?> createForum(@RequestBody String title, @RequestHeader String token) {
 		System.out.println(title + "  " + token);
 		User user = userRepository.findUserByApiToken(token);
 		if (user != null && title != null && !title.trim().equals("")) {
@@ -132,7 +132,7 @@ public class ForumController {
 	 */
 	@PutMapping("/{forumId}")
 	public ResponseEntity<?> updateForum(@PathVariable long forumId, @RequestBody String title,
-										 @RequestBody String token) {
+										 @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
 		Optional<Forum> oldForum = forumRepository.findById(forumId);
 		if (user != null

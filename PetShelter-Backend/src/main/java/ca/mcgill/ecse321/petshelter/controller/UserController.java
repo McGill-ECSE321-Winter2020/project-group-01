@@ -5,12 +5,11 @@ import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
-import ca.mcgill.ecse321.petshelter.service.*;
+import ca.mcgill.ecse321.petshelter.service.UserService;
 import ca.mcgill.ecse321.petshelter.service.exception.LoginException;
 import ca.mcgill.ecse321.petshelter.service.exception.RegisterException;
 import ca.mcgill.ecse321.petshelter.service.extrafeatures.EmailingService;
 import ca.mcgill.ecse321.petshelter.service.extrafeatures.JWTTokenProvider;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -108,7 +107,7 @@ public class UserController {
 		userRepo.save(user);
 		return new ResponseEntity<>("Account validated", HttpStatus.OK);
 	}
-
+	
 	/**
 	 * Resets the password and emails the user a link with the new password.
 	 *
@@ -116,7 +115,7 @@ public class UserController {
 	 * @return
 	 */
 	@PostMapping("/resetPassword")
-	public ResponseEntity<?> resetPassword(@RequestHeader String email) {
+	public ResponseEntity<?> resetPassword(@RequestBody String email) {
 		User ue = userRepo.findUserByEmail(email);
 		// if no user is found with that email, bad request
 		if (ue == null) {
@@ -190,14 +189,14 @@ public class UserController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // if the requester is not an admin
 		}
-
+		
 	}
-
+	
 	/**
 	 * Returns a specified user's information. The requester must be an admin.
-	 * 
-	 * @param userName
-	 * @param token
+	 *
+	 * @param username user to be deleted
+	 * @param token admin only token
 	 * @return
 	 */
 	@GetMapping("/{username}")
@@ -214,12 +213,12 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
 	/**
 	 * Updates a specified user's information. Only the user tied to the account can
 	 * * make the request.
 	 *
-	 * @param userName
+	 * @param username
 	 * @param userDto
 	 * @param token
 	 * @return
