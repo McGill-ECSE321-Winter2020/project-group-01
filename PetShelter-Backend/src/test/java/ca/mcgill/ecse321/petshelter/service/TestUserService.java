@@ -5,6 +5,8 @@ import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import ca.mcgill.ecse321.petshelter.service.exception.RegisterException;
+
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,8 +17,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import static ca.mcgill.ecse321.petshelter.model.UserType.USER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -400,8 +400,6 @@ public class TestUserService {
 		User dbUser = userRepository.findUserByUserName(USER_NAME);
 
 		Assert.assertEquals(userDTO.getUsername(), dbUser.getUserName());
-
-		ResponseEntity<?> re = userService.deleteUser(userDTO);
-		assert (re.getStatusCode().compareTo(HttpStatus.OK) == 0);
+		assert (userService.deleteUser(userDTO.getUsername()));
 	}
 }

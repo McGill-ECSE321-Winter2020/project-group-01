@@ -1,6 +1,7 @@
-package ca.mcgill.ecse321.petshelter.passwordvalidator;
+package ca.mcgill.ecse321.petshelter.service.extrafeatures;
 
 import com.google.common.base.Joiner;
+
 import org.passay.*;
 
 import javax.validation.ConstraintValidator;

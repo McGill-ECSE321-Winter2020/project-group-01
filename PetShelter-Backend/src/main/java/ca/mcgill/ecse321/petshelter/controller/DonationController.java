@@ -4,41 +4,50 @@ import ca.mcgill.ecse321.petshelter.dto.DonationDTO;
 import ca.mcgill.ecse321.petshelter.model.Donation;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.DonationService;
-import ca.mcgill.ecse321.petshelter.service.EmailingService;
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.EmailingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/donation")
 public class DonationController {
-
+	
 	@Autowired
 	private DonationService donationService;
-
+	
 	@Autowired
 	private UserRepository userRepository;
 	
 	@Autowired
 	private EmailingService emailingService;
 	
-
+	/**
+	 * @return returns all donations
+	 */
 	@GetMapping("/all")
 	public ResponseEntity<?> getAllDonations() {
 		return new ResponseEntity<>(
 				donationService.getAllDonations().stream().map(this::convertToDto).collect(Collectors.toList()),
 				HttpStatus.OK);
 	}
-
+	
+	/**
+	 * Get a user specific donation
+	 *
+	 * @param user user targeted
+	 * @return all of that user's donations
+	 */
 	@GetMapping("/{user}")
 	public ResponseEntity<?> getUserDonation(@PathVariable String user) {
 		return new ResponseEntity<>(donationService.getAllUserDonations(userRepository.findUserByUserName(user))
 				.stream().map(this::convertToDto).collect(Collectors.toList()), HttpStatus.OK);
 	}
-
+	
 	public DonationDTO convertToDto(Donation donation) {
 		DonationDTO donationDTO = new DonationDTO();
 		donationDTO.setDate(donation.getDate());
@@ -51,7 +60,13 @@ public class DonationController {
 		}
 		return donationDTO;
 	}
-
+	
+	/**
+	 * Creates a donation
+	 *
+	 * @param donationDTO DTO passed by the in the request header
+	 * @return Ok if all the fields are satisfied, else Error msg
+	 */
 	@PostMapping()
 	public ResponseEntity<?> createDonation(@RequestBody DonationDTO donationDTO) {
 		Donation donation = donationService.createDonation(donationDTO);
