@@ -111,8 +111,8 @@ public class UserController {
 	 * @return confirmation that email has been sent
 	 */
 	@PostMapping("/resetPassword")
-	public ResponseEntity<?> resetPassword(@RequestBody UserDTO email) {
-		User ue = userRepo.findUserByEmail(email.getEmail());
+	public ResponseEntity<?> resetPassword(@RequestHeader String email) {
+		User ue = userRepo.findUserByEmail(email);
 		// if no user is found with that email, bad request
 		if (ue == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -210,9 +210,12 @@ public class UserController {
 		}
 	}
 	
+	//todo doesnt work
+	
 	/**
 	 * Updates a specified user's information. Only the user tied to the account can
-	 * 	 * make the request.
+	 * * make the request.
+	 *
 	 * @param userName
 	 * @param userDto
 	 * @param token
@@ -220,8 +223,8 @@ public class UserController {
 	 */
 	@PutMapping("/{username}")
 	// note: the username and email cannot be changed
-	public ResponseEntity<?> updateUser(@PathVariable String userName, @RequestBody UserDTO userDto,
-			@RequestHeader String token) {
+	public ResponseEntity<?> updateUserPicture(@PathVariable String userName, @RequestBody UserDTO userDto,
+											   @RequestHeader String token) {
 		// find a user by username
 		User user = userRepo.findUserByUserName(userName);
 		// the user updating the profile must be the requester, as in it should be his
