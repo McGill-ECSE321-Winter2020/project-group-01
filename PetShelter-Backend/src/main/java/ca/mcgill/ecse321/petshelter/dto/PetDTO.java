@@ -14,7 +14,7 @@ public class PetDTO {
 	private String breed;
 	private String description;
 	private byte[] picture;
-	private Long id;
+	private Long petId;
     private Gender gender;
     private Advertisement advertisement;
     private String userName;
@@ -27,7 +27,7 @@ public class PetDTO {
 		this.species = spec;
 		this.breed = breed;
 		this.picture = pic;
-		id = null;
+		this.petId = null;
 		this.gender = gen;
 		this.advertisement = ad;
 		this.userName = userName;
@@ -95,13 +95,13 @@ public class PetDTO {
 
 
 	public Long getId() {
-		return id;
+		return petId;
 	}
 
 
 	public void setId(Long id) {
-		if(this.id == null) {
-			this.id = id;
+		if(this.petId == null) {
+			this.petId = id;
 		}
 	}
 

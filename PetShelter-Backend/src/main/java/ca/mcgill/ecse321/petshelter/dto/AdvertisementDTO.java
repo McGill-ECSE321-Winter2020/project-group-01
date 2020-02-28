@@ -1,26 +1,28 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
 
 public class AdvertisementDTO {
 	private String title;
-	private long[] petIds;
+	private List<Long> petIds;
 	private String description;
 	private boolean isFulfilled;
-	private Set<AdoptionApplication> adoptionApplication;
+	private Set<AdoptionApplication> adoptionApplication = new HashSet<AdoptionApplication>();
 	private Long adId;
 	
 
-	public AdvertisementDTO(String title, boolean isfullfilled, long[] petIds, Long adId,  Set<AdoptionApplication> adoptionApplication,
+	public AdvertisementDTO(String title, boolean isfullfilled, List<Long> petIds, Set<AdoptionApplication> adoptionApplication,
 			String des) {
 		this.title = title; 
 		this.description = des; 
 		this.isFulfilled = isfullfilled;
 		this.petIds = petIds;
 		this.adoptionApplication.addAll(adoptionApplication);
-		adId = null;
+		this.adId = null;
 	}
 
 
@@ -34,12 +36,12 @@ public class AdvertisementDTO {
 	}
 
 
-	public long[] getPetIds() {
+	public List<Long> getPetIds() {
 		return petIds;
 	}
 
 
-	public void setPetIds(long[] petIds) {
+	public void setPetIds(List<Long> petIds) {
 		this.petIds = petIds;
 	}
 

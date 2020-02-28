@@ -64,14 +64,14 @@ public class AdvertisementService {
 	
 	@Transactional
 	public Advertisement createAdvertisement(AdvertisementDTO adDTO) {
-		int numOfPets = adDTO.getPetIds().length;
+		int numOfPets = adDTO.getPetIds().size();
 		if(numOfPets == 0) {
 			throw new AdvertisementException("A pet must be linked to an advertisement.");
 		}
 		//finding all pets that are on this ad
 		List<Pet> petsInAd = new ArrayList<Pet>();
 		for(int i = 0; i < numOfPets; i++) {
-			Pet pet = petRepository.findPetById(adDTO.getPetIds()[i]);
+			Pet pet = petRepository.findPetById(adDTO.getPetIds().get(i));
 			if (pet == null) {
 				throw new AdvertisementException("One or more pets do not exist.");
 			}
@@ -115,15 +115,15 @@ public class AdvertisementService {
 		if (adDTO.getDescription().trim() == "" || adDTO.getDescription().trim() == null) {
 			throw new AdvertisementException("Description cannot be empty");
 		}
-		Pet pet0 = petRepository.findPetById(adDTO.getPetIds()[0]);
+		Pet pet0 = petRepository.findPetById(adDTO.getPetIds().get(0));
 		if (pet0 == null) {
 			throw new AdvertisementException("One or more pets do not exist.");
 		}
-		int numOfPets = adDTO.getPetIds().length;
+		int numOfPets = adDTO.getPetIds().size();
 		Set<Pet> petsInAd = new HashSet<Pet>();
 		petsInAd.add(pet0);
 		for (int i = 1; i < numOfPets; i++) {
-			Pet petI = petRepository.findPetById(adDTO.getPetIds()[i]);
+			Pet petI = petRepository.findPetById(adDTO.getPetIds().get(i));
 			if((petI.getAdvertisement() != ad) && (petI.getAdvertisement() != null)) {
 				throw new AdvertisementException("One or more pets have a different advertisement.");
 			} else {
@@ -150,4 +150,14 @@ public class AdvertisementService {
 		advertisementRepository.delete(ad);
 		return ad;
 	}
+
+	@Transactional
+    public void deleteAdvertisement(Advertisement ad) {
+        if(advertisementRepository.findAdvertisementById(ad.getId())!=null) {
+	    advertisementRepository.delete(ad);
+        }
+        else {
+            throw new AdvertisementException("Cannot delete: Advertisement does not exist.");
+        }
+    }
 }

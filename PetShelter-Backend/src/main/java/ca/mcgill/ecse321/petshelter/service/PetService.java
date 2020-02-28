@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.petshelter.service;
 
 import ca.mcgill.ecse321.petshelter.dto.PetDTO;
+import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
@@ -25,6 +26,9 @@ public class PetService {
 	
 	@Autowired
 	private AdvertisementRepository advertisementRepository;
+	
+	@Autowired
+	private AdvertisementService advertisementService;
 	
 	@Transactional
 	public Pet getPet(long petId) {
@@ -172,7 +176,18 @@ public class PetService {
 			throw new PetException("Cannot delete: Pet does not exist.");
 		}
 		else {
+		    Advertisement petAd = pet.getAdvertisement();
+	          if(petAd!=null) {
+	              advertisementService.deleteAdvertisement(petAd);
+	          }
+		    User user = userRepository.findUserByUserName(petDTO.getUserName());
+		    Set<Pet> userPet = user.getPets();
+		    userPet.remove(pet);
+		    user.setPets(userPet);
+		    userRepository.save(user);
 			petRepository.delete(pet);
+			petDTO = null;
+
 			return true;
 		}
 	}
