@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -88,8 +89,11 @@ public class ApplicationService {
         return application;
     }
 
-    public void deleteApplication(AdoptionApplication app) {
-        // TODO Auto-generated method stub
-        
+    @Transactional
+    public void deleteApplication(Long appId) {
+        Optional <AdoptionApplication> app = applicationRepository.findById(appId);
+        if(app.isPresent()) {
+        applicationRepository.deleteById(appId);
+        }
     }
 }
