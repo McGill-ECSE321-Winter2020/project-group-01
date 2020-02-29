@@ -1,40 +1,7 @@
 package ca.mcgill.ecse321.petshelter.service;
 
-import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
-import ca.mcgill.ecse321.petshelter.dto.DonationDTO;
-import ca.mcgill.ecse321.petshelter.dto.PasswordChangeDTO;
-import ca.mcgill.ecse321.petshelter.dto.UserDTO;
-import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
-import ca.mcgill.ecse321.petshelter.model.Advertisement;
-import ca.mcgill.ecse321.petshelter.model.Donation;
-import ca.mcgill.ecse321.petshelter.model.User;
-import ca.mcgill.ecse321.petshelter.model.UserType;
-import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
-import ca.mcgill.ecse321.petshelter.repository.ApplicationRepository;
-import ca.mcgill.ecse321.petshelter.repository.UserRepository;
-import org.junit.Assert;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import static ca.mcgill.ecse321.petshelter.model.UserType.USER;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyDouble;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.lenient;
-
-import java.sql.Date;
-import java.sql.Time;
-import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class TestApplicationService {
