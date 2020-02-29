@@ -44,6 +44,12 @@ public class DonationController {
 				.stream().map(this::convertToDto).collect(Collectors.toList()), HttpStatus.OK);
 	}
 	
+	/**
+	 * Converts donation object to donation dto
+	 *
+	 * @param donation donation object
+	 * @return donation dto
+	 */
 	public DonationDTO convertToDto(Donation donation) {
 		DonationDTO donationDTO = new DonationDTO();
 		donationDTO.setDate(donation.getDate());

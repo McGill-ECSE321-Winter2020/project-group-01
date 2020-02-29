@@ -8,7 +8,6 @@ import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import ca.mcgill.ecse321.petshelter.repository.ApplicationRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.exception.ApplicationException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,32 +19,43 @@ import java.util.Set;
 
 @Service
 public class ApplicationService {
-
+    
     @Autowired
     ApplicationRepository applicationRepository;
-
+    
     @Autowired
     AdvertisementRepository advertisementRepository;
-
+    
     @Autowired
     UserRepository userRepository;
-
+    
+    /**
+     * @return list of all applications
+     */
     @Transactional
     public List<AdoptionApplication> getAllApplications() {
         return toList(applicationRepository.findAll());
     }
-
+    
+    /**
+     * @param applicant     targeted applicant username
+     * @param advertisement advertisement
+     * @return Adoption application that matches the 2 parameter
+     */
     @Transactional
     public AdoptionApplication getApplication(String applicant, Advertisement advertisement) {
         return applicationRepository.findApplicationByUserUserNameAndAdvertisement(applicant, advertisement);
     }
-
-
+    
+    /**
+     * @param name user object
+     * @return all the applications that matches that user
+     */
     @Transactional
     public List<AdoptionApplication> getAllUserApplications(User name) {
         return toList(applicationRepository.findApplicationsByUser(name));
     }
-
+    
     //From tutorial
     private <T> List<T> toList(Iterable<T> iterable) {
         List<T> resultList = new ArrayList<>();
@@ -54,7 +64,14 @@ public class ApplicationService {
         }
         return resultList;
     }
-
+    
+    
+    /**
+     * Creates an adoption and saves it in the database
+     *
+     * @param applicationDTO application DTO from controller
+     * @return adoption application object
+     */
     @Transactional
     public AdoptionApplication createApplication(ApplicationDTO applicationDTO) {
         //condition checks
@@ -88,11 +105,18 @@ public class ApplicationService {
         advertisementRepository.save(advertisement);
         return application;
     }
+    
+    
+    //todo check if they are the owner
+    
+    /**
+     * @param appId application id
+     */
     @Transactional
     public void deleteApplication(Long appId) {
-        Optional <AdoptionApplication> app = applicationRepository.findById(appId);
-        if(app.isPresent()) {
-        applicationRepository.deleteById(appId);
+        Optional<AdoptionApplication> app = applicationRepository.findById(appId);
+        if (app.isPresent()) {
+            applicationRepository.deleteById(appId);
         }
     }
 }

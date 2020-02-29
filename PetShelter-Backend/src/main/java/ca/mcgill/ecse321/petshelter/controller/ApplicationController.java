@@ -62,6 +62,12 @@ public class ApplicationController {
 		}
 	}
 	
+	/**
+	 * Converts Application to ApplicationDTO
+	 *
+	 * @param application application object
+	 * @return application DTO
+	 */
 	public ApplicationDTO convertToDto(AdoptionApplication application) {
 		ApplicationDTO applicationDTO = new ApplicationDTO();
 		applicationDTO.setDescription(application.getDescription());

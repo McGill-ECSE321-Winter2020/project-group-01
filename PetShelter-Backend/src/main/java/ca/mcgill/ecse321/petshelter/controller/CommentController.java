@@ -71,15 +71,15 @@ public class CommentController {
 	/**
 	 * Create a comment on a designated forum thread.
 	 *
-	 * @param commentDTO The comment DTO to add.
-	 * @param id         The id of the forum thread to respond to.
-	 * @param token      The user session token.
+	 * @param commentText comment to add
+	 * @param id          The id of the forum thread to respond to.
+	 * @param token       The user session token.
 	 * @return The comment added to the thread.
 	 */
 	@PostMapping("/{id}")
 	public ResponseEntity<?> createComment(@RequestBody String commentText, @PathVariable long id,
 										   @RequestHeader String token) {
-		System.out.println(commentDTO.toString());
+		System.out.println(commentText);
 		System.out.println("Thread ID=" + id);
 		User user = userRepository.findUserByApiToken(token);
 		// Check if the user exists.

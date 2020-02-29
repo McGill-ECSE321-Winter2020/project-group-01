@@ -1,14 +1,5 @@
 package ca.mcgill.ecse321.petshelter.service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import ca.mcgill.ecse321.petshelter.dto.AdvertisementDTO;
 import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
@@ -16,46 +7,75 @@ import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import ca.mcgill.ecse321.petshelter.repository.PetRepository;
 import ca.mcgill.ecse321.petshelter.service.exception.AdvertisementException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 //TODO Javadoc
 @Service
 public class AdvertisementService {
 	@Autowired
 	private AdvertisementRepository advertisementRepository;
-
+	
 	@Autowired
 	private PetRepository petRepository;
 	
+	/**
+	 * Finds an advertisement by the DTO
+	 *
+	 * @param adDTO advertisement DTO
+	 * @return advertisement object
+	 */
 	@Transactional
 	public Advertisement getAdvertisement(AdvertisementDTO adDTO) {
 		Advertisement ad = advertisementRepository.findAdvertisementById(adDTO.getAdId());
-		if(ad == null) {
+		if (ad == null) {
 			throw new AdvertisementException("Advertisement does not exist.");
 		} else {
 			return ad;
 		}
 	}
 	
+	/**
+	 * Finds advertisement by title
+	 *
+	 * @param title title of advertisement
+	 * @return List of advertisement that matches that title
+	 */
 	@Transactional
 	public List<Advertisement> getAdvertisementByTitle(String title) {
-		List<Advertisement> ads = advertisementRepository.findAdvertisementByTitle(title);
-		return ads;
-	}
-
-	@Transactional
-	public List<Advertisement> getAllAdvertisements() {
-		List<Advertisement> allAds = advertisementRepository.findAll();
-		return allAds;
+		return advertisementRepository.findAdvertisementByTitle(title);
 	}
 	
+	/**
+	 * Gets all the created advertisement in the database
+	 *
+	 * @return List of all the advertisement
+	 */
+	@Transactional
+	public List<Advertisement> getAllAdvertisements() {
+		return advertisementRepository.findAll();
+	}
+	
+	/**
+	 * Finds advertisement by a PetID
+	 *
+	 * @param petId unique identifier of the pet
+	 * @return unique advertisement linked to that pet
+	 */
 	@Transactional
 	public Advertisement getAdvertisementByPet(long petId) {
 		Pet pet = petRepository.findPetById(petId);
-		if(pet == null) {
+		if (pet == null) {
 			throw new AdvertisementException("Pet does not exist.");
 		} else {
 			Advertisement ad = pet.getAdvertisement();
-			if(ad == null) {
+			if (ad == null) {
 				throw new AdvertisementException("Advertisement does not exist.");
 			} else {
 				return ad;
@@ -63,32 +83,37 @@ public class AdvertisementService {
 		}
 	}
 	
+	/**
+	 * Creates and advertisement and stores it in the database
+	 *
+	 * @param adDTO advertisement DTO (JSON format)
+	 * @return advertisement object
+	 */
 	@Transactional
 	public Advertisement createAdvertisement(AdvertisementDTO adDTO) {
 		int numOfPets = adDTO.getPetIds().length;
-		if(numOfPets == 0) {
+		if (numOfPets == 0) {
 			throw new AdvertisementException("A pet must be linked to an advertisement.");
 		}
 		//finding all pets that are on this ad
-		List<Pet> petsInAd = new ArrayList<Pet>();
-		for(int i = 0; i < numOfPets; i++) {
+		List<Pet> petsInAd = new ArrayList<>();
+		for (int i = 0; i < numOfPets; i++) {
 			Pet pet = petRepository.findPetById(adDTO.getPetIds()[i]);
 			if (pet == null) {
 				throw new AdvertisementException("One or more pets do not exist.");
-			}
-			else if (pet.getAdvertisement()!=null) {
+			} else if (pet.getAdvertisement() != null) {
 				throw new AdvertisementException("One or more pets already have an advertisement.");
 			}
 			petsInAd.add(pet);
 		}
-
-		if (adDTO.getTitle() == "" || adDTO.getTitle() == null) {
+		
+		if (adDTO.getTitle().equals("") || adDTO.getTitle() == null) {
 			throw new AdvertisementException("An advertisement needs a title");
 		}
-		if (adDTO.getDescription().trim() == "" || adDTO.getDescription() == null) {
+		if (adDTO.getDescription().trim().equals("") || adDTO.getDescription() == null) {
 			throw new AdvertisementException("An advertisement needs a description");
 		}
-		Set<AdoptionApplication> applications = new HashSet<AdoptionApplication>();
+		Set<AdoptionApplication> applications = new HashSet<>();
 		applications.addAll(adDTO.getAdoptionApplication());
 		Advertisement ad = new Advertisement();
 		ad.setTitle(adDTO.getTitle());
@@ -100,20 +125,30 @@ public class AdvertisementService {
 			pet.setAdvertisement(ad);
 			petRepository.save(pet);
 		}
-		adDTO.setAdId((long)ad.getId());
-		return ad;		
+		adDTO.setAdId(ad.getId());
+		return ad;
 	}
-
+	
+	
+	//todo: check if edit and delete is the original user in order to delete
+	
+	
+	/**
+	 * Allows user to edit advertisement
+	 *
+	 * @param adDTO advertisement DTO
+	 * @return edited advertisement
+	 */
 	@Transactional
 	public Advertisement editAdvertisement(AdvertisementDTO adDTO) {
 		Advertisement ad = advertisementRepository.findAdvertisementById(adDTO.getAdId());
 		if (ad == null) {
 			throw new AdvertisementException("Advertisement does not exist");
 		}
-		if (adDTO.getTitle().trim() == "" || adDTO.getTitle() == null) {
+		if (adDTO.getTitle().trim().equals("") || adDTO.getTitle() == null) {
 			throw new AdvertisementException("Title cannot be empty");
 		}
-		if (adDTO.getDescription().trim() == "" || adDTO.getDescription().trim() == null) {
+		if (adDTO.getDescription().trim().equals("") || adDTO.getDescription().trim() == null) {
 			throw new AdvertisementException("Description cannot be empty");
 		}
 		Pet pet0 = petRepository.findPetById(adDTO.getPetIds()[0]);
@@ -144,11 +179,16 @@ public class AdvertisementService {
 		}
 		return ad;
 	}
-
-	@Transactional 
-	Advertisement deleteAdvertisement(AdvertisementDTO adDTO) {
+	
+	/**
+	 * Deletes advertisement from the database
+	 *
+	 * @param adDTO advertisement DTO
+	 * @return
+	 */
+	@Transactional
+	public void deleteAdvertisement(AdvertisementDTO adDTO) {
 		Advertisement ad = getAdvertisement(adDTO);
 		advertisementRepository.delete(ad);
-		return ad;
 	}
 }
