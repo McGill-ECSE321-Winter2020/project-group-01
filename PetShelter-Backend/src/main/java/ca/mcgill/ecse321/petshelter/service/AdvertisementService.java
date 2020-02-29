@@ -30,6 +30,9 @@ public class AdvertisementService {
 	@Autowired
 	private ApplicationService applicationService;
 	
+	@Autowired
+	private PetService petService;
+	
 	@Transactional
 	public Advertisement getAdvertisement(AdvertisementDTO adDTO) {
 		Advertisement ad = advertisementRepository.findAdvertisementById(adDTO.getAdId());
@@ -68,6 +71,16 @@ public class AdvertisementService {
 	}
 	
 	@Transactional
+	public Advertisement getAdvertisementById (long id) {
+	    Advertisement ad = advertisementRepository.findAdvertisementById(id);
+	    if(ad == null) {
+	        throw new AdvertisementException("Advertisement does not exist.");
+	    } else {
+	        return ad;
+	    }
+	}
+	
+	@Transactional
 	public Advertisement createAdvertisement(AdvertisementDTO adDTO) {
 		int numOfPets = adDTO.getPetIds().size();
 		if(numOfPets == 0) {
@@ -103,7 +116,7 @@ public class AdvertisementService {
 			pet.setAdvertisement(ad);
 			petRepository.save(pet);
 		}
-		adDTO.setAdId((long)ad.getId());
+		adDTO.adId = ad.getId();
 		return ad;		
 	}
 
@@ -123,21 +136,26 @@ public class AdvertisementService {
 		if (pet0 == null) {
 			throw new AdvertisementException("One or more pets do not exist.");
 		}
+		
 		int numOfPets = adDTO.getPetIds().size();
-		Set<Pet> petsInAd = new HashSet<Pet>();
-		petsInAd.add(pet0);
+		Set<Pet> newPets = new HashSet<Pet>();
+		newPets.add(pet0);
 		for (int i = 1; i < numOfPets; i++) {
 			Pet petI = petRepository.findPetById(adDTO.getPetIds().get(i));
 			if((petI.getAdvertisement() != ad) && (petI.getAdvertisement() != null)) {
 				throw new AdvertisementException("One or more pets have a different advertisement.");
 			} else {
-				petsInAd.add(petI);
+				newPets.add(petI);
 			}
 		}
+		for (Pet pet : petService.getAllPets()) {
+            if(pet.getAdvertisement().equals(ad)) {
+                if(!(newPets.contains(pet))) {
+                    pet.setAdvertisement(null);
+                }
+            }
+        }
 		Set<AdoptionApplication> applications = new HashSet<AdoptionApplication>();
-		for (ApplicationDTO app : adDTO.getApplicationDTO()) {
-		  
-		}
 		//TODO change with fixed master 
 		//applications.addAll(adDTO.getAdoptionApplication());
 		ad.setAdoptionApplication(applications);
@@ -145,7 +163,7 @@ public class AdvertisementService {
 		ad.setDescription(adDTO.getDescription());
 		ad.setIsFulfilled(adDTO.isFulfilled());
 		advertisementRepository.save(ad);
-		for (Pet pet : petsInAd) {
+		for (Pet pet : newPets) {
 			pet.setAdvertisement(ad);
 			petRepository.save(pet);
 		}
@@ -157,7 +175,7 @@ public class AdvertisementService {
 		Advertisement ad = getAdvertisement(adDTO);
 		Set<AdoptionApplication> apps = ad.getAdoptionApplication();
 		for(AdoptionApplication app : apps) {
-		    applicationService.deleteApplication(app);
+		    applicationService.deleteApplication(app.getId());
 		}
 		advertisementRepository.delete(ad);
 		return ad;
@@ -168,7 +186,7 @@ public class AdvertisementService {
         if(advertisementRepository.findAdvertisementById(ad.getId())!=null) {
             Set<AdoptionApplication> apps = ad.getAdoptionApplication();
             for(AdoptionApplication app : apps) {
-                applicationService.deleteApplication(app);
+                applicationService.deleteApplication(app.getId());
             }
             advertisementRepository.delete(ad);
         }

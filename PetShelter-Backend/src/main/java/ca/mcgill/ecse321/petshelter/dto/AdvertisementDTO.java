@@ -12,7 +12,7 @@ public class AdvertisementDTO {
 	private String description;
 	private boolean isFulfilled;
 	private Set<ApplicationDTO> applications = new HashSet<ApplicationDTO>();
-	private Long adId;
+	public Long adId;
 	
 
 	public AdvertisementDTO(String title, boolean isfullfilled, List<Long> petIds, Set<ApplicationDTO> applications,
@@ -84,12 +84,4 @@ public class AdvertisementDTO {
 	public Long getAdId() {
 		return adId;
 	}
-
-
-	public void setAdId(Long adId) {
-		if (this.adId == null) {
-		this.adId = adId;
-		}
-	}
-
 }

@@ -113,7 +113,7 @@ public class PetService {
 		allUserPets.add(pet);
 		petRepository.save(pet);
 		userRepository.save(user);
-		petDTO.setId(pet.getId());
+		petDTO.petId = (pet.getId());
 	
 		return pet;		
 	}

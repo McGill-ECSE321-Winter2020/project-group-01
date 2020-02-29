@@ -21,6 +21,8 @@ public class ApplicationDTO {
 	
 	@NotNull(message = "Advertisement cannot be empty.")
 	private Long adId;
+	
+    public Long appId;
 		
 	public ApplicationDTO() {
 	}
@@ -31,6 +33,7 @@ public class ApplicationDTO {
 		this.username = username;
 		this.isAccepted = isAccepted;
 		this.setAdId(adId);
+		this.appId = null;
 	}
 	
 	/**
@@ -95,5 +98,9 @@ public class ApplicationDTO {
 
     public void setAdId(Long adId) {
         this.adId = adId;
+    }
+
+    public Long getAppId() {
+        return appId;
     }
 }
