@@ -126,13 +126,12 @@ public class UserController {
 			return new ResponseEntity<>("Account not verified", HttpStatus.BAD_REQUEST);
 		}
 		// generate a random password for the user to log in and change later
-		String tempPw = userService.generateRandomPassword();
-		ue.setPassword(passwordEncoder.encode(tempPw));
-		userRepo.save(ue);
+		
 		try {
+			String tempPw = userService.resetPassword(email);
 			emailingService.userForgotPasswordEmail(ue.getEmail(), tempPw, ue.getUserName());
 			return new ResponseEntity<>(HttpStatus.OK);
-		} catch (MailException x) {
+		} catch (MailException | RegisterException x) {
 			return new ResponseEntity<>(x.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -170,7 +169,7 @@ public class UserController {
 			return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
 	/**
 	 * Deletes a user. The person making the request must be an admin.
 	 *
@@ -178,7 +177,7 @@ public class UserController {
 	 * @return delete was successful or not
 	 */
 	@DeleteMapping("/{username}")
-	public ResponseEntity<?> deleteUser(@PathVariable String username, @RequestHeader String token) {
+	public ResponseEntity<?> deleteUser(@PathVariable String username, @RequestHeader String token) throws RegisterException {
 		User requester = userRepo.findUserByApiToken(token);
 		if (requester != null && requester.getUserType().equals(UserType.ADMIN)) {
 			if (userService.deleteUser(username)) { // if the user is successfully deleted
