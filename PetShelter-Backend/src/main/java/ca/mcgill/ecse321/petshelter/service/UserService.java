@@ -66,6 +66,7 @@ public class UserService {
 		// create the user and set its attributes
 		User user1 = new User();
 		user1.setPassword(passwordEncoder.encode(user.getPassword()));
+		System.out.println("pipcouil");
 		user1.setEmail(user.getEmail());
 		user1.setUserName(user.getUsername());
 		user1.setUserType(user.getUserType());
@@ -84,21 +85,7 @@ public class UserService {
 		return userToDto(user1);
 	}
 
-	/**
-	 * Generates a strong temporary password to be used in case of password reset.
-	 *
-	 * @return
-	 */
-	public String generateRandomPassword() {
-		String upperCaseLetters = RandomStringUtils.random(1, 65, 90, true, true);
-		String lowerCaseLetters = RandomStringUtils.random(1, 97, 122, true, true);
-		String numbers = RandomStringUtils.randomNumeric(1);
-		String totalChars = RandomStringUtils.randomAlphanumeric(6);
-		String combinedChars = upperCaseLetters.concat(lowerCaseLetters).concat(numbers).concat(totalChars);
-		List<Character> pwdChars = combinedChars.chars().mapToObj(c -> (char) c).collect(Collectors.toList());
-		Collections.shuffle(pwdChars);
-		return pwdChars.stream().collect(StringBuilder::new, StringBuilder::append, StringBuilder::append).toString();
-	}
+
 
 	/**
 	 * Validates the UserDto it is given. Email must be an email, and fields must
