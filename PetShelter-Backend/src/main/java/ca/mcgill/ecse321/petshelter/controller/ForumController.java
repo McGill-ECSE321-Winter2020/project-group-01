@@ -22,16 +22,16 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/forum")
 public class ForumController {
-	
+
 	@Autowired
 	ForumRepository forumRepository;
-	
+
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	ForumService forumService;
-	
+
 	/**
 	 * Convert a forum thread to a forum DTO.
 	 *
@@ -51,7 +51,7 @@ public class ForumController {
 		forumDTO.setAuthor(UserController.userToDto(forum.getAuthor()));
 		return forumDTO;
 	}
-	
+
 	/**
 	 * Gets the desired forum and its associated comments.
 	 *
@@ -59,37 +59,45 @@ public class ForumController {
 	 * @return The forum DTO.
 	 */
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getForum(@PathVariable(required = true) Long id) {
+	public ResponseEntity<?> getForum(@PathVariable(required = true) Long id, @RequestHeader String token) {
+		User requester = userRepository.findUserByApiToken(token);
 		Optional<Forum> forum = forumRepository.findById(id);
-		if (forum.isPresent()) {
+		if (forum.isPresent() && requester != null) {
 			return new ResponseEntity<>(forumToDto(forum.get()), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	
-	
-	//todo, check if the user exists else, it will give a null pointer
-	
+
 	/**
 	 * Get all the forum threads of a user.
 	 *
-	 * @param username The username of the user which is the author of all desired comments.
+	 * @param username The username of the user which is the author of all desired
+	 *                 comments.
 	 * @return The list of all forums of a user.
 	 */
 	@GetMapping("/forums/{username}")
-	public List<ForumDTO> getUserForums(@PathVariable String username) {
-		return forumService.getForumsByUser(userRepository.findUserByUserName(username).getId()).stream()
-				.map(ForumController::forumToDto).collect(Collectors.toList());
+	public ResponseEntity<?> getUserForums(@PathVariable String username, @RequestHeader String token) {
+		User requester = userRepository.findUserByApiToken(token);
+		if (requester != null) {
+			List<ForumDTO> forums = forumService.getForumsByUser(userRepository.findUserByUserName(username).getId())
+					.stream().map(ForumController::forumToDto).collect(Collectors.toList());
+			return new ResponseEntity<>(forums, HttpStatus.OK);
+		} else
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
-	
+
 	/**
 	 * Gets all existing forums thread.
 	 *
 	 * @return List of all existing forum threads.
 	 */
 	@GetMapping("/all")
-	public ResponseEntity<?> getAllForums() {
+	public ResponseEntity<?> getAllForums(@RequestHeader String token) {
+		User requester = userRepository.findUserByApiToken(token);
+		if(requester == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		List<Forum> forums = new ArrayList<>();
 		List<ForumDTO> forumsDto = new ArrayList<>();
 		Iterable<Forum> usersIterable = forumRepository.findAll();
@@ -100,9 +108,7 @@ public class ForumController {
 		}
 		return new ResponseEntity<>(forumsDto, HttpStatus.OK);
 	}
-	
-	//todo doesnt work with body, only with Header. maybe JSON problem?
-	
+
 	/**
 	 * Create new forum thread.
 	 *
@@ -112,7 +118,6 @@ public class ForumController {
 	 */
 	@PostMapping()
 	public ResponseEntity<?> createForum(@RequestBody String title, @RequestHeader String token) {
-		System.out.println(title + "  " + token);
 		User user = userRepository.findUserByApiToken(token);
 		if (user != null && title != null && !title.trim().equals("")) {
 			Forum forum = forumService.addForum(title, user);
@@ -121,7 +126,7 @@ public class ForumController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	/**
 	 * Update the title of a forum thread.
 	 *
@@ -132,11 +137,10 @@ public class ForumController {
 	 */
 	@PutMapping("/{forumId}")
 	public ResponseEntity<?> updateForum(@PathVariable long forumId, @RequestBody String title,
-										 @RequestHeader String token) {
+			@RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
 		Optional<Forum> oldForum = forumRepository.findById(forumId);
-		if (user != null
-				&& oldForum.isPresent() // Verify the forum already exists.
+		if (user != null && oldForum.isPresent() // Verify the forum already exists.
 				&& oldForum.get().getAuthor().getId() == user.getId() // Check if the issuing user is the author.
 				&& title != null // Check if the new title is valid.
 				&& !title.trim().equals("")) {
@@ -146,9 +150,10 @@ public class ForumController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	/**
-	 * Lock or unlock a given forum. By design, only admin are allowed to lock and unlock forums.
+	 * Lock or unlock a given forum. By design, only admin are allowed to lock and
+	 * unlock forums.
 	 *
 	 * @param forumID  The id of a given forum.
 	 * @param token    The session token of a user.
@@ -157,7 +162,7 @@ public class ForumController {
 	 */
 	@PutMapping("/lock/{forumID}")
 	public ResponseEntity<?> setLockForum(@PathVariable long forumID, @RequestHeader String token,
-										  @RequestBody Boolean isLocked) {
+			@RequestBody Boolean isLocked) {
 		User user = userRepository.findUserByApiToken(token);
 		if (user != null && user.getUserType() == UserType.ADMIN) {
 			Forum forum;
@@ -171,9 +176,10 @@ public class ForumController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	/**
-	 * Delete a forum thread from the database. By design, only an admin may delete a forum thread.
+	 * Delete a forum thread from the database. By design, only an admin may delete
+	 * a forum thread.
 	 *
 	 * @param forumID Forum id of the forum to delete.
 	 * @param token   Session token of the user.
@@ -185,9 +191,9 @@ public class ForumController {
 		Optional<Forum> forum = forumRepository.findById(forumID);
 		if (user != null && forum.isPresent() && user.getUserType().equals(UserType.ADMIN)) {
 			// delete all comments
-			
+
 			Set<Comment> comments = forum.get().getComments();
-			for (Iterator<Comment> it = comments.iterator(); it.hasNext(); ) {
+			for (Iterator<Comment> it = comments.iterator(); it.hasNext();) {
 				it.next();
 				it.remove();
 			}
@@ -196,7 +202,7 @@ public class ForumController {
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
-	
+
 	/**
 	 * Subscribe to a forum.
 	 *
@@ -215,7 +221,7 @@ public class ForumController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	/**
 	 * Unsubscribe to from a forum.
 	 *
