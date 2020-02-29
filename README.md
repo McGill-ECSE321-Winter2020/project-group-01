@@ -51,7 +51,7 @@ The project report for this deliverable can be found [here](https://github.com/M
 | Louis Barrette-Vanasse | ...| 0 |
 | Mathieu Bissonnette |... | 0 |
 | Christopher Boustros | ... | 0 |
-| Ding Ma | ... | 0 |
+| Ding Ma | <ul><li>RESTful services tests through Postman, Newman, and Documentation </li><li>Donation and User service tests </li><li>Donation controller and Service </li><li>Heroku deployment</li></ul> | 35 |
 | Katrina Poulin | ... | 0 |
 
 (*) *From ECSE321_Project_Description.pdf written by M. Kanaan, posted on myCourses.*
