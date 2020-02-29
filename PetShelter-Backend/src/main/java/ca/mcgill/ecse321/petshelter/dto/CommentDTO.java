@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
 import java.sql.Date;
+import java.sql.Time;
 
 public class CommentDTO {
 	private Date datePosted;
@@ -12,6 +13,16 @@ public class CommentDTO {
 	 */
 	
 	private UserDTO user;
+
+	private Time time;
+
+	public void setTime(Time value) {
+		this.time = value;
+	}
+
+	public Time getTime() {
+		return this.time;
+	}
 	
 	public Date getDatePosted() {
 		return this.datePosted;
@@ -64,6 +75,7 @@ public class CommentDTO {
 				", id=" + id +
 				", text='" + text + '\'' +
 				", user=" + user +
+				", time=" + time +
 				'}';
 	}
 }
