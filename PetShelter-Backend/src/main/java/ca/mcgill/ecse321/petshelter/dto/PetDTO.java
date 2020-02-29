@@ -13,12 +13,15 @@ public class PetDTO {
 	private String breed;
 	private String description;
 	private byte[] picture;
-	private Long petId;
+	public Long petId;
     private Gender gender;
     private Advertisement advertisement;
     private String userName;
 	
 
+    public PetDTO() {
+        
+    }
 	public PetDTO(Date date, String name, String spec, String breed, String desc, byte [] pic, Gender gen, Advertisement ad, String userName) {
 		this.dateOfBirth = date;
 		this.name = name;
@@ -96,14 +99,6 @@ public class PetDTO {
 	public Long getId() {
 		return petId;
 	}
-
-
-	public void setId(Long id) {
-		if(this.petId == null) {
-			this.petId = id;
-		}
-	}
-
 
 	public Gender getGender() {
 		return gender;
