@@ -49,17 +49,24 @@ public class CommentController {
 	}
 
 	/**
-	 * Get all the comments in the database and return them.
+	 * Get all the comments in the database and return them. Only the admin may get those.
 	 *
 	 * @return The list of all comments.
 	 */
 	@GetMapping("/all")
-	public List<CommentDTO> getAllComments() {
-		return commentService.getComments().stream().map(CommentController::commentToDto).collect(Collectors.toList());
+	public ResponseEntity<?> getAllComments(@RequestHeader String token) {
+		User requester = userRepository.findUserByApiToken(token);
+		if(requester!=null && requester.getUserType().equals(UserType.ADMIN)) {
+			List<CommentDTO> comments= commentService.getComments().stream().map(CommentController::commentToDto).collect(Collectors.toList());
+			return new ResponseEntity<>(comments, HttpStatus.OK);
+			}
+		else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	/**
-	 * Get all the comments of a user.
+	 * Get all the comments of a user. Anybody can see anyone's comments.
 	 *
 	 * @param username The username of the user which is the author of all desired
 	 *                 comments.
