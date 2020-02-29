@@ -101,13 +101,12 @@ public class TestUserService {
 	@Test
 	public void testCreatePerson() {
 		UserDTO userDTO = new UserDTO();
-		UserType userType = USER;
-
+		
 		userDTO.setEmail(USER_EMAIL);
 		userDTO.setPassword(USER_PASSWORD);
 		userDTO.setUsername(USER_NAME);
-		userDTO.setUserType(userType);
-
+		userDTO.setUserType(USER);
+		
 		try {
 			userService.createUser(userDTO);
 		} catch (RegisterException e) {
