@@ -6,7 +6,6 @@ import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.DonationRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.exception.DonationException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,8 +35,8 @@ public class DonationService {
     }
     
     @Transactional
-    public List<Donation> getAllUserDonations(User name) {
-        return toList(donationRepository.findAllByUser(name));
+    public List<Donation> getAllUserDonations(String name) {
+        return toList(donationRepository.findAllByUser(userRepository.findUserByUserName(name)));
     }
     
     //From tutorial

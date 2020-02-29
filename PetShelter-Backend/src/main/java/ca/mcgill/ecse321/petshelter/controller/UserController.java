@@ -174,14 +174,14 @@ public class UserController {
 	/**
 	 * Deletes a user. The person making the request must be an admin.
 	 *
-	 * @param userName user's account to delete
+	 * @param username user's account to delete
 	 * @return delete was successful or not
 	 */
-	@DeleteMapping("/{userName}")
-	public ResponseEntity<?> deleteUser(@PathVariable String userName, @RequestHeader String token) {
+	@DeleteMapping("/{username}")
+	public ResponseEntity<?> deleteUser(@PathVariable String username, @RequestHeader String token) {
 		User requester = userRepo.findUserByApiToken(token);
 		if (requester != null && requester.getUserType().equals(UserType.ADMIN)) {
-			if (userService.deleteUser(userName)) { // if the user is successfully deleted
+			if (userService.deleteUser(username)) { // if the user is successfully deleted
 				return new ResponseEntity<>(HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
