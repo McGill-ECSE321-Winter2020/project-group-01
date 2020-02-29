@@ -6,6 +6,8 @@ import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.exception.RegisterException;
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.EmailingService;
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.JWTTokenProvider;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static ca.mcgill.ecse321.petshelter.model.UserType.USER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,15 +29,27 @@ import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
 public class TestUserService {
-	
+
 	private static final String USER_NAME = "TestPerson";
 	private static final String USER_EMAIL = "TestPerson@email.com";
 	private static final String USER_PASSWORD = "myP1+abc";
+	private static final String USER_NAME2 = "TestPerson2";
+	private static final String USER_EMAIL2 = "TestPerson2@email.com";
+	private static final String USER_PASSWORD2 = "myP1+abc2";
 	@Mock
 	private UserRepository userRepository;
 	@InjectMocks
 	private UserService userService;
-	
+
+	@Mock
+	private PasswordEncoder passwordEncoder;
+
+	@Mock
+	private JWTTokenProvider jwtTokenProvider;
+
+	@Mock
+	private EmailingService emailingService;
+
 	@BeforeEach
 	public void setMockOutput() {
 		MockitoAnnotations.initMocks(this);
@@ -60,7 +75,7 @@ public class TestUserService {
 				return null;
 			}
 		});
-		
+
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> invocation.getArgument(0);
 		lenient().when(userRepository.save(any(User.class))).thenAnswer(returnParameterAsAnswer);
 
@@ -71,17 +86,17 @@ public class TestUserService {
 		UserDTO userDTO = new UserDTO();
 		UserType userType = USER;
 
-		userDTO.setEmail(USER_EMAIL);
-		userDTO.setPassword(USER_PASSWORD);
-		userDTO.setUsername(USER_NAME);
+		userDTO.setEmail(USER_EMAIL2);
+		userDTO.setPassword(USER_PASSWORD2);
+		userDTO.setUsername(USER_NAME2);
 		userDTO.setUserType(userType);
-
+		UserDTO e = null;
 		try {
-			userService.createUser(userDTO);
-		} catch (RegisterException e) {
-			e.printStackTrace();
+			e = userService.createUser(userDTO);
+		} catch (RegisterException ex) {
+			ex.printStackTrace();
 		}
-		User e = userRepository.findUserByUserName(USER_NAME);
+
 		assertEquals(userDTO.getEmail(), e.getEmail());
 	}
 
