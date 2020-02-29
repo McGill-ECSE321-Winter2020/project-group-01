@@ -30,8 +30,6 @@ public class UserService {
     @Autowired
     private ApplicationRepository applicationRepository;
     @Autowired
-    private PetRepository petRepository;
-    @Autowired
     private CommentRepository commentRepository;
     @Autowired
     private UserRepository userRepository;
