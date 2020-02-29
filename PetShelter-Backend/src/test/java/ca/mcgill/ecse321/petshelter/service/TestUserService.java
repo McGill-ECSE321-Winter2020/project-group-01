@@ -5,6 +5,8 @@ import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.*;
 import ca.mcgill.ecse321.petshelter.repository.*;
 import ca.mcgill.ecse321.petshelter.service.exception.RegisterException;
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.EmailingService;
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.JWTTokenProvider;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,12 +17,12 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.sql.Date;
-import java.sql.Time;
-
+import static ca.mcgill.ecse321.petshelter.model.UserType.ADMIN;
 import static ca.mcgill.ecse321.petshelter.model.UserType.USER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
@@ -32,10 +34,9 @@ public class TestUserService {
 	private static final String USER_EMAIL = "TestPerson@email.com";
 	private static final String USER_PASSWORD = "myP1+abc";
 	
-	private static final double DONATION_AMOUNT = 2.12;
-	private static final Date DONATION_DATE = Date.valueOf("2020-01-22");
-	private static final Time DONATION_TIME = Time.valueOf("11:22:00");
-	
+	private static final String USER_NAME2 = "TestPerson2";
+	private static final String USER_EMAIL2 = "TestPerson2@email.com";
+	private static final String USER_PASSWORD2 = "myP1+abc2";
 	@Mock
 	private UserRepository userRepository;
 	
@@ -59,6 +60,15 @@ public class TestUserService {
 	
 	@InjectMocks
 	private UserService userService;
+	
+	@Mock
+	private PasswordEncoder passwordEncoder;
+	
+	@Mock
+	private JWTTokenProvider jwtTokenProvider;
+	
+	@Mock
+	private EmailingService emailingService;
 	
 	@BeforeEach
 	public void setMockOutput() {
@@ -97,32 +107,52 @@ public class TestUserService {
 		lenient().when(commentRepository.save(any(Comment.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(forumRepository.save(any(Forum.class))).thenAnswer(returnParameterAsAnswer);
 	}
-
+	
 	@Test
-	public void testCreatePerson() {
+	public void testCreateUser() {
 		UserDTO userDTO = new UserDTO();
 		
-		userDTO.setEmail(USER_EMAIL);
-		userDTO.setPassword(USER_PASSWORD);
-		userDTO.setUsername(USER_NAME);
+		userDTO.setEmail(USER_EMAIL2);
+		userDTO.setPassword(USER_PASSWORD2);
+		userDTO.setUsername(USER_NAME2);
 		userDTO.setUserType(USER);
 		
+		UserDTO createdUser = null;
 		try {
-			userService.createUser(userDTO);
+			createdUser = userService.createUser(userDTO);
 		} catch (RegisterException e) {
 			e.printStackTrace();
 		}
-		User e = userRepository.findUserByUserName(USER_NAME);
-		assertEquals(userDTO.getEmail(), e.getEmail());
+		assertNotNull(createdUser);
+		assertEquals(userDTO.getEmail(), createdUser.getEmail());
 	}
-
+	
+	@Test
+	public void testCreateAdmin() {
+		UserDTO userDTO = new UserDTO();
+		
+		userDTO.setEmail(USER_EMAIL2);
+		userDTO.setPassword(USER_PASSWORD2);
+		userDTO.setUsername(USER_NAME2);
+		userDTO.setUserType(ADMIN);
+		
+		UserDTO createdUser = null;
+		try {
+			createdUser = userService.createUser(userDTO);
+		} catch (RegisterException e) {
+			e.printStackTrace();
+		}
+		assertNotNull(createdUser);
+		assertEquals(userDTO.getEmail(), createdUser.getEmail());
+	}
+	
 	@Test
 	public void testRegisterWithInvalidEmail() {
 		UserDTO userDTO = new UserDTO();
-
+		
 		String email = "myEmail@";
 		UserType userType = USER;
-
+		
 		userDTO.setEmail(email);
 		userDTO.setPassword(USER_PASSWORD);
 		userDTO.setUsername(USER_NAME);
