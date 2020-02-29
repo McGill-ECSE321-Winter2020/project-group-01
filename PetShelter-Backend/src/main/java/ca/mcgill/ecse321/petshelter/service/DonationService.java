@@ -15,6 +15,11 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Services to handle the creation of donations.
+ *
+ * @author dingm
+ */
 @Service
 public class DonationService {
     
@@ -24,16 +29,28 @@ public class DonationService {
     @Autowired
     UserRepository userRepository;
     
+    /**
+     * @return list of all the donations
+     */
     @Transactional
     public List<Donation> getAllDonations() {
         return toList(donationRepository.findAll());
     }
     
+    /**
+     * @param name   user's username
+     * @param amount amount donated
+     * @return donation based on name and amount
+     */
     @Transactional
     public Donation getDonation(String name, double amount) {
         return donationRepository.findDonationsByUserUserNameAndAmount(name, amount);
     }
     
+    /**
+     * @param name user's username
+     * @return all the donations made by that username
+     */
     @Transactional
     public List<Donation> getAllUserDonations(String name) {
         return toList(donationRepository.findAllByUser(userRepository.findUserByUserName(name)));
@@ -48,6 +65,12 @@ public class DonationService {
         return resultList;
     }
     
+    /**
+     * Creates a donation and saves it in database
+     *
+     * @param donationDTO donation dto from controller
+     * @return donation object
+     */
     @Transactional
     public Donation createDonation(DonationDTO donationDTO) {
         //condition checks
@@ -57,7 +80,7 @@ public class DonationService {
         if (donationDTO.getAmount() < 0.00) {
             throw new DonationException("Donation amount can't be less than 0$");
         }
-    
+        
         // System.out.println(donationDTO.toString());
         User user = userRepository.findUserByUserName(donationDTO.getUsername());
         Donation donation = new Donation();

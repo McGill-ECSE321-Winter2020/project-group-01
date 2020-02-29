@@ -60,6 +60,13 @@ public class DonationController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
+	
+	/**
+	 * Converts donation object to donation dto
+	 *
+	 * @param donation donation object
+	 * @return donation dto
+	 */
 	public DonationDTO convertToDto(Donation donation) {
 		DonationDTO donationDTO = new DonationDTO();
 		donationDTO.setDate(donation.getDate());

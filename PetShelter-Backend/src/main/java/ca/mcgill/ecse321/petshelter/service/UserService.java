@@ -48,6 +48,12 @@ public class UserService {
         this.emailingService = emailingService;
     }
     
+    /**
+     * takes in user object to transform into dto
+     *
+     * @param user user object
+     * @return dto object
+     */
     // converts a user into a userdto
     static UserDTO userToDto(User user) {
         UserDTO userDto = new UserDTO();
@@ -63,8 +69,8 @@ public class UserService {
      * Creates a user if the input is valid and sends an email to the specified
      * email address.
      *
-     * @param user
-     * @return
+     * @param user userDTO
+     * @return user
      */
     
     public UserDTO createUser(UserDTO user) throws RegisterException {
@@ -104,7 +110,7 @@ public class UserService {
     /**
      * Generates a strong temporary password to be used in case of password reset.
      *
-     * @return
+     * @return randomly generated password
      */
     public String generateRandomPassword() {
         String upperCaseLetters = RandomStringUtils.random(1, 65, 90, true, true);
@@ -201,29 +207,34 @@ public class UserService {
         for (Donation donation : donations) {
             donation.setUser(null);
         }
-        
+    
         List<Forum> forumList = forumRepository.findForumByAuthorUserName(username);
         for (Forum forum : forumList) {
             forum.setAuthor(null);
             Set<User> subs = forum.getSubscribers();
             subs.remove(user);
         }
-        
+    
         List<Comment> commentList = commentRepository.findCommentByUserUserName(username);
         for (Comment comment : commentList) {
             comment.setUser(null);
         }
-        
+    
         applicationRepository.deleteAdoptionApplicationsByUserUserName(username);
         //petRepository.deletePetsByUserUserName(username);
         if (user.getPets() != null) { //this is needed for the tests to pass
             user.getPets().clear(); //check if this will work
         }
-        
+    
         userRepository.deleteById(user.getId());
         return true;
     }
     
+    /**
+     * @param email user's email
+     * @return randomly generated password
+     * @throws RegisterException
+     */
     public String resetPassword(String email) throws RegisterException {
         User user = userRepository.findUserByEmail(email);
         if (user == null) {
