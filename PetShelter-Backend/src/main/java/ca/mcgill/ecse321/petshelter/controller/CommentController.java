@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/forum")
+@RequestMapping("/api/comment")
 public class CommentController {
 	
 	@Autowired
@@ -42,7 +42,7 @@ public class CommentController {
 		commentDTO.setId(comment.getId());
 		commentDTO.setText(comment.getText());
 		commentDTO.setTime(comment.getTime());
-		commentDTO.setUser(UserController.userToDto(comment.getUser()));
+		commentDTO.setUsername(comment.getUser().getUserName());
 		return commentDTO;
 	}
 	
@@ -51,7 +51,7 @@ public class CommentController {
 	 *
 	 * @return The list of all comments.
 	 */
-	@GetMapping("/comments/all")
+	@GetMapping("/all")
 	public List<CommentDTO> getAllComments() {
 		return commentService.getComments().stream().map(CommentController::commentToDto).collect(Collectors.toList());
 	}
@@ -62,7 +62,7 @@ public class CommentController {
 	 * @param username The username of the user which is the author of all desired comments.
 	 * @return The list of all comments of a user.
 	 */
-	@GetMapping("/comments/{username}")
+	@GetMapping("/{username}")
 	public List<CommentDTO> getUserComments(@PathVariable String username) {
 		return commentService.getCommentsByUser(userRepository.findUserByUserName(username).getId()).stream()
 				.map(CommentController::commentToDto).collect(Collectors.toList());
@@ -71,18 +71,21 @@ public class CommentController {
 	/**
 	 * Create a comment on a designated forum thread.
 	 *
-	 * @param comment The comment DTO to add.
-	 * @param id      The id of the forum thread to respond to.
-	 * @param token   The user session token.
+	 * @param commentDTO The comment DTO to add.
+	 * @param id         The id of the forum thread to respond to.
+	 * @param token      The user session token.
 	 * @return The comment added to the thread.
 	 */
 	@PostMapping("/{id}")
 	public ResponseEntity<?> createComment(@RequestBody String commentText, @PathVariable long id,
 										   @RequestHeader String token) {
+		System.out.println(commentDTO.toString());
+		System.out.println("Thread ID=" + id);
 		User user = userRepository.findUserByApiToken(token);
 		// Check if the user exists.
 		if (user != null) {
 			Comment commentCreated = commentService.addComment(commentText, id, user.getId());
+			System.out.println(commentCreated.toString());
 			return new ResponseEntity<>(commentToDto(commentCreated), HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
