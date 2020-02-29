@@ -50,7 +50,7 @@ public class CommentService {
 	 * @return The created comment.
 	 */
 	@Transactional
-	public Comment addComment(String text, long forumID, long userID) {
+	public Comment addComment(String text, long forumID, long userID) throws CommentException{
 		Optional<User> user = userRepository.findById(userID);
 		Optional<Forum> forum = forumRepository.findById(forumID);
 		if (user.isPresent()) {
@@ -85,9 +85,10 @@ public class CommentService {
 	 * @param commentID Comment ID.
 	 * @param comment   Comment update.
 	 * @return The updated comment.
+	 * @throws CommentException 
 	 */
 	@Transactional
-	public Comment updateComment(long commentID, String comment) {
+	public Comment updateComment(long commentID, String comment) throws CommentException {
 		Optional<Comment> oldComment = commentRepository.findById(commentID);
 		if (oldComment.isPresent()) {
 			Comment updatedComment = oldComment.get();
@@ -104,9 +105,10 @@ public class CommentService {
 	 *
 	 * @param commentID The ID of the comment.
 	 * @return The deleted comment.
+	 * @throws CommentException 
 	 */
 	@Transactional
-	public Comment deleteComment(long commentID) {
+	public Comment deleteComment(long commentID) throws CommentException {
 		Optional<Comment> oldComment = commentRepository.findById(commentID);
 		if (oldComment.isPresent()) {
 			commentRepository.deleteById(commentID);
@@ -134,7 +136,7 @@ public class CommentService {
 	 * @return The list of all comments by the user.
 	 */
 	@Transactional
-	public List<Comment> getCommentsByUser(long userID) {
+	public List<Comment> getCommentsByUser(long userID) throws CommentException{
 		Optional<User> user = userRepository.findById(userID);
 		if (user.isPresent()) {
 			List<Comment> comments = commentRepository.findCommentsByUser(user.get());
