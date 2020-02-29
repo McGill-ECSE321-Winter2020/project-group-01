@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -86,5 +87,12 @@ public class ApplicationService {
         userRepository.save(user);
         advertisementRepository.save(advertisement);
         return application;
+    }
+    @Transactional
+    public void deleteApplication(Long appId) {
+        Optional <AdoptionApplication> app = applicationRepository.findById(appId);
+        if(app.isPresent()) {
+        applicationRepository.deleteById(appId);
+        }
     }
 }
