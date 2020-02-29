@@ -56,7 +56,7 @@ public class Forum {
         this.subscribers = subscriberss;
     }
     
-    @ManyToOne
+    @ManyToOne(optional = true)
     public User getAuthor() {
         return this.author;
     }
