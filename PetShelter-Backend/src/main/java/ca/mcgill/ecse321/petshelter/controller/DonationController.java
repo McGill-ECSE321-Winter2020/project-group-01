@@ -2,7 +2,6 @@ package ca.mcgill.ecse321.petshelter.controller;
 
 import ca.mcgill.ecse321.petshelter.dto.DonationDTO;
 import ca.mcgill.ecse321.petshelter.model.Donation;
-import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.DonationService;
 import ca.mcgill.ecse321.petshelter.service.extrafeatures.EmailingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,6 @@ public class DonationController {
 	
 	@Autowired
 	private DonationService donationService;
-	
-	@Autowired
-	private UserRepository userRepository;
 	
 	@Autowired
 	private EmailingService emailingService;
@@ -44,7 +40,7 @@ public class DonationController {
 	 */
 	@GetMapping("/{user}")
 	public ResponseEntity<?> getUserDonation(@PathVariable String user) {
-		return new ResponseEntity<>(donationService.getAllUserDonations(userRepository.findUserByUserName(user))
+		return new ResponseEntity<>(donationService.getAllUserDonations(user)
 				.stream().map(this::convertToDto).collect(Collectors.toList()), HttpStatus.OK);
 	}
 	

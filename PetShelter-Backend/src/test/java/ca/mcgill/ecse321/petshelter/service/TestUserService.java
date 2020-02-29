@@ -2,11 +2,12 @@ package ca.mcgill.ecse321.petshelter.service;
 
 import ca.mcgill.ecse321.petshelter.dto.PasswordChangeDTO;
 import ca.mcgill.ecse321.petshelter.dto.UserDTO;
-import ca.mcgill.ecse321.petshelter.model.User;
-import ca.mcgill.ecse321.petshelter.model.UserType;
-import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import ca.mcgill.ecse321.petshelter.model.*;
+import ca.mcgill.ecse321.petshelter.repository.*;
+import ca.mcgill.ecse321.petshelter.service.exception.PasswordException;
 import ca.mcgill.ecse321.petshelter.service.exception.RegisterException;
-
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.EmailingService;
+import ca.mcgill.ecse321.petshelter.service.extrafeatures.JWTTokenProvider;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,9 +18,11 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static ca.mcgill.ecse321.petshelter.model.UserType.ADMIN;
 import static ca.mcgill.ecse321.petshelter.model.UserType.USER;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
@@ -30,10 +33,43 @@ public class TestUserService {
 	private static final String USER_NAME = "TestPerson";
 	private static final String USER_EMAIL = "TestPerson@email.com";
 	private static final String USER_PASSWORD = "myP1+abc";
+	
+	private static final String USER_NAME2 = "TestPerson2";
+	private static final String USER_EMAIL2 = "TestPerson2@email.com";
+	private static final String USER_PASSWORD2 = "myP1+abc2";
+	private static final String NEW_USER_PASSWORD = "ad@ssa23Asda";
 	@Mock
 	private UserRepository userRepository;
+	
+	@Mock
+	private AdvertisementRepository advertisementRepository;
+	
+	@Mock
+	private ApplicationRepository applicationRepository;
+	
+	@Mock
+	private CommentRepository commentRepository;
+	
+	@Mock
+	private ForumRepository forumRepository;
+	
+	@Mock
+	private PetRepository petRepository;
+	
+	@Mock
+	private DonationRepository donationRepository;
+	
 	@InjectMocks
 	private UserService userService;
+	
+	@Mock
+	private PasswordEncoder passwordEncoder;
+	
+	@Mock
+	private JWTTokenProvider jwtTokenProvider;
+	
+	@Mock
+	private EmailingService emailingService;
 	
 	@BeforeEach
 	public void setMockOutput() {
@@ -63,35 +99,61 @@ public class TestUserService {
 		
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> invocation.getArgument(0);
 		lenient().when(userRepository.save(any(User.class))).thenAnswer(returnParameterAsAnswer);
-
+		
+		//these are needed to pass the delete methods
+		lenient().when(donationRepository.save(any(Donation.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(advertisementRepository.save(any(Advertisement.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(applicationRepository.save(any(AdoptionApplication.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(petRepository.save(any(Pet.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(commentRepository.save(any(Comment.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(forumRepository.save(any(Forum.class))).thenAnswer(returnParameterAsAnswer);
 	}
-
+	
 	@Test
-	public void testCreatePerson() {
+	public void testCreateUser() {
 		UserDTO userDTO = new UserDTO();
-		UserType userType = USER;
-
-		userDTO.setEmail(USER_EMAIL);
-		userDTO.setPassword(USER_PASSWORD);
-		userDTO.setUsername(USER_NAME);
-		userDTO.setUserType(userType);
-
+		
+		userDTO.setEmail(USER_EMAIL2);
+		userDTO.setPassword(USER_PASSWORD2);
+		userDTO.setUsername(USER_NAME2);
+		userDTO.setUserType(USER);
+		
+		UserDTO createdUser = null;
 		try {
-			userService.createUser(userDTO);
+			createdUser = userService.createUser(userDTO);
 		} catch (RegisterException e) {
 			e.printStackTrace();
 		}
-		User e = userRepository.findUserByUserName(USER_NAME);
-		assertEquals(userDTO.getEmail(), e.getEmail());
+		assertNotNull(createdUser);
+		assertEquals(userDTO.getEmail(), createdUser.getEmail());
 	}
-
+	
+	@Test
+	public void testCreateAdmin() {
+		UserDTO userDTO = new UserDTO();
+		
+		userDTO.setEmail(USER_EMAIL2);
+		userDTO.setPassword(USER_PASSWORD2);
+		userDTO.setUsername(USER_NAME2);
+		userDTO.setUserType(ADMIN);
+		
+		UserDTO createdUser = null;
+		try {
+			createdUser = userService.createUser(userDTO);
+		} catch (RegisterException e) {
+			e.printStackTrace();
+		}
+		assertNotNull(createdUser);
+		assertEquals(userDTO.getEmail(), createdUser.getEmail());
+	}
+	
 	@Test
 	public void testRegisterWithInvalidEmail() {
 		UserDTO userDTO = new UserDTO();
-
+		
 		String email = "myEmail@";
 		UserType userType = USER;
-
+		
 		userDTO.setEmail(email);
 		userDTO.setPassword(USER_PASSWORD);
 		userDTO.setUsername(USER_NAME);
@@ -162,77 +224,77 @@ public class TestUserService {
 
 	@Test
 	public void testChangeUserPassword() {
-		UserDTO userDTO = new UserDTO();
-
-		String password = "myPassword123";
 		String newPassword = "newPassword123!";
-		UserType userType = USER;
-
-		PasswordChangeDTO passwordChangeDTO = new PasswordChangeDTO();
-		passwordChangeDTO.setUserName(USER_NAME);
-		passwordChangeDTO.setNewPassword(newPassword);
-		passwordChangeDTO.setOldPassword(password);
-		userDTO.setEmail(USER_EMAIL);
-		userDTO.setPassword(password);
-		userDTO.setUsername(USER_NAME);
-		userDTO.setUserType(userType);
-
-		try {
-			userService.createUser(userDTO);
-			UserDTO user = userService.updateUser(passwordChangeDTO);
-			assertEquals(newPassword, user.getPassword());
-		} catch (RegisterException e) {
-		}
-
-	}
-
-	@Test
-	public void testChangeUserPasswordToNull() {
-		UserDTO userDTO = new UserDTO();
-
-		String newPassword = null;
-		UserType userType = USER;
-
+		
 		PasswordChangeDTO passwordChangeDTO = new PasswordChangeDTO();
 		passwordChangeDTO.setUserName(USER_NAME);
 		passwordChangeDTO.setNewPassword(newPassword);
 		passwordChangeDTO.setOldPassword(USER_PASSWORD);
-
-		userDTO.setEmail(USER_EMAIL);
-		userDTO.setPassword(USER_PASSWORD);
-		userDTO.setUsername(USER_NAME);
-		userDTO.setUserType(userType);
-
+		UserDTO userPasswordChangeDTO = null;
 		try {
-			// userService.createUser(userDTO);
+			userPasswordChangeDTO = userService.updateUser(passwordChangeDTO);
+		} catch (PasswordException e) {
+			e.printStackTrace();
+		}
+		assertNotNull(userPasswordChangeDTO);
+	}
+	
+	@Test
+	public void testChangeUserPasswordWithUserNotFound() {
+		PasswordChangeDTO passwordChangeDTO = new PasswordChangeDTO();
+		passwordChangeDTO.setUserName("USER_NAME");
+		passwordChangeDTO.setNewPassword(NEW_USER_PASSWORD);
+		passwordChangeDTO.setOldPassword(USER_PASSWORD);
+		
+		try {
 			userService.updateUser(passwordChangeDTO);
-		} catch (IllegalArgumentException e) {
-			Assert.assertEquals("Password cannot be null.", e.getMessage());
+		} catch (PasswordException e) {
+			assertEquals("No user was found", e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testChangeUserPasswordWithWrongPassword() {
+		
+		PasswordChangeDTO passwordChangeDTO = new PasswordChangeDTO();
+		passwordChangeDTO.setUserName(USER_NAME);
+		passwordChangeDTO.setNewPassword(NEW_USER_PASSWORD);
+		passwordChangeDTO.setOldPassword(USER_PASSWORD2);
+		
+		try {
+			userService.updateUser(passwordChangeDTO);
+		} catch (PasswordException e) {
+			assertEquals("Wrong password", e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testChangeUserPasswordToNull() {
+		
+		PasswordChangeDTO passwordChangeDTO = new PasswordChangeDTO();
+		passwordChangeDTO.setUserName(USER_NAME);
+		passwordChangeDTO.setNewPassword(null);
+		passwordChangeDTO.setOldPassword(USER_PASSWORD);
+		
+		try {
+			userService.updateUser(passwordChangeDTO);
+		} catch (PasswordException e) {
+			assertEquals("Password cannot be null.", e.getMessage());
 		}
 	}
 
 	@Test
 	public void testChangeInvalidPassword() {
-		UserDTO userDTO = new UserDTO();
-
-		String newPassword = "1m3iiIiii";
-		UserType userType = USER;
-
+		
 		PasswordChangeDTO passwordChangeDTO = new PasswordChangeDTO();
 		passwordChangeDTO.setUserName(USER_NAME);
-		passwordChangeDTO.setNewPassword(newPassword);
+		passwordChangeDTO.setNewPassword("123!Aa");
 		passwordChangeDTO.setOldPassword(USER_PASSWORD);
-
-		userDTO.setEmail(USER_EMAIL);
-		userDTO.setPassword(USER_PASSWORD);
-		userDTO.setUsername(USER_NAME);
-		userDTO.setUserType(userType);
-
+		
 		try {
-			// userService.createUser(userDTO);
 			userService.updateUser(passwordChangeDTO);
-		} catch (IllegalArgumentException e) {
-			Assert.assertEquals("Password must contain at least 1 special characters.", e.getMessage());
+		} catch (PasswordException e) {
+			assertEquals("Password must be at least 8 characters in length.", e.getMessage());
 		}
 	}
 
@@ -379,27 +441,36 @@ public class TestUserService {
 			Assert.assertEquals("Password must contain at least 1 special characters.", e.getMessage());
 		}
 	}
-
+	
 	@Test
-	public void testDeleteUser() {
-		UserDTO userDTO = new UserDTO();
-
-		UserType userType = USER;
-
-		userDTO.setEmail(USER_EMAIL);
-		userDTO.setPassword(USER_PASSWORD);
-		userDTO.setUsername(USER_NAME);
-		userDTO.setUserType(userType);
-
+	public void testDeleteUser() throws RegisterException {
+		assertTrue(userService.deleteUser(USER_NAME));
+	}
+	
+	@Test
+	public void testDeleteNotExistingUser() {
 		try {
-			userService.createUser(userDTO);
-		} catch (RegisterException ignored) {
-			// Assert.fail();
+			userService.deleteUser(USER_NAME2);
+		} catch (RegisterException e) {
+			assertEquals("User not found", e.getMessage());
 		}
-
-		User dbUser = userRepository.findUserByUserName(USER_NAME);
-
-		Assert.assertEquals(userDTO.getUsername(), dbUser.getUserName());
-		assert (userService.deleteUser(userDTO.getUsername()));
+	}
+	
+	@Test
+	public void testResetPassword() {
+		try {
+			userService.resetPassword(USER_EMAIL);
+		} catch (RegisterException e) {
+			fail();
+		}
+	}
+	
+	@Test
+	public void testResetPasswordInvalidUser() {
+		try {
+			userService.resetPassword(USER_EMAIL2);
+		} catch (RegisterException e) {
+			assertEquals("User not found", e.getMessage());
+		}
 	}
 }
