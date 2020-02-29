@@ -10,8 +10,6 @@ import ca.mcgill.ecse321.petshelter.service.exception.LoginException;
 import ca.mcgill.ecse321.petshelter.service.exception.RegisterException;
 import ca.mcgill.ecse321.petshelter.service.extrafeatures.EmailingService;
 import ca.mcgill.ecse321.petshelter.service.extrafeatures.JWTTokenProvider;
-
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author louis User controller class - allows for creation of users, login of
@@ -130,13 +126,12 @@ public class UserController {
 			return new ResponseEntity<>("Account not verified", HttpStatus.BAD_REQUEST);
 		}
 		// generate a random password for the user to log in and change later
-		String tempPw = generateRandomPassword();
-		ue.setPassword(passwordEncoder.encode(tempPw));
-		userRepo.save(ue);
+		
 		try {
+			String tempPw = userService.resetPassword(email);
 			emailingService.userForgotPasswordEmail(ue.getEmail(), tempPw, ue.getUserName());
 			return new ResponseEntity<>(HttpStatus.OK);
-		} catch (MailException x) {
+		} catch (MailException | RegisterException x) {
 			return new ResponseEntity<>(x.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -174,18 +169,18 @@ public class UserController {
 			return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
 	/**
 	 * Deletes a user. The person making the request must be an admin.
 	 *
-	 * @param userName user's account to delete
+	 * @param username user's account to delete
 	 * @return delete was successful or not
 	 */
-	@DeleteMapping("/{userName}")
-	public ResponseEntity<?> deleteUser(@PathVariable String userName, @RequestHeader String token) {
+	@DeleteMapping("/{username}")
+	public ResponseEntity<?> deleteUser(@PathVariable String username, @RequestHeader String token) throws RegisterException {
 		User requester = userRepo.findUserByApiToken(token);
 		if (requester != null && requester.getUserType().equals(UserType.ADMIN)) {
-			if (userService.deleteUser(userName)) { // if the user is successfully deleted
+			if (userService.deleteUser(username)) { // if the user is successfully deleted
 				return new ResponseEntity<>(HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -288,7 +283,7 @@ public class UserController {
 	
 	/**
 	 * Deletes the user's token from the database. The user is now seen as logged out.
-	 * @param The user's token
+	 * @param token user's token
 	 * @return 
 	 */
 	@GetMapping("/logout")
@@ -303,21 +298,5 @@ public class UserController {
 			userRepo.save(user);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
-	}
-	
-	/**
-	 * Generates a strong temporary password to be used in case of password reset.
-	 *
-	 * @return
-	 */
-	public String generateRandomPassword() {
-		String upperCaseLetters = RandomStringUtils.random(1, 65, 90, true, true);
-		String lowerCaseLetters = RandomStringUtils.random(1, 97, 122, true, true);
-		String numbers = RandomStringUtils.randomNumeric(1);
-		String totalChars = RandomStringUtils.randomAlphanumeric(6);
-		String combinedChars = upperCaseLetters.concat(lowerCaseLetters).concat(numbers).concat(totalChars);
-		List<Character> pwdChars = combinedChars.chars().mapToObj(c -> (char) c).collect(Collectors.toList());
-		Collections.shuffle(pwdChars);
-		return pwdChars.stream().collect(StringBuilder::new, StringBuilder::append, StringBuilder::append).toString();
 	}
 }

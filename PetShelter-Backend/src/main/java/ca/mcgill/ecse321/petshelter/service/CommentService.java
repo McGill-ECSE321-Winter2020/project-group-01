@@ -7,7 +7,6 @@ import ca.mcgill.ecse321.petshelter.repository.CommentRepository;
 import ca.mcgill.ecse321.petshelter.repository.ForumRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.exception.CommentException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +34,12 @@ public class CommentService {
 	
 	@Autowired
 	private ForumRepository forumRepository;
+	
+	/*
+	some stuff doenst work:
+	1- comments seems to be erased after
+	2- multiple comments are not saved, even with different names
+	 */
 	
 	/**
 	 * Add a comment to a thread.

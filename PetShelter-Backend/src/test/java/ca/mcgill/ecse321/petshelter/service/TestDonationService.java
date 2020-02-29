@@ -6,7 +6,6 @@ import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.DonationRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.exception.DonationException;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -135,7 +134,7 @@ public class TestDonationService {
             e.printStackTrace();
         }
         
-        Donation donation = donationRepository.findDonationsByUserUserNameAndAmount(USER_NAME, DONATION_AMOUNT);
+        Donation donation = donationService.getDonation(USER_NAME, DONATION_AMOUNT);
         assertEquals(DONATION_AMOUNT, donation.getAmount());
     }
     
@@ -157,8 +156,8 @@ public class TestDonationService {
         } catch (DonationException e) {
             e.printStackTrace();
         }
-        
-        List<Donation> allDonations = donationRepository.findAllByUser(null);
+    
+        List<Donation> allDonations = donationService.getAllUserDonations(null);
         System.out.println(allDonations);
         //  assertNull(allDonations.get(0).getUser());
     }
