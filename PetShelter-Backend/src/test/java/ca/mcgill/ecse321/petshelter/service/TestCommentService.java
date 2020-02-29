@@ -188,6 +188,7 @@ public class TestCommentService {
         // Set a reflexive return answer.
         Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> invocation.getArgument(0);
         lenient().when(commentRepository.save(any(Comment.class))).thenAnswer(returnParameterAsAnswer);
+        lenient().when(forumRepository.save(any(Forum.class))).thenAnswer(returnParameterAsAnswer);
 
     }
 

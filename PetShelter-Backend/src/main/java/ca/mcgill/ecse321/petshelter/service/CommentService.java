@@ -65,6 +65,7 @@ public class CommentService {
 					Set<Comment> comments = newForum.getComments();
 					comments.add(newComment);
 					newForum.setComments(comments);
+					commentRepository.save(newComment);
 					forumRepository.save(newForum);
 					return newComment;
 				} else {
