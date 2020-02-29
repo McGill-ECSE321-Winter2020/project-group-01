@@ -77,12 +77,12 @@ public class CommentController {
 	 * @return The comment added to the thread.
 	 */
 	@PostMapping("/{id}")
-	public ResponseEntity<?> createComment(@RequestBody CommentDTO comment, @PathVariable long id,
+	public ResponseEntity<?> createComment(@RequestBody String commentText, @PathVariable long id,
 										   @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
-		// Check if the user posting the comment is actually the declared used.
-		if (user.getUserName().equals(comment.getUser().getUsername())) {
-			Comment commentCreated = commentService.addComment(comment.getText(), id, user.getId());
+		// Check if the user exists.
+		if (user != null) {
+			Comment commentCreated = commentService.addComment(commentText, id, user.getId());
 			return new ResponseEntity<>(commentToDto(commentCreated), HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
