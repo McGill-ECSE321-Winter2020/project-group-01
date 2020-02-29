@@ -12,7 +12,7 @@ public class CommentDTO {
 	 * Author of the comment.
 	 */
 	
-	private UserDTO user;
+	private String username;
 
 	private Time time;
 
@@ -54,27 +54,27 @@ public class CommentDTO {
 	 * @return The author.
 	 */
 	
-	public UserDTO getUser() {
-		return this.user;
+	public String getUsername() {
+		return this.username;
 	}
 	
 	/**
 	 * Set the author of the comment.
 	 *
-	 * @param user The new author.
+	 * @param username The new author.
 	 */
 	
-	public void setUser(UserDTO user) {
-		this.user = user;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	
 	@Override
 	public String toString() {
-		return "Comment{" +
+		return "CommentDTO {" +
 				"datePosted=" + datePosted +
 				", id=" + id +
 				", text='" + text + '\'' +
-				", user=" + user +
+				", username=" + username +
 				", time=" + time +
 				'}';
 	}

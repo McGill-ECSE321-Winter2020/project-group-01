@@ -1,8 +1,8 @@
 To run the tests, use newman
 
-`newman run APITests.son`
+`newman run APITests.json`
 
-UserAndDonationAPI.json is the most up to date one. The contain assertion and token get/set.
+The test will go through a general use-case of the program. It contains assertions to detect if something is failing.
 
 If you you do not have newman (requires Node.js)
 
