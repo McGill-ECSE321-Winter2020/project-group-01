@@ -106,6 +106,7 @@ public class PetService {
 	 */
 	@Transactional
 	public Pet createPet(PetDTO petDTO) {
+		System.out.println(petDTO);
 		User user = userRepository.findUserByUserName(petDTO.getUserName());
 		if (user == null) {
 			throw new PetException("Cannot add: User does not exist.");
