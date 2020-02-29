@@ -1,27 +1,5 @@
 package ca.mcgill.ecse321.petshelter.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.lenient;
-
-import java.sql.Date;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
-
 import ca.mcgill.ecse321.petshelter.dto.PetDTO;
 import ca.mcgill.ecse321.petshelter.model.Gender;
 import ca.mcgill.ecse321.petshelter.model.Pet;
@@ -30,6 +8,23 @@ import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.PetRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.exception.PetException;
+import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
+
+import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
 
 //TODO Javadoc
 @RunWith(MockitoJUnitRunner.class)
@@ -65,17 +60,9 @@ public class TestPetService {
 	private static final Set<Pet> USER_PETS = new HashSet<Pet>();
 	private long petId;
 	private Pet pet;
-
-	
-	//TODO this is not called
-	@AfterEach
-	@BeforeEach
-	public void clearDatabase() {
-		userDao.deleteAll();
-		petDao.deleteAll();
-	}
-	
-	@Before
+    
+    
+    @BeforeEach
 	public void setMockOutput() {
 		//user mock
 		lenient().when(userDao.findUserByUserName(anyString())).thenAnswer((InvocationOnMock invocation) -> {
@@ -109,28 +96,6 @@ public class TestPetService {
 		
 	}
 	
-	//TODO are we doing this?
-	/**
-	 * Creates a test user in the database.
-	 * @author Katrina
-	 * @return user created
-	 */
-    public User createUser() {
-        User user = new User();
-        String userName = "testUN";
-        String password = "myPassword1!";
-        String email = "TestUserName@gmail.com";
-        UserType userType = UserType.USER;
-        
-        user.setUserName(userName);
-        user.setUserType(userType);
-        user.setPassword(password);
-        user.setEmail(email);
-        userDao.save(user);
-        
-        return user;
-    }
-	
     
 ////////////////////////////// CREATE PET //////////////////////////////
 
@@ -156,8 +121,8 @@ public class TestPetService {
 		assertEquals(PET_PICTURE, pet.getPicture());
 		User fetchedUser = userDao.findUserByUserName(USER_NAME);
 		Pet fetchedPet = (Pet) fetchedUser.getPets().toArray()[0];
-		assertTrue(fetchedPet.getId() == petId);
-		assertEquals(Gender.FEMALE, pet.getGender());	
+        assertEquals(fetchedPet.getId(), petId);
+        assertEquals(Gender.FEMALE, pet.getGender());
 	}
 
 	/**
@@ -167,7 +132,6 @@ public class TestPetService {
 	 */
 	@Test
 	public void testCreatePetNoUser() {
-		clearDatabase();
 		assertEquals(0, petService.getAllPets().size());
 		pet = null;
 		try {
@@ -176,7 +140,7 @@ public class TestPetService {
 		} catch(PetException e) {
 			assertEquals(e.getMessage(), "Cannot add: User does not exist.");
 		}
-		assertEquals(pet, null);
+        assertNull(pet);
 	}
 
 	/**
@@ -186,7 +150,6 @@ public class TestPetService {
 	 */
 	@Test
 	public void testCreatePetNoName() {
-		clearDatabase();
 		assertEquals(0, petService.getAllPets().size());
 		pet = null;
 		try {
@@ -195,7 +158,7 @@ public class TestPetService {
 		} catch(PetException e) {
 			assertEquals(e.getMessage(), "Cannot add: A pet needs a name.");
 		}
-		assertEquals(pet, null);
+        assertNull(pet);
 	}
 	
 	/**
@@ -205,7 +168,6 @@ public class TestPetService {
 	 */
 	@Test
 	public void testCreatePetNoSpecies() {
-		clearDatabase();
 		assertEquals(0, petService.getAllPets().size());
 		pet = null;
 		try{
@@ -214,7 +176,7 @@ public class TestPetService {
 		} catch(PetException e) {
 			assertEquals(e.getMessage(), "Cannot add: A pet needs a species.");
 		}
-		assertEquals(pet, null);
+        assertNull(pet);
 	}
 	
 	/**
@@ -224,7 +186,6 @@ public class TestPetService {
 	 */
 	@Test
 	public void testCreatePetNoBreed() {
-		clearDatabase();
 		assertEquals(0, petService.getAllPets().size());
 		pet = null;
 		try{
@@ -233,7 +194,7 @@ public class TestPetService {
 		} catch(PetException e) {
 			assertEquals(e.getMessage(), "Cannot add: A pet needs a breed.");
 		}
-		assertEquals(pet, null);
+        assertNull(pet);
 	}
 	
 	/**
@@ -242,7 +203,6 @@ public class TestPetService {
 	 */
 	@Test
 	public void testCreatePetNoDesc() {
-		clearDatabase();
 		assertEquals(0, petService.getAllPets().size());
 		pet = null;
 		PetDTO petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, "", PET_PICTURE, USER_NAME, PET_GENDER);
@@ -259,7 +219,6 @@ public class TestPetService {
 	 */
 	@Test
 	public void testCreatePetNoGender() {
-		clearDatabase();
 		assertEquals(0, petService.getAllPets().size());
 		pet = null;
 		try{
@@ -268,7 +227,7 @@ public class TestPetService {
 		} catch(PetException e) {
 			assertEquals(e.getMessage(), "Cannot add: A pet needs a gender.");
 		}
-		assertEquals(pet, null);
+        assertNull(pet);
 	}
 	
 ////////////////////////////// EDIT PET //////////////////////////////
@@ -296,8 +255,8 @@ public class TestPetService {
 		assertEquals(PET_PICTURE, pet.getPicture());
 		User fetchedUser = userDao.findUserByUserName(USER_NAME);
 		Pet fetchedPet = (Pet) fetchedUser.getPets().toArray()[0];
-		assertTrue(fetchedPet.getId() == petId);
-		assertEquals(Gender.FEMALE, pet.getGender());	
+        assertEquals(fetchedPet.getId(), petId);
+        assertEquals(Gender.FEMALE, pet.getGender());
 		
 		petDto.setName("newName");
 		petDto.setSpecies("newSpecies");
@@ -316,9 +275,9 @@ public class TestPetService {
 		assertEquals("newDesc", pet.getDescription());
 		assertEquals(newPic, pet.getPicture());
 		fetchedUser = userDao.findUserByUserName(USER_NAME);
-		fetchedPet = (Pet) fetchedUser.getPets().toArray()[0];
-		assertTrue(fetchedPet.getId() == petId);
-		assertEquals(Gender.MALE, pet.getGender());	
+        fetchedPet = (Pet) fetchedUser.getPets().toArray()[0];
+        assertEquals(fetchedPet.getId(), petId);
+        assertEquals(Gender.MALE, pet.getGender());
 	}
 
 	/**
@@ -328,7 +287,6 @@ public class TestPetService {
 	 */
 	@Test
 	public void testEditPetNoUser() {
-		clearDatabase();
 		assertEquals(0, petService.getAllPets().size());
 		pet = null;
 		try {
@@ -337,7 +295,7 @@ public class TestPetService {
 		} catch(PetException e) {
 			assertEquals(e.getMessage(), "Cannot add: User does not exist.");
 		}
-		assertEquals(pet, null);
+        assertNull(pet);
 	}
 
 	/**
@@ -347,7 +305,6 @@ public class TestPetService {
 	 */
 	@Test
 	public void testEditPetNoName() {
-		clearDatabase();
 		assertEquals(0, petService.getAllPets().size());
 		pet = null;
 		try {
@@ -356,7 +313,7 @@ public class TestPetService {
 		} catch(PetException e) {
 			assertEquals(e.getMessage(), "Cannot add: A pet needs a name.");
 		}
-		assertEquals(pet, null);
+        assertNull(pet);
 	}
 	
 	/**
@@ -366,7 +323,6 @@ public class TestPetService {
 	 */
 	@Test
 	public void testEditPetNoSpecies() {
-		clearDatabase();
 		assertEquals(0, petService.getAllPets().size());
 		pet = null;
 		try{
@@ -375,7 +331,7 @@ public class TestPetService {
 		} catch(PetException e) {
 			assertEquals(e.getMessage(), "Cannot add: A pet needs a species.");
 		}
-		assertEquals(pet, null);
+        assertNull(pet);
 	}
 	
 	/**
@@ -385,7 +341,6 @@ public class TestPetService {
 	 */
 	@Test
 	public void testEditPetNoBreed() {
-		clearDatabase();
 		assertEquals(0, petService.getAllPets().size());
 		pet = null;
 		try{
@@ -394,7 +349,7 @@ public class TestPetService {
 		} catch(PetException e) {
 			assertEquals(e.getMessage(), "Cannot add: A pet needs a breed.");
 		}
-		assertEquals(pet, null);
+        assertNull(pet);
 	}
 	
 	/**
@@ -403,7 +358,6 @@ public class TestPetService {
 	 */
 	@Test
 	public void testEditPetNoDesc() {
-		clearDatabase();
 		assertEquals(0, petService.getAllPets().size());
 		pet = null;
 		PetDTO petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, "", PET_PICTURE, USER_NAME, PET_GENDER);
@@ -420,25 +374,26 @@ public class TestPetService {
 	 */
 	@Test
 	public void testEditPetNoGender() {
-		clearDatabase();
 		assertEquals(0, petService.getAllPets().size());
 		pet = null;
 		try{
 			PetDTO petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME, null);
 			pet = petService.createPet(petDto);
-		} catch(PetException e) {
-			assertEquals(e.getMessage(), "Cannot add: A pet needs a gender.");
-		}
-		assertEquals(pet, null);
-	}
-	
-	@Test
-	public void testChangeOwnership() {
-		//TODO
-	}
-	private PetDTO createPetDto(Date petDob, String petName, String petSpecies, String petBreed, String petDescription,
-			byte[] petPicture, String userName, Gender petGender) {
-		PetDTO dto = new PetDTO(petDob, petName, petSpecies, petBreed, petDescription, petPicture, petGender, null, userName);
-		return dto;
-	}
-  }
+        } catch (PetException e) {
+            assertEquals(e.getMessage(), "Cannot add: A pet needs a gender.");
+        }
+        assertNull(pet);
+    }
+    
+    @Test
+    public void testChangeOwnership() {
+        //TODO
+    }
+    
+    //why do you need this??
+    private PetDTO createPetDto(Date petDob, String petName, String petSpecies, String petBreed, String petDescription,
+                                byte[] petPicture, String userName, Gender petGender) {
+        PetDTO dto = new PetDTO(petDob, petName, petSpecies, petBreed, petDescription, petPicture, petGender, null, userName);
+        return dto;
+    }
+}

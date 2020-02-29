@@ -1,9 +1,10 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
-import java.sql.Date;
-
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Gender;
+
+import java.sql.Date;
+import java.util.Arrays;
 
 
 public class PetDTO {
@@ -132,5 +133,19 @@ public class PetDTO {
 		this.userName = userName;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "PetDTO{" +
+				"dateOfBirth=" + dateOfBirth +
+				", name='" + name + '\'' +
+				", species='" + species + '\'' +
+				", breed='" + breed + '\'' +
+				", description='" + description + '\'' +
+				", picture=" + Arrays.toString(picture) +
+				", id=" + id +
+				", gender=" + gender +
+				", advertisement=" + advertisement +
+				", userName='" + userName + '\'' +
+				'}';
+	}
 }
