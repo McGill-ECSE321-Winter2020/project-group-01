@@ -49,18 +49,19 @@ public class CommentController {
 	}
 
 	/**
-	 * Get all the comments in the database and return them. Only the admin may get those.
+	 * Get all the comments in the database and return them. Only the admin may get
+	 * those.
 	 *
 	 * @return The list of all comments.
 	 */
 	@GetMapping("/all")
 	public ResponseEntity<?> getAllComments(@RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
-		if(requester!=null && requester.getUserType().equals(UserType.ADMIN)) {
-			List<CommentDTO> comments= commentService.getComments().stream().map(CommentController::commentToDto).collect(Collectors.toList());
+		if (requester != null && requester.getUserType().equals(UserType.ADMIN)) {
+			List<CommentDTO> comments = commentService.getComments().stream().map(CommentController::commentToDto)
+					.collect(Collectors.toList());
 			return new ResponseEntity<>(comments, HttpStatus.OK);
-			}
-		else {
+		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -73,15 +74,19 @@ public class CommentController {
 	 * @return The list of all comments of a user.
 	 */
 	@GetMapping("/{username}")
-	public ResponseEntity<?> getUserComments(@PathVariable String username) {
-		try {
-			List<CommentDTO> comments = commentService
-					.getCommentsByUser(userRepository.findUserByUserName(username).getId()).stream()
-					.map(CommentController::commentToDto).collect(Collectors.toList());
-			return new ResponseEntity<>(comments, HttpStatus.OK);
-		} catch (CommentException e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<?> getUserComments(@PathVariable String username, @RequestHeader String token) {
+		User requester = userRepository.findUserByApiToken(token);
+		if (requester != null) {
+			try {
+				List<CommentDTO> comments = commentService
+						.getCommentsByUser(userRepository.findUserByUserName(username).getId()).stream()
+						.map(CommentController::commentToDto).collect(Collectors.toList());
+				return new ResponseEntity<>(comments, HttpStatus.OK);
+			} catch (CommentException e) {
+				return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			}
+		} else
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
 	/**
