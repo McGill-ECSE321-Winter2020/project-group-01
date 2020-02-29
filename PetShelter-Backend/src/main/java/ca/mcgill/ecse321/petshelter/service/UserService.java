@@ -4,6 +4,7 @@ import ca.mcgill.ecse321.petshelter.dto.PasswordChangeDTO;
 import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.*;
 import ca.mcgill.ecse321.petshelter.repository.*;
+import ca.mcgill.ecse321.petshelter.service.exception.PasswordException;
 import ca.mcgill.ecse321.petshelter.service.exception.RegisterException;
 import ca.mcgill.ecse321.petshelter.service.extrafeatures.EmailingService;
 import ca.mcgill.ecse321.petshelter.service.extrafeatures.JWTTokenProvider;
@@ -165,22 +166,22 @@ public class UserService {
      * @param passwordDto
      * @return
      */
-    public UserDTO updateUser(PasswordChangeDTO passwordDto) throws IllegalArgumentException {
+    public UserDTO updateUser(PasswordChangeDTO passwordDto) throws PasswordException {
         if (passwordDto.getNewPassword() == null || passwordDto.getNewPassword().trim().length() == 0) {
-            throw new IllegalArgumentException("Password cannot be null.");
+            throw new PasswordException("Password cannot be null.");
         }
         // check if new password is valid
         String constraintViolation = isPasswordChangeValid(passwordDto);
         if (constraintViolation != null) {
-            throw new IllegalArgumentException(constraintViolation);
+            throw new PasswordException(constraintViolation);
         }
         User user = userRepository.findUserByUserName(passwordDto.getUserName());
         if (user == null) {
-            throw new IllegalArgumentException("No user was found");
+            throw new PasswordException("No user was found");
         }
         // the old password must be correct
-        if (!passwordEncoder.matches(passwordDto.getOldPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("Wrong password");
+        if (!passwordDto.getOldPassword().equals(user.getPassword())) {
+            throw new PasswordException("Wrong password");
         }
         user.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
         userRepository.save(user);
@@ -193,9 +194,11 @@ public class UserService {
      * @param username username to delete
      * @return if we can find the user
      */
-    public boolean deleteUser(String username) {
+    public boolean deleteUser(String username) throws RegisterException {
         User user = userRepository.findUserByUserName(username);
-        
+        if (user == null) {
+            throw new RegisterException("User not found");
+        }
         List<Donation> donations = donationRepository.findAllByUser(user);
         for (Donation donation : donations) {
             donation.setUser(null);
@@ -219,11 +222,18 @@ public class UserService {
             user.getPets().clear(); //check if this will work
         }
         
-        try {
-            userRepository.deleteById(user.getId());
-        } catch (RuntimeException e) {
-            return false;
-        }
+        userRepository.deleteById(user.getId());
         return true;
+    }
+    
+    public String resetPassword(String email) throws RegisterException {
+        User user = userRepository.findUserByEmail(email);
+        if (user == null) {
+            throw new RegisterException("User not found");
+        }
+        String tmpPassword = generateRandomPassword();
+        user.setPassword(passwordEncoder.encode(tmpPassword));
+        userRepository.save(user);
+        return tmpPassword;
     }
 }
