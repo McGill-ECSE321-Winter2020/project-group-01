@@ -205,7 +205,7 @@ public class TestCommentService {
 			assertEquals(0, comment.getId());
 			assertEquals(COMMENT_TEXT, comment.getText());
 		} catch (CommentException e) {
-			fail();
+			fail(e.getMessage());
 		}
 	}
 
@@ -251,7 +251,7 @@ public class TestCommentService {
 			assertEquals(newText, comment.getText());
 			assertEquals(COMMENT_ID, comment.getId());
 		} catch (CommentException e) {
-			fail();
+			fail(e.getMessage());
 		}
 	}
 
@@ -278,7 +278,7 @@ public class TestCommentService {
 			assertEquals(COMMENT_ID, comment.getId());
 			assertEquals(COMMENT_TEXT, comment.getText());
 		} catch (CommentException e) {
-			fail();
+			fail(e.getMessage());
 		}
 		
 	}
@@ -317,7 +317,7 @@ public class TestCommentService {
 			assertEquals(COMMENT_ID, comments.get(0).getId()); // List contains the correct comment.
 			assertEquals(USER_NAME, comments.get(0).getUsername()); // Comment has the correct author.
 		} catch (CommentException e) {
-			fail();
+			fail(e.getMessage());
 		}
 	}
 
@@ -329,6 +329,40 @@ public class TestCommentService {
 	public void testGetMissingUserComments() {
 		CommentException thrown = assertThrows(CommentException.class, () -> commentService.getCommentsByUser(0));
 		assertTrue(thrown.getMessage().contains("No such user."));
+	}
+
+	/**
+	 * Test the DTO conversion.
+	 */
+	@Test
+	public void testCommentToDTO() {
+		try {
+			// Create comment and user.
+			User user = new User();
+			user.setId(USER_ID);
+			user.setUserName(USER_NAME);
+			user.setEmail(USER_EMAIL);
+			user.setPassword(USER_PASSWORD);
+			Comment comment = new Comment();
+			comment.setUser(user);
+			comment.setText(COMMENT_TEXT);
+			comment.setId(COMMENT_ID);
+			comment.setDatePosted(COMMENT_DATE);
+			comment.setTime(COMMENT_TIME);
+
+			// Convert.
+			CommentDTO commentDTO = commentService.commentToDto(comment);
+
+			// Test values.
+			assertEquals(COMMENT_ID, commentDTO.getId());
+			assertEquals(USER_NAME, commentDTO.getUsername());
+			assertEquals(COMMENT_TEXT, commentDTO.getText());
+			assertEquals(COMMENT_DATE, commentDTO.getDatePosted());
+			assertEquals(COMMENT_TIME, commentDTO.getTime());
+
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
 	}
 
 }

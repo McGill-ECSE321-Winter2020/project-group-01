@@ -87,7 +87,7 @@ public class CommentService {
 	 * @param commentID Comment ID.
 	 * @param comment   Comment update.
 	 * @return The updated comment.
-	 * @throws CommentException
+	 * @throws CommentException If the user doesn't exists.
 	 */
 	@Transactional
 	public CommentDTO updateComment(long commentID, String comment) throws CommentException {
@@ -109,7 +109,7 @@ public class CommentService {
 	 *
 	 * @param commentID The ID of the comment.
 	 * @return The deleted comment.
-	 * @throws CommentException
+	 * @throws CommentException If the user doesn't exists.
 	 */
 	@Transactional
 	public CommentDTO deleteComment(long commentID) throws CommentException {
@@ -128,6 +128,7 @@ public class CommentService {
 	 * @return The list of all comments.
 	 */
 	@Transactional
+
 	public Set<CommentDTO> getComments(long forumID) throws CommentException {
 		Optional<Forum> forum = forumRepository.findById(forumID);
 		if (forum.isPresent()) {
@@ -150,7 +151,9 @@ public class CommentService {
 	public List<CommentDTO> getCommentsByUser(long userID) throws CommentException {
 		Optional<User> user = userRepository.findById(userID);
 		if (user.isPresent()) {
-			return commentRepository.findCommentsByUser(user.get()).stream().map(this::commentToDto).collect(Collectors.toList());
+			return commentRepository.findCommentsByUser(user.get()).stream()
+					.map(CommentService::commentToDto)
+					.collect(Collectors.toList());
 		} else {
 			throw new CommentException("No such user.");
 		}
@@ -162,7 +165,7 @@ public class CommentService {
 	 * @param comment The comment to convert.
 	 * @return A comment DTO.
 	 */
-	public CommentDTO commentToDto(Comment comment) {
+	public static CommentDTO commentToDto(Comment comment) {
 		CommentDTO commentDTO = new CommentDTO();
 		commentDTO.setDatePosted(comment.getDatePosted());
 		commentDTO.setId(comment.getId());
