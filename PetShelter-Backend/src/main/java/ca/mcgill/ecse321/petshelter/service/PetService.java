@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -58,19 +59,37 @@ public class PetService {
 		User user = validateParametersAdd(petDTO);
 		Pet pet = new Pet();
 		petSetters(pet, petDTO);
-		if (petDTO.getAdvertisement() != null
-				&& advertisementRepository.findAdvertisementById(petDTO.getAdvertisement()) != null) {
+		if (petDTO.getAdvertisement() != null && advertisementRepository.findAdvertisementById(petDTO.getAdvertisement()) != null) {
 			pet.setAdvertisement(advertisementRepository.findAdvertisementById(petDTO.getAdvertisement()));
 		}
 		Set<PetDTO> allUserPets = getPetsByUser(petDTO.getUserName());
 		allUserPets.add(petDTO);
+		
+		user.getPets().add(pet);
+		
 		petRepository.save(pet);
 		userRepository.save(user);
 		petDTO.setId(pet.getId());
-
+		
 		return petDTO;
 	}
-
+	
+	private Set<Pet> convertToObject(Set<PetDTO> allUserPets) {
+		Set<Pet> petSet = new HashSet<>();
+		for (PetDTO petDTO : allUserPets) {
+			Pet pet = new Pet();
+			pet.setName(petDTO.getName());
+			pet.setDateOfBirth(petDTO.getDateOfBirth());
+			pet.setBreed(petDTO.getBreed());
+			pet.setSpecies(petDTO.getSpecies());
+			pet.setDescription(petDTO.getDescription());
+			pet.setGender(petDTO.getGender());
+			pet.setPicture(petDTO.getPicture());
+			petSet.add(pet);
+		}
+		return petSet;
+	}
+	
 	/**
 	 * finds pet with the DTO
 	 *
@@ -129,34 +148,42 @@ public class PetService {
 	@Transactional
 	public PetDTO editPet(PetDTO petDTO) {
 		Pet pet = validateParametersEdit(petDTO);
-		User oldUser = userRepository.findUserByPets(pet);
+		petSetters(pet, petDTO);
+		petRepository.save(pet);
+		return petToPetDTO(pet);
+	}
+	
+	
+	@Transactional
+	public PetDTO changeOwner(PetDTO petDTO, String token) {
+		Pet pet = validateParametersEdit(petDTO);
+		User oldUser = userRepository.findUserByApiToken(token);
 		if (oldUser == null) {
 			throw new PetException("Cannot edit: User not found.");
 		}
 		User newUser = userRepository.findUserByUserName(petDTO.getUserName());
 		if (newUser == null) {
 			throw new PetException("Cannot edit: User not found.");
-		} else if (!(newUser.equals(oldUser))) { // change ownership
-			Set<Pet> oldUserPets = oldUser.getPets();
-			oldUserPets.remove(pet);
-			oldUser.setPets(oldUserPets);
-			Set<Pet> newUserPets = newUser.getPets();
-			newUserPets.add(pet);
-			newUser.setPets(newUserPets);
-			userRepository.save(oldUser);
-			userRepository.save(newUser);
 		}
+		Set<Pet> oldUserPets = oldUser.getPets();
+		oldUserPets.remove(pet);
+		oldUser.setPets(oldUserPets);
+		Set<Pet> newUserPets = newUser.getPets();
+		newUserPets.add(pet);
+		newUser.setPets(newUserPets);
+		userRepository.save(oldUser);
+		userRepository.save(newUser);
 		petSetters(pet, petDTO);
 		petRepository.save(pet);
 		return petToPetDTO(pet);
 	}
-
+	
 	// todo, check in DTO if it is the owner of the pet
-
+	
 	/**
 	 * Removes a pet from the database
 	 *
-	 * @param id id of the pet
+	 * @param id       id of the pet
 	 * @param userName requester
 	 * @return ok if deleted
 	 */
@@ -164,6 +191,7 @@ public class PetService {
 	public boolean deletePet(long id, String userName) {
 		Pet pet = petRepository.findPetById(id);
 		User user = userRepository.findUserByUserName(userName);
+		System.out.println(user);
 		if (user == null) {
 			throw new PetException("Cannot delete: User does not exist.");
 		} else if (pet == null) {
