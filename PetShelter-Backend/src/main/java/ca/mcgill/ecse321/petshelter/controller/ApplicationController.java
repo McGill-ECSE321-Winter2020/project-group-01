@@ -62,12 +62,12 @@ public class ApplicationController {
 	 * Creates an application with the DTO
 	 *
 	 * @param applicationDTO JSON passed by the request body
-	 * @param token The requester's token.
+	 * @param token          The requester's token.
 	 * @return check if all the fields are good
 	 */
-	@PostMapping()
+	@PostMapping("/")
 	public ResponseEntity<?> createApplication(@RequestBody ApplicationDTO applicationDTO,
-			@RequestHeader String token) {
+											   @RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
 		if (requester != null) {
 			ApplicationDTO application = applicationService.createApplication(applicationDTO);

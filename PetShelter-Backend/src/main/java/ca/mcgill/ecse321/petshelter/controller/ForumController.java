@@ -91,7 +91,7 @@ public class ForumController {
 	 * @param token The session token of the user.
 	 * @return The created forum.
 	 */
-	@PostMapping()
+	@PostMapping("/")
 	public ResponseEntity<?> createForum(@RequestBody String title, @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
 		if (user != null && title != null && !title.trim().equals("")) {
