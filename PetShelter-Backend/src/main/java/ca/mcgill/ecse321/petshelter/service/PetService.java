@@ -140,17 +140,14 @@ public class PetService {
 			Set<Pet> oldUserPets = oldUser.getPets();
 			oldUserPets.remove(pet);
 			oldUser.setPets(oldUserPets);
-
 			Set<Pet> newUserPets = newUser.getPets();
 			newUserPets.add(pet);
 			newUser.setPets(newUserPets);
-
 			userRepository.save(oldUser);
 			userRepository.save(newUser);
 		}
 		petSetters(pet, petDTO);
 		petRepository.save(pet);
-
 		return petToPetDTO(pet);
 	}
 
