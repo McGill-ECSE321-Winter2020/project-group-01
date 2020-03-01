@@ -1,12 +1,9 @@
 package ca.mcgill.ecse321.petshelter.controller;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,11 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse321.petshelter.dto.AdvertisementDTO;
 import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
-import ca.mcgill.ecse321.petshelter.dto.PetDTO;
-import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
-import ca.mcgill.ecse321.petshelter.model.Gender;
 import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.model.UserType;
