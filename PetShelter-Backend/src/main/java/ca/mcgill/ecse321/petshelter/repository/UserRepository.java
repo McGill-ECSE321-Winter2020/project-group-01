@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.petshelter.repository;
 
+import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.model.User;
 import org.springframework.data.repository.CrudRepository;
@@ -21,5 +22,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	User findUserByApiToken(String token);
 	
 	User findUserByPets(Pet pet);
+
+    void deleteAll();
 //	User findUserByPet(Pet pet);
 }
