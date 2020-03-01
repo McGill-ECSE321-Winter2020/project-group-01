@@ -20,7 +20,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	User findUserByApiToken(String token);
 	
 	User findUserByPets(Pet pet);
-
-    void deleteAll();
+	
+	void deleteAll();
 //	User findUserByPet(Pet pet);
 }
