@@ -95,6 +95,8 @@ public class CommentService {
 		if (oldComment.isPresent()) {
 			Comment updatedComment = oldComment.get();
 			updatedComment.setText(comment);
+			updatedComment.setTime(new Time(System.currentTimeMillis()));
+			updatedComment.setDatePosted(new Date(System.currentTimeMillis()));
 			commentRepository.save(updatedComment);
 			return commentToDto(updatedComment);
 		} else {
@@ -126,8 +128,16 @@ public class CommentService {
 	 * @return The list of all comments.
 	 */
 	@Transactional
-	public List<CommentDTO> getComments() {
-		return commentRepository.findAll().stream().map(this::commentToDto).collect(Collectors.toList());
+	public Set<CommentDTO> getComments(long forumID) throws CommentException {
+		Optional<Forum> forum = forumRepository.findById(forumID);
+		if (forum.isPresent()) {
+			return forum.get().getComments().stream().map(this::commentToDto).collect(Collectors.toSet());
+			
+		} else {
+			throw new CommentException("No comments found");
+		}
+		
+		//return commentRepository.findAll().stream().map(this::commentToDto).collect(Collectors.toList());
 	}
 	
 	/**
