@@ -1,6 +1,6 @@
 package ca.mcgill.ecse321.petshelter.controller;
 
-import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
+import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.ApplicationService;
@@ -60,12 +60,12 @@ public class ApplicationController {
 			@RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
 		if (requester != null) {
-			AdoptionApplication application = applicationService.createApplication(applicationDTO);
+			ApplicationDTO application = applicationService.createApplication(applicationDTO);
 			try {
 				applicationDTO.setDescription(application.getDescription());
-				applicationDTO.setUsername(application.getUser().getUserName());
-				applicationDTO.setAdvertisementTitle(application.getAdvertisement().getTitle());
-				applicationDTO.setIsAccepted(application.isIsAccepted());
+				applicationDTO.setUsername(application.getUsername());
+				applicationDTO.setAdvertisementTitle(application.getAdvertisementTitle());
+				applicationDTO.setIsAccepted(application.getIsAccepted());
 				return new ResponseEntity<>(applicationDTO, HttpStatus.OK);
 			} catch (IllegalArgumentException e) {
 				return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
