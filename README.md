@@ -16,7 +16,7 @@ We are 5 McGill University students from the Faculty of Engineering
 | Name | GitHub | Major | Year |
 | ------------- | ------------- | ------------- | ------------- |
 |Louis Barrette-Vanasse | [Louismousine](https://github.com/Louismousine) | Software Engineering | U2 |
-|Mathieu Bissonnette | [Mat-san](https://github.com/Mat-san) | Software Engineering | U2 |
+|Mathieu Bissonnette | [Mat-san](https://github.com/Mat-san) | Computer Engineering | U2 |
 |Christopher Boustros | [cboustros](https://github.com/cboustros) | Software Engineering | U2 |
 |Ding Ma | [ding-ma](https://github.com/ding-ma) | Software Engineering | U2 |
 |Katrina Poulin | [katrinapoulin](https://github.com/katrinapoulin) | Computer Engineering | U2 |
