@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This class implements the REST controller for the comment related features of the backend.
+ */
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/comment")
@@ -33,6 +37,8 @@ public class CommentController {
 	/**
 	 * Get all the comments in the database and return them. Only the admin may get
 	 * those.
+	 *
+	 * @param token The user session access token.
 	 *
 	 * @return The list of all comments.
 	 */
@@ -53,6 +59,8 @@ public class CommentController {
 	 *
 	 * @param username The username of the user which is the author of all desired
 	 *                 comments.
+	 * @param token The user session access token.
+	 *
 	 * @return The list of all comments of a user.
 	 */
 	@GetMapping("/{username}")
@@ -76,6 +84,7 @@ public class CommentController {
 	 * @param commentText The comment to add.
 	 * @param id          The id of the forum thread to respond to.
 	 * @param token       The user session token.
+	 *
 	 * @return The comment added to the thread.
 	 */
 	@PostMapping("/{id}")
@@ -99,9 +108,10 @@ public class CommentController {
 	 * Update a comment.
 	 *
 	 * @param commentDTO The update to the existing comment.
-	 * @param id         The forum thread id.
+	 * @param id         The forum thread id (it is not actually used).
 	 * @param token      The user session token.
 	 * @param commentId  The comment id.
+	 *
 	 * @return The modified comment.
 	 */
 	@PutMapping("/{id}/{commentId}")
@@ -127,6 +137,8 @@ public class CommentController {
 	 *
 	 * @param token     The user session token.
 	 * @param commentId The id of the comment.
+	 * @param id The forum id. (It is not actually used).
+	 *
 	 * @return The deleted comment.
 	 */
 	@DeleteMapping("/{id}/{commentId}")
