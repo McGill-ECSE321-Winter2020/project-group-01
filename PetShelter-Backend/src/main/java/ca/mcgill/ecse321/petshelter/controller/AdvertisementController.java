@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import ca.mcgill.ecse321.petshelter.dto.AdvertisementDTO;
 import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
 import ca.mcgill.ecse321.petshelter.dto.PetDTO;
@@ -26,11 +25,19 @@ import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.model.UserType;
+import ca.mcgill.ecse321.petshelter.repository.PetRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.AdvertisementService;
 import ca.mcgill.ecse321.petshelter.service.PetService;
 import ca.mcgill.ecse321.petshelter.service.UserService;
 
+/**
+ * Controller that handles requests made to access, modify or delete an
+ * advertisement.
+ * 
+ * @author louis
+ *
+ */
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/advertisement")
@@ -41,6 +48,9 @@ public class AdvertisementController {
 
 	@Autowired
 	PetService petService;
+	
+	@Autowired
+	PetRepository petRepository;
 
 	@Autowired
 	AdvertisementService advertisementService;
@@ -54,7 +64,6 @@ public class AdvertisementController {
 	 * @param ad The advertisement to convert.
 	 * @return An advertisement DTO.
 	 */
-
 	AdvertisementDTO advertisementToDto(Advertisement ad) {
 		AdvertisementDTO adDto = new AdvertisementDTO();
 		Set<Application> applications = new HashSet<Application>();
@@ -68,7 +77,7 @@ public class AdvertisementController {
 		List<Long> petIds = new ArrayList<Long>();
 		Set<PetDTO> allPets = petService.getAllPets();
 		for (PetDTO pet : allPets) {
-			if (pet.getAdvertisement().equals(ad)) {
+			if (pet.getAdvertisement().equals(ad.getId())) {
 				petIds.add(pet.getId());
 			}
 		}
@@ -80,13 +89,14 @@ public class AdvertisementController {
 	/**
 	 * Gets the desired advertisement.
 	 *
-	 * @param id Advertisement ID.
+	 * @param id    Advertisement ID.
+	 * @param token The requester's token.
 	 * @return The advertisement DTO.
 	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getAdvertisement(@PathVariable(required = true) Long id, @RequestHeader String token) {
 		AdvertisementDTO ad = advertisementService.getAdvertisementById(id);
-		User requester = userRepository.findUserByApiToken(token);
+		User requester = userRepository.findUserByApiToken(token); // make sure the requester is logged in
 		if (ad != null && requester != null) {
 			return new ResponseEntity<>(ad, HttpStatus.OK);
 		} else {
@@ -98,13 +108,14 @@ public class AdvertisementController {
 	 * Get all advertisements with a specific title.
 	 *
 	 * @param title The title for which you want to find the advertisements.
+	 * @param token The requester's token.
 	 * @return The list of all advertisements with this title.
 	 */
 	@GetMapping("/advertisements/{title}")
 	public ResponseEntity<?> getAdvertisementByTitle(@PathVariable String title, @RequestHeader String token) {
 		List<AdvertisementDTO> ads = advertisementService.getAdvertisementByTitle(title);
 		User requester = userRepository.findUserByApiToken(token);
-		if (requester != null) {
+		if (requester != null) { // make sure the requester is logged in
 			List<AdvertisementDTO> adDtos = new ArrayList<AdvertisementDTO>();
 			for (AdvertisementDTO ad : ads) {
 				adDtos.add(ad);
@@ -117,13 +128,14 @@ public class AdvertisementController {
 
 	/**
 	 * Gets all existing advertisements.
-	 *
+	 * 
+	 * @param token The requester's token.
 	 * @return List of all existing advertisements.
 	 */
 	@GetMapping("/all")
 	public ResponseEntity<?> getAllAdvertisements(@RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
-		if (requester != null) {
+		if (requester != null) { // make sure the requester is logged in
 			List<AdvertisementDTO> ads = new ArrayList<>();
 			List<AdvertisementDTO> adsDto = new ArrayList<>();
 			Iterable<AdvertisementDTO> adsIterable = advertisementService.getAllAdvertisements();
@@ -145,11 +157,10 @@ public class AdvertisementController {
 	 */
 	@PostMapping("/{petId}/newAd")
 	public ResponseEntity<?> createAdvertisement(@PathVariable(required = true) long petId, @RequestBody String title,
-												 String description, @RequestHeader String token) {
+			String description, @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
-		PetDTO pet = petService.getPet(petId);
+		Pet pet = petRepository.findPetById(petId);
 		boolean isOwner = user.getPets().contains(pet);
-
 		if (user != null && isOwner && title != null && !title.trim().equals("") && description != null
 				&& !description.trim().equals("")) {
 			List<Long> petIds = new ArrayList<Long>();
@@ -169,6 +180,7 @@ public class AdvertisementController {
 	/**
 	 * Update an advertisement.
 	 *
+
 	 * @param adID The ID of the advertisement to update.
 	 * @param advertisementDTO The advertisement DTO containing the information to change.
 	 * @param token The user session token.
@@ -224,6 +236,12 @@ public class AdvertisementController {
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
+	/**
+	 * Converts an application into an applicationdto
+	 * 
+	 * @param application
+	 * @return
+	 */
 	public static ApplicationDTO applicationToDto(Application application) {
 		ApplicationDTO applicationDTO = new ApplicationDTO();
 		applicationDTO.setDescription(application.getDescription());
@@ -235,6 +253,16 @@ public class AdvertisementController {
 		return applicationDTO;
 	}
 
+	/**
+	 * Creates an advertisement dto.
+	 * 
+	 * @param title
+	 * @param isfulfilled
+	 * @param aD_PET_IDS
+	 * @param adoptionApplication
+	 * @param description
+	 * @return
+	 */
 	private AdvertisementDTO createAdDto(String title, boolean isfulfilled, List<Long> aD_PET_IDS,
 			Set<Application> adoptionApplication, String description) {
 		AdvertisementDTO dto = new AdvertisementDTO();
@@ -242,39 +270,52 @@ public class AdvertisementController {
 		dto.setDescription(description);
 		dto.setTitle(title);
 		dto.setFulfilled(isfulfilled);
-		dto.setPetIds((Long[]) aD_PET_IDS.toArray()); 
+		dto.setPetIds((Long[]) aD_PET_IDS.toArray());
 		return dto;
 	}
 
+	/**
+	 * Determines if a user has rights to modify an ad.
+	 * 
+	 * @param user
+	 * @param ad
+	 * @return
+	 */
 	public boolean hasRightsForAd(User user, AdvertisementDTO ad) {
 		boolean hasRights = false;
 		List<PetDTO> pets = petService.getPetsByAdvertisement(ad.getAdId());
 		if (user.getUserType().equals(UserType.USER)) {
 			for (PetDTO pet : pets) {
-			    for (Pet pet1 : user.getPets()) {
-			        PetDTO pet1Dto = petToPetDTO(pet1);
-			        if(pet1Dto.equals(pet)) {
-			            hasRights = true;
-			        }
-			    }
+				for (Pet pet1 : user.getPets()) {
+					PetDTO pet1Dto = petToPetDTO(pet1);
+					if (pet1Dto.equals(pet)) {
+						hasRights = true;
+					}
+				}
 			}
 		} else {
 			hasRights = true;
 		}
 		return hasRights;
 	}
-	
-    public PetDTO petToPetDTO(Pet pet) {
-        PetDTO petDTO = new PetDTO();
-        petDTO.setId(pet.getId());
-        petDTO.setDateOfBirth(pet.getDateOfBirth());
-        petDTO.setSpecies(pet.getSpecies());
-        petDTO.setPicture(pet.getPicture());
-        petDTO.setName(pet.getName());
-        petDTO.setGender(pet.getGender());
-        petDTO.setDescription(pet.getDescription());
-        petDTO.setBreed(pet.getBreed());
-        petDTO.setAdvertisement(pet.getAdvertisement().getId());
-        return petDTO;
-    }
+
+	/**
+	 * COnverts a pet into a petdto.
+	 * 
+	 * @param pet
+	 * @return
+	 */
+	public PetDTO petToPetDTO(Pet pet) {
+		PetDTO petDTO = new PetDTO();
+		petDTO.setId(pet.getId());
+		petDTO.setDateOfBirth(pet.getDateOfBirth());
+		petDTO.setSpecies(pet.getSpecies());
+		petDTO.setPicture(pet.getPicture());
+		petDTO.setName(pet.getName());
+		petDTO.setGender(pet.getGender());
+		petDTO.setDescription(pet.getDescription());
+		petDTO.setBreed(pet.getBreed());
+		petDTO.setAdvertisement(pet.getAdvertisement().getId());
+		return petDTO;
+	}
 }

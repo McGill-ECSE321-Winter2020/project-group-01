@@ -97,7 +97,6 @@ public class PetController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	
 	/**
 	 * Creates a pet
 	 *
@@ -105,7 +104,7 @@ public class PetController {
 	 * @param pet
 	 * @return
 	 */
-	@PostMapping()
+	@PostMapping("/")
 	public ResponseEntity<?> createPet(@RequestHeader String token, @RequestBody PetDTO pet) {
 		User requester = userRepository.findUserByApiToken(token);
 		if (requester != null && requester.getUserName().equals(pet.getUserName())) {
