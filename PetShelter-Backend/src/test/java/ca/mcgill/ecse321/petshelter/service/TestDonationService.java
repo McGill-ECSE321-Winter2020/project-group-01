@@ -157,6 +157,7 @@ public class TestDonationService {
         }
         assertNotNull(dto);
         assertNull(dto.getUsername());
+        assertEquals(amount, dto.getAmount());
     }
     
     @Test
