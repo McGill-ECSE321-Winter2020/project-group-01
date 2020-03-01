@@ -1,6 +1,8 @@
 package ca.mcgill.ecse321.petshelter.service;
 
 import ca.mcgill.ecse321.petshelter.dto.AdvertisementDTO;
+import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
+
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Application;
 import ca.mcgill.ecse321.petshelter.model.Pet;
@@ -24,6 +26,12 @@ public class AdvertisementService {
 	
 	@Autowired
 	private PetRepository petRepository;
+	
+	@Autowired
+	private ApplicationService applicationService;
+	
+	@Autowired
+	private PetService petService;
 	
 	/**
 	 * Finds an advertisement by the DTO
@@ -90,29 +98,18 @@ public class AdvertisementService {
 	 * @return advertisement object
 	 */
 	@Transactional
+	public Advertisement getAdvertisementById (long id) {
+	    Advertisement ad = advertisementRepository.findAdvertisementById(id);
+	    if(ad == null) {
+	        throw new AdvertisementException("Advertisement does not exist.");
+	    } else {
+	        return ad;
+	    }
+	}
+	
+	@Transactional
 	public AdvertisementDTO createAdvertisement(AdvertisementDTO adDTO) {
-		int numOfPets = adDTO.getPetIds().length;
-		if (numOfPets == 0) {
-			throw new AdvertisementException("A pet must be linked to an advertisement.");
-		}
-		//finding all pets that are on this ad
-		List<Pet> petsInAd = new ArrayList<>();
-		for (int i = 0; i < numOfPets; i++) {
-			Pet pet = petRepository.findPetById(adDTO.getPetIds()[i]);
-			if (pet == null) {
-				throw new AdvertisementException("One or more pets do not exist.");
-			} else if (pet.getAdvertisement() != null) {
-				throw new AdvertisementException("One or more pets already have an advertisement.");
-			}
-			petsInAd.add(pet);
-		}
-		
-		if (adDTO.getTitle().equals("") || adDTO.getTitle() == null) {
-			throw new AdvertisementException("An advertisement needs a title");
-		}
-		if (adDTO.getDescription().trim().equals("") || adDTO.getDescription() == null) {
-			throw new AdvertisementException("An advertisement needs a description");
-		}
+	    List<Pet> petsInAd = validateParametersAdd(adDTO);
 		Set<Application> applications = new HashSet<>();
 		applications.addAll(adDTO.getApplication());
 		Advertisement ad = new Advertisement();
@@ -120,7 +117,6 @@ public class AdvertisementService {
 		ad.setIsFulfilled(adDTO.isFulfilled());
 		ad.setDescription(adDTO.getDescription());
 		ad.setApplication(applications);
-		
 		
 		advertisementRepository.save(ad);
 		for (Pet pet : petsInAd) {
@@ -143,59 +139,46 @@ public class AdvertisementService {
 	 */
 	@Transactional
 	public AdvertisementDTO editAdvertisement(AdvertisementDTO adDTO) {
-		Advertisement ad = advertisementRepository.findAdvertisementById(adDTO.getAdId());
-		if (ad == null) {
-			throw new AdvertisementException("Advertisement does not exist");
-		}
-		if (adDTO.getTitle() == null || adDTO.getTitle().trim().equals("")) {
-			throw new AdvertisementException("Title cannot be empty");
-		}
-		if (adDTO.getDescription() == null || adDTO.getDescription().trim().equals("")) {
-			throw new AdvertisementException("Description cannot be empty");
-		}
-		Pet pet0 = petRepository.findPetById(adDTO.getPetIds()[0]);
-		if (pet0 == null) {
-			throw new AdvertisementException("One or more pets do not exist.");
-		}
-		int numOfPets = adDTO.getPetIds().length;
-		Set<Pet> petsInAd = new HashSet<Pet>();
-		petsInAd.add(pet0);
-		for (int i = 1; i < numOfPets; i++) {
-			Pet petI = petRepository.findPetById(adDTO.getPetIds()[i]);
-			if ((petI.getAdvertisement() != ad) && (petI.getAdvertisement() != null)) {
-				throw new AdvertisementException("One or more pets have a different advertisement.");
-			} else {
-				petsInAd.add(petI);
-			}
-		}
-		Set<Application> applications = new HashSet<>();
-		applications.addAll(adDTO.getApplication());
+        Advertisement ad = advertisementRepository.findAdvertisementById(adDTO.getAdId());
+		Set<Pet> newPets = validateParametersEdit(adDTO);
+		Set<Application> applications = new HashSet<Application>();
+		//TODO change with fixed master 
+		//applications.addAll(adDTO.getAdoptionApplication());
+	    applications.addAll(adDTO.getApplication());
 		ad.setApplication(applications);
-		
+		ad.setApplication(applications);
 		
 		ad.setTitle(adDTO.getTitle());
 		ad.setDescription(adDTO.getDescription());
 		ad.setIsFulfilled(adDTO.isFulfilled());
 		advertisementRepository.save(ad);
-		for (Pet pet : petsInAd) {
+		for (Pet pet : newPets) {
 			pet.setAdvertisement(ad);
 			petRepository.save(pet);
 		}
 		return convertToDTO(ad);
 	}
-	
-	//todo check if it will work
-	
-	/**
-	 * Deletes advertisement from the database
-	 *
-	 * @param adDTO advertisement DTO
-	 * @return
-	 */
+
+	   /**
+     * Deletes advertisement from the database
+     *
+     * @param adDTO advertisement DTO
+     * @return
+     */
 	@Transactional
-	public void deleteAdvertisement(AdvertisementDTO adDTO) {
-		AdvertisementDTO ad = getAdvertisement(adDTO);
-		advertisementRepository.deleteById(ad.getAdId());
+    public boolean deleteAdvertisement(AdvertisementDTO adDTO) {
+		Advertisement ad = getAdvertisementById(adDTO.getAdId());
+		if(ad == null) {
+		    Set<Application> apps = ad.getApplication();
+	        for(Application app : apps) {
+	            applicationService.deleteApplication(app.getId());
+	        }
+	        advertisementRepository.delete(ad);
+	        return true;
+		}
+		else {
+            throw new AdvertisementException("Cannot delete: Advertisement does not exist.");
+        }
 	}
 	
 	public AdvertisementDTO convertToDTO(Advertisement advertisement) {
@@ -209,4 +192,62 @@ public class AdvertisementService {
 		return advertisementDTO;
 	}
 	
+    public List<Pet> validateParametersAdd(AdvertisementDTO adDTO) {
+    int numOfPets = adDTO.getPetIds().length;
+    if (numOfPets == 0) {
+        throw new AdvertisementException("A pet must be linked to an advertisement.");
+    }
+    //finding all pets that are on this ad
+    List<Pet> petsInAd = new ArrayList<>();
+    for (int i = 0; i < numOfPets; i++) {
+        Pet pet = petRepository.findPetById(adDTO.getPetIds()[i]);
+        if (pet == null) {
+            throw new AdvertisementException("One or more pets do not exist.");
+        } else if (pet.getAdvertisement() != null) {
+            throw new AdvertisementException("One or more pets already have an advertisement.");
+        }
+        petsInAd.add(pet);
+    }
+    
+    if (adDTO.getTitle().equals("") || adDTO.getTitle() == null) {
+        throw new AdvertisementException("An advertisement needs a title");
+    }
+    if (adDTO.getDescription().trim().equals("") || adDTO.getDescription() == null) {
+        throw new AdvertisementException("An advertisement needs a description");
+    }
+    return petsInAd;
+}
+
+    public Set<Pet> validateParametersEdit (AdvertisementDTO adDTO) {
+        Advertisement ad = advertisementRepository.findAdvertisementById(adDTO.getAdId());
+        if (ad == null) {
+            throw new AdvertisementException("Advertisement does not exist");  }
+        if (adDTO.getTitle() == null || adDTO.getTitle().trim().equals("")) {
+            throw new AdvertisementException("Title cannot be empty");   }
+        if (adDTO.getDescription() == null || adDTO.getDescription().trim().equals("")) {
+            throw new AdvertisementException("Description cannot be empty"); }
+        Pet pet0 = petRepository.findPetById(adDTO.getPetIds()[0]);
+        if (pet0 == null) {
+            throw new AdvertisementException("One or more pets do not exist.");}
+        
+        int numOfPets = adDTO.getPetIds().length;
+        Set<Pet> newPets = new HashSet<Pet>();
+        newPets.add(pet0);
+        for (int i = 1; i < numOfPets; i++) {
+            Pet petI = petRepository.findPetById(adDTO.getPetIds()[i]);
+            if ((petI.getAdvertisement() != ad) && (petI.getAdvertisement() != null)) {
+                throw new AdvertisementException("One or more pets have a different advertisement.");
+            } else {
+                newPets.add(petI);
+            }
+        }
+        for (Pet pet : petService.getAllPets()) {
+            if(pet.getAdvertisement().equals(ad)) {
+                if(!(newPets.contains(pet))) {
+                    pet.setAdvertisement(null);
+                }
+            }
+        }
+        return newPets;
+    }
 }
