@@ -39,12 +39,12 @@ public class ForumController {
 	 * @return The forum DTO.
 	 */
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getForum(@PathVariable(required = true) Long id, @RequestHeader String token) {
+	public ResponseEntity<?> getForum(@PathVariable Long id, @RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
-		ForumDTO forumDTO = forumService.getForumWithID(id);
-		if (forum.isPresent() && requester != null) {
+		if (requester != null) {
+			ForumDTO forumDTO = forumService.getForumWithID(id);
 			return new ResponseEntity<>(forumDTO, HttpStatus.OK);
-
+			
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -119,7 +119,7 @@ public class ForumController {
 				&& title != null // Check if the new title is valid.
 				&& !title.trim().equals("")) {
 			ForumDTO forum = forumService.updateForum(forumId, title);
-			return new ResponseEntity<ForumDTO>(forum, HttpStatus.OK);
+			return new ResponseEntity<>(forum, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -145,7 +145,7 @@ public class ForumController {
 			} else {
 				forum = forumService.unlockForum(forumID);
 			}
-			return new ResponseEntity<ForumDTO>(forum, HttpStatus.OK);
+			return new ResponseEntity<>(forum, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -190,7 +190,7 @@ public class ForumController {
 		Optional<Forum> forum = forumRepository.findById(forumID);
 		if (user != null && forum.isPresent()) {
 			ForumDTO newForum = forumService.subscribeTo(forumID, user.getId());
-			return new ResponseEntity<ForumDTO>(newForum, HttpStatus.OK);
+			return new ResponseEntity<>(newForum, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -209,7 +209,7 @@ public class ForumController {
 		Optional<Forum> forum = forumRepository.findById(forumID);
 		if (user != null && forum.isPresent()) {
 			ForumDTO newForum = forumService.unsubscribeFrom(forumID, user.getId());
-			return new ResponseEntity<ForumDTO>(newForum, HttpStatus.OK);
+			return new ResponseEntity<>(newForum, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
