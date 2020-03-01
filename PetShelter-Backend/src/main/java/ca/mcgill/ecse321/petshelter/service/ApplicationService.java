@@ -96,8 +96,7 @@ public class ApplicationService {
         userRepository.save(user);
         advertisementRepository.save(advertisement);
         return convertToDto(application);
-    }
-    
+    }    
     
     //todo check if they are the owner
     

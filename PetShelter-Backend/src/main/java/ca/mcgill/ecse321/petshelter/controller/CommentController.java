@@ -60,8 +60,7 @@ public class CommentController {
 		User requester = userRepository.findUserByApiToken(token);
 		if (requester != null) {
 			try {
-				List<CommentDTO> comments = commentService
-                    .getCommentsByUser(userRepository.findUserByUserName(username).getId());
+				List<CommentDTO> comments = commentService.getCommentsByUser(userRepository.findUserByUserName(username).getId());
 				return new ResponseEntity<>(comments, HttpStatus.OK);
 			} catch (CommentException e) {
 				return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
