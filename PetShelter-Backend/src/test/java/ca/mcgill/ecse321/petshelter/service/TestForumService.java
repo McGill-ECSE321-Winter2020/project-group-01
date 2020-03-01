@@ -203,62 +203,6 @@ public class TestForumService {
             }
         });
 
-        lenient().when(commentRepository.findById(anyLong())).thenAnswer((InvocationOnMock invocation) -> {
-            if (invocation.getArgument(0).equals(COMMENT_ID)) {
-                User user = new User();
-                user.setId(USER_ID);
-                user.setUserName(USER_NAME);
-                user.setEmail(USER_EMAIL);
-                user.setPassword(USER_PASSWORD);
-                Comment comment = new Comment();
-                comment.setTime(COMMENT_TIME);
-                comment.setDatePosted(COMMENT_DATE);
-                comment.setId(COMMENT_ID);
-                comment.setText(COMMENT_TEXT);
-                comment.setUser(user);
-                return Optional.of(comment);
-            }
-            return Optional.empty();
-        });
-
-        lenient().when(commentRepository.findCommentsByUser(any(User.class)))
-                .thenAnswer((InvocationOnMock invocation) -> {
-                    if (((User) invocation.getArgument(0)).getId() == (USER_ID)) {
-                        User user = new User();
-                        user.setId(USER_ID);
-                        user.setUserName(USER_NAME);
-                        user.setEmail(USER_EMAIL);
-                        user.setPassword(USER_PASSWORD);
-                        Comment comment = new Comment();
-                        comment.setTime(COMMENT_TIME);
-                        comment.setDatePosted(COMMENT_DATE);
-                        comment.setId(COMMENT_ID);
-                        comment.setText(COMMENT_TEXT);
-                        comment.setUser(user);
-                        List<Comment> comments = new ArrayList<>();
-                        comments.add(comment);
-                        return comments;
-                    }
-                    return new ArrayList<Comment>();
-                });
-
-        lenient().when(commentRepository.findAll()).thenAnswer((InvocationOnMock invocation) -> {
-            User user = new User();
-            user.setId(USER_ID);
-            user.setUserName(USER_NAME);
-            user.setEmail(USER_EMAIL);
-            user.setPassword(USER_PASSWORD);
-            Comment comment = new Comment();
-            comment.setTime(COMMENT_TIME);
-            comment.setDatePosted(COMMENT_DATE);
-            comment.setId(COMMENT_ID);
-            comment.setText(COMMENT_TEXT);
-            comment.setUser(user);
-            List<Comment> comments = new ArrayList<>();
-            comments.add(comment);
-            return comments;
-        });
-
         lenient().when(forumRepository.findAll()).thenAnswer((InvocationOnMock invocation) -> {
             User user = new User();
             user.setId(USER_ID);
@@ -575,7 +519,7 @@ public class TestForumService {
     @Test
     public void testGetForumByMissingUser() {
         ForumException thrown = assertThrows(ForumException.class,
-                () -> forumService.getForumsByUser((long) 0));
+                () -> forumService.getForumsByUser(0));
         assertTrue(thrown.getMessage().contains("No such user."));
     }
 
