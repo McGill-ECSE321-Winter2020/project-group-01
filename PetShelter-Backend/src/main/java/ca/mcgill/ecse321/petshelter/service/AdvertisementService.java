@@ -98,12 +98,12 @@ public class AdvertisementService {
      * @return advertisement object
      */
     @Transactional
-    public Advertisement getAdvertisementById(long id) {
+    public AdvertisementDTO getAdvertisementById(long id) {
         Advertisement ad = advertisementRepository.findAdvertisementById(id);
         if (ad == null) {
             throw new AdvertisementException("Advertisement does not exist.");
         } else {
-            return ad;
+            return convertToDTO(ad);
         }
     }
     
@@ -173,14 +173,14 @@ public class AdvertisementService {
         if (adDTO.getAdId() == null) {
             throw new AdvertisementException("Advertisement not found");
         }
-        Advertisement ad = getAdvertisementById(adDTO.getAdId());
+        AdvertisementDTO ad = getAdvertisementById(adDTO.getAdId());
         Set<Application> apps = ad.getApplication();
         if (apps != null) {
             for (Application app : apps) {
                 applicationService.deleteApplication(app.getId());
             }
         }
-        advertisementRepository.delete(ad);
+        advertisementRepository.deleteById(ad.getAdId());
         return true;
     
     }

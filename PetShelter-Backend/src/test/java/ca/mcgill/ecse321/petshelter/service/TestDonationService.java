@@ -227,4 +227,13 @@ public class TestDonationService {
             assertEquals("Donation can't be null!", e.getMessage());
         }
     }
+    
+    @Test
+    public  void testWrongDonationName(){
+        try {
+            donationService.getAllUserDonations("bob");
+        } catch (DonationException e){
+            assertEquals("Donations not found", e.getMessage());
+        }
+    }
 }
