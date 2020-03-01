@@ -1,6 +1,6 @@
 plugins {
-	id 'org.springframework.boot' version '2.2.4.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'org.springframework.boot' version '2.1.9.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 	id 'java'
 }
 apply plugin: 'java'
@@ -61,6 +61,7 @@ dependencies {
 	compile group: 'org.springframework.security', name: 'spring-security-web', version: '5.2.2.RELEASE'
 	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
 	compile group: 'org.springframework.security', name: 'spring-security-config', version: '5.2.2.RELEASE'
+	compile group: 'org.springframework.security', name: 'spring-security-core', version: '5.2.2.RELEASE'
 	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-jwt
 	compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.9.RELEASE'
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
