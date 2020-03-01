@@ -2,8 +2,14 @@ package ca.mcgill.ecse321.petshelter.controller;
 
 import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
 import ca.mcgill.ecse321.petshelter.model.User;
+import ca.mcgill.ecse321.petshelter.model.UserType;
+import ca.mcgill.ecse321.petshelter.model.Application;
+import ca.mcgill.ecse321.petshelter.repository.ApplicationRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.ApplicationService;
+
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +29,9 @@ public class ApplicationController {
 
 	@Autowired
 	private ApplicationService applicationService;
+	
+	@Autowired
+	private ApplicationRepository applicationRepository;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -82,5 +91,27 @@ public class ApplicationController {
 			}
 		} else
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	}
+	
+	/**
+	 * Deletes an application from the database. By design, only an admin may
+	 * delete an application.
+	 * 
+	 * @param applicationId the application id of the application to delete
+	 * @param token the session token of the user
+	 * @return the deleted application
+	 */
+	@DeleteMapping("/{forumID}")
+	public ResponseEntity<?> deleteApplication(@PathVariable long applicationId, @RequestHeader String token) {
+		User user = userRepository.findUserByApiToken(token);
+		Optional<Application> application = applicationRepository.findById(applicationId);
+		if (user != null && application.isPresent() && user.getUserType().equals(UserType.ADMIN)) {
+			// Delete application
+			
+			applicationRepository.delete(application.get());
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 }
