@@ -1,14 +1,12 @@
 package ca.mcgill.ecse321.petshelter.config;
 
-
 import org.springframework.core.env.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
-//helper class that retrieves properties from application.properties
 /**
- * 
+ * Helper class that retrieves the data from application.properties.
  * @author louis
  *
  */

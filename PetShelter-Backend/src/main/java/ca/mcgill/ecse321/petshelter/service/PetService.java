@@ -59,21 +59,22 @@ public class PetService {
 		User user = validateParametersAdd(petDTO);
 		Pet pet = new Pet();
 		petSetters(pet, petDTO);
-		if (petDTO.getAdvertisement() != null && advertisementRepository.findAdvertisementById(petDTO.getAdvertisement()) != null) {
+		if (petDTO.getAdvertisement() != null
+				&& advertisementRepository.findAdvertisementById(petDTO.getAdvertisement()) != null) {
 			pet.setAdvertisement(advertisementRepository.findAdvertisementById(petDTO.getAdvertisement()));
 		}
 		Set<PetDTO> allUserPets = getPetsByUser(petDTO.getUserName());
 		allUserPets.add(petDTO);
-		
+
 		user.getPets().add(pet);
-		
+
 		petRepository.save(pet);
 		userRepository.save(user);
 		petDTO.setId(pet.getId());
-		
+
 		return petDTO;
 	}
-	
+
 	private Set<Pet> convertToObject(Set<PetDTO> allUserPets) {
 		Set<Pet> petSet = new HashSet<>();
 		for (PetDTO petDTO : allUserPets) {
@@ -89,7 +90,7 @@ public class PetService {
 		}
 		return petSet;
 	}
-	
+
 	/**
 	 * finds pet with the DTO
 	 *
@@ -152,8 +153,7 @@ public class PetService {
 		petRepository.save(pet);
 		return petToPetDTO(pet);
 	}
-	
-	
+
 	@Transactional
 	public PetDTO changeOwner(PetDTO petDTO, String token) {
 		Pet pet = validateParametersEdit(petDTO);
@@ -177,9 +177,9 @@ public class PetService {
 		petRepository.save(pet);
 		return petToPetDTO(pet);
 	}
-	
+
 	// todo, check in DTO if it is the owner of the pet
-	
+
 	/**
 	 * Removes a pet from the database
 	 *
@@ -191,12 +191,11 @@ public class PetService {
 	public boolean deletePet(long id, String userName) {
 		Pet pet = petRepository.findPetById(id);
 		User user = userRepository.findUserByUserName(userName);
-		System.out.println(user);
 		if (user == null) {
 			throw new PetException("Cannot delete: User does not exist.");
 		} else if (pet == null) {
 			throw new PetException("Cannot delete: Pet does not exist.");
-		} else if (!(user.getPets().contains(pet))) {
+		} else if (user.getPets() == null || !(user.getPets().contains(pet))) {
 			throw new PetException("Cannot delete: The requester is not the owner of the pet.");
 		} else {
 			Advertisement petAd = pet.getAdvertisement();

@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.petshelter.service;
 
+import ca.mcgill.ecse321.petshelter.dto.CommentDTO;
 import ca.mcgill.ecse321.petshelter.dto.ForumDTO;
 import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.Comment;
@@ -18,6 +19,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static ca.mcgill.ecse321.petshelter.service.CommentService.commentToDto;
 import static ca.mcgill.ecse321.petshelter.service.UserService.userToDto;
 
 /**
@@ -28,8 +30,10 @@ import static ca.mcgill.ecse321.petshelter.service.UserService.userToDto;
 
 @Service
 public class ForumService {
+
 	@Autowired
 	private ForumRepository forumRepository;
+
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -61,10 +65,13 @@ public class ForumService {
 	 * @return The forum that was deleted. This value may be null;
 	 */
 	@Transactional
-	public void deleteForum(long forumID) {
+	public ForumDTO deleteForum(long forumID) {
 		Optional<Forum> forum = forumRepository.findById(forumID);
 		if (forum.isPresent()) {
 			forumRepository.deleteById(forumID);
+			return forumToDTO(forum.get());
+		} else {
+			return null;
 		}
 		
 	}
@@ -176,17 +183,7 @@ public class ForumService {
 			throw new ForumException("No such forum thread.");
 		}
 	}
-	
-	/**
-	 * Get the list of all the forum threads.
-	 *
-	 * @return List of all forum threads.
-	 */
-	@Transactional
-	public List<ForumDTO> getForums() {
-		return forumRepository.findAll().stream().map(this::forumToDTO).collect(Collectors.toList());
-	}
-	
+
 	/**
 	 * Get all the forums of a user.
 	 *
@@ -202,7 +199,12 @@ public class ForumService {
 			throw new ForumException("No such user.");
 		}
 	}
-	
+
+	/**
+	 * Get the list of all the forum threads.
+	 *
+	 * @return List of all forum threads.
+	 */
 	@Transactional
 	public List<ForumDTO> getAllForum() {
 		return forumRepository.findAll().stream().map(this::forumToDTO).collect(Collectors.toList());
@@ -223,11 +225,15 @@ public class ForumService {
 		forumDTO.setAuthor(userToDto(forum.getAuthor()));
 		forumDTO.setTitle(forum.getTitle());
 		forumDTO.setId(forum.getId());
+		forumDTO.setLocked(forum.isLocked());
 		Set<UserDTO> forumSubsDTO = new HashSet<>();
-		for (User user : forum.getSubscribers()){
-			forumSubsDTO.add(userToDto(user));
-		}
+		forum.getSubscribers()
+				.forEach(u -> forumSubsDTO.add(userToDto(u)));
+		Set<CommentDTO> forumCommentsDTO = new HashSet<>();
+		forum.getComments()
+				.forEach(c -> forumCommentsDTO.add(commentToDto(c)));
 		forumDTO.setSubscribers(forumSubsDTO);
+		forumDTO.setComments(forumCommentsDTO);
 		return forumDTO;
 	}
 }
