@@ -4,12 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ca.mcgill.ecse321.petshelter.dto.PetDTO;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.PetRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
@@ -69,4 +74,38 @@ public class PetController {
 		}
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
+	
+	//The service method for delete is wrong, so icannot delete correctly here
+//	@DeleteMapping("/{id}")
+//	public ResponseEntity<?> deletePet(@RequestHeader String token, @PathVariable long id){
+//		User requester = userRepository.findUserByApiToken(token);
+//		if(requester != null) {
+//			petService.deletePet(id);
+//			return new ResponseEntity<>(HttpStatus.OK);
+//		}
+//		else {
+//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//		}
+//	}
+	
+	//TODO
+	@PutMapping("/{id}")
+	public ResponseEntity<?> updatePet(@RequestHeader String token, @PathVariable long id){
+		User requester = userRepository.findUserByApiToken(token);
+		return null;
+	}
+	
+	@PostMapping()
+	public ResponseEntity<?> createPet(@RequestHeader String token, @RequestBody PetDTO pet){
+		User requester = userRepository.findUserByApiToken(token);
+		return null;
+	}
+	
+	@GetMapping("/donate/{id}")
+	public ResponseEntity<?> createPet(@RequestHeader String token, @PathVariable long id){
+		User requester = userRepository.findUserByApiToken(token);
+		return null;
+	}
+	
+	//METHODS LEFT TO DO: Delete pet, update pet, give pet to shelter, create pet
 }

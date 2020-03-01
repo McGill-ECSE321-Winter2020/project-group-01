@@ -43,16 +43,6 @@ public class PetService {
 	}
 	
 	@Transactional
-	public Pet getPet(PetDTO petDTO) {
-		Pet pet = petRepository.findPetById(petDTO.getId());
-		if(pet == null) {
-			throw new PetException("Pet does not exist.");
-		} else {
-			return pet;
-		}
-	}
-	
-	@Transactional
 	public Set<Pet> getPetsByUser(String userName) {
 		User user = userRepository.findUserByUserName(userName);
 		if (user == null) {
