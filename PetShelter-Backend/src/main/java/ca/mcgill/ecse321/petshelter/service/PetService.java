@@ -34,11 +34,11 @@ public class PetService {
      * @return pet object
      */
     @Transactional
-    public Pet getPet(PetDTO petDTO) {
+    public PetDTO getPet(PetDTO petDTO) {
         if (petDTO.getId() == null) {
             throw new PetException("Pet does not exist.");
         } else {
-            return petRepository.findPetById(petDTO.getId());
+            return petToPetDTO(petRepository.findPetById(petDTO.getId()));
         }
     }
     
@@ -81,7 +81,7 @@ public class PetService {
      * @return pet object
      */
     @Transactional
-    public Pet createPet(PetDTO petDTO) throws PetException {
+    public PetDTO createPet(PetDTO petDTO) throws PetException {
         User user = userRepository.findUserByUserName(petDTO.getUserName());
         if (user == null) {
             throw new PetException("Cannot add: User does not exist.");
@@ -117,7 +117,7 @@ public class PetService {
         userRepository.save(user);
         petDTO.setId(pet.getId());
         
-        return pet;
+        return petToPetDTO(pet);
     }
     //todo check if owner of the pet
     
@@ -128,12 +128,12 @@ public class PetService {
      * @return edited pet
      */
     @Transactional
-    public Pet editPet(PetDTO petDTO) {
+    public PetDTO editPet(PetDTO petDTO) {
         if (petDTO.getId() == null) {
             throw new PetException("Cannot edit: Pet does not exist.");
         }
         Pet pet = petRepository.findPetById(petDTO.getId());
-    
+        
         if (petDTO.getName() == null || petDTO.getName().trim().equals("")) {
             throw new PetException("Cannot edit: A pet needs a name.");
         }
@@ -179,7 +179,7 @@ public class PetService {
         pet.setPicture(petDTO.getPicture());
         petRepository.save(pet);
         
-        return pet;
+        return petToPetDTO(pet);
     }
     
     
@@ -200,5 +200,20 @@ public class PetService {
             petRepository.delete(pet);
             return true;
         }
+    }
+    
+    
+    public PetDTO petToPetDTO(Pet pet) {
+        PetDTO petDTO = new PetDTO();
+        petDTO.setId(pet.getId());
+        petDTO.setDateOfBirth(pet.getDateOfBirth());
+        petDTO.setSpecies(pet.getSpecies());
+        petDTO.setPicture(pet.getPicture());
+        petDTO.setName(pet.getName());
+        petDTO.setGender(pet.getGender());
+        petDTO.setDescription(pet.getDescription());
+        petDTO.setBreed(pet.getBreed());
+        petDTO.setAdvertisement(pet.getAdvertisement());
+        return petDTO;
     }
 }

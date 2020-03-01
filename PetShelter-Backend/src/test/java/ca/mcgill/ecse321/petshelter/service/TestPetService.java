@@ -139,7 +139,7 @@ public class TestPetService {
         petDTO.setSpecies(PET_SPECIES);
         petDTO.setUserName(USER_NAME);
         
-        Pet pet = null;
+        PetDTO pet = null;
         
         try {
             pet = petService.createPet(petDTO);
@@ -234,8 +234,8 @@ public class TestPetService {
         petDTO.setPicture(PET_PICTURE);
         petDTO.setSpecies(PET_SPECIES);
         petDTO.setUserName(USER_NAME);
-        
-        Pet pet = null;
+    
+        PetDTO pet = null;
         try {
             pet = petService.createPet(petDTO);
         } catch (PetException e) {
@@ -276,8 +276,8 @@ public class TestPetService {
         petDTO.setPicture(PET_PICTURE);
         petDTO.setSpecies(PET_SPECIES);
         petDTO.setUserName(USER_NAME);
-        
-        Pet oldPet = petService.createPet(petDTO);
+    
+        PetDTO oldPet = petService.createPet(petDTO);
         
         assertEquals(PET_NAME, oldPet.getName());
         
@@ -292,8 +292,8 @@ public class TestPetService {
         petUpdateDTO.setSpecies(PET_SPECIES_UPDATE);
         petUpdateDTO.setUserName(USER_NAME);
         petUpdateDTO.setId(oldPet.getId());
-        
-        Pet pet = petService.editPet(petUpdateDTO);
+    
+        PetDTO pet = petService.editPet(petUpdateDTO);
         
         assertNotNull(pet);
         assertEquals(PET_NAME_UPDATE, pet.getName());
@@ -311,8 +311,8 @@ public class TestPetService {
         petDTO.setPicture(PET_PICTURE);
         petDTO.setSpecies(PET_SPECIES);
         petDTO.setUserName(USER_NAME);
-        
-        Pet oldPet = petService.createPet(petDTO);
+    
+        PetDTO oldPet = petService.createPet(petDTO);
         
         assertEquals(PET_NAME, oldPet.getName());
         
@@ -348,8 +348,8 @@ public class TestPetService {
         petDTO.setPicture(PET_PICTURE);
         petDTO.setSpecies(PET_SPECIES);
         petDTO.setUserName(USER_NAME);
-        
-        Pet oldPet = petService.createPet(petDTO);
+    
+        PetDTO oldPet = petService.createPet(petDTO);
         
         assertEquals(PET_NAME, oldPet.getName());
         
@@ -385,8 +385,8 @@ public class TestPetService {
         petDTO.setPicture(PET_PICTURE);
         petDTO.setSpecies(PET_SPECIES);
         petDTO.setUserName(USER_NAME);
-        
-        Pet oldPet = petService.createPet(petDTO);
+    
+        PetDTO oldPet = petService.createPet(petDTO);
         
         assertEquals(PET_NAME, oldPet.getName());
         
@@ -422,8 +422,8 @@ public class TestPetService {
         petDTO.setPicture(PET_PICTURE);
         petDTO.setSpecies(PET_SPECIES);
         petDTO.setUserName(USER_NAME);
-        
-        Pet oldPet = petService.createPet(petDTO);
+    
+        PetDTO oldPet = petService.createPet(petDTO);
         
         assertEquals(PET_NAME, oldPet.getName());
         
@@ -459,8 +459,8 @@ public class TestPetService {
         petDTO.setPicture(PET_PICTURE);
         petDTO.setSpecies(PET_SPECIES);
         petDTO.setUserName(USER_NAME);
-        
-        Pet oldPet = petService.createPet(petDTO);
+    
+        PetDTO oldPet = petService.createPet(petDTO);
         
         assertEquals(PET_NAME, oldPet.getName());
         
@@ -496,8 +496,8 @@ public class TestPetService {
         petDTO.setPicture(PET_PICTURE);
         petDTO.setSpecies(PET_SPECIES);
         petDTO.setUserName(USER_NAME);
-        
-        Pet oldPet = petService.createPet(petDTO);
+    
+        PetDTO oldPet = petService.createPet(petDTO);
         
         assertEquals(PET_NAME, oldPet.getName());
         
@@ -533,8 +533,8 @@ public class TestPetService {
         petDTO.setPicture(PET_PICTURE);
         petDTO.setSpecies(PET_SPECIES);
         petDTO.setUserName(USER_NAME);
-        
-        Pet oldPet = petService.createPet(petDTO);
+    
+        PetDTO oldPet = petService.createPet(petDTO);
         
         assertEquals(PET_NAME, oldPet.getName());
         
@@ -569,8 +569,8 @@ public class TestPetService {
         petDTO.setPicture(PET_PICTURE);
         petDTO.setSpecies(PET_SPECIES);
         petDTO.setUserName(USER_NAME);
-        
-        Pet pet = null;
+    
+        PetDTO pet = null;
         
         try {
             pet = petService.createPet(petDTO);
@@ -619,8 +619,8 @@ public class TestPetService {
         petDTO.setPicture(PET_PICTURE);
         petDTO.setSpecies(PET_SPECIES);
         petDTO.setUserName(USER_NAME);
-        
-        Pet pet = null;
+    
+        PetDTO pet = null;
         
         try {
             pet = petService.createPet(petDTO);
@@ -630,8 +630,8 @@ public class TestPetService {
         
         assertNotNull(pet);
         petDTO.setId(pet.getId());
-        
-        Pet dbPet = petService.getPet(petDTO);
+    
+        PetDTO dbPet = petService.getPet(petDTO);
         assertEquals(pet.getName(), dbPet.getName());
         assertEquals(pet.getBreed(), dbPet.getBreed());
     }
