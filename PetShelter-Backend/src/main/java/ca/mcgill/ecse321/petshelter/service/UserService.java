@@ -183,7 +183,8 @@ public class UserService {
             throw new PasswordException("No user was found");
         }
         // the old password must be correct
-        System.out.println(user);
+        System.out.println(user.getPassword());
+        System.out.println(passwordDto.getOldPassword());
         if (!passwordEncoder.matches(passwordDto.getOldPassword(), user.getPassword())) {
             throw new PasswordException("Wrong password");
         }
