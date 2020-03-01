@@ -1,8 +1,8 @@
 package ca.mcgill.ecse321.petshelter.service;
 
 import ca.mcgill.ecse321.petshelter.dto.AdvertisementDTO;
-import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
+import ca.mcgill.ecse321.petshelter.model.Application;
 import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import ca.mcgill.ecse321.petshelter.repository.PetRepository;
@@ -112,13 +112,13 @@ public class AdvertisementService {
 		if (adDTO.getDescription().trim().equals("") || adDTO.getDescription() == null) {
 			throw new AdvertisementException("An advertisement needs a description");
 		}
-		Set<AdoptionApplication> applications = new HashSet<>();
-		applications.addAll(adDTO.getAdoptionApplication());
+		Set<Application> applications = new HashSet<>();
+		applications.addAll(adDTO.getApplication());
 		Advertisement ad = new Advertisement();
 		ad.setTitle(adDTO.getTitle());
 		ad.setIsFulfilled(adDTO.isFulfilled());
 		ad.setDescription(adDTO.getDescription());
-		ad.setAdoptionApplication(applications);
+		ad.setApplication(applications);
 		advertisementRepository.save(ad);
 		for (Pet pet : petsInAd) {
 			pet.setAdvertisement(ad);
@@ -159,15 +159,15 @@ public class AdvertisementService {
 		petsInAd.add(pet0);
 		for (int i = 1; i < numOfPets; i++) {
 			Pet petI = petRepository.findPetById(adDTO.getPetIds()[i]);
-			if((petI.getAdvertisement() != ad) && (petI.getAdvertisement() != null)) {
+			if ((petI.getAdvertisement() != ad) && (petI.getAdvertisement() != null)) {
 				throw new AdvertisementException("One or more pets have a different advertisement.");
 			} else {
 				petsInAd.add(petI);
 			}
 		}
-		Set<AdoptionApplication> applications = new HashSet<AdoptionApplication>();
-		applications.addAll(adDTO.getAdoptionApplication());
-		ad.setAdoptionApplication(applications);
+		Set<Application> applications = new HashSet<Application>();
+		applications.addAll(adDTO.getApplication());
+		ad.setApplication(applications);
 		ad.setTitle(adDTO.getTitle());
 		ad.setDescription(adDTO.getDescription());
 		ad.setIsFulfilled(adDTO.isFulfilled());

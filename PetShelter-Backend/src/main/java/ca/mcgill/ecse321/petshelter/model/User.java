@@ -1,9 +1,8 @@
 package ca.mcgill.ecse321.petshelter.model;
 
-import javax.persistence.*;
-
 import ca.mcgill.ecse321.petshelter.service.extrafeatures.ValidPassword;
 
+import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -73,58 +72,56 @@ public class User {
 	public String getApiToken() {
 		return this.apiToken;
 	}
-
+	
 	private Set<Pet> pets;
-
+	
 	@OneToMany
 	public Set<Pet> getPets() {
 		return this.pets;
 	}
-
+	
 	public void setPets(Set<Pet> petss) {
 		this.pets = petss;
 	}
-
-	private Set<AdoptionApplication> applications;
-
+	
+	private Set<Application> applications;
+	private byte[] picture;
+	@Enumerated
+	private UserType userType;
+	
 	@OneToMany(mappedBy = "user")
-	public Set<AdoptionApplication> getApplications() {
+	public Set<Application> getApplications() {
 		return this.applications;
 	}
-
-	public void setApplications(Set<AdoptionApplication> applicationss) {
+	
+	public void setApplications(Set<Application> applicationss) {
 		this.applications = applicationss;
 	}
-    
-    private byte[] picture;
-    
-    public void setPicture(byte[] value) {
-        this.picture = value;
-    }
-    
-    public byte[] getPicture() {
-        return this.picture;
-    }
-    
-    @Enumerated
-    private UserType userType;
-    
-    public UserType getUserType() {
-        return this.userType;
-    }
-    
-    public void setUserType(UserType value) {
-        this.userType = value;
-    }
-    
-    @Override
-    public String toString() {
-        return "User{" +
-                "userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", isEmailValidated=" + isEmailValidated +
-                ", email='" + email + '\'' +
-                ", id=" + id +
+	
+	public byte[] getPicture() {
+		return this.picture;
+	}
+	
+	public void setPicture(byte[] value) {
+		this.picture = value;
+	}
+	
+	public UserType getUserType() {
+		return this.userType;
+	}
+	
+	public void setUserType(UserType value) {
+		this.userType = value;
+	}
+	
+	@Override
+	public String toString() {
+		return "User{" +
+				"userName='" + userName + '\'' +
+				", password='" + password + '\'' +
+				", isEmailValidated=" + isEmailValidated +
+				", email='" + email + '\'' +
+				", id=" + id +
                 ", apiToken='" + apiToken + '\'' +
                 ", pets=" + pets +
                 ", applications=" + applications +

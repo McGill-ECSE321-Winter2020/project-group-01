@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ca.mcgill.ecse321.petshelter.service.UserService.userToDto;
+
 /**
  * @author louis User controller class - allows for creation of users, login of
- *         users, and email validation of users.
+ * users, and email validation of users.
  */
 
 @RestController
@@ -45,17 +47,8 @@ public class UserController {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
-	// converts a user into a userdto
-	public static UserDTO userToDto(User user) {
-		UserDTO userDto = new UserDTO();
-		userDto.setEmail(user.getEmail());
-		userDto.setUsername(user.getUserName());
-		userDto.setUserType(user.getUserType());
-		userDto.setPicture(user.getPicture());
-		return userDto;
-	}
-
+	
+	
 	/**
 	 * Creates a user account. The Request body is a UserDTO aka email, password
 	 * username and UserType are provided. The method also validates if the
