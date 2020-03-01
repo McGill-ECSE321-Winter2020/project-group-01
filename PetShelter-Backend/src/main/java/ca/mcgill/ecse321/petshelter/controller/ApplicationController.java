@@ -9,6 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller that handles requests made to create, edit and delete
+ * applications.
+ * 
+ * @author louis
+ *
+ */
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/application")
@@ -21,10 +28,11 @@ public class ApplicationController {
 	private UserRepository userRepository;
 
 	/**
+	 * Returns all applications.
 	 * @return the list of all applications
+	 * @param token The requester's token.
 	 */
 	@GetMapping("/all")
-
 	public ResponseEntity<?> getAllApplications(@RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
 		if (requester != null)
@@ -34,11 +42,12 @@ public class ApplicationController {
 	}
 
 	/**
+	 * Returns applications made by a user.
 	 * @param user user targeted
+	 * @param token Requester's token.
 	 * @return that user's applications
 	 */
 	@GetMapping("/{user}")
-
 	public ResponseEntity<?> getUserApplication(@PathVariable String user, @RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
 		if (requester != null) {
@@ -53,6 +62,7 @@ public class ApplicationController {
 	 * Creates an application with the DTO
 	 *
 	 * @param applicationDTO JSON passed by the request body
+	 * @param token The requester's token.
 	 * @return check if all the fields are good
 	 */
 	@PostMapping()
