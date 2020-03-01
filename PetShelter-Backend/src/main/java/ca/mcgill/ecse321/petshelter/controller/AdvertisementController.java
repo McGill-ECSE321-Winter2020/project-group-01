@@ -25,6 +25,7 @@ import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.model.UserType;
+import ca.mcgill.ecse321.petshelter.repository.PetRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.AdvertisementService;
 import ca.mcgill.ecse321.petshelter.service.PetService;
@@ -47,6 +48,9 @@ public class AdvertisementController {
 
 	@Autowired
 	PetService petService;
+	
+	@Autowired
+	PetRepository petRepository;
 
 	@Autowired
 	AdvertisementService advertisementService;
@@ -73,7 +77,7 @@ public class AdvertisementController {
 		List<Long> petIds = new ArrayList<Long>();
 		Set<PetDTO> allPets = petService.getAllPets();
 		for (PetDTO pet : allPets) {
-			if (pet.getAdvertisement().equals(ad)) {
+			if (pet.getAdvertisement().equals(ad.getId())) {
 				petIds.add(pet.getId());
 			}
 		}
@@ -155,7 +159,7 @@ public class AdvertisementController {
 	public ResponseEntity<?> createAdvertisement(@PathVariable(required = true) long petId, @RequestBody String title,
 			String description, @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
-		PetDTO pet = petService.getPet(petId);
+		Pet pet = petRepository.findPetById(petId);
 		boolean isOwner = user.getPets().contains(pet);
 		if (user != null && isOwner && title != null && !title.trim().equals("") && description != null
 				&& !description.trim().equals("")) {
