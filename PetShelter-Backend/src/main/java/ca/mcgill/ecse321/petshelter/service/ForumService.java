@@ -218,6 +218,7 @@ public class ForumService {
 		forumDTO.setAuthor(userToDto(forum.getAuthor()));
 		forumDTO.setTitle(forum.getTitle());
 		forumDTO.setId(forum.getId());
+		forumDTO.setLocked(forum.isLocked());
 		Set<UserDTO> forumSubsDTO = null;
 		for (User user : forum.getSubscribers()){
 			forumSubsDTO.add(userToDto(user));
