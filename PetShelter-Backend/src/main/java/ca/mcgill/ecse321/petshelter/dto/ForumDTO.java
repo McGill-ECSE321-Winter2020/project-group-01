@@ -8,6 +8,7 @@ public class ForumDTO {
     private Set<CommentDTO> comments;
     private Set<UserDTO> subscribers;
     private UserDTO author;
+    private boolean isLocked;
     
     public String getTitle() {
         return this.title;
@@ -57,5 +58,13 @@ public class ForumDTO {
                 ", subscribers=" + subscribers +
                 ". author=" + author +
                 '}';
+    }
+
+    public boolean isLocked() {
+        return isLocked;
+    }
+
+    public void setLocked(boolean locked) {
+        isLocked = locked;
     }
 }
