@@ -198,7 +198,8 @@ public class PetService {
 		petDTO.setGender(pet.getGender());
 		petDTO.setDescription(pet.getDescription());
 		petDTO.setBreed(pet.getBreed());
-		petDTO.setAdvertisement(pet.getAdvertisement().getId());
+		if (pet.getAdvertisement() != null)
+			petDTO.setAdvertisement(pet.getAdvertisement().getId());
 		return petDTO;
 	}
 
@@ -217,13 +218,13 @@ public class PetService {
 		if (user == null) {
 			throw new PetException("Cannot add: User does not exist.");
 		}
-		if (petDTO.getName().trim() == "" || petDTO.getName() == null) {
+		if (petDTO.getName() == null || petDTO.getName().trim() == "") {
 			throw new PetException("Cannot add: A pet needs a name.");
 		}
-		if (petDTO.getSpecies().trim() == "" || petDTO.getSpecies() == null) {
+		if (petDTO.getSpecies() == null || petDTO.getSpecies().trim() == "") {
 			throw new PetException("Cannot add: A pet needs a species.");
 		}
-		if (petDTO.getBreed().trim() == "" || petDTO.getBreed() == null) {
+		if (petDTO.getBreed() == null || petDTO.getBreed().trim() == "") {
 			throw new PetException("Cannot add: A pet needs a breed.");
 		}
 		if (petDTO.getDescription() == null) {

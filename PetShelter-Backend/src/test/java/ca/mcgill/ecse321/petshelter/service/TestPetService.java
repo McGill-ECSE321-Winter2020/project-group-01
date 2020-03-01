@@ -72,6 +72,7 @@ public class TestPetService {
 	private static final Gender PET_GENDER_UPDATE = Gender.MALE;
 	private static final byte[] PET_PICTURE_UPDATE = new byte[10];
 	private long PET_ID = 0;
+	private Pet PET = new Pet();
 
 	@Mock
 	private PetRepository petRepository;
@@ -88,6 +89,7 @@ public class TestPetService {
 				user.setUserName(USER_NAME);
 				user.setEmail(USER_EMAIL);
 				user.setPassword(USER_PASSWORD);
+				USER_PETS.add(PET);
 				user.setPets(USER_PETS);
 				return user;
 			} else {
@@ -98,14 +100,14 @@ public class TestPetService {
 		// this will never work because petid is null.....
 		lenient().when(petRepository.findPetById(anyLong())).thenAnswer((InvocationOnMock invocation) -> {
 			if (invocation.getArgument(0).equals(PET_ID)) {
-				Pet pet = new Pet();
-				pet.setBreed(PET_BREED);
-				pet.setDateOfBirth(PET_DOB);
-				pet.setDescription(PET_DESCRIPTION);
-				pet.setName(PET_NAME);
-				pet.setSpecies(PET_SPECIES);
-				pet.setPicture(PET_PICTURE);
-				return pet;
+				PET.setBreed(PET_BREED);
+				PET.setDateOfBirth(PET_DOB);
+				PET.setDescription(PET_DESCRIPTION);
+				PET.setName(PET_NAME);
+				PET.setSpecies(PET_SPECIES);
+				PET.setPicture(PET_PICTURE);
+				PET.setAdvertisement(new Advertisement());
+				return PET;
 			} else {
 				return null;
 			}
@@ -221,6 +223,7 @@ public class TestPetService {
 		petDTO.setPicture(PET_PICTURE);
 		petDTO.setSpecies(PET_SPECIES);
 		petDTO.setUserName(USER_NAME);
+		petDTO.setAdvertisement(new Long(0));
 
 		try {
 			petService.createPet(petDTO);
@@ -239,6 +242,7 @@ public class TestPetService {
 		petDTO.setName(PET_NAME);
 		petDTO.setPicture(PET_PICTURE);
 		petDTO.setUserName(USER_NAME);
+		petDTO.setAdvertisement(new Long(0));
 
 		try {
 			petService.createPet(petDTO);
@@ -627,7 +631,6 @@ public class TestPetService {
 		try {
 			isDeleted = petService.deletePet(petDTO.getId(), USER_NAME);
 		} catch (PetException e) {
-			e.printStackTrace();
 		}
 		assertTrue(isDeleted);
 	}
@@ -643,10 +646,11 @@ public class TestPetService {
 		petDTO.setPicture(PET_PICTURE);
 		petDTO.setSpecies(PET_SPECIES);
 		petDTO.setUserName(USER_NAME);
+		petDTO.setId(new Long(0));
 		try {
 			petService.deletePet(petDTO.getId(), USER_NAME);
 		} catch (PetException e) {
-			assertEquals("Cannot delete: Pet does not exist.", e.getMessage());
+			assertEquals("Cannot delete: The requester is not the owner of the pet.", e.getMessage());
 		}
 	}
 
@@ -661,6 +665,7 @@ public class TestPetService {
 		petDTO.setPicture(PET_PICTURE);
 		petDTO.setSpecies(PET_SPECIES);
 		petDTO.setUserName(USER_NAME);
+		petDTO.setAdvertisement(new Long(0));
 
 		PetDTO pet = null;
 		try {
