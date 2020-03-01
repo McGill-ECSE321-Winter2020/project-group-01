@@ -2,11 +2,12 @@ package ca.mcgill.ecse321.petshelter.dto;
 
 import ca.mcgill.ecse321.petshelter.model.Application;
 
+import java.util.Arrays;
 import java.util.Set;
 
 public class AdvertisementDTO {
     private String title;
-    private long[] petIds;
+    private Long[] petIds;
     private String description;
     private boolean isFulfilled;
     private Set<Application> application;
@@ -27,15 +28,14 @@ public class AdvertisementDTO {
     }
     
     
-    public long[] getPetIds() {
+    public Long[] getPetIds() {
         return petIds;
     }
     
     
-    public void setPetIds(long[] petIds) {
-        this.petIds = petIds;
+    public void setPetIds(Long[] ids) {
+        this.petIds = ids;
     }
-    
     
     public String getDescription() {
         return description;
@@ -73,9 +73,18 @@ public class AdvertisementDTO {
     
     
     public void setAdId(Long adId) {
-        if (this.adId == null) {
-            this.adId = adId;
-        }
+        this.adId = adId;
     }
     
+    @Override
+    public String toString() {
+        return "AdvertisementDTO{" +
+                "title='" + title + '\'' +
+                ", petIds=" + Arrays.toString(petIds) +
+                ", description='" + description + '\'' +
+                ", isFulfilled=" + isFulfilled +
+                ", application=" + application +
+                ", adId=" + adId +
+                '}';
+    }
 }

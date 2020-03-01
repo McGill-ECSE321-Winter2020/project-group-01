@@ -54,6 +54,9 @@ public class DonationService {
      */
     @Transactional
     public List<DonationDTO> getAllUserDonations(String name) {
+        if(name == null ||donationRepository.findAllByUser(userRepository.findUserByUserName(name)) == null ){
+            throw new DonationException("Donations not found");
+        }
         return toList(donationRepository.findAllByUser(userRepository.findUserByUserName(name))).stream().map(this::convertToDto).collect(Collectors.toList());
     }
     

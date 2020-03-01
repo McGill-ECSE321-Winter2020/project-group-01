@@ -18,7 +18,6 @@ import org.mockito.stubbing.Answer;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -156,10 +155,9 @@ public class TestDonationService {
         } catch (DonationException e) {
             e.printStackTrace();
         }
-    
-        List<DonationDTO> allDonations = donationService.getAllUserDonations(null);
         assertNotNull(dto);
         assertNull(dto.getUsername());
+        assertEquals(amount, dto.getAmount());
     }
     
     @Test
@@ -227,6 +225,15 @@ public class TestDonationService {
             donationService.createDonation(donationDTO);
         } catch (DonationException e) {
             assertEquals("Donation can't be null!", e.getMessage());
+        }
+    }
+    
+    @Test
+    public  void testWrongDonationName(){
+        try {
+            donationService.getAllUserDonations("bob");
+        } catch (DonationException e){
+            assertEquals("Donations not found", e.getMessage());
         }
     }
 }

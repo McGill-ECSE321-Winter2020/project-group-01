@@ -7,7 +7,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 /**
  * @author Louis
- * @author Katrina
  *
  */
 //REST endpoint specification
@@ -21,5 +20,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	User findUserByApiToken(String token);
 	
 	User findUserByPets(Pet pet);
+
+    void deleteAll();
 //	User findUserByPet(Pet pet);
 }
