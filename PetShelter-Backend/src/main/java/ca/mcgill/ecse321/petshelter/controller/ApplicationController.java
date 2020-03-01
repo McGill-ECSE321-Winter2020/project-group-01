@@ -1,15 +1,12 @@
 package ca.mcgill.ecse321.petshelter.controller;
 
 import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
-import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -28,7 +25,7 @@ public class ApplicationController {
 	@GetMapping("/all")
 	public ResponseEntity<?> getAllApplications() {
 		return new ResponseEntity<>(
-				applicationService.getAllApplications().stream().map(this::convertToDto).collect(Collectors.toList()),
+				applicationService.getAllApplications(),
 				HttpStatus.OK);
 	}
 	
@@ -38,8 +35,7 @@ public class ApplicationController {
 	 */
 	@GetMapping("/{user}")
 	public ResponseEntity<?> getUserApplication(@PathVariable String user) {
-		return new ResponseEntity<>(applicationService.getAllUserApplications(userRepository.findUserByUserName(user))
-				.stream().map(this::convertToDto).collect(Collectors.toList()), HttpStatus.OK);
+		return new ResponseEntity<>(applicationService.getAllUserApplications(userRepository.findUserByUserName(user)), HttpStatus.OK);
 	}
 	
 	/**
@@ -50,31 +46,17 @@ public class ApplicationController {
 	 */
 	@PostMapping()
 	public ResponseEntity<?> createApplication(@RequestBody ApplicationDTO applicationDTO) {
-		AdoptionApplication application = applicationService.createApplication(applicationDTO);
+		ApplicationDTO application = applicationService.createApplication(applicationDTO);
 		try {
 			applicationDTO.setDescription(application.getDescription());
-			applicationDTO.setUsername(application.getUser().getUserName());
-			applicationDTO.setAdvertisementTitle(application.getAdvertisement().getTitle());
-			applicationDTO.setIsAccepted(application.isIsAccepted());
+			applicationDTO.setUsername(application.getUsername());
+			applicationDTO.setAdvertisementTitle(application.getAdvertisementTitle());
+			applicationDTO.setIsAccepted(application.getIsAccepted());
 			return new ResponseEntity<>(applicationDTO, HttpStatus.OK);
 		} catch (IllegalArgumentException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	/**
-	 * Converts Application to ApplicationDTO
-	 *
-	 * @param application application object
-	 * @return application DTO
-	 */
-	public ApplicationDTO convertToDto(AdoptionApplication application) {
-		ApplicationDTO applicationDTO = new ApplicationDTO();
-		applicationDTO.setDescription(application.getDescription());
-		applicationDTO.setUsername(application.getUser().getUserName());
-		applicationDTO.setAdvertisementTitle(application.getAdvertisement().getTitle());
-		applicationDTO.setIsAccepted(application.isIsAccepted());
-		
-		return applicationDTO;
-	}
+	
 }

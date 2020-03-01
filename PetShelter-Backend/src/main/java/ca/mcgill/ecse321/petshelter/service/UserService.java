@@ -49,13 +49,20 @@ public class UserService {
     }
     
     /**
+     * Creates a user if the input is valid and sends an email to the specified
+     * email address.
+     *
+     * @param user userDTO
+     * @return user
+     */
+    
+    /**
      * takes in user object to transform into dto
      *
      * @param user user object
      * @return dto object
      */
-    // converts a user into a userdto
-    static UserDTO userToDto(User user) {
+    public static UserDTO userToDto(User user) {
         UserDTO userDto = new UserDTO();
         userDto.setEmail(user.getEmail());
         userDto.setUsername(user.getUserName());
@@ -64,14 +71,6 @@ public class UserService {
         userDto.setToken(user.getApiToken());
         return userDto;
     }
-    
-    /**
-     * Creates a user if the input is valid and sends an email to the specified
-     * email address.
-     *
-     * @param user userDTO
-     * @return user
-     */
     
     public UserDTO createUser(UserDTO user) throws RegisterException {
         if (user.getPassword() == null || user.getPassword().trim().length() == 0) {

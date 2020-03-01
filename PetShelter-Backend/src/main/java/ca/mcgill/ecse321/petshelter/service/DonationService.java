@@ -105,11 +105,12 @@ public class DonationService {
         donationDTO.setDate(donation.getDate());
         donationDTO.setTime(donation.getTime());
         donationDTO.setAmount(donation.getAmount());
-        donationDTO.setEmail(donation.getUser().getEmail());
         try {
             donationDTO.setUser(donation.getUser().getUserName());
+            donationDTO.setEmail(donation.getUser().getEmail());
         } catch (NullPointerException e) {
             donationDTO.setUser(null); // occurs when it is an anonymous donor, no account.
+            donationDTO.setEmail(null);
         }
         return donationDTO;
     }
