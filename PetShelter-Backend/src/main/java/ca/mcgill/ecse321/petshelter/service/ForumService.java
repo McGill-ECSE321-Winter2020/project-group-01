@@ -176,17 +176,7 @@ public class ForumService {
 			throw new ForumException("No such forum thread.");
 		}
 	}
-	
-	/**
-	 * Get the list of all the forum threads.
-	 *
-	 * @return List of all forum threads.
-	 */
-	@Transactional
-	public List<ForumDTO> getForums() {
-		return forumRepository.findAll().stream().map(this::forumToDTO).collect(Collectors.toList());
-	}
-	
+
 	/**
 	 * Get all the forums of a user.
 	 *
@@ -202,7 +192,12 @@ public class ForumService {
 			throw new ForumException("No such user.");
 		}
 	}
-	
+
+	/**
+	 * Get the list of all the forum threads.
+	 *
+	 * @return List of all forum threads.
+	 */
 	@Transactional
 	public List<ForumDTO> getAllForum() {
 		return forumRepository.findAll().stream().map(this::forumToDTO).collect(Collectors.toList());
