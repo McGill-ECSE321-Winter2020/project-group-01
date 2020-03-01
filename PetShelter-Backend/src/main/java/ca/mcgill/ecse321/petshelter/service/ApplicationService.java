@@ -1,6 +1,5 @@
 package ca.mcgill.ecse321.petshelter.service;
 
-import ca.mcgill.ecse321.petshelter.dto.AdvertisementDTO;
 import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Application;
@@ -79,7 +78,6 @@ public class ApplicationService {
     public List<ApplicationDTO> getAllAcceptedApplications() {
     	List<Application> allApplications = toList(applicationRepository.findAll());
     	List<Application> acceptedApplications = new ArrayList<Application>();
-
     	for (Application a : allApplications) {
     		if (a.isIsAccepted()) {
     			acceptedApplications.add(a);
@@ -133,6 +131,7 @@ public class ApplicationService {
         application.setAdvertisement(advertisement);
         application.setDescription(applicationDTO.getDescription());
         application.setIsAccepted(applicationDTO.getIsAccepted());
+    
         Set<Application> userApplications = user.getApplications();
         Set<Application> adApplications = advertisement.getApplication();
         adApplications.add(application);
@@ -171,7 +170,7 @@ public class ApplicationService {
         applicationDTO.setUsername(application.getUser().getUserName());
         applicationDTO.setAdvertisementTitle(application.getAdvertisement().getTitle());
         applicationDTO.setIsAccepted(application.isIsAccepted());
-        
+        applicationDTO.setAdId(application.getId());
         return applicationDTO;
     }
     
