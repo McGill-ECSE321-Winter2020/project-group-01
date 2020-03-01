@@ -159,6 +159,7 @@ public class AdvertisementService {
             pet.setAdvertisement(ad);
             petRepository.save(pet);
         }
+        System.out.println(convertToDTO(ad));
         return convertToDTO(ad);
     }
     
