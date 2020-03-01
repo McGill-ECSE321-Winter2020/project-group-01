@@ -1,6 +1,5 @@
 package ca.mcgill.ecse321.petshelter.controller;
 
-import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
 import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
@@ -9,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -27,11 +24,11 @@ public class ApplicationController {
 	 * @return the list of all applications
 	 */
 	@GetMapping("/all")
+
 	public ResponseEntity<?> getAllApplications(@RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
 		if (requester != null)
-			return new ResponseEntity<>(applicationService.getAllApplications().stream().map(this::convertToDto)
-					.collect(Collectors.toList()), HttpStatus.OK);
+			return new ResponseEntity<>(applicationService.getAllApplications(), HttpStatus.OK);
 		else
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
@@ -41,15 +38,15 @@ public class ApplicationController {
 	 * @return that user's applications
 	 */
 	@GetMapping("/{user}")
+
 	public ResponseEntity<?> getUserApplication(@PathVariable String user, @RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
 		if (requester != null) {
 			return new ResponseEntity<>(
-					applicationService.getAllUserApplications(userRepository.findUserByUserName(user)).stream()
-							.map(this::convertToDto).collect(Collectors.toList()),
-					HttpStatus.OK);
+					applicationService.getAllUserApplications(userRepository.findUserByUserName(user)), HttpStatus.OK);
 		} else
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
 	}
 
 	/**
@@ -75,21 +72,5 @@ public class ApplicationController {
 			}
 		} else
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-	}
-
-	/**
-	 * Converts Application to ApplicationDTO
-	 *
-	 * @param application application object
-	 * @return application DTO
-	 */
-	public ApplicationDTO convertToDto(AdoptionApplication application) {
-		ApplicationDTO applicationDTO = new ApplicationDTO();
-		applicationDTO.setDescription(application.getDescription());
-		applicationDTO.setUsername(application.getUser().getUserName());
-		applicationDTO.setAdvertisementTitle(application.getAdvertisement().getTitle());
-		applicationDTO.setIsAccepted(application.isIsAccepted());
-
-		return applicationDTO;
 	}
 }

@@ -1,9 +1,10 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
-import java.sql.Date;
-
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Gender;
+
+import java.sql.Date;
+import java.util.Arrays;
 
 
 public class PetDTO {
@@ -14,12 +15,15 @@ public class PetDTO {
 	private String description;
 	private byte[] picture;
 	private Long id;
-    private Gender gender;
-    private Advertisement advertisement;
-    private String userName;
+	private Gender gender;
+	private Advertisement advertisement;
+	private String userName;
 	
-
-	public PetDTO(Date date, String name, String spec, String breed, String desc, byte [] pic, Gender gen, Advertisement ad, String userName) {
+	public PetDTO() {
+	
+	}
+	
+	public PetDTO(Date date, String name, String spec, String breed, String desc, byte[] pic, Gender gen, Advertisement ad, String userName) {
 		this.dateOfBirth = date;
 		this.name = name;
 		this.description = desc;
@@ -118,8 +122,8 @@ public class PetDTO {
 	public Advertisement getAdvertisement() {
 		return advertisement;
 	}
-
-
+	
+	
 	public void setAdvertisement(Advertisement advertisement) {
 		this.advertisement = advertisement;
 	}
@@ -128,9 +132,23 @@ public class PetDTO {
 		return userName;
 	}
 	
-	public void SetUserName(String userName) {
+	public void setUserName(String userName) {
 		this.userName = userName;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "PetDTO{" +
+				"dateOfBirth=" + dateOfBirth +
+				", name='" + name + '\'' +
+				", species='" + species + '\'' +
+				", breed='" + breed + '\'' +
+				", description='" + description + '\'' +
+				", picture=" + Arrays.toString(picture) +
+				", id=" + id +
+				", gender=" + gender +
+				", advertisement=" + advertisement +
+				", userName='" + userName + '\'' +
+				'}';
+	}
 }

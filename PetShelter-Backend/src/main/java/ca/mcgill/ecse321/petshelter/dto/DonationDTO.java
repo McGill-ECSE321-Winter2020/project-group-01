@@ -9,6 +9,7 @@ public class DonationDTO {
     private Date date;
     private Time time;
     private Double amount;
+    private String email;
     
     //Empty constructor
     public DonationDTO() {
@@ -51,6 +52,14 @@ public class DonationDTO {
     
     public void setTime(Time time) {
         this.time = time;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+    
+    public void setEmail(String email) {
+        this.email = email;
     }
     
     @Override

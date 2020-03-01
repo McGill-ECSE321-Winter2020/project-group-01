@@ -1,8 +1,8 @@
 package ca.mcgill.ecse321.petshelter.service;
 
 import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
-import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
+import ca.mcgill.ecse321.petshelter.model.Application;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import ca.mcgill.ecse321.petshelter.repository.ApplicationRepository;
@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ApplicationService {
@@ -33,8 +34,8 @@ public class ApplicationService {
      * @return list of all applications
      */
     @Transactional
-    public List<AdoptionApplication> getAllApplications() {
-        return toList(applicationRepository.findAll());
+    public List<ApplicationDTO> getAllApplications() {
+        return toList(applicationRepository.findAll()).stream().map(this::convertToDto).collect(Collectors.toList());
     }
     
     /**
@@ -43,8 +44,8 @@ public class ApplicationService {
      * @return Adoption application that matches the 2 parameter
      */
     @Transactional
-    public AdoptionApplication getApplication(String applicant, Advertisement advertisement) {
-        return applicationRepository.findApplicationByUserUserNameAndAdvertisement(applicant, advertisement);
+    public ApplicationDTO getApplication(String applicant, Advertisement advertisement) {
+        return convertToDto(applicationRepository.findApplicationByUserUserNameAndAdvertisement(applicant, advertisement));
     }
     
     /**
@@ -52,17 +53,8 @@ public class ApplicationService {
      * @return all the applications that matches that user
      */
     @Transactional
-    public List<AdoptionApplication> getAllUserApplications(User name) {
-        return toList(applicationRepository.findApplicationsByUser(name));
-    }
-    
-    //From tutorial
-    private <T> List<T> toList(Iterable<T> iterable) {
-        List<T> resultList = new ArrayList<>();
-        for (T t : iterable) {
-            resultList.add(t);
-        }
-        return resultList;
+    public List<ApplicationDTO> getAllUserApplications(User name) {
+        return toList(applicationRepository.findApplicationsByUser(name)).stream().map(this::convertToDto).collect(Collectors.toList());
     }
     
     
@@ -73,7 +65,7 @@ public class ApplicationService {
      * @return adoption application object
      */
     @Transactional
-    public AdoptionApplication createApplication(ApplicationDTO applicationDTO) {
+    public ApplicationDTO createApplication(ApplicationDTO applicationDTO) {
         //condition checks
         if (applicationDTO.getDescription() == null) {
             throw new ApplicationException("Description can't be null!");
@@ -85,25 +77,25 @@ public class ApplicationService {
             throw new ApplicationException("Advertisement Title can't be null!");
         }
         Advertisement advertisement = advertisementRepository.findAdvertisementById(applicationDTO.getAdId());
-        if(advertisement == null) {
+        if (advertisement == null) {
             throw new ApplicationException("Advertisement can't be null!");
         }
         User user = userRepository.findUserByUserName(applicationDTO.getUsername());
-        AdoptionApplication application = new AdoptionApplication();
+        Application application = new Application();
         application.setAdvertisement(advertisement);
         application.setDescription(applicationDTO.getDescription());
         application.setIsAccepted(applicationDTO.getIsAccepted());
-        Set<AdoptionApplication> userApplications = user.getApplications();
-        Set<AdoptionApplication> adApplications = advertisement.getAdoptionApplication();
+        Set<Application> userApplications = user.getApplications();
+        Set<Application> adApplications = advertisement.getApplication();
         adApplications.add(application);
-        advertisement.setAdoptionApplication(adApplications);
+        advertisement.setApplication(adApplications);
         application.setUser(user);
         userApplications.add(application);
         user.setApplications(userApplications);
         applicationRepository.save(application);
         userRepository.save(user);
         advertisementRepository.save(advertisement);
-        return application;
+        return convertToDto(application);
     }
     
     
@@ -114,9 +106,34 @@ public class ApplicationService {
      */
     @Transactional
     public void deleteApplication(Long appId) {
-        Optional<AdoptionApplication> app = applicationRepository.findById(appId);
+        Optional<Application> app = applicationRepository.findById(appId);
         if (app.isPresent()) {
             applicationRepository.deleteById(appId);
         }
+    }
+    
+    /**
+     * Converts Application to ApplicationDTO
+     *
+     * @param application application object
+     * @return application DTO
+     */
+    public ApplicationDTO convertToDto(Application application) {
+        ApplicationDTO applicationDTO = new ApplicationDTO();
+        applicationDTO.setDescription(application.getDescription());
+        applicationDTO.setUsername(application.getUser().getUserName());
+        applicationDTO.setAdvertisementTitle(application.getAdvertisement().getTitle());
+        applicationDTO.setIsAccepted(application.isIsAccepted());
+        
+        return applicationDTO;
+    }
+    
+    //From tutorial
+    private <T> List<T> toList(Iterable<T> iterable) {
+        List<T> resultList = new ArrayList<>();
+        for (T t : iterable) {
+            resultList.add(t);
+        }
+        return resultList;
     }
 }

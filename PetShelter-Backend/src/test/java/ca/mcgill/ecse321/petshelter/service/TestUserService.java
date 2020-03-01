@@ -103,7 +103,7 @@ public class TestUserService {
 		//these are needed to pass the delete methods
 		lenient().when(donationRepository.save(any(Donation.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(advertisementRepository.save(any(Advertisement.class))).thenAnswer(returnParameterAsAnswer);
-		lenient().when(applicationRepository.save(any(AdoptionApplication.class))).thenAnswer(returnParameterAsAnswer);
+		lenient().when(applicationRepository.save(any(Application.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(petRepository.save(any(Pet.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(commentRepository.save(any(Comment.class))).thenAnswer(returnParameterAsAnswer);
 		lenient().when(forumRepository.save(any(Forum.class))).thenAnswer(returnParameterAsAnswer);
