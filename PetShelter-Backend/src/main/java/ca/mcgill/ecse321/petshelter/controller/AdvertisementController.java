@@ -1,9 +1,9 @@
 package ca.mcgill.ecse321.petshelter.controller;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -178,102 +178,40 @@ public class AdvertisementController {
 	}
 
 	/**
-	 * Update the title of an advertisement.
+	 * Update an advertisement.
 	 *
-	 * @param adId  The id of a given ad.
-	 * @param title The new title of the ad.
-	 * @param token The session token of the user.
-	 * @return The modified advertisement.
-	 */
-	@PutMapping("/{adId}/title")
-	public ResponseEntity<?> updateAdTitle(@PathVariable long adId, @RequestBody String title,
-			@RequestHeader String token) {
-		User user = userRepository.findUserByApiToken(token);
-		AdvertisementDTO adDto = advertisementService.getAdvertisementById(adId);
-		if (user != null && adDto != null // Verify the ad already exists.
-				&& hasRightsForAd(user, adDto) // Check if the issuing user is the author.
-				&& title != null // Check if the new title is valid.
-				&& !title.trim().equals("")) {
-			adDto.setTitle(title);
-			adDto = advertisementService.editAdvertisement(adDto);
-			return new ResponseEntity<AdvertisementDTO>(adDto, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-	}
 
-	/**
-	 * Update the description of an advertisement.
-	 *
-	 * @param adId        The id of a given ad.
-	 * @param description The new description of the ad.
-	 * @param token       The session token of the user.
-	 * @return The modified advertisement.
+	 * @param adID The ID of the advertisement to update.
+	 * @param advertisementDTO The advertisement DTO containing the information to change.
+	 * @param token The user session token.
+	 * @return The modified advertisement as a DTO.
 	 */
-	@PutMapping("/{adId}/description")
-	public ResponseEntity<?> updateAdDescription(@PathVariable long adId, @RequestBody String description,
-			@RequestHeader String token) {
+	@PutMapping
+	public ResponseEntity<?> updateAd(@PathVariable long adID,
+									  @RequestBody AdvertisementDTO advertisementDTO,
+									  @RequestBody String token) {
 		User user = userRepository.findUserByApiToken(token);
-		AdvertisementDTO ad = advertisementService.getAdvertisementById(adId);
-		if (user != null && ad != null // Verify the ad already exists.
-				&& hasRightsForAd(user, ad)) // Check if the issuing user is the author.
+		AdvertisementDTO advertisementOld = advertisementService.getAdvertisementById(adID);
+		if ( user != null // Check if user an advert exist and if user can modify it.
+				&& advertisementOld != null
+				&& hasRightsForAd(user, advertisementOld)
+				&& advertisementDTO.getTitle() != null // Check if the new title is valid.
+				&& !advertisementDTO.getTitle().trim().equals("") )
 		{
-			ad.setDescription(description);
-			ad = advertisementService.editAdvertisement(ad);
-			return new ResponseEntity<AdvertisementDTO>(ad, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-	}
-
-	/**
-	 * Fulfill an advertisement.
-	 *
-	 * @param adId      The id of a given ad.
-	 * @param token     The session token of a user.
-	 * @param fulfilled The status f the advertisement.
-	 * @return The modified advertisement.
-	 */
-	@PutMapping("/{adId}/fulfill")
-	public ResponseEntity<?> fulfillAd(@PathVariable long adId, @RequestHeader String token,
-			@RequestBody Boolean fulfilled) {
-		User user = userRepository.findUserByApiToken(token);
-		AdvertisementDTO adDto = advertisementService.getAdvertisementById(adId);
-		if (user != null && hasRightsForAd(user, adDto)) {
-			adDto.setFulfilled(fulfilled);
-			adDto = advertisementService.editAdvertisement(adDto);
-			return new ResponseEntity<AdvertisementDTO>(adDto, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-	}
-
-	/**
-	 * Updates the pets of an advertisement.
-	 * 
-	 * @param token  The requester's token.
-	 * @param adId   The advertisement's id.
-	 * @param petIds The ids of the pets.
-	 */
-	@PutMapping("/{adId}/pets")
-	public ResponseEntity<?> updateAdPets(@PathVariable long adId, @RequestBody long[] petIds,
-			@RequestHeader String token) {
-		User user = userRepository.findUserByApiToken(token);
-		AdvertisementDTO adDto = advertisementService.getAdvertisementById(adId);
-		Set<PetDTO> pets = petService.getPetsByUser(user.getUserName());
-		List<Long> newIds = new ArrayList<Long>();
-		for (Long id : petIds) {
-			PetDTO petDto = petService.getPet(id);
-			if (!(pets.contains(petDto))) {
+			// Converts all the pets of the user to a set of their IDs.
+			Set<Long> petsID = petService.getPetsByUser(user.getUserName()).stream()
+					.map(PetDTO::getId)
+					.collect(Collectors.toSet());
+			// Then verify if the pets of the new advertisement are contained in that set.
+			if (petsID.containsAll(Arrays.asList(advertisementDTO.getPetIds()))) {
+				advertisementDTO.setAdId(adID); // Make sure the advertisement ID remains the same.
+				return new ResponseEntity<AdvertisementDTO>(
+						advertisementService.editAdvertisement(advertisementDTO),
+						HttpStatus.OK
+				);
+			} else {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
-			newIds.add(id);
-		}
-		if (user != null && hasRightsForAd(user, adDto)) {
-
-			adDto.setPetIds((Long[]) newIds.toArray());
-			adDto = advertisementService.editAdvertisement(adDto);
-			return new ResponseEntity<AdvertisementDTO>(adDto, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
