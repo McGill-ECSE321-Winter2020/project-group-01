@@ -233,7 +233,7 @@ public class PetShelterPersistence {
         advertisementRepository.save(ad);
         boolean isAccepted = false;
         
-        AdoptionApplication application = new AdoptionApplication();
+        Application application = new Application();
         application.setIsAccepted(isAccepted);
         application.setAdvertisement(ad);
         application.setUser(applicant);
@@ -266,7 +266,7 @@ public class PetShelterPersistence {
         pet.setSpecies(species);
         pet.setBreed(breed);
         pet.setGender(Gender.FEMALE);
-        HashSet<Pet> pets = new HashSet<Pet>();
+        HashSet<Pet> pets = new HashSet<>();
         user.setPets(pets);
         petRepository.save(pet);
         userRepository.save(user);
@@ -392,23 +392,23 @@ public class PetShelterPersistence {
     public void testDeleteAdoptionApplication() {
         User applicant = createUser();
         String description = "myDescription";
-        
+    
         Advertisement ad = new Advertisement();
         advertisementRepository.save(ad);
         boolean isAccepted = false;
-        
-        AdoptionApplication application = new AdoptionApplication();
+    
+        Application application = new Application();
         application.setIsAccepted(isAccepted);
         application.setAdvertisement(ad);
         application.setUser(applicant);
         application.setDescription(description);
-        
+    
         applicationRepository.save(application);
     
-        AdoptionApplication dbApplication = applicationRepository.findApplicationByUserUserNameAndAdvertisement(applicant.getUserName(), ad);
-        
+        Application dbApplication = applicationRepository.findApplicationByUserUserNameAndAdvertisement(applicant.getUserName(), ad);
+    
         assertEquals(application.getUser().getUserName(), dbApplication.getUser().getUserName());
-        
+    
         applicationRepository.deleteById(application.getId());
     
         assertNull(applicationRepository.findApplicationByUserUserNameAndAdvertisement(applicant.getUserName(), ad));

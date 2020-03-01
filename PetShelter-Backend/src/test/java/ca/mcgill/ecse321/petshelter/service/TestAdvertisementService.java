@@ -39,7 +39,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ca.mcgill.ecse321.petshelter.dto.AdvertisementDTO;
 import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
 import ca.mcgill.ecse321.petshelter.dto.PetDTO;
-import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
+import ca.mcgill.ecse321.petshelter.model.Application;
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Gender;
 import ca.mcgill.ecse321.petshelter.model.Pet;
@@ -98,7 +98,7 @@ public class TestAdvertisementService {
     private long petId;
     private long adId;
     private Pet pet;
-    private Advertisement ad;
+    private AdvertisementDTO ad;
     private User user1;
     private User user2;
     private PetDTO petDto;
@@ -111,7 +111,7 @@ public class TestAdvertisementService {
     private static final String AD_DESCRIPTION = "testDescription";
     private static final boolean AD_FULLFILLED = false;
     private static List<Long> AD_PET_IDS = new ArrayList<Long>();
-    private static final Set<ApplicationDTO> AD_APPLICATIONS = new HashSet<ApplicationDTO>();
+    private static final Set<Application> AD_APPLICATIONS = new HashSet<Application>();
 
 
     
@@ -128,12 +128,12 @@ public class TestAdvertisementService {
         //ad Id mock
         lenient().when(adDao.findAdvertisementById(any(Long.class))).thenAnswer((InvocationOnMock invocation) -> {
             if(invocation.getArgument(0).equals(adId)) {
-                ad = new Advertisement();
+                ad = new AdvertisementDTO();
                // ad.setAdoptionApplication(AD_APPLICATIONS);
                 ad.setDescription(AD_DESCRIPTION);
-                ad.setIsFulfilled(AD_FULLFILLED);
+                ad.setFulfilled(AD_FULLFILLED);
                 ad.setTitle(AD_TITLE);
-
+                ad.setAdId(adId);
                 return ad;
                } else {
                 return null;
@@ -183,7 +183,7 @@ public class TestAdvertisementService {
 
         lenient().when(petDao.findPetById(any(Long.class))).thenAnswer((InvocationOnMock invocation) -> {
             if(invocation.getArgument(0).equals(petId)) {
-                pet.setAdvertisement(ad);
+                pet.setAdvertisement(advertisementService.getAdvertisementById(ad.getAdId()));
                 return pet;
             } else {
                 return null;
@@ -198,8 +198,7 @@ public class TestAdvertisementService {
         lenient().when(petDao.save(any(Pet.class))).thenAnswer(returnParameterAsAnswer);
 
     }
-
-    //TODO are we doing this?
+    
     /**
      * Creates a test user in the database.
      * @author Katrina
@@ -237,18 +236,18 @@ public class TestAdvertisementService {
         adDto = null;
         user1 = userDao.findUserByUserName(USER_NAME1);
         petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
-        pet = petService.createPet(petDto);
-        assertNotNull(pet);
-        AD_PET_IDS.add(pet.getId());
+        petDto = petService.createPet(petDto);
+        assertNotNull(petDto);
+        AD_PET_IDS.add(petDto.getId());
         adDto = createAdDto(AD_TITLE, AD_FULLFILLED, AD_PET_IDS, AD_APPLICATIONS, AD_DESCRIPTION);
-        ad = advertisementService.createAdvertisement(adDto);
-        adId = ad.getId();
+        adDto = advertisementService.createAdvertisement(adDto);
+        adId = adDto.getAdId();
         assertNotNull(ad);
         assertNotNull(adDao.findAdvertisementById(adId));
         assertEquals(AD_TITLE ,ad.getTitle());
         assertEquals(AD_DESCRIPTION, ad.getDescription());
-        assertEquals(AD_FULLFILLED, ad.isIsFulfilled());
-        assertEquals(AD_APPLICATIONS, ad.getAdoptionApplication());
+        assertEquals(AD_FULLFILLED, ad.isFulfilled());
+        assertEquals(AD_APPLICATIONS, ad.getApplication());
 
         for(Long id : AD_PET_IDS) {
             Pet pet = petDao.findPetById(id);
@@ -270,8 +269,7 @@ public class TestAdvertisementService {
         petDto = null;
         ad = null;
         adDto = null;
-        petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
-        pet = petService.createPet(petDto);
+        petDto = petService.createPet(createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER));
         try {
             adDto = createAdDto(AD_TITLE, AD_FULLFILLED, AD_PET_IDS, AD_APPLICATIONS, AD_DESCRIPTION);
             ad = advertisementService.createAdvertisement(adDto);
@@ -295,8 +293,8 @@ public class TestAdvertisementService {
         petDto = null;
         ad = null;
         adDto = null;
-        petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
-        pet = petService.createPet(petDto);
+        petDto = petService.createPet(createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER));
+
         AD_PET_IDS.add(pet.getId());
         try {
             adDto = createAdDto("", AD_FULLFILLED, AD_PET_IDS, AD_APPLICATIONS, AD_DESCRIPTION);
@@ -306,83 +304,82 @@ public class TestAdvertisementService {
         }
         assertEquals(ad, null);
     }
-
-    /**
-     * Creates a pet with no species. Expects AdvertisementException with
-     * message "A pet needs a species".
-     * @author Katrina
-     */
-    @Test
-    public void testCreatePetNoSpecies() {
-        clearDatabase();
-        assertEquals(0, petService.getAllPets().size());
-        pet = null;
-        petDto = null;
-        try{
-            petDto = createPetDto(PET_DOB, PET_NAME, "", PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
-            pet = petService.createPet(petDto);
-        } catch(AdvertisementException e) {
-            assertEquals(e.getMessage(), "Cannot add: A pet needs a species.");
-        }
-        assertEquals(pet, null);
-    }
-
-    /**
-     * Creates a pet with no breed. Expects IllegalArgumentException with
-     * message "A pet needs a breed".
-     * @author Katrina
-     */
-    @Test
-    public void testCreatePetNoBreed() {
-        clearDatabase();
-        assertEquals(0, petService.getAllPets().size());
-        pet = null;
-        petDto = null;
-        try{
-            petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, "", PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
-            pet = petService.createPet(petDto);
-        } catch(AdvertisementException e) {
-            assertEquals(e.getMessage(), "Cannot add: A pet needs a breed.");
-        }
-        assertEquals(pet, null);
-    }
-
-    /**
-     * Creates a pet with no description. Should not throw an exception as empty and null descriptions are allowed.
-     * @author Katrina
-     */
-    @Test
-    public void testCreatePetNoDesc() {
-        clearDatabase();
-        assertEquals(0, petService.getAllPets().size());
-        pet = null;
-        petDto = null;
-        petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, "", PET_PICTURE, USER_NAME1, PET_GENDER);
-        pet = petService.createPet(petDto);
-        assertNotNull(pet);
-        assertEquals("", pet.getDescription());
-        assertNotNull(petDao.findPetById(pet.getId()));
-    }
-
-    /**
-     * Creates a pet with no gender. Expects IllegalArgumentException with
-     * message "A pet needs a gender".
-     * @author Katrina
-     */
-    @Test
-    public void testCreatePetNoGender() {
-        clearDatabase();
-        assertEquals(0, petService.getAllPets().size());
-        pet = null;
-        petDto = null;
-        try{
-            petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, null);
-            pet = petService.createPet(petDto);
-        } catch(AdvertisementException e) {
-            assertEquals(e.getMessage(), "Cannot add: A pet needs a gender.");
-        }
-        assertEquals(pet, null);
-    }
+//
+//    /**
+//     * Creates a pet with no species. Expects AdvertisementException with
+//     * message "A pet needs a species".
+//     * @author Katrina
+//     */
+//    @Test
+//    public void testCreatePetNoSpecies() {
+//        clearDatabase();
+//        assertEquals(0, petService.getAllPets().size());
+//        pet = null;
+//        petDto = null;
+//        try{
+//            petDto = createPetDto(PET_DOB, PET_NAME, "", PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
+//            petDto = petService.createPet(petDto);
+//        } catch(AdvertisementException e) {
+//            assertEquals(e.getMessage(), "Cannot add: A pet needs a species.");
+//        }
+//        assertEquals(pet, null);
+//    }
+//
+//    /**
+//     * Creates a pet with no breed. Expects IllegalArgumentException with
+//     * message "A pet needs a breed".
+//     * @author Katrina
+//     */
+//    @Test
+//    public void testCreatePetNoBreed() {
+//        clearDatabase();
+//        assertEquals(0, petService.getAllPets().size());
+//        pet = null;
+//        petDto = null;
+//        try{
+//            petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, "", PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
+//            petDto = petService.createPet(petDto);
+//        } catch(AdvertisementException e) {
+//            assertEquals(e.getMessage(), "Cannot add: A pet needs a breed.");
+//        }
+//        assertEquals(pet, null);
+//    }
+//
+//    /**
+//     * Creates a pet with no description. Should not throw an exception as empty and null descriptions are allowed.
+//     * @author Katrina
+//     */
+//    @Test
+//    public void testCreatePetNoDesc() {
+//        clearDatabase();
+//        assertEquals(0, petService.getAllPets().size());
+//        pet = null;
+//        petDto = null;
+//        petDto = petService.createPet(createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, "", PET_PICTURE, USER_NAME1, PET_GENDER));
+//        assertNotNull(pet);
+//        assertEquals("", pet.getDescription());
+//        assertNotNull(petDao.findPetById(pet.getId()));
+//    }
+//
+//    /**
+//     * Creates a pet with no gender. Expects IllegalArgumentException with
+//     * message "A pet needs a gender".
+//     * @author Katrina
+//     */
+//    @Test
+//    public void testCreatePetNoGender() {
+//        clearDatabase();
+//        assertEquals(0, petService.getAllPets().size());
+//        pet = null;
+//        petDto = null;
+//        try{
+//            petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, null);
+//            petDto = petService.createPet(petDto);
+//        } catch(AdvertisementException e) {
+//            assertEquals(e.getMessage(), "Cannot add: A pet needs a gender.");
+//        }
+//        assertEquals(petDto, null);
+//    }
 
     ////////////////////////////// EDIT PET //////////////////////////////
     //TODO everything here
@@ -390,229 +387,228 @@ public class TestAdvertisementService {
      * Normal test case. Creates a pet. Should not throw any exception".
      * @author Katrina
      */
-    @Test
-    public void testEditPet() {
-        assertEquals(0, petService.getAllPets().size());
-        pet = null;
-        petDto = null;
-        petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
-        pet = petService.createPet(petDto);
-        petId = pet.getId();
-        assertNotNull(pet);
-        assertNotNull(petDao.findPetById(petId));
-        assertEquals("testPettt",pet.getName());
-        assertEquals(new Date(119, 10, 20), pet.getDateOfBirth());
-        assertEquals("testSpecies", pet.getSpecies());
-        assertEquals("testBreed", pet.getBreed());
-        assertEquals("testDesc", pet.getDescription());
-        assertEquals(PET_PICTURE, pet.getPicture());
-        User fetchedUser = userDao.findUserByUserName(USER_NAME1);
-        Pet fetchedPet = (Pet) fetchedUser.getPets().toArray()[0];
-        assertTrue(fetchedPet.getId() == petId);
-        assertEquals(Gender.FEMALE, pet.getGender());   
-
-        petDto.setName("newName");
-        petDto.setSpecies("newSpecies");
-        petDto.setBreed("newBreed");
-        petDto.setDescription("newDesc");
-        byte[] newPic = new byte[10];
-        petDto.setPicture(newPic);
-        petDto.setGender(Gender.MALE);
-        pet = petService.editPet(petDto);
-        assertNotNull(pet);
-        assertNotNull(petDao.findPetById(petId));
-        assertEquals("newName",pet.getName());
-        assertEquals(PET_DOB, pet.getDateOfBirth());
-        assertEquals("newSpecies", pet.getSpecies());
-        assertEquals("newBreed", pet.getBreed());
-        assertEquals("newDesc", pet.getDescription());
-        assertEquals(newPic, pet.getPicture());
-        fetchedUser = userDao.findUserByUserName(USER_NAME1);
-        fetchedPet = (Pet) fetchedUser.getPets().toArray()[0];
-        assertTrue(fetchedPet.getId() == petId);
-        assertEquals(Gender.MALE, pet.getGender()); 
-    }
-
-    /**
-     * Creates a pet with no user. Expects AdvertisementException with
-     * message "User does not exist: a pet needs a user".
-     * @author Katrina
-     */
-    @Test
-    public void testEditPetNoUser() {
-        clearDatabase();
-        assertEquals(0, petService.getAllPets().size());
-        pet = null;
-        petDto = null;
-        Pet oldPet = null;
-        try {
-            petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
-            pet = petService.createPet(petDto);
-            oldPet = pet;
-            petDto.SetUserName("");
-            pet = petService.editPet(petDto);
-        } catch(AdvertisementException e) {
-            assertEquals(e.getMessage(), "Cannot edit: User not found.");
-        }
-        assertEquals(pet, oldPet);
-    }
-
-    /**
-     * Creates a pet with no name. Expects AdvertisementException with
-     * message "A pet needs a name".
-     * @author Katrina
-     */
-    @Test
-    public void testEditPetNoName() {
-        clearDatabase();
-        assertEquals(0, petService.getAllPets().size());
-        pet = null;
-        Pet oldPet = null;
-        petDto = null;
-        try {
-            petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
-            pet = petService.createPet(petDto);
-            oldPet = pet;
-            petDto.setName("");
-            pet = petService.editPet(petDto);
-        } catch(AdvertisementException e) {
-            assertEquals(e.getMessage(), "Cannot edit: A pet needs a name.");
-        }
-        assertEquals(pet, oldPet);
-    }
-
-    /**
-     * Creates a pet with no species. Expects AdvertisementException with
-     * message "A pet needs a species".
-     * @author Katrina
-     */
-    @Test
-    public void testEditPetNoSpecies() {
-        clearDatabase();
-        assertEquals(0, petService.getAllPets().size());
-        pet = null;
-        petDto = null;
-        Pet oldPet = null;
-        try {
-            petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
-            pet = petService.createPet(petDto);
-            oldPet = pet;
-            petDto.setSpecies("");
-            pet = petService.editPet(petDto);
-        } catch(AdvertisementException e) {
-            assertEquals(e.getMessage(), "Cannot edit: A pet needs a species.");
-        }
-        assertEquals(pet, oldPet);
-    }
-
-    /**
-     * Creates a pet with no breed. Expects IllegalArgumentException with
-     * message "A pet needs a breed".
-     * @author Katrina
-     */
-    @Test
-    public void testEditPetNoBreed() {
-        clearDatabase();
-        assertEquals(0, petService.getAllPets().size());
-        pet = null;
-        petDto = null;
-        Pet oldPet = null;
-        try {
-            petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
-            pet = petService.createPet(petDto);
-            oldPet = pet;
-            petDto.setBreed("");
-            pet = petService.editPet(petDto);
-        } catch(AdvertisementException e) {
-            assertEquals(e.getMessage(), "Cannot edit: A pet needs a breed.");
-        }
-        assertEquals(pet, oldPet);
-    }
-
-    /**
-     * Creates a pet with no description. Should not throw an exception as empty and null descriptions are allowed.
-     * @author Katrina
-     */
-    @Test
-    public void testEditPetNoDesc() {
-        clearDatabase();
-        assertEquals(0, petService.getAllPets().size());
-        pet = null;
-        petDto = null;
-        petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
-        pet = petService.createPet(petDto);
-        petDto.setDescription("");
-        pet = petService.editPet(petDto);
-        assertEquals(pet, petDao.findPetById(pet.getId()));
-        assertEquals("testPettt",pet.getName());
-        assertEquals(new Date(119, 10, 20), pet.getDateOfBirth());
-        assertEquals("testSpecies", pet.getSpecies());
-        assertEquals("testBreed", pet.getBreed());
-        assertEquals("", pet.getDescription());
-        assertEquals(PET_PICTURE, pet.getPicture());
-        assertEquals(Gender.FEMALE, pet.getGender());
-    }
-
-    /**
-     * Creates a pet with no gender. Expects IllegalArgumentException with
-     * message "A pet needs a gender".
-     * @author Katrina
-     */
-    @Test
-    public void testEditPetNoGender() {
-        clearDatabase();
-        assertEquals(0, petService.getAllPets().size());
-        pet = null;
-        petDto = null;
-        Pet oldPet = null;
-        try {
-            petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
-            pet = petService.createPet(petDto);
-            oldPet = pet;
-            petDto.setGender(null);
-            pet = petService.editPet(petDto);
-        } catch(AdvertisementException e) {
-            assertEquals(e.getMessage(), "Cannot edit: A pet needs a gender.");
-        }
-        assertEquals(pet, oldPet);
-    }
-
-    @Test
-    public void testChangeOwnership() {
-        //TODO
-        clearDatabase();
-        assertEquals(0, petService.getAllPets().size());
-        pet = null;
-        Pet oldPet = null;
-        petDto = null;
-        petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
-        pet = petService.createPet(petDto);
-        assertTrue(user1.getPets().contains(pet));            
-
-        petDto.SetUserName(USER_NAME2);
-        user2 = userDao.findUserByUserName(USER_NAME2);
-        pet = petService.editPet(petDto);
-        assertTrue(user2.getPets().contains(pet));
-        
-    }
-    @Test //new user is null
-    public void testChangeToNullUser() {
-        clearDatabase();
-        assertEquals(0, petService.getAllPets().size());
-        pet = null;
-        Pet oldPet = null;
-        petDto = null;
-        petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
-        pet = petService.createPet(petDto);
-        assertTrue(user1.getPets().contains(pet));            
-        try {
-        petDto.SetUserName("");
-        pet = petService.editPet(petDto);
-        assertTrue(user2.getPets().contains(pet));
-        } catch (AdvertisementException e) {
-            assertEquals(e.getMessage(), "Cannot edit: User not found.");
-        }
-    }
+//    @Test
+//    public void testEditPet() {
+//        assertEquals(0, petService.getAllPets().size());
+//        pet = null;
+//        petDto = null;
+//        petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
+//        petDto = petService.createPet(petDto);
+//        petId = pet.getId();
+//        assertNotNull(petDto);
+//        assertNotNull(petDao.findPetById(petId));
+//        assertEquals("testPettt",pet.getName());
+//        assertEquals(new Date(119, 10, 20), pet.getDateOfBirth());
+//        assertEquals("testSpecies", pet.getSpecies());
+//        assertEquals("testBreed", pet.getBreed());
+//        assertEquals("testDesc", pet.getDescription());
+//        assertEquals(PET_PICTURE, pet.getPicture());
+//        User fetchedUser = userDao.findUserByUserName(USER_NAME1);
+//        Pet fetchedPet = (Pet) fetchedUser.getPets().toArray()[0];
+//        assertTrue(fetchedPet.getId() == petId);
+//        assertEquals(Gender.FEMALE, pet.getGender());   
+//
+//        petDto.setName("newName");
+//        petDto.setSpecies("newSpecies");
+//        petDto.setBreed("newBreed");
+//        petDto.setDescription("newDesc");
+//        byte[] newPic = new byte[10];
+//        petDto.setPicture(newPic);
+//        petDto.setGender(Gender.MALE);
+//        petDto = petService.editPet(petDto);
+//        assertNotNull(petDto);
+//        assertNotNull(petDao.findPetById(petId));
+//        assertEquals("newName",pet.getName());
+//        assertEquals(PET_DOB, pet.getDateOfBirth());
+//        assertEquals("newSpecies", pet.getSpecies());
+//        assertEquals("newBreed", pet.getBreed());
+//        assertEquals("newDesc", pet.getDescription());
+//        assertEquals(newPic, pet.getPicture());
+//        fetchedUser = userDao.findUserByUserName(USER_NAME1);
+//        fetchedPet = (Pet) fetchedUser.getPets().toArray()[0];
+//        assertTrue(fetchedPet.getId() == petId);
+//        assertEquals(Gender.MALE, pet.getGender()); 
+//    }
+//
+//    /**
+//     * Creates a pet with no user. Expects AdvertisementException with
+//     * message "User does not exist: a pet needs a user".
+//     * @author Katrina
+//     */
+//    @Test
+//    public void testEditPetNoUser() {
+//        clearDatabase();
+//        assertEquals(0, petService.getAllPets().size());
+//        pet = null;
+//        petDto = null;
+//        Pet oldPet = null;
+//        try {
+//            petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
+//            petDto = petService.createPet(petDto);
+//            petDto.setUserName("");
+//            petDto = petService.editPet(petDto);
+//        } catch(AdvertisementException e) {
+//            assertEquals(e.getMessage(), "Cannot edit: User not found.");
+//        }
+//        assertEquals(petDto, oldPet);
+//    }
+//
+//    /**
+//     * Creates a pet with no name. Expects AdvertisementException with
+//     * message "A pet needs a name".
+//     * @author Katrina
+//     */
+//    @Test
+//    public void testEditPetNoName() {
+//        clearDatabase();
+//        assertEquals(0, petService.getAllPets().size());
+//        pet = null;
+//        Pet oldPet = null;
+//        petDto = null;
+//        try {
+//            petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
+//            pet = petService.createPet(petDto);
+//            oldPet = pet;
+//            petDto.setName("");
+//            pet = petService.editPet(petDto);
+//        } catch(AdvertisementException e) {
+//            assertEquals(e.getMessage(), "Cannot edit: A pet needs a name.");
+//        }
+//        assertEquals(pet, oldPet);
+//    }
+//
+//    /**
+//     * Creates a pet with no species. Expects AdvertisementException with
+//     * message "A pet needs a species".
+//     * @author Katrina
+//     */
+//    @Test
+//    public void testEditPetNoSpecies() {
+//        clearDatabase();
+//        assertEquals(0, petService.getAllPets().size());
+//        pet = null;
+//        petDto = null;
+//        Pet oldPet = null;
+//        try {
+//            petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
+//            pet = petService.createPet(petDto);
+//            oldPet = pet;
+//            petDto.setSpecies("");
+//            pet = petService.editPet(petDto);
+//        } catch(AdvertisementException e) {
+//            assertEquals(e.getMessage(), "Cannot edit: A pet needs a species.");
+//        }
+//        assertEquals(pet, oldPet);
+//    }
+//
+//    /**
+//     * Creates a pet with no breed. Expects IllegalArgumentException with
+//     * message "A pet needs a breed".
+//     * @author Katrina
+//     */
+//    @Test
+//    public void testEditPetNoBreed() {
+//        clearDatabase();
+//        assertEquals(0, petService.getAllPets().size());
+//        pet = null;
+//        petDto = null;
+//        Pet oldPet = null;
+//        try {
+//            petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
+//            pet = petService.createPet(petDto);
+//            oldPet = pet;
+//            petDto.setBreed("");
+//            pet = petService.editPet(petDto);
+//        } catch(AdvertisementException e) {
+//            assertEquals(e.getMessage(), "Cannot edit: A pet needs a breed.");
+//        }
+//        assertEquals(pet, oldPet);
+//    }
+//
+//    /**
+//     * Creates a pet with no description. Should not throw an exception as empty and null descriptions are allowed.
+//     * @author Katrina
+//     */
+//    @Test
+//    public void testEditPetNoDesc() {
+//        clearDatabase();
+//        assertEquals(0, petService.getAllPets().size());
+//        pet = null;
+//        petDto = null;
+//        petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
+//        pet = petService.createPet(petDto);
+//        petDto.setDescription("");
+//        pet = petService.editPet(petDto);
+//        assertEquals(pet, petDao.findPetById(pet.getId()));
+//        assertEquals("testPettt",pet.getName());
+//        assertEquals(new Date(119, 10, 20), pet.getDateOfBirth());
+//        assertEquals("testSpecies", pet.getSpecies());
+//        assertEquals("testBreed", pet.getBreed());
+//        assertEquals("", pet.getDescription());
+//        assertEquals(PET_PICTURE, pet.getPicture());
+//        assertEquals(Gender.FEMALE, pet.getGender());
+//    }
+//
+//    /**
+//     * Creates a pet with no gender. Expects IllegalArgumentException with
+//     * message "A pet needs a gender".
+//     * @author Katrina
+//     */
+//    @Test
+//    public void testEditPetNoGender() {
+//        clearDatabase();
+//        assertEquals(0, petService.getAllPets().size());
+//        pet = null;
+//        petDto = null;
+//        Pet oldPet = null;
+//        try {
+//            petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
+//            pet = petService.createPet(petDto);
+//            oldPet = pet;
+//            petDto.setGender(null);
+//            pet = petService.editPet(petDto);
+//        } catch(AdvertisementException e) {
+//            assertEquals(e.getMessage(), "Cannot edit: A pet needs a gender.");
+//        }
+//        assertEquals(pet, oldPet);
+//    }
+//
+//    @Test
+//    public void testChangeOwnership() {
+//        //TODO
+//        clearDatabase();
+//        assertEquals(0, petService.getAllPets().size());
+//        pet = null;
+//        Pet oldPet = null;
+//        petDto = null;
+//        petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
+//        pet = petService.createPet(petDto);
+//        assertTrue(user1.getPets().contains(pet));            
+//
+//        petDto.setUserName(USER_NAME2);
+//        user2 = userDao.findUserByUserName(USER_NAME2);
+//        pet = petService.editPet(petDto);
+//        assertTrue(user2.getPets().contains(pet));
+//        
+//    }
+//    @Test //new user is null
+//    public void testChangeToNullUser() {
+//        clearDatabase();
+//        assertEquals(0, petService.getAllPets().size());
+//        pet = null;
+//        Pet oldPet = null;
+//        petDto = null;
+//        petDto = createPetDto(PET_DOB, PET_NAME, PET_SPECIES, PET_BREED, PET_DESCRIPTION, PET_PICTURE, USER_NAME1, PET_GENDER);
+//        pet = petService.createPet(petDto);
+//        assertTrue(user1.getPets().contains(pet));            
+//        try {
+//        petDto.setUserName("");
+//        pet = petService.editPet(petDto);
+//        assertTrue(user2.getPets().contains(pet));
+//        } catch (AdvertisementException e) {
+//            assertEquals(e.getMessage(), "Cannot edit: User not found.");
+//        }
+//    }
     
     private PetDTO createPetDto(Date petDob, String petName, String petSpecies, String petBreed, String petDescription,
             byte[] petPicture, String userName, Gender petGender) {
@@ -620,8 +616,14 @@ public class TestAdvertisementService {
         return dto;
     }
     
-    private AdvertisementDTO createAdDto (String title, boolean isfulfilled, List<Long> aD_PET_IDS, Set<ApplicationDTO> adoptionApplication, String description) {
-        AdvertisementDTO dto = new AdvertisementDTO(title, isfulfilled, aD_PET_IDS, adoptionApplication, description);
+    private AdvertisementDTO createAdDto (String title, boolean isfulfilled, List<Long> aD_PET_IDS, Set<Application> application, String description) {
+        AdvertisementDTO dto = new AdvertisementDTO();
+        
+        dto.setTitle(title);
+        dto.setFulfilled(isfulfilled);
+        dto.setPetIds((Long[]) aD_PET_IDS.toArray());
+        dto.setApplication(application);
+        dto.setDescription(description);
         return dto;
     }
 }

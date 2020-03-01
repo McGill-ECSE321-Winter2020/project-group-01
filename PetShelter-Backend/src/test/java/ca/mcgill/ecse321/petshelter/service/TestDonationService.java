@@ -6,7 +6,6 @@ import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.repository.DonationRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.exception.DonationException;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +20,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.lenient;
 
@@ -123,44 +122,44 @@ public class TestDonationService {
     public void testDonation() {
         assertEquals(0, donationService.getAllDonations().size());
         DonationDTO donationDTO = new DonationDTO();
-        
+    
         donationDTO.setUser(USER_NAME);
         donationDTO.setAmount(DONATION_AMOUNT);
         donationDTO.setDate(DONATION_DATE);
         donationDTO.setTime(DONATION_TIME);
-        
+    
         try {
             donationService.createDonation(donationDTO);
         } catch (DonationException e) {
             e.printStackTrace();
         }
-        
-        Donation donation = donationRepository.findDonationsByUserUserNameAndAmount(USER_NAME, DONATION_AMOUNT);
+    
+        DonationDTO donation = donationService.getDonation(USER_NAME, DONATION_AMOUNT);
         assertEquals(DONATION_AMOUNT, donation.getAmount());
     }
     
-    //todo cant test this with mockito
     @Test
     public void testAnonymousDonation() {
         DonationDTO donationDTO = new DonationDTO();
         Date date = Date.valueOf("2020-01-22");
         Time time = Time.valueOf("11:22:00");
         double amount = 11.22;
-        
+    
         donationDTO.setUser(null);
         donationDTO.setTime(time);
         donationDTO.setDate(date);
         donationDTO.setAmount(amount);
-        
+    
+        DonationDTO dto = null;
         try {
-            donationService.createDonation(donationDTO);
+            dto = donationService.createDonation(donationDTO);
         } catch (DonationException e) {
             e.printStackTrace();
         }
-        
-        List<Donation> allDonations = donationRepository.findAllByUser(null);
-        System.out.println(allDonations);
-        //  assertNull(allDonations.get(0).getUser());
+    
+        List<DonationDTO> allDonations = donationService.getAllUserDonations(null);
+        assertNotNull(dto);
+        assertNull(dto.getUsername());
     }
     
     @Test

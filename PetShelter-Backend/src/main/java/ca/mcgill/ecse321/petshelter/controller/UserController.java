@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ca.mcgill.ecse321.petshelter.service.UserService.userToDto;
+
 /**
  * @author louis User controller class - allows for creation of users, login of
- *         users, and email validation of users.
+ * users, and email validation of users.
  */
 
 @RestController
@@ -45,17 +47,8 @@ public class UserController {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
-	// converts a user into a userdto
-	public static UserDTO userToDto(User user) {
-		UserDTO userDto = new UserDTO();
-		userDto.setEmail(user.getEmail());
-		userDto.setUsername(user.getUserName());
-		userDto.setUserType(user.getUserType());
-		userDto.setPicture(user.getPicture());
-		return userDto;
-	}
-
+	
+	
 	/**
 	 * Creates a user account. The Request body is a UserDTO aka email, password
 	 * username and UserType are provided. The method also validates if the
@@ -126,13 +119,12 @@ public class UserController {
 			return new ResponseEntity<>("Account not verified", HttpStatus.BAD_REQUEST);
 		}
 		// generate a random password for the user to log in and change later
-		String tempPw = userService.generateRandomPassword();
-		ue.setPassword(passwordEncoder.encode(tempPw));
-		userRepo.save(ue);
+		
 		try {
+			String tempPw = userService.resetPassword(email);
 			emailingService.userForgotPasswordEmail(ue.getEmail(), tempPw, ue.getUserName());
 			return new ResponseEntity<>(HttpStatus.OK);
-		} catch (MailException x) {
+		} catch (MailException | RegisterException x) {
 			return new ResponseEntity<>(x.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -170,18 +162,18 @@ public class UserController {
 			return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
 	/**
 	 * Deletes a user. The person making the request must be an admin.
 	 *
-	 * @param userName user's account to delete
+	 * @param username user's account to delete
 	 * @return delete was successful or not
 	 */
-	@DeleteMapping("/{userName}")
-	public ResponseEntity<?> deleteUser(@PathVariable String userName, @RequestHeader String token) {
+	@DeleteMapping("/{username}")
+	public ResponseEntity<?> deleteUser(@PathVariable String username, @RequestHeader String token) throws RegisterException {
 		User requester = userRepo.findUserByApiToken(token);
 		if (requester != null && requester.getUserType().equals(UserType.ADMIN)) {
-			if (userService.deleteUser(userName)) { // if the user is successfully deleted
+			if (userService.deleteUser(username)) { // if the user is successfully deleted
 				return new ResponseEntity<>(HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -284,7 +276,7 @@ public class UserController {
 	
 	/**
 	 * Deletes the user's token from the database. The user is now seen as logged out.
-	 * @param The user's token
+	 * @param token user's token
 	 * @return 
 	 */
 	@GetMapping("/logout")

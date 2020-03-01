@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @SuppressWarnings("serial")
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class CommentException extends RuntimeException {
+public class CommentException extends Exception {
 	public CommentException(String msg) {
 		super(msg);
 	}
