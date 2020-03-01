@@ -1,17 +1,11 @@
 package ca.mcgill.ecse321.petshelter.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.lenient;
-
-import java.sql.Date;
-import java.util.HashSet;
-import java.util.Set;
-
+import ca.mcgill.ecse321.petshelter.dto.PetDTO;
+import ca.mcgill.ecse321.petshelter.model.*;
+import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
+import ca.mcgill.ecse321.petshelter.repository.PetRepository;
+import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import ca.mcgill.ecse321.petshelter.service.exception.PetException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,16 +16,13 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
-import ca.mcgill.ecse321.petshelter.dto.PetDTO;
-import ca.mcgill.ecse321.petshelter.model.Advertisement;
-import ca.mcgill.ecse321.petshelter.model.Gender;
-import ca.mcgill.ecse321.petshelter.model.Pet;
-import ca.mcgill.ecse321.petshelter.model.User;
-import ca.mcgill.ecse321.petshelter.model.UserType;
-import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
-import ca.mcgill.ecse321.petshelter.repository.PetRepository;
-import ca.mcgill.ecse321.petshelter.repository.UserRepository;
-import ca.mcgill.ecse321.petshelter.service.exception.PetException;
+import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.lenient;
 
 //TODO Javadoc
 @ExtendWith(MockitoExtension.class)
@@ -603,18 +594,18 @@ public class TestPetService {
 			assertEquals("Cannot edit: Pet does not exist.", e.getMessage());
 		}
 	}
-
-	@Test
-	public void deletePet() {
-		PetDTO petDTO = new PetDTO();
-		petDTO.setBreed(PET_BREED);
-		petDTO.setDateOfBirth(PET_DOB);
-		petDTO.setDescription(PET_DESCRIPTION);
-		petDTO.setGender(PET_GENDER);
-		petDTO.setName(PET_NAME);
-		petDTO.setPicture(PET_PICTURE);
-		petDTO.setSpecies(PET_SPECIES);
-		petDTO.setUserName(USER_NAME);
+    
+    @Test
+    public void testdeletePet() {
+        PetDTO petDTO = new PetDTO();
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setName(PET_NAME);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setUserName(USER_NAME);
 
 		PetDTO pet = null;
 
@@ -634,38 +625,38 @@ public class TestPetService {
 		}
 		assertTrue(isDeleted);
 	}
-
-	@Test
-	public void deletePetFail() {
-		PetDTO petDTO = new PetDTO();
-		petDTO.setBreed(PET_BREED);
-		petDTO.setDateOfBirth(PET_DOB);
-		petDTO.setDescription(PET_DESCRIPTION);
-		petDTO.setGender(PET_GENDER);
-		petDTO.setName(PET_NAME);
-		petDTO.setPicture(PET_PICTURE);
-		petDTO.setSpecies(PET_SPECIES);
-		petDTO.setUserName(USER_NAME);
-		petDTO.setId(new Long(0));
+    
+    @Test
+    public void testdeletePetFail() {
+        PetDTO petDTO = new PetDTO();
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setName(PET_NAME);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setUserName(USER_NAME);
+        petDTO.setId(new Long(0));
 		try {
 			petService.deletePet(petDTO.getId(), USER_NAME);
 		} catch (PetException e) {
 			assertEquals("Cannot delete: The requester is not the owner of the pet.", e.getMessage());
 		}
 	}
-
-	@Test
-	public void findPet() {
-		PetDTO petDTO = new PetDTO();
-		petDTO.setBreed(PET_BREED);
-		petDTO.setDateOfBirth(PET_DOB);
-		petDTO.setDescription(PET_DESCRIPTION);
-		petDTO.setGender(PET_GENDER);
-		petDTO.setName(PET_NAME);
-		petDTO.setPicture(PET_PICTURE);
-		petDTO.setSpecies(PET_SPECIES);
-		petDTO.setUserName(USER_NAME);
-		petDTO.setAdvertisement(new Long(0));
+    
+    @Test
+    public void testfindPet() {
+        PetDTO petDTO = new PetDTO();
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setName(PET_NAME);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setUserName(USER_NAME);
+        petDTO.setAdvertisement(new Long(0));
 
 		PetDTO pet = null;
 		try {
@@ -681,18 +672,18 @@ public class TestPetService {
 		assertEquals(pet.getName(), dbPet.getName());
 		assertEquals(pet.getBreed(), dbPet.getBreed());
 	}
-
-	@Test
-	public void findPetNoID() {
-		PetDTO petDTO = new PetDTO();
-		petDTO.setBreed(PET_BREED);
-		petDTO.setDateOfBirth(PET_DOB);
-		petDTO.setDescription(PET_DESCRIPTION);
-		petDTO.setGender(PET_GENDER);
-		petDTO.setName(PET_NAME);
-		petDTO.setPicture(PET_PICTURE);
-		petDTO.setSpecies(PET_SPECIES);
-		petDTO.setUserName(USER_NAME);
+    
+    @Test
+    public void testfindPetNoID() {
+        PetDTO petDTO = new PetDTO();
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setName(PET_NAME);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setUserName(USER_NAME);
 
 		try {
 			petService.getPet(petDTO);
@@ -700,14 +691,14 @@ public class TestPetService {
 			assertEquals("Pet does not exist.", e.getMessage());
 		}
 	}
-
-	@Test
-	public void getPetsByWrongUserName() {
-		try {
-			petService.getPetsByUser("bob");
-		} catch (PetException e) {
-			assertEquals("User does not exist.", e.getMessage());
-		}
-	}
+    
+    @Test
+    public void testGetPetsByWrongUserName() {
+        try {
+            petService.getPetsByUser("bob");
+        } catch (PetException e) {
+            assertEquals("User does not exist.", e.getMessage());
+        }
+    }
 
 }
