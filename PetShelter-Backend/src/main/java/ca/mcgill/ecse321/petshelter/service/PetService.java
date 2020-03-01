@@ -35,11 +35,10 @@ public class PetService {
      */
     @Transactional
     public Pet getPet(PetDTO petDTO) {
-        Pet pet = petRepository.findPetById(petDTO.getId());
-        if (pet == null) {
+        if (petDTO.getId() == null) {
             throw new PetException("Pet does not exist.");
         } else {
-            return pet;
+            return petRepository.findPetById(petDTO.getId());
         }
     }
     
@@ -74,15 +73,6 @@ public class PetService {
             return pets;
         }
     }
-    
-    /**
-     * @return sets of all pet
-     */
-    @Transactional
-    public Set<Pet> getAllPets() {
-        return petRepository.findAll();
-    }
-    
     
     /**
      * Creates a pet and stores it in database
