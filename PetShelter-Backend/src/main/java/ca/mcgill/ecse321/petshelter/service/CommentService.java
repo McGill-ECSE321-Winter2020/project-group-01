@@ -132,7 +132,7 @@ public class CommentService {
 	public Set<CommentDTO> getComments(long forumID) throws CommentException {
 		Optional<Forum> forum = forumRepository.findById(forumID);
 		if (forum.isPresent()) {
-			return forum.get().getComments().stream().map(this::commentToDto).collect(Collectors.toSet());
+			return forum.get().getComments().stream().map(CommentService::commentToDto).collect(Collectors.toSet());
 			
 		} else {
 			throw new CommentException("No comments found");
