@@ -12,6 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * This class implements the REST controller for the donation related features of the backend.
+ */
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/donation")
@@ -27,6 +31,10 @@ public class DonationController {
 	private UserRepository userRepository;
 
 	/**
+	 * Get all the donations in the system.
+	 *
+	 * @param token The user access token. Need to be an admin.
+	 *
 	 * @return returns all donations if the requester is an admin
 	 */
 	@GetMapping("/all")
@@ -44,6 +52,8 @@ public class DonationController {
 	 * Get a user specific donation
 	 *
 	 * @param user user targeted
+	 * @param token The user access token.
+	 *
 	 * @return all of that user's donations
 	 */
 	@GetMapping("/{user}")
@@ -62,6 +72,7 @@ public class DonationController {
 	 * Creates a donation
 	 *
 	 * @param donationDTO DTO passed by the in the request body
+	 *
 	 * @return Ok if all the fields are satisfied, else Error msg
 	 */
 	@PostMapping()
