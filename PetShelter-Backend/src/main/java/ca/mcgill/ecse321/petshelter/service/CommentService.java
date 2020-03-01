@@ -127,7 +127,9 @@ public class CommentService {
 	 */
 	@Transactional
 	public List<CommentDTO> getComments() {
-		return commentRepository.findAll().stream().map(this::commentToDto).collect(Collectors.toList());
+		return commentRepository.findAll().stream()
+				.map(c -> commentToDto(c))
+				.collect(Collectors.toList());
 	}
 	
 	/**
@@ -140,7 +142,9 @@ public class CommentService {
 	public List<CommentDTO> getCommentsByUser(long userID) throws CommentException {
 		Optional<User> user = userRepository.findById(userID);
 		if (user.isPresent()) {
-			return commentRepository.findCommentsByUser(user.get()).stream().map(this::commentToDto).collect(Collectors.toList());
+			return commentRepository.findCommentsByUser(user.get()).stream()
+					.map(c -> commentToDto(c))
+					.collect(Collectors.toList());
 		} else {
 			throw new CommentException("No such user.");
 		}
@@ -152,7 +156,7 @@ public class CommentService {
 	 * @param comment The comment to convert.
 	 * @return A comment DTO.
 	 */
-	public CommentDTO commentToDto(Comment comment) {
+	public static CommentDTO commentToDto(Comment comment) {
 		CommentDTO commentDTO = new CommentDTO();
 		commentDTO.setDatePosted(comment.getDatePosted());
 		commentDTO.setId(comment.getId());
