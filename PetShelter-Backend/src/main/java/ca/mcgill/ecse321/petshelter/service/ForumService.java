@@ -223,7 +223,7 @@ public class ForumService {
 		forumDTO.setAuthor(userToDto(forum.getAuthor()));
 		forumDTO.setTitle(forum.getTitle());
 		forumDTO.setId(forum.getId());
-		Set<UserDTO> forumSubsDTO = null;
+		Set<UserDTO> forumSubsDTO = new HashSet<>();
 		for (User user : forum.getSubscribers()){
 			forumSubsDTO.add(userToDto(user));
 		}
