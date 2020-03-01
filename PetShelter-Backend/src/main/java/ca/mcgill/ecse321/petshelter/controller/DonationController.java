@@ -34,8 +34,7 @@ public class DonationController {
 	 * Get all the donations in the system.
 	 *
 	 * @param token The user access token. Need to be an admin.
-	 *
-	 * @return returns all donations if the requester is an admin
+	 * @return returns all donations if the requester is an admin, if it is a user, only return their donations
 	 */
 	@GetMapping("/all")
 
@@ -44,8 +43,15 @@ public class DonationController {
 		if (requester != null && requester.getUserType().equals(UserType.ADMIN))
 			return new ResponseEntity<>(
 					donationService.getAllDonations(), HttpStatus.OK);
-		else
+		
+		else if(requester != null && requester.getUserType().equals(UserType.USER)){
+			return new ResponseEntity<>(
+					donationService.getAllUserDonations(requester.getUserName()), HttpStatus.OK);
+		}
+		else{
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
 	}
 
 	/**
@@ -60,8 +66,7 @@ public class DonationController {
 	public ResponseEntity<?> getUserDonation(@PathVariable String user, @RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
 		User requestedUser = userRepository.findUserByUserName(user);
-		if (requester != null
-				&& (requester.getUserType().equals(UserType.ADMIN) || token.equals(requestedUser.getApiToken())))
+		if (requester != null && (requester.getUserType().equals(UserType.ADMIN) || token.equals(requestedUser.getApiToken())))
 			return new ResponseEntity<>(donationService.getAllUserDonations(user), HttpStatus.OK);
 		else
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -76,18 +81,16 @@ public class DonationController {
 	 * @return Ok if all the fields are satisfied, else Error msg
 	 */
 	@PostMapping()
-	public ResponseEntity<?> createDonation(@RequestBody DonationDTO donationDTO) {
+	public ResponseEntity<?> createDonation(@RequestBody DonationDTO donationDTO, @RequestHeader String token) {
 		DonationDTO donation = donationService.createDonation(donationDTO);
 		try {
-			if (donation.getUsername() != null) {
+			//if the person is a registered user, we will send him a email
+			if (donation.getUsername() != null && userRepository.findUserByApiToken(token).getUserName().equals(donation.getUsername())) {
 				donationDTO.setUser(donation.getUsername());
 				emailingService.donationConfirmationEmail(donation.getEmail(), donationDTO.getUsername(),
 						donationDTO.getAmount(), donationDTO.getTime(), donationDTO.getDate());
 			}
-			donationDTO.setTime(donation.getTime());
-			donationDTO.setDate(donation.getDate());
-			donationDTO.setAmount(donation.getAmount());
-			return new ResponseEntity<>(donationDTO, HttpStatus.OK);
+			return new ResponseEntity<>(donation, HttpStatus.OK);
 		} catch (IllegalArgumentException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
