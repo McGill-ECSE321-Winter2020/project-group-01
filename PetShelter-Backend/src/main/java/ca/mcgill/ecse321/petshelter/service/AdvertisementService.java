@@ -190,11 +190,12 @@ public class AdvertisementService {
     }
     
     public List<Pet> validateParametersAdd(AdvertisementDTO adDTO) {
-        int numOfPets = adDTO.getPetIds().length;
-        if (numOfPets == 0) {
+        if (adDTO.getPetIds() == null || adDTO.getPetIds().length == 0) {
             throw new AdvertisementException("A pet must be linked to an advertisement.");
+    
         }
         //finding all pets that are on this ad
+        int numOfPets = adDTO.getPetIds().length;
         
         List<Pet> petsInAd = new ArrayList<>();
         for (int i = 0; i < numOfPets; i++) {
