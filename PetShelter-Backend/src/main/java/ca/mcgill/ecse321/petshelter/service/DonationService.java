@@ -14,6 +14,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Services to handle the creation of donations.
@@ -33,8 +34,8 @@ public class DonationService {
      * @return list of all the donations
      */
     @Transactional
-    public List<Donation> getAllDonations() {
-        return toList(donationRepository.findAll());
+    public List<DonationDTO> getAllDonations() {
+        return toList(donationRepository.findAll()).stream().map(this::convertToDto).collect(Collectors.toList());
     }
     
     /**
@@ -43,8 +44,8 @@ public class DonationService {
      * @return donation based on name and amount
      */
     @Transactional
-    public Donation getDonation(String name, double amount) {
-        return donationRepository.findDonationsByUserUserNameAndAmount(name, amount);
+    public DonationDTO getDonation(String name, double amount) {
+        return convertToDto(donationRepository.findDonationsByUserUserNameAndAmount(name, amount));
     }
     
     /**
@@ -52,8 +53,8 @@ public class DonationService {
      * @return all the donations made by that username
      */
     @Transactional
-    public List<Donation> getAllUserDonations(String name) {
-        return toList(donationRepository.findAllByUser(userRepository.findUserByUserName(name)));
+    public List<DonationDTO> getAllUserDonations(String name) {
+        return toList(donationRepository.findAllByUser(userRepository.findUserByUserName(name))).stream().map(this::convertToDto).collect(Collectors.toList());
     }
     
     //From tutorial
@@ -72,7 +73,7 @@ public class DonationService {
      * @return donation object
      */
     @Transactional
-    public Donation createDonation(DonationDTO donationDTO) {
+    public DonationDTO createDonation(DonationDTO donationDTO) {
         //condition checks
         if (donationDTO.getAmount() == null) {
             throw new DonationException("Donation can't be null!");
@@ -90,6 +91,26 @@ public class DonationService {
         donation.setAmount(Math.round(donationDTO.getAmount() * 100.0) / 100.0);//trim it down to 2 decimal points
         donationRepository.save(donation);
         //  System.out.println(donation.toString());
-        return donation;
+        return convertToDto(donation);
+    }
+    
+    /**
+     * Converts donation object to donation dto
+     *
+     * @param donation donation object
+     * @return donation dto
+     */
+    public DonationDTO convertToDto(Donation donation) {
+        DonationDTO donationDTO = new DonationDTO();
+        donationDTO.setDate(donation.getDate());
+        donationDTO.setTime(donation.getTime());
+        donationDTO.setAmount(donation.getAmount());
+        donationDTO.setEmail(donation.getUser().getEmail());
+        try {
+            donationDTO.setUser(donation.getUser().getUserName());
+        } catch (NullPointerException e) {
+            donationDTO.setUser(null); // occurs when it is an anonymous donor, no account.
+        }
+        return donationDTO;
     }
 }
