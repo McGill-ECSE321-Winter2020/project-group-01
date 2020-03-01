@@ -18,11 +18,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
@@ -44,13 +45,13 @@ public class TestAdvertisementService {
     
     @InjectMocks
     private AdvertisementService advertisementService;
-
+    
     //User1 parameters
     private static final String USER_NAME1 = "testUN";
     private static final String USER_EMAIL1 = "username@gmail.com";
     private static final String USER_PASSWORD1 = "password1";
     private static final UserType USER_TYPE1 = UserType.USER;
-
+    
     //User2 parameters
     private static final String USER_NAME2 = "secondUser";
     private static final String USER_EMAIL2 = "username2@gmail.com";
@@ -84,11 +85,18 @@ public class TestAdvertisementService {
     private User USER1 = new User();
     private User USER2 = new User();
     
+    //Edited ad parameters
+    private static final String AD_TITLE_EDIT = "newTestTitle";
+    private static final String AD_DESCRIPTION_EDIT = "newTestDescription";
+    private static final boolean AD_FULLFILLED_EDTI = true;
+    
     @BeforeEach
     public void setMockOutput() {
         //ad Id mock
         lenient().when(advertisementRepository.findAdvertisementById(any(Long.class))).thenAnswer((InvocationOnMock invocation) -> {
+            
             if (invocation.getArgument(0).equals(AD_ID)) {
+                
                 Advertisement ad = new Advertisement();
                 // ad.setAdoptionApplication(AD_APPLICATIONS);
                 ad.setDescription(AD_DESCRIPTION);
@@ -101,6 +109,29 @@ public class TestAdvertisementService {
             }
         });
         
+        lenient().when(advertisementRepository.findAdvertisementByTitle(anyString())).thenAnswer((InvocationOnMock invocation) -> {
+            List<Advertisement> advertisementList = new ArrayList<>();
+            Advertisement ad = new Advertisement();
+            // ad.setAdoptionApplication(AD_APPLICATIONS);
+            ad.setDescription(AD_DESCRIPTION);
+            ad.setIsFulfilled(AD_FULLFILLED);
+            ad.setTitle(AD_TITLE);
+            ad.setId(AD_ID);
+            advertisementList.add(ad);
+            return advertisementList;
+        });
+        
+        lenient().when(advertisementRepository.findAll()).thenAnswer((InvocationOnMock invocation) -> {
+            List<Advertisement> advertisementList = new ArrayList<>();
+            Advertisement ad = new Advertisement();
+            // ad.setAdoptionApplication(AD_APPLICATIONS);
+            ad.setDescription(AD_DESCRIPTION);
+            ad.setIsFulfilled(AD_FULLFILLED);
+            ad.setTitle(AD_TITLE);
+            ad.setId(AD_ID);
+            advertisementList.add(ad);
+            return advertisementList;
+        });
         lenient().when(userRepository.findUserByUserName(anyString())).thenAnswer((InvocationOnMock invocation) -> {
             if (invocation.getArgument(0).equals(USER_NAME1)) {
                 USER1.setUserName(USER_NAME1);
@@ -120,8 +151,6 @@ public class TestAdvertisementService {
                 return null;
             }
         });
-        
-        
         lenient().when(userRepository.findUserByPets(any(Pet.class))).thenAnswer((InvocationOnMock invocation) -> {
             if (invocation.getArgument(0).equals(PET)) {
                 return USER1;
@@ -140,24 +169,29 @@ public class TestAdvertisementService {
                 PET.setDescription(PET_DESCRIPTION);
                 PET.setPicture(PET_PICTURE);
                 PET.setGender(PET_GENDER);
-                //   PET.setAdvertisement(advertisementService.getAdvertisementById(AD_ID));
+                //PET.setAdvertisement(advertisementService.getAdvertisementById(AD_ID));
                 return PET;
             } else {
                 return null;
             }
         });
         
+        lenient().when(petRepository.findAll()).thenAnswer((InvocationOnMock invocation) -> {
+            Set<Pet> petSet = new HashSet<>();
+            petSet.add(PET);
+            return petSet;
+        });
         
-        Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
-            return invocation.getArgument(0);
-        };
+        
+        Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> invocation.getArgument(0);
         lenient().when(userRepository.save(any(User.class))).thenAnswer(returnParameterAsAnswer);
         lenient().when(petRepository.save(any(Pet.class))).thenAnswer(returnParameterAsAnswer);
         
     }
-
+    
     /**
      * Normal test case. Creates a pet. Should not throw any exception".
+     *
      * @author Katrina
      */
     @Test
@@ -396,7 +430,651 @@ public class TestAdvertisementService {
     
     @Test
     public void testEditPet() {
+        USER1 = userRepository.findUserByUserName(USER_NAME1);
+        PetDTO petDTO = new PetDTO();
     
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setName(PET_NAME);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setUserName(USER_NAME1);
+    
+        PetDTO createdPet = null;
+        try {
+            createdPet = petService.createPet(petDTO);
+        } catch (PetException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(createdPet);
+        AD_PET_IDS[0] = createdPet.getId();
+        AdvertisementDTO advertisementDTO = new AdvertisementDTO();
+        advertisementDTO.setTitle(AD_TITLE);
+        advertisementDTO.setFulfilled(AD_FULLFILLED);
+        advertisementDTO.setPetIds(AD_PET_IDS);
+        advertisementDTO.setApplication(AD_APPLICATIONS);
+        advertisementDTO.setDescription(AD_DESCRIPTION);
+    
+        AdvertisementDTO createdAd = advertisementService.createAdvertisement(advertisementDTO);
+        assertNotNull(createdAd);
+    
+        AdvertisementDTO editAdvertisementDTO = new AdvertisementDTO();
+        editAdvertisementDTO.setTitle(AD_TITLE_EDIT);
+        editAdvertisementDTO.setFulfilled(AD_FULLFILLED_EDTI);
+        editAdvertisementDTO.setPetIds(AD_PET_IDS);
+        editAdvertisementDTO.setApplication(AD_APPLICATIONS);
+        editAdvertisementDTO.setDescription(AD_DESCRIPTION_EDIT);
+        editAdvertisementDTO.setAdId(createdAd.getAdId());
+    
+        AdvertisementDTO editedAd = advertisementService.editAdvertisement(editAdvertisementDTO);
+    
+        assertNotNull(editedAd);
+        assertNotEquals(createdAd.getTitle(), editedAd.getTitle());
+        assertEquals(createdAd.getAdId(), editedAd.getAdId());
+        assertEquals(AD_TITLE_EDIT, editedAd.getTitle());
+    }
+    
+    @Test
+    public void testEditAdNoID() {
+        
+        USER1 = userRepository.findUserByUserName(USER_NAME1);
+        PetDTO petDTO = new PetDTO();
+        
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setName(PET_NAME);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setUserName(USER_NAME1);
+        
+        PetDTO createdPet = null;
+        try {
+            createdPet = petService.createPet(petDTO);
+        } catch (PetException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(createdPet);
+        AD_PET_IDS[0] = createdPet.getId();
+        AdvertisementDTO advertisementDTO = new AdvertisementDTO();
+        advertisementDTO.setTitle(AD_TITLE);
+        advertisementDTO.setFulfilled(AD_FULLFILLED);
+        advertisementDTO.setPetIds(AD_PET_IDS);
+        advertisementDTO.setApplication(AD_APPLICATIONS);
+        advertisementDTO.setDescription(AD_DESCRIPTION);
+        
+        AdvertisementDTO createdAd = advertisementService.createAdvertisement(advertisementDTO);
+        assertNotNull(createdAd);
+        
+        AdvertisementDTO editAdvertisementDTO = new AdvertisementDTO();
+        editAdvertisementDTO.setTitle(AD_TITLE_EDIT);
+        editAdvertisementDTO.setFulfilled(AD_FULLFILLED_EDTI);
+        editAdvertisementDTO.setPetIds(AD_PET_IDS);
+        editAdvertisementDTO.setApplication(AD_APPLICATIONS);
+        editAdvertisementDTO.setDescription(AD_DESCRIPTION_EDIT);
+        //   editAdvertisementDTO.setAdId(createdAd.getAdId());
+        
+        try {
+            advertisementService.editAdvertisement(editAdvertisementDTO);
+        } catch (AdvertisementException e) {
+            assertEquals("Advertisement does not exist", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testEditAdNoTitle() {
+        USER1 = userRepository.findUserByUserName(USER_NAME1);
+        PetDTO petDTO = new PetDTO();
+        
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setName(PET_NAME);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setUserName(USER_NAME1);
+        
+        PetDTO createdPet = null;
+        try {
+            createdPet = petService.createPet(petDTO);
+        } catch (PetException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(createdPet);
+        AD_PET_IDS[0] = createdPet.getId();
+        AdvertisementDTO advertisementDTO = new AdvertisementDTO();
+        advertisementDTO.setTitle(AD_TITLE);
+        advertisementDTO.setFulfilled(AD_FULLFILLED);
+        advertisementDTO.setPetIds(AD_PET_IDS);
+        advertisementDTO.setApplication(AD_APPLICATIONS);
+        advertisementDTO.setDescription(AD_DESCRIPTION);
+        
+        AdvertisementDTO createdAd = advertisementService.createAdvertisement(advertisementDTO);
+        assertNotNull(createdAd);
+        
+        AdvertisementDTO editAdvertisementDTO = new AdvertisementDTO();
+        //      editAdvertisementDTO.setTitle(AD_TITLE_EDIT);
+        editAdvertisementDTO.setFulfilled(AD_FULLFILLED_EDTI);
+        editAdvertisementDTO.setPetIds(AD_PET_IDS);
+        editAdvertisementDTO.setApplication(AD_APPLICATIONS);
+        editAdvertisementDTO.setDescription(AD_DESCRIPTION_EDIT);
+        editAdvertisementDTO.setAdId(createdAd.getAdId());
+        
+        try {
+            advertisementService.editAdvertisement(editAdvertisementDTO);
+        } catch (AdvertisementException e) {
+            assertEquals("Title cannot be empty", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testEditAdNoDescription() {
+        USER1 = userRepository.findUserByUserName(USER_NAME1);
+        PetDTO petDTO = new PetDTO();
+        
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setName(PET_NAME);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setUserName(USER_NAME1);
+        
+        PetDTO createdPet = null;
+        try {
+            createdPet = petService.createPet(petDTO);
+        } catch (PetException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(createdPet);
+        AD_PET_IDS[0] = createdPet.getId();
+        AdvertisementDTO advertisementDTO = new AdvertisementDTO();
+        advertisementDTO.setTitle(AD_TITLE);
+        advertisementDTO.setFulfilled(AD_FULLFILLED);
+        advertisementDTO.setPetIds(AD_PET_IDS);
+        advertisementDTO.setApplication(AD_APPLICATIONS);
+        advertisementDTO.setDescription(AD_DESCRIPTION);
+        
+        AdvertisementDTO createdAd = advertisementService.createAdvertisement(advertisementDTO);
+        assertNotNull(createdAd);
+        
+        AdvertisementDTO editAdvertisementDTO = new AdvertisementDTO();
+        editAdvertisementDTO.setTitle(AD_TITLE_EDIT);
+        editAdvertisementDTO.setFulfilled(AD_FULLFILLED_EDTI);
+        editAdvertisementDTO.setPetIds(AD_PET_IDS);
+        editAdvertisementDTO.setApplication(AD_APPLICATIONS);
+        //   editAdvertisementDTO.setDescription(AD_DESCRIPTION_EDIT);
+        editAdvertisementDTO.setAdId(createdAd.getAdId());
+        
+        try {
+            advertisementService.editAdvertisement(editAdvertisementDTO);
+        } catch (AdvertisementException e) {
+            assertEquals("Description cannot be empty", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testEditAdNoPet() {
+        USER1 = userRepository.findUserByUserName(USER_NAME1);
+        PetDTO petDTO = new PetDTO();
+        
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setName(PET_NAME);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setUserName(USER_NAME1);
+        
+        PetDTO createdPet = null;
+        try {
+            createdPet = petService.createPet(petDTO);
+        } catch (PetException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(createdPet);
+        AD_PET_IDS[0] = createdPet.getId();
+        AdvertisementDTO advertisementDTO = new AdvertisementDTO();
+        advertisementDTO.setTitle(AD_TITLE);
+        advertisementDTO.setFulfilled(AD_FULLFILLED);
+        advertisementDTO.setPetIds(AD_PET_IDS);
+        advertisementDTO.setApplication(AD_APPLICATIONS);
+        advertisementDTO.setDescription(AD_DESCRIPTION);
+        
+        AdvertisementDTO createdAd = advertisementService.createAdvertisement(advertisementDTO);
+        assertNotNull(createdAd);
+        
+        AdvertisementDTO editAdvertisementDTO = new AdvertisementDTO();
+        editAdvertisementDTO.setTitle(AD_TITLE_EDIT);
+        editAdvertisementDTO.setFulfilled(AD_FULLFILLED_EDTI);
+        //      editAdvertisementDTO.setPetIds(AD_PET_IDS);
+        editAdvertisementDTO.setApplication(AD_APPLICATIONS);
+        editAdvertisementDTO.setDescription(AD_DESCRIPTION_EDIT);
+        editAdvertisementDTO.setAdId(createdAd.getAdId());
+        
+        try {
+            advertisementService.editAdvertisement(editAdvertisementDTO);
+        } catch (AdvertisementException e) {
+            assertEquals("One or more pets do not exist.", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testDeleteAd() {
+        
+        USER1 = userRepository.findUserByUserName(USER_NAME1);
+        PetDTO petDTO = new PetDTO();
+        
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setName(PET_NAME);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setUserName(USER_NAME1);
+        
+        PetDTO createdPet = null;
+        try {
+            createdPet = petService.createPet(petDTO);
+        } catch (PetException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(createdPet);
+        AD_PET_IDS[0] = createdPet.getId();
+        AdvertisementDTO advertisementDTO = new AdvertisementDTO();
+        advertisementDTO.setTitle(AD_TITLE);
+        advertisementDTO.setFulfilled(AD_FULLFILLED);
+        advertisementDTO.setPetIds(AD_PET_IDS);
+        advertisementDTO.setApplication(AD_APPLICATIONS);
+        advertisementDTO.setDescription(AD_DESCRIPTION);
+        
+        AdvertisementDTO createdAd = null;
+        try {
+            createdAd = advertisementService.createAdvertisement(advertisementDTO);
+        } catch (AdvertisementException e) {
+            e.printStackTrace();
+        }
+        
+        assertNotNull(createdAd);
+        boolean isDeleted = advertisementService.deleteAdvertisement(createdAd);
+        assertTrue(isDeleted);
+    }
+    
+    @Test
+    public void testDeleteWrongAd() {
+        
+        USER1 = userRepository.findUserByUserName(USER_NAME1);
+        PetDTO petDTO = new PetDTO();
+        
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setName(PET_NAME);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setUserName(USER_NAME1);
+        
+        PetDTO createdPet = null;
+        try {
+            createdPet = petService.createPet(petDTO);
+        } catch (PetException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(createdPet);
+        AD_PET_IDS[0] = createdPet.getId();
+        AdvertisementDTO advertisementDTO = new AdvertisementDTO();
+        advertisementDTO.setTitle(AD_TITLE);
+        advertisementDTO.setFulfilled(AD_FULLFILLED);
+        advertisementDTO.setPetIds(AD_PET_IDS);
+        advertisementDTO.setApplication(AD_APPLICATIONS);
+        advertisementDTO.setDescription(AD_DESCRIPTION);
+        
+        AdvertisementDTO createdAd = null;
+        try {
+            createdAd = advertisementService.createAdvertisement(advertisementDTO);
+        } catch (AdvertisementException e) {
+            e.printStackTrace();
+        }
+        
+        assertNotNull(createdAd);
+        createdAd.setAdId(11L);
+        System.out.println(createdAd);
+        try {
+            advertisementService.deleteAdvertisement(createdAd);
+        } catch (AdvertisementException e) {
+            assertEquals("Advertisement does not exist.", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testDeleteNoAd() {
+        
+        USER1 = userRepository.findUserByUserName(USER_NAME1);
+        PetDTO petDTO = new PetDTO();
+        
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setName(PET_NAME);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setUserName(USER_NAME1);
+        
+        PetDTO createdPet = null;
+        try {
+            createdPet = petService.createPet(petDTO);
+        } catch (PetException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(createdPet);
+        AD_PET_IDS[0] = createdPet.getId();
+        AdvertisementDTO advertisementDTO = new AdvertisementDTO();
+        advertisementDTO.setTitle(AD_TITLE);
+        advertisementDTO.setFulfilled(AD_FULLFILLED);
+        advertisementDTO.setPetIds(AD_PET_IDS);
+        advertisementDTO.setApplication(AD_APPLICATIONS);
+        advertisementDTO.setDescription(AD_DESCRIPTION);
+        
+        AdvertisementDTO createdAd = null;
+        try {
+            createdAd = advertisementService.createAdvertisement(advertisementDTO);
+        } catch (AdvertisementException e) {
+            e.printStackTrace();
+        }
+        
+        assertNotNull(createdAd);
+        createdAd.setAdId(null);
+        try {
+            advertisementService.deleteAdvertisement(createdAd);
+        } catch (AdvertisementException e) {
+            assertEquals("Advertisement not found", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testGetAdvertisement() {
+        USER1 = userRepository.findUserByUserName(USER_NAME1);
+        PetDTO petDTO = new PetDTO();
+        
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setName(PET_NAME);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setUserName(USER_NAME1);
+        
+        PetDTO createdPet = null;
+        try {
+            createdPet = petService.createPet(petDTO);
+        } catch (PetException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(createdPet);
+        AD_PET_IDS[0] = createdPet.getId();
+        AdvertisementDTO advertisementDTO = new AdvertisementDTO();
+        advertisementDTO.setTitle(AD_TITLE);
+        advertisementDTO.setFulfilled(AD_FULLFILLED);
+        advertisementDTO.setPetIds(AD_PET_IDS);
+        advertisementDTO.setApplication(AD_APPLICATIONS);
+        advertisementDTO.setDescription(AD_DESCRIPTION);
+        
+        AdvertisementDTO createdAd = null;
+        try {
+            createdAd = advertisementService.createAdvertisement(advertisementDTO);
+        } catch (AdvertisementException e) {
+            e.printStackTrace();
+        }
+        
+        assertNotNull(createdAd);
+        AdvertisementDTO dbAd = null;
+        try {
+            dbAd = advertisementService.getAdvertisement(createdAd);
+        } catch (AdvertisementException e) {
+            e.printStackTrace();
+        }
+        
+        assertNotNull(dbAd);
+        assertEquals(createdAd.getTitle(), dbAd.getTitle());
+        assertEquals(createdAd.getDescription(), dbAd.getDescription());
+    }
+    
+    @Test
+    public void testGetWrongAdvertisement() {
+        USER1 = userRepository.findUserByUserName(USER_NAME1);
+        PetDTO petDTO = new PetDTO();
+        
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setName(PET_NAME);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setUserName(USER_NAME1);
+        
+        PetDTO createdPet = null;
+        try {
+            createdPet = petService.createPet(petDTO);
+        } catch (PetException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(createdPet);
+        AD_PET_IDS[0] = createdPet.getId();
+        AdvertisementDTO advertisementDTO = new AdvertisementDTO();
+        advertisementDTO.setTitle(AD_TITLE);
+        advertisementDTO.setFulfilled(AD_FULLFILLED);
+        advertisementDTO.setPetIds(AD_PET_IDS);
+        advertisementDTO.setApplication(AD_APPLICATIONS);
+        advertisementDTO.setDescription(AD_DESCRIPTION);
+        
+        AdvertisementDTO createdAd = null;
+        try {
+            createdAd = advertisementService.createAdvertisement(advertisementDTO);
+        } catch (AdvertisementException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(createdAd);
+        createdAd.setAdId(null);
+        try {
+            advertisementService.getAdvertisement(createdAd);
+        } catch (AdvertisementException e) {
+            assertEquals("Advertisement does not exist.", e.getMessage());
+        }
+    }
+    
+    
+    @Test
+    public void testGetAllAdvertisementByTitle() {
+        USER1 = userRepository.findUserByUserName(USER_NAME1);
+        PetDTO petDTO = new PetDTO();
+        
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setName(PET_NAME);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setUserName(USER_NAME1);
+        
+        PetDTO createdPet = null;
+        try {
+            createdPet = petService.createPet(petDTO);
+        } catch (PetException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(createdPet);
+        AD_PET_IDS[0] = createdPet.getId();
+        AdvertisementDTO advertisementDTO = new AdvertisementDTO();
+        advertisementDTO.setTitle(AD_TITLE);
+        advertisementDTO.setFulfilled(AD_FULLFILLED);
+        advertisementDTO.setPetIds(AD_PET_IDS);
+        advertisementDTO.setApplication(AD_APPLICATIONS);
+        advertisementDTO.setDescription(AD_DESCRIPTION);
+        
+        AdvertisementDTO createdAd = null;
+        try {
+            createdAd = advertisementService.createAdvertisement(advertisementDTO);
+        } catch (AdvertisementException e) {
+            e.printStackTrace();
+        }
+        
+        List<AdvertisementDTO> advertisementDTOList = advertisementService.getAdvertisementByTitle(AD_TITLE);
+        assertNotNull(createdAd);
+        assertEquals(createdAd.getTitle(), advertisementDTOList.get(0).getTitle());
+    }
+    
+    @Test
+    public void testGetAllAdvertisementNoTitle() {
+        USER1 = userRepository.findUserByUserName(USER_NAME1);
+        PetDTO petDTO = new PetDTO();
+        
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setName(PET_NAME);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setUserName(USER_NAME1);
+        
+        PetDTO createdPet = null;
+        try {
+            createdPet = petService.createPet(petDTO);
+        } catch (PetException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(createdPet);
+        AD_PET_IDS[0] = createdPet.getId();
+        AdvertisementDTO advertisementDTO = new AdvertisementDTO();
+        advertisementDTO.setTitle(AD_TITLE);
+        advertisementDTO.setFulfilled(AD_FULLFILLED);
+        advertisementDTO.setPetIds(AD_PET_IDS);
+        advertisementDTO.setApplication(AD_APPLICATIONS);
+        advertisementDTO.setDescription(AD_DESCRIPTION);
+        
+        AdvertisementDTO createdAd = null;
+        try {
+            createdAd = advertisementService.createAdvertisement(advertisementDTO);
+        } catch (AdvertisementException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(createdAd);
+        try {
+            advertisementService.getAdvertisementByTitle(null);
+        } catch (AdvertisementException e) {
+            assertEquals("No advertisement found", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testGetFindAll() {
+        USER1 = userRepository.findUserByUserName(USER_NAME1);
+        PetDTO petDTO = new PetDTO();
+        
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setName(PET_NAME);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setUserName(USER_NAME1);
+        
+        PetDTO createdPet = null;
+        try {
+            createdPet = petService.createPet(petDTO);
+        } catch (PetException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(createdPet);
+        AD_PET_IDS[0] = createdPet.getId();
+        AdvertisementDTO advertisementDTO = new AdvertisementDTO();
+        advertisementDTO.setTitle(AD_TITLE);
+        advertisementDTO.setFulfilled(AD_FULLFILLED);
+        advertisementDTO.setPetIds(AD_PET_IDS);
+        advertisementDTO.setApplication(AD_APPLICATIONS);
+        advertisementDTO.setDescription(AD_DESCRIPTION);
+        
+        AdvertisementDTO createdAd = null;
+        try {
+            createdAd = advertisementService.createAdvertisement(advertisementDTO);
+        } catch (AdvertisementException e) {
+            e.printStackTrace();
+        }
+        
+        List<AdvertisementDTO> advertisementDTOList = advertisementService.getAllAdvertisements();
+        assertNotNull(createdAd);
+        assertEquals(createdAd.getTitle(), advertisementDTOList.get(0).getTitle());
+    }
+    
+    @Test
+    public void testFindAdvertisementByPet() {
+        USER1 = userRepository.findUserByUserName(USER_NAME1);
+        PetDTO petDTO = new PetDTO();
+        
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setName(PET_NAME);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setUserName(USER_NAME1);
+        
+        PetDTO createdPet = null;
+        try {
+            createdPet = petService.createPet(petDTO);
+        } catch (PetException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(createdPet);
+        AD_PET_IDS[0] = createdPet.getId();
+        AdvertisementDTO advertisementDTO = new AdvertisementDTO();
+        advertisementDTO.setTitle(AD_TITLE);
+        advertisementDTO.setFulfilled(AD_FULLFILLED);
+        advertisementDTO.setPetIds(AD_PET_IDS);
+        advertisementDTO.setApplication(AD_APPLICATIONS);
+        advertisementDTO.setDescription(AD_DESCRIPTION);
+        
+        AdvertisementDTO createdAd = null;
+        try {
+            createdAd = advertisementService.createAdvertisement(advertisementDTO);
+        } catch (AdvertisementException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(createdAd);
+        
+        AdvertisementDTO adWithPet = null;
+        
+        try {
+            adWithPet = advertisementService.getAdvertisementByPet(createdPet.getId());
+        } catch (AdvertisementException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(adWithPet);
+        assertEquals(createdAd.getTitle(), adWithPet.getTitle());
+        assertEquals(createdAd.getDescription(), adWithPet.getDescription());
+    }
+    
+    @Test
+    public void testFindAdvertisementByPetNoPet() {
+        try {
+            advertisementService.getAdvertisementByPet(22L);
+        } catch (AdvertisementException e) {
+            assertEquals("Pet does not exist.", e.getMessage());
+        }
     }
 }
 
