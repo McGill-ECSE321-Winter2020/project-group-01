@@ -51,7 +51,7 @@ public class ForumDTO {
     }
     
     public String toString() {
-        return "Forum{" +
+        return "ForumDTO{" +
                 "title='" + title + '\'' +
                 ", id=" + id +
                 ", comments=" + comments +
