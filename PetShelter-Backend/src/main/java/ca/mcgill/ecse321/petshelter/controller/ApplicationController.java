@@ -119,13 +119,9 @@ public class ApplicationController {
 											   @RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
 		if (requester != null) {
-			ApplicationDTO application = applicationService.createApplication(applicationDTO);
 			try {
-				applicationDTO.setDescription(application.getDescription());
-				applicationDTO.setUsername(application.getUsername());
-				applicationDTO.setAdvertisementTitle(application.getAdvertisementTitle());
-				applicationDTO.setIsAccepted(application.getIsAccepted());
-				return new ResponseEntity<>(applicationDTO, HttpStatus.OK);
+				ApplicationDTO application = applicationService.createApplication(applicationDTO);
+				return new ResponseEntity<>(application, HttpStatus.OK);
 			} catch (IllegalArgumentException e) {
 				return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 			}

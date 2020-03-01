@@ -170,7 +170,8 @@ public class ApplicationService {
         applicationDTO.setUsername(application.getUser().getUserName());
         applicationDTO.setAdvertisementTitle(application.getAdvertisement().getTitle());
         applicationDTO.setIsAccepted(application.isIsAccepted());
-        applicationDTO.setAdId(application.getId());
+        applicationDTO.setAdId(application.getAdvertisement().getId());
+        applicationDTO.setAppId(application.getId());
         return applicationDTO;
     }
     
