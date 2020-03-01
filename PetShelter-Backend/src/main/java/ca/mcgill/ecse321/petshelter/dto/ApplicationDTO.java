@@ -91,16 +91,20 @@ public class ApplicationDTO {
 	public void setIsAccepted(boolean isAccepted) {
 		this.isAccepted = isAccepted;
 	}
-
-    public Long getAdId() {
-        return adId;
-    }
-
-    public void setAdId(Long adId) {
-        this.adId = adId;
-    }
-
-    public Long getAppId() {
-        return appId;
-    }
+	
+	public Long getAdId() {
+		return adId;
+	}
+	
+	public void setAdId(Long adId) {
+		this.adId = adId;
+	}
+	
+	public void setAppId(Long appId) {
+		this.appId = appId;
+	}
+	
+	public Long getAppId() {
+		return appId;
+	}
 }
