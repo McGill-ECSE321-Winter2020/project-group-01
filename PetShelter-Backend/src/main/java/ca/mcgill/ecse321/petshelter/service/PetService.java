@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class PetService {
@@ -49,12 +50,12 @@ public class PetService {
      * @return set of all pet
      */
     @Transactional
-    public Set<Pet> getPetsByUser(String userName) {
+    public Set<PetDTO> getPetsByUser(String userName) {
         User user = userRepository.findUserByUserName(userName);
         if (user == null) {
             throw new PetException("User does not exist.");
         } else {
-            return user.getPets();
+            return user.getPets().stream().map(this::petToPetDTO).collect(Collectors.toSet());
         }
     }
     
@@ -65,12 +66,12 @@ public class PetService {
      * @return list of all pets in that advertisement
      */
     @Transactional
-    public List<Pet> getPetsByAdvertisement(long adId) {
+    public List<PetDTO> getPetsByAdvertisement(long adId) {
         List<Pet> pets = petRepository.findPetByAdvertisement(advertisementRepository.findAdvertisementById(adId));
         if (pets == null) {
             throw new PetException("Advertisement does not exist.");
         } else {
-            return pets;
+            return pets.stream().map(this::petToPetDTO).collect(Collectors.toList());
         }
     }
     
@@ -111,12 +112,12 @@ public class PetService {
         pet.setGender(petDTO.getGender());
         pet.setPicture(petDTO.getPicture());
         pet.setAdvertisement(petDTO.getAdvertisement());
-        Set<Pet> allUserPets = getPetsByUser(petDTO.getUserName());
-        allUserPets.add(pet);
+        Set<PetDTO> allUserPets = getPetsByUser(petDTO.getUserName());
+        allUserPets.add(petToPetDTO(pet));
         petRepository.save(pet);
         userRepository.save(user);
         petDTO.setId(pet.getId());
-        
+    
         return petToPetDTO(pet);
     }
     //todo check if owner of the pet
