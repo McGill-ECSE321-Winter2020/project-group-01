@@ -289,26 +289,71 @@
 						"localhost"
 					],
 					"port": "8080",
-					"path": [
-						"api",
-						"user",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get all users",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "6e925581-0e9f-432e-9497-b128a5cff91c",
-						"exec": [
-							"pm.globals.get(\"AdminToken\");"
-						],
-						"type": "text/javascript"
+                  "path": [
+                    "api",
+                    "user",
+                    "login"
+                  ]
+                }
+            },
+          "response": []
+        },
+      {
+        "name": "Get user",
+        "protocolProfileBehavior": {
+          "disableBodyPruning": true
+        },
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "token",
+              "name": "Content-Type",
+              "type": "text",
+              "value": "{{AdminToken}}"
+            },
+            {
+              "key": "Content-Type",
+              "value": "{{AdminToken}}"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n\t\"email\": \"ding@mail.com\",\n    \"username\": \"Iamabaws\"\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          },
+          "url": {
+            "raw": "http://localhost:8080/api/user/Iamabaws",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "8080",
+            "path": [
+              "api",
+              "user",
+              "Iamabaws"
+            ]
+          },
+          "description": "Get all users\n"
+        },
+        "response": []
+      },
+      {
+        "name": "Get all users",
+        "event": [
+          {
+            "listen": "prerequest",
+            "script": {
+              "id": "6e925581-0e9f-432e-9497-b128a5cff91c",
+              "exec": [
+                "pm.globals.get(\"AdminToken\");"
+              ],
+              "type": "text/javascript"
 					}
 				},
 				{
@@ -414,14 +459,14 @@
 					}
 				],
 				"body": {
-					"mode": "raw",
-					"raw": "giving out my cat",
-					"options": {
-						"raw": {
-							"language": "text"
-						}
-					}
-				},
+                  "mode": "raw",
+                  "raw": "giving out my cat 321",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                },
 				"url": {
 					"raw": "http://localhost:8080/api/forum",
 					"protocol": "http",
@@ -476,10 +521,10 @@
                 "path": [
                   "api",
                   "forum",
-						"3"
-					]
-				}
-			},
+                  "3"
+                ]
+              }
+            },
 			"response": []
 		},
 		{
@@ -521,10 +566,10 @@
                 "path": [
                   "api",
                   "forum",
-						"all"
-					]
-				}
-			},
+                  "all"
+                ]
+              }
+            },
 			"response": []
 		},
 		{
@@ -577,7 +622,7 @@
                   }
                 ]
               }
-			},
+            },
 			"response": []
 		},
 		{
@@ -621,22 +666,22 @@
 					"options": {
 						"raw": {
 							"language": "text"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/forum/3",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-                  "path": [
-                    "api",
-                    "forum",
-                    "3"
-                  ]
-                }
+                        }
+                    }
+                },
+              "url": {
+                "raw": "http://localhost:8080/api/forum/3",
+                "protocol": "http",
+                "host": [
+                  "localhost"
+                ],
+                "port": "8080",
+                "path": [
+                  "api",
+                  "forum",
+                  "3"
+                ]
+              }
             },
           "response": []
         },
@@ -659,7 +704,7 @@
           ],
           "body": {
             "mode": "raw",
-            "raw": "this is my comment",
+            "raw": "this is my comment cool qwdad  qeqwe",
             "options": {
               "raw": {
                 "language": "text"
@@ -667,7 +712,7 @@
             }
           },
           "url": {
-            "raw": "http://localhost:8080/api/comment/3",
+            "raw": "http://localhost:8080/api/comment/6",
             "protocol": "http",
             "host": [
               "localhost"
@@ -676,7 +721,133 @@
             "path": [
               "api",
               "comment",
+              "6"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Get all Comments",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "token",
+              "value": "{{AdminToken}}",
+              "type": "text"
+            }
+          ],
+          "url": {
+            "raw": "http://localhost:8080/api/comment/all/3",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "8080",
+            "path": [
+              "api",
+              "comment",
+              "all",
               "3"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Get all User Comment",
+        "request": {
+          "method": "GET",
+          "header": [
+            {
+              "key": "token",
+              "type": "text",
+              "value": "{{UserToken}}"
+            }
+          ],
+          "url": {
+            "raw": "http://localhost:8080/api/comment/Iamabaws",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "8080",
+            "path": [
+              "api",
+              "comment",
+              "Iamabaws"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Update Comment",
+        "request": {
+          "method": "PUT",
+          "header": [
+            {
+              "key": "token",
+              "type": "text",
+              "value": "{{UserToken}}"
+            },
+            {
+              "key": "Content-Type",
+              "name": "Content-Type",
+              "value": "application/json",
+              "type": "text"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n\t\"id\":4,\n\t\"text\":\"This is my new comment\"\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          },
+          "url": {
+            "raw": "http://localhost:8080/api/comment/2/4",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "8080",
+            "path": [
+              "api",
+              "comment",
+              "2",
+              "4"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Delete Comment",
+        "request": {
+          "method": "DELETE",
+          "header": [
+            {
+              "key": "token",
+              "value": "{{UserToken}}",
+              "type": "text"
+            }
+          ],
+          "url": {
+            "raw": "http://localhost:8080/api/comment/2/4",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "8080",
+            "path": [
+              "api",
+              "comment",
+              "2",
+              "4"
             ]
           }
         },
@@ -693,36 +864,36 @@
                 "pm.test(\"Successful POST request\", function () {",
                 "    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);",
                 "});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "token",
-                    "value": "{{UserToken}}",
-                    "type": "text"
-                  }
-                ],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"amount\":0.06222222\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
+              ],
+              "type": "text/javascript"
+            }
+          }
+        ],
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Content-Type",
+              "name": "Content-Type",
+              "value": "application/json",
+              "type": "text"
+            },
+            {
+              "key": "token",
+              "value": "{{UserToken}}",
+              "type": "text"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n\t\"amount\":0.06222222\n}",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          },
+          "url": {
 					"raw": "http://localhost:8080/api/donation",
 					"protocol": "http",
 					"host": [
@@ -754,44 +925,44 @@
 				}
 			],
 			"request": {
-				"method": "POST",
-				"header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "value": "application/json",
-                    "type": "text"
-                  },
-                  {
-                    "key": "token",
-                    "value": "{{UserToken}}",
-                    "type": "text"
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "name": "Content-Type",
+                  "value": "application/json",
+                  "type": "text"
+                },
+                {
+                  "key": "token",
+                  "value": "{{UserToken}}",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n\t\"user\":\"Iamabaws\",\n\t\"amount\":200.66\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
                   }
-                ],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"user\":\"Iamabaws\",\n\t\"amount\":200.66\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
+                }
+              },
+              "url": {
 					"raw": "http://localhost:8080/api/donation",
 					"protocol": "http",
 					"host": [
 						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"donation"
-					]
-				}
-			},
-			"response": []
-		},
+                    ],
+                "port": "8080",
+                "path": [
+                  "api",
+                  "donation"
+                ]
+              }
+            },
+          "response": []
+        },
       {
         "name": "Get all donations Admin",
         "event": [
@@ -876,16 +1047,16 @@
             "path": [
               "api",
               "donation",
-						"all"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Find user donation",
-			"event": [
-				{
+              "all"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Find user donation",
+        "event": [
+          {
 					"listen": "test",
 					"script": {
 						"id": "fc671cb1-9bec-453e-966b-9f20b6727391",
@@ -917,10 +1088,10 @@
                 "path": [
                   "api",
                   "donation",
-						"Iamabaws"
-					]
-				}
-			},
+                  "Iamabaws"
+                ]
+              }
+            },
 			"response": []
 		},
 		{
@@ -1000,30 +1171,30 @@
 				}
 			],
 			"request": {
-				"method": "POST",
-				"header": [
-                  {
-                    "key": "Content-Type",
-                    "name": "Content-Type",
-                    "type": "text",
-                    "value": "application/json"
-                  },
-                  {
-                    "key": "token",
-                    "value": "{{UserToken}}",
-                    "type": "text"
+              "method": "POST",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "name": "Content-Type",
+                  "type": "text",
+                  "value": "application/json"
+                },
+                {
+                  "key": "token",
+                  "value": "{{UserToken}}",
+                  "type": "text"
+                }
+              ],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n\t\"userName\":\"Iamabaws\",\n\t\"oldPassword\":\"123!@#qweQWE\",\n\t\"newPassword\":\"qweQWE123!@#\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
                   }
-                ],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"userName\":\"Iamabaws\",\n\t\"oldPassword\":\"123!@#qweQWE\",\n\t\"newPassword\":\"qweQWE123!@#\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
+                }
+              },
+              "url": {
 					"raw": "http://localhost:8080/api/user/changePassword",
 					"protocol": "http",
 					"host": [
