@@ -893,6 +893,23 @@ public class TestAdvertisementService {
         }
     }
     
+    @Test
+    public void testGetNullAdvertisement() {
+        try {
+            advertisementService.getAdvertisement(null);
+        } catch (AdvertisementException e) {
+            assertEquals("Advertisement does not exist.", e.getMessage());
+        }
+    }
+    @Test
+    public void testGetAdvertisementNullId() {
+        try {
+            advertisementService.getAdvertisement(new AdvertisementDTO());
+        } catch (AdvertisementException e) {
+            assertEquals("Advertisement does not exist.", e.getMessage());
+        }
+    }
+    
     
     @Test
     public void testGetAllAdvertisementByTitle() {
