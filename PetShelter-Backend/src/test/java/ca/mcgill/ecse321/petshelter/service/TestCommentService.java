@@ -185,7 +185,7 @@ public class TestCommentService {
 			comments.add(comment);
 			return comments;
 		});
-
+		
 		// Set a reflexive return answer.
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> invocation.getArgument(0);
 		lenient().when(commentRepository.save(any(Comment.class))).thenAnswer(returnParameterAsAnswer);
@@ -292,15 +292,16 @@ public class TestCommentService {
 		CommentException thrown = assertThrows(CommentException.class, () -> commentService.deleteComment(0));
 		assertTrue(thrown.getMessage().contains("No such comment."));
 	}
-
+	
 	/**
 	 * This test verifies get all comments works.
 	 */
 	@Test
-	public void testGetAllComments() {
-		List<CommentDTO> comments = commentService.getComments();
+	public void testGetAllComments() throws CommentException {
+		Set<CommentDTO> comments = commentService.getComments(FORUM_ID);
 		assertEquals(1, comments.size()); // List contains a single element.
-		assertEquals(COMMENT_ID, comments.get(0).getId()); // List contains the only comment.
+		CommentDTO comment = (CommentDTO) comments.toArray()[0];
+		assertEquals(COMMENT_ID, comment.getId()); // List contains the only comment.
 	}
 
 	/**
