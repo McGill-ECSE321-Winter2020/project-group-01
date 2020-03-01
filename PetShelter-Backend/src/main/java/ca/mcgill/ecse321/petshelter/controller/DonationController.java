@@ -4,7 +4,6 @@ import ca.mcgill.ecse321.petshelter.dto.DonationDTO;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
-
 import ca.mcgill.ecse321.petshelter.service.DonationService;
 import ca.mcgill.ecse321.petshelter.service.extrafeatures.EmailingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +69,7 @@ public class DonationController {
 	 * @param donationDTO DTO passed by the in the request body
 	 * @return Ok if all the fields are satisfied, else Error msg
 	 */
-	@PostMapping()
+	@PostMapping("/")
 	public ResponseEntity<?> createDonation(@RequestBody DonationDTO donationDTO, @RequestHeader String token) {
 		DonationDTO donation = donationService.createDonation(donationDTO);
 		try {
