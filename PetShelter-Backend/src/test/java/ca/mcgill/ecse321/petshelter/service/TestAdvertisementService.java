@@ -895,8 +895,15 @@ public class TestAdvertisementService {
     
     @Test
     public void testGetNullAdvertisement() {
+        AdvertisementDTO advertisementDTO = new AdvertisementDTO();
+        advertisementDTO.setTitle(AD_TITLE);
+        advertisementDTO.setFulfilled(AD_FULLFILLED);
+        advertisementDTO.setPetIds(AD_PET_IDS);
+        advertisementDTO.setApplication(AD_APPLICATIONS);
+        advertisementDTO.setDescription(AD_DESCRIPTION);
+    
         try {
-            advertisementService.getAdvertisement(null);
+            advertisementService.getAdvertisement(advertisementDTO);
         } catch (AdvertisementException e) {
             assertEquals("Advertisement does not exist.", e.getMessage());
         }
