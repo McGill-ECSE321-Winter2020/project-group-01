@@ -1,35 +1,21 @@
 package ca.mcgill.ecse321.petshelter.controller;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import ca.mcgill.ecse321.petshelter.dto.AdvertisementDTO;
 import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
 import ca.mcgill.ecse321.petshelter.dto.PetDTO;
-import ca.mcgill.ecse321.petshelter.model.Application;
-import ca.mcgill.ecse321.petshelter.model.Advertisement;
-import ca.mcgill.ecse321.petshelter.model.Pet;
-import ca.mcgill.ecse321.petshelter.model.User;
-import ca.mcgill.ecse321.petshelter.model.UserType;
+import ca.mcgill.ecse321.petshelter.model.*;
 import ca.mcgill.ecse321.petshelter.repository.PetRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.AdvertisementService;
 import ca.mcgill.ecse321.petshelter.service.PetService;
 import ca.mcgill.ecse321.petshelter.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Controller that handles requests made to access, modify or delete an
@@ -85,7 +71,7 @@ public class AdvertisementController {
 		adDto.setPetIds(ids);
 		return adDto;
 	}
-
+	
 	/**
 	 * Gets the desired advertisement.
 	 *
@@ -93,7 +79,7 @@ public class AdvertisementController {
 	 * @param token The requester's token.
 	 * @return The advertisement DTO.
 	 */
-	@GetMapping("/{id}")
+	@GetMapping("/id/{id}")
 	public ResponseEntity<?> getAdvertisement(@PathVariable(required = true) Long id, @RequestHeader String token) {
 		AdvertisementDTO ad = advertisementService.getAdvertisementById(id);
 		User requester = userRepository.findUserByApiToken(token); // make sure the requester is logged in
@@ -103,7 +89,7 @@ public class AdvertisementController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
 	/**
 	 * Get all advertisements with a specific title.
 	 *
@@ -111,8 +97,8 @@ public class AdvertisementController {
 	 * @param token The requester's token.
 	 * @return The list of all advertisements with this title.
 	 */
-	@GetMapping("/advertisements/{title}")
-	public ResponseEntity<?> getAdvertisementByTitle(@PathVariable String title, @RequestHeader String token) {
+	@GetMapping("/title")
+	public ResponseEntity<?> getAdvertisementByTitle(@RequestBody String title, @RequestHeader String token) {
 		List<AdvertisementDTO> ads = advertisementService.getAdvertisementByTitle(title);
 		User requester = userRepository.findUserByApiToken(token);
 		if (requester != null) { // make sure the requester is logged in
@@ -147,25 +133,24 @@ public class AdvertisementController {
 		} else
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
-
+	
 	/**
 	 * Create new advertisement.
 	 *
-	 * @param title The title of the advertisement to create.
-	 * @param token The session token of the user.
+	 * @param advertisementDTO dto
+	 * @param token            The session token of the user.
 	 * @return The created advertisement.
 	 */
 	@PostMapping("/{petId}/newAd")
-	public ResponseEntity<?> createAdvertisement(@PathVariable(required = true) long petId, @RequestBody String title,
-			String description, @RequestHeader String token) {
+	public ResponseEntity<?> createAdvertisement(@PathVariable(required = true) long petId, @RequestBody AdvertisementDTO advertisementDTO, @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
 		Pet pet = petRepository.findPetById(petId);
 		boolean isOwner = user.getPets().contains(pet);
-		if (user != null && isOwner && title != null && !title.trim().equals("") && description != null
-				&& !description.trim().equals("")) {
-			List<Long> petIds = new ArrayList<Long>();
-			petIds.add(petId);
-			AdvertisementDTO adDto = createAdDto(title, false, petIds, new HashSet<Application>(), description);
+		if (user != null && isOwner && advertisementDTO.getTitle() != null && !advertisementDTO.getTitle().trim().equals("") && advertisementDTO.getDescription() != null
+				&& !advertisementDTO.getDescription().trim().equals("")) {
+			Long[] petIds = new Long[1];
+			petIds[0] = petId;
+			AdvertisementDTO adDto = createAdDto(advertisementDTO.getTitle(), false, petIds, new HashSet<Application>(), advertisementDTO.getDescription());
 			adDto = advertisementService.createAdvertisement(adDto);
 			if (adDto != null) {
 				return new ResponseEntity<>(adDto, HttpStatus.CREATED);
@@ -176,35 +161,33 @@ public class AdvertisementController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
 	/**
 	 * Update an advertisement.
 	 *
-
-	 * @param adID The ID of the advertisement to update.
 	 * @param advertisementDTO The advertisement DTO containing the information to change.
-	 * @param token The user session token.
+	 * @param token            The user session token.
 	 * @return The modified advertisement as a DTO.
 	 */
-	@PutMapping
-	public ResponseEntity<?> updateAd(@PathVariable long adID,
-									  @RequestBody AdvertisementDTO advertisementDTO,
-									  @RequestBody String token) {
+	@PutMapping("/")
+	public ResponseEntity<?> updateAd(@RequestBody AdvertisementDTO advertisementDTO,
+									  @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
-		AdvertisementDTO advertisementOld = advertisementService.getAdvertisementById(adID);
-		if ( user != null // Check if user an advert exist and if user can modify it.
+		AdvertisementDTO advertisementOld = advertisementService.getAdvertisementById(advertisementDTO.getAdId());
+		if (user != null // Check if user an advert exist and if user can modify it.
 				&& advertisementOld != null
-				&& hasRightsForAd(user, advertisementOld)
+				//	&& hasRightsForAd(user, advertisementOld) this needs to be fixed later on THIS ALSO NEEDS TO BE FIXED
 				&& advertisementDTO.getTitle() != null // Check if the new title is valid.
-				&& !advertisementDTO.getTitle().trim().equals("") )
-		{
+				&& !advertisementDTO.getTitle().trim().equals("")) {
 			// Converts all the pets of the user to a set of their IDs.
 			Set<Long> petsID = petService.getPetsByUser(user.getUserName()).stream()
 					.map(PetDTO::getId)
 					.collect(Collectors.toSet());
+			
 			// Then verify if the pets of the new advertisement are contained in that set.
-			if (petsID.containsAll(Arrays.asList(advertisementDTO.getPetIds()))) {
-				advertisementDTO.setAdId(adID); // Make sure the advertisement ID remains the same.
+			
+			if (petsID.containsAll(Arrays.asList(advertisementDTO.getPetIds()))) { //this doesnt work either, CANT just cast like this
+				advertisementDTO.setAdId(advertisementDTO.getAdId()); // Make sure the advertisement ID remains the same.
 				return new ResponseEntity<AdvertisementDTO>(
 						advertisementService.editAdvertisement(advertisementDTO),
 						HttpStatus.OK
@@ -249,13 +232,13 @@ public class AdvertisementController {
 		applicationDTO.setAdvertisementTitle(application.getAdvertisement().getTitle());
 		applicationDTO.setIsAccepted(application.isIsAccepted());
 		applicationDTO.appId = application.getId();
-
+		
 		return applicationDTO;
 	}
-
+	
 	/**
 	 * Creates an advertisement dto.
-	 * 
+	 *
 	 * @param title
 	 * @param isfulfilled
 	 * @param aD_PET_IDS
@@ -263,14 +246,14 @@ public class AdvertisementController {
 	 * @param description
 	 * @return
 	 */
-	private AdvertisementDTO createAdDto(String title, boolean isfulfilled, List<Long> aD_PET_IDS,
-			Set<Application> adoptionApplication, String description) {
+	private AdvertisementDTO createAdDto(String title, boolean isfulfilled, Long[] aD_PET_IDS,
+										 Set<Application> adoptionApplication, String description) {
 		AdvertisementDTO dto = new AdvertisementDTO();
 		dto.setApplication(adoptionApplication);
 		dto.setDescription(description);
 		dto.setTitle(title);
 		dto.setFulfilled(isfulfilled);
-		dto.setPetIds((Long[]) aD_PET_IDS.toArray());
+		dto.setPetIds(aD_PET_IDS);
 		return dto;
 	}
 
