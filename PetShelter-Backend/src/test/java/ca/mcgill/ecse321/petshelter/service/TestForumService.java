@@ -1,6 +1,8 @@
 package ca.mcgill.ecse321.petshelter.service;
 
+import ca.mcgill.ecse321.petshelter.dto.CommentDTO;
 import ca.mcgill.ecse321.petshelter.dto.ForumDTO;
+import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.Comment;
 import ca.mcgill.ecse321.petshelter.model.Forum;
 import ca.mcgill.ecse321.petshelter.model.User;
@@ -94,16 +96,20 @@ public class TestForumService {
                 user.setUserName(USER_NAME);
                 user.setEmail(USER_EMAIL);
                 user.setPassword(USER_PASSWORD);
+
                 Set<User> subscribers = new HashSet<>();
                 subscribers.add(user);
+
                 Comment comment = new Comment();
                 comment.setTime(COMMENT_TIME);
                 comment.setDatePosted(COMMENT_DATE);
                 comment.setId(COMMENT_ID);
                 comment.setText(COMMENT_TEXT);
                 comment.setUser(user);
+
                 Set<Comment> comments = new HashSet<>();
                 comments.add(comment);
+
                 Forum forum = new Forum();
                 forum.setId(FORUM_ID);
                 forum.setTitle(FORUM_TITLE);
@@ -111,6 +117,7 @@ public class TestForumService {
                 forum.setComments(comments);
                 forum.setLocked(false);
                 forum.setSubscribers(subscribers);
+
                 return Optional.of(forum);
             } else if (invocation.getArgument(0).equals(FORUM_LOCKED_ID)) {
                 User user = new User();
@@ -118,8 +125,48 @@ public class TestForumService {
                 user.setUserName(USER_NAME);
                 user.setEmail(USER_EMAIL);
                 user.setPassword(USER_PASSWORD);
+
                 Set<User> subscribers = new HashSet<>();
                 subscribers.add(user);
+
+                Comment comment = new Comment();
+                comment.setTime(COMMENT_TIME);
+                comment.setDatePosted(COMMENT_DATE);
+                comment.setId(COMMENT_ID);
+                comment.setText(COMMENT_TEXT);
+                comment.setUser(user);
+
+                Set<Comment> comments = new HashSet<>();
+                comments.add(comment);
+
+                Forum forum = new Forum();
+                forum.setId(FORUM_LOCKED_ID);
+                forum.setTitle(FORUM_TITLE);
+                forum.setAuthor(user);
+                forum.setComments(comments);
+                forum.setLocked(true);
+                forum.setSubscribers(subscribers);
+
+                return Optional.of(forum);
+            } else {
+                return Optional.empty();
+            }
+        });
+
+        lenient().when(forumRepository.findForumsByAuthor(any(User.class))).thenAnswer((InvocationOnMock invocation) -> {
+            if (((User)invocation.getArgument(0)).getId() == (USER_ID)) {
+                // Create user.
+                User user = new User();
+                user.setId(USER_ID);
+                user.setUserName(USER_NAME);
+                user.setEmail(USER_EMAIL);
+                user.setPassword(USER_PASSWORD);
+
+                // Create subscribers.
+                Set<User> subscribers = new HashSet<>();
+                subscribers.add(user);
+
+                // Create comments.
                 Comment comment = new Comment();
                 comment.setTime(COMMENT_TIME);
                 comment.setDatePosted(COMMENT_DATE);
@@ -128,16 +175,31 @@ public class TestForumService {
                 comment.setUser(user);
                 Set<Comment> comments = new HashSet<>();
                 comments.add(comment);
+
+                // Create forums.
                 Forum forum = new Forum();
-                forum.setId(FORUM_LOCKED_ID);
+                forum.setId(FORUM_ID);
                 forum.setTitle(FORUM_TITLE);
                 forum.setAuthor(user);
                 forum.setComments(comments);
-                forum.setLocked(true);
+                forum.setLocked(false);
                 forum.setSubscribers(subscribers);
-                return Optional.of(forum);
+
+                Forum forum2 = new Forum();
+                forum2.setId(FORUM_LOCKED_ID);
+                forum2.setTitle(FORUM_TITLE);
+                forum2.setAuthor(user);
+                forum2.setComments(comments);
+                forum2.setLocked(true);
+                forum2.setSubscribers(subscribers);
+
+                List<Forum> forums = new ArrayList<>();
+                forums.add(forum);
+                forums.add(forum2);
+
+                return forums;
             } else {
-                return Optional.empty();
+                return new ArrayList<ForumDTO>();
             }
         });
 
@@ -203,32 +265,39 @@ public class TestForumService {
             user.setUserName(USER_NAME);
             user.setEmail(USER_EMAIL);
             user.setPassword(USER_PASSWORD);
+
             Set<User> subscribers = new HashSet<>();
             subscribers.add(user);
+
             Comment comment = new Comment();
             comment.setTime(COMMENT_TIME);
             comment.setDatePosted(COMMENT_DATE);
             comment.setId(COMMENT_ID);
             comment.setText(COMMENT_TEXT);
             comment.setUser(user);
+
             Set<Comment> comments = new HashSet<>();
             comments.add(comment);
+
             Forum forum1 = new Forum();
             forum1.setId(FORUM_ID);
             forum1.setAuthor(user);
             forum1.setComments(comments);
             forum1.setLocked(false);
             forum1.setSubscribers(subscribers);
+
             Forum forum2 = new Forum();
             forum2.setId(FORUM_LOCKED_ID);
             forum2.setAuthor(user);
             forum2.setComments(comments);
             forum2.setLocked(true);
             forum2.setSubscribers(subscribers);
+
             List<Forum> forums = new ArrayList<>();
             forums.add(forum1);
             forums.add(forum2);
-            return comments;
+
+            return forums;
         });
 
         // Set a reflexive return answer.
@@ -254,7 +323,7 @@ public class TestForumService {
             assertEquals(USER_NAME, forumDTO.getAuthor().getUsername());
             assertEquals(FORUM_TITLE, forumDTO.getTitle());
             assertTrue(forumDTO.getSubscribers().stream()
-                    .map(u -> u.getUsername())
+                    .map(UserDTO::getUsername)
                     .collect(Collectors.toSet())
                     .contains(USER_NAME)
             );
@@ -269,7 +338,21 @@ public class TestForumService {
     @Test
     public void testDeleteForum() {
         try {
-            forumService.deleteForum(FORUM_ID);
+            ForumDTO forumDTO = forumService.deleteForum(FORUM_ID);
+            assertEquals(FORUM_ID, forumDTO.getId());
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    /**
+     * Test that no exception are encountered when deleting a forum that doesn't exist.
+     */
+    @Test
+    public void testDeleteMissingForum() {
+        try {
+            ForumDTO forumDTO = forumService.deleteForum(0);
+            assertNull(forumDTO);
         } catch (Exception e) {
             fail(e.getMessage());
         }
@@ -282,7 +365,7 @@ public class TestForumService {
     public void testLockForum() {
         try {
             ForumDTO forumDTO = forumService.lockForum(FORUM_ID);
-            assertEquals(true, forumDTO.isLocked());
+            assertTrue(forumDTO.isLocked());
         } catch (Exception e) {
             fail(e.getMessage());
         }
@@ -305,7 +388,7 @@ public class TestForumService {
     public void testUnlockForum() {
         try {
             ForumDTO forumDTO = forumService.unlockForum(FORUM_LOCKED_ID);
-            assertEquals(false, forumDTO.isLocked());
+            assertFalse(forumDTO.isLocked());
         } catch (Exception e) {
             fail(e.getMessage());
         }
@@ -329,12 +412,12 @@ public class TestForumService {
         try {
             ForumDTO forumDTO = forumService.subscribeTo(FORUM_ID, USER_ID_2);
             assertTrue(forumDTO.getSubscribers().stream()
-                    .map(u -> u.getUsername())
+                    .map(UserDTO::getUsername)
                     .collect(Collectors.toSet())
                     .contains(USER_NAME)
             );
             assertTrue(forumDTO.getSubscribers().stream()
-                    .map(u -> u.getUsername())
+                    .map(UserDTO::getUsername)
                     .collect(Collectors.toSet())
                     .contains(USER_NAME_2)
             );
@@ -371,7 +454,7 @@ public class TestForumService {
         try {
             ForumDTO forumDTO = forumService.unsubscribeFrom(FORUM_ID, USER_ID);
             assertFalse(forumDTO.getSubscribers().stream()
-                    .map(u -> u.getUsername())
+                    .map(UserDTO::getUsername)
                     .collect(Collectors.toSet())
                     .contains(USER_NAME)
             );
@@ -388,16 +471,6 @@ public class TestForumService {
         ForumException thrown = assertThrows(ForumException.class,
                 () -> forumService.unsubscribeFrom(0, USER_ID));
         assertTrue(thrown.getMessage().contains("No such forum thread."));
-    }
-
-    /**
-     * Test that unsubscription fails when using an user that doesn't exists.
-     */
-    @Test
-    public void testForumUnsubscribeMissingUser() {
-        ForumException thrown = assertThrows(ForumException.class,
-                () -> forumService.unsubscribeFrom(FORUM_ID, 0));
-        assertTrue(thrown.getMessage().contains("No such user."));
     }
 
     /**
@@ -433,12 +506,12 @@ public class TestForumService {
         try {
             List<ForumDTO> forumDTOS = forumService.getAllForum();
             assertTrue(forumDTOS.stream()
-                    .map(f -> f.getId())
+                    .map(ForumDTO::getId)
                     .collect(Collectors.toSet())
                     .contains(FORUM_ID)
             );
             assertTrue(forumDTOS.stream()
-                    .map(f -> f.getId())
+                    .map(ForumDTO::getId)
                     .collect(Collectors.toSet())
                     .contains(FORUM_LOCKED_ID)
             );
@@ -455,7 +528,7 @@ public class TestForumService {
         try {
             ForumDTO forumDTO = forumService.getForumWithID(FORUM_ID);
             assertEquals(FORUM_ID, forumDTO.getId());
-            assertEquals(USER_ID, forumDTO.getAuthor().getUsername());
+            assertEquals(USER_NAME, forumDTO.getAuthor().getUsername());
             assertEquals(FORUM_TITLE, forumDTO.getTitle());
         } catch (Exception e) {
             fail(e.getMessage());
@@ -470,6 +543,40 @@ public class TestForumService {
         ForumException thrown = assertThrows(ForumException.class,
                 () -> forumService.getForumWithID((long) 0));
         assertTrue(thrown.getMessage().contains("Forum not found"));
+    }
+
+    /**
+     * Test that finding forum by user works.
+     */
+    @Test
+    public void testGetForumByUser() {
+        try {
+            List<ForumDTO> forumDTOS = forumService.getForumsByUser(USER_ID);
+            assertTrue(
+                    forumDTOS.stream()
+                            .map(ForumDTO::getId)
+                            .collect(Collectors.toSet())
+                            .contains(FORUM_ID)
+            );
+            assertTrue(
+                    forumDTOS.stream()
+                            .map(ForumDTO::getId)
+                            .collect(Collectors.toSet())
+                            .contains(FORUM_LOCKED_ID)
+            );
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    /**
+     * Test that finding forum by an user that doesn't exists fails.
+     */
+    @Test
+    public void testGetForumByMissingUser() {
+        ForumException thrown = assertThrows(ForumException.class,
+                () -> forumService.getForumsByUser((long) 0));
+        assertTrue(thrown.getMessage().contains("No such user."));
     }
 
     /**
@@ -502,7 +609,7 @@ public class TestForumService {
             forum.setLocked(false);
             forum.setSubscribers(subscribers);
 
-            // Convert forum.
+            // Convert.
             ForumDTO forumDTO = forumService.forumToDTO(forum);
 
             // Test values.
@@ -510,18 +617,19 @@ public class TestForumService {
             assertEquals(USER_NAME, forumDTO.getAuthor().getUsername());
             assertTrue(
                     forumDTO.getComments().stream()
-                            .map(c -> c.getText())
+                            .map(CommentDTO::getText)
                             .collect(Collectors.toSet())
                             .contains(COMMENT_TEXT)
             );
             assertTrue(
                     forumDTO.getSubscribers().stream()
-                            .map(c -> c.getUsername())
+                            .map(UserDTO::getUsername)
                             .collect(Collectors.toSet())
                             .contains(USER_NAME)
             );
         } catch (Exception e) {
             fail(e.getMessage());
         }
+
     }
 }
