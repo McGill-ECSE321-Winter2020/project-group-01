@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.petshelter.service;
 
+import ca.mcgill.ecse321.petshelter.dto.CommentDTO;
 import ca.mcgill.ecse321.petshelter.model.Comment;
 import ca.mcgill.ecse321.petshelter.model.Forum;
 import ca.mcgill.ecse321.petshelter.model.User;
@@ -7,7 +8,6 @@ import ca.mcgill.ecse321.petshelter.repository.CommentRepository;
 import ca.mcgill.ecse321.petshelter.repository.ForumRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.exception.CommentException;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,8 +26,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
@@ -181,7 +181,7 @@ public class TestCommentService {
 			comment.setId(COMMENT_ID);
 			comment.setText(COMMENT_TEXT);
 			comment.setUser(user);
-			List<Comment> comments = new ArrayList<Comment>();
+			List<Comment> comments = new ArrayList<>();
 			comments.add(comment);
 			return comments;
 		});
@@ -198,11 +198,10 @@ public class TestCommentService {
 	 */
 	@Test
 	public void testAddComment() {
-		;
-		Comment comment;
+		CommentDTO comment;
 		try {
 			comment = commentService.addComment(COMMENT_TEXT, FORUM_ID, USER_ID);
-			assertEquals(USER_ID, comment.getUser().getId());
+			assertEquals(USER_NAME, comment.getUsername());
 			assertEquals(0, comment.getId());
 			assertEquals(COMMENT_TEXT, comment.getText());
 		} catch (CommentException e) {
@@ -246,7 +245,7 @@ public class TestCommentService {
 	@Test
 	public void testCommentUpdate() {
 		String newText = "This is an updated comment text.";
-		Comment comment;
+		CommentDTO comment;
 		try {
 			comment = commentService.updateComment(COMMENT_ID, newText);
 			assertEquals(newText, comment.getText());
@@ -272,16 +271,16 @@ public class TestCommentService {
 	 */
 	@Test
 	public void testCommentDelete() {
-		Comment comment;
+		CommentDTO comment;
 		try {
 			comment = commentService.deleteComment(COMMENT_ID);
-			assertEquals(USER_ID, comment.getUser().getId());
+			assertEquals(USER_NAME, comment.getUsername());
 			assertEquals(COMMENT_ID, comment.getId());
 			assertEquals(COMMENT_TEXT, comment.getText());
 		} catch (CommentException e) {
 			fail();
 		}
-
+		
 	}
 
 	/**
@@ -299,7 +298,7 @@ public class TestCommentService {
 	 */
 	@Test
 	public void testGetAllComments() {
-		List<Comment> comments = commentService.getComments();
+		List<CommentDTO> comments = commentService.getComments();
 		assertEquals(1, comments.size()); // List contains a single element.
 		assertEquals(COMMENT_ID, comments.get(0).getId()); // List contains the only comment.
 	}
@@ -309,13 +308,13 @@ public class TestCommentService {
 	 */
 	@Test
 	public void testGetUserComments() {
-		List<Comment> comments;
+		List<CommentDTO> comments;
 		try {
 			comments = commentService.getCommentsByUser(USER_ID);
-
+			
 			assertEquals(1, comments.size()); // List contains a single element.
 			assertEquals(COMMENT_ID, comments.get(0).getId()); // List contains the correct comment.
-			assertEquals(USER_ID, comments.get(0).getUser().getId()); // Comment has the correct author.
+			assertEquals(USER_NAME, comments.get(0).getUsername()); // Comment has the correct author.
 		} catch (CommentException e) {
 			fail();
 		}

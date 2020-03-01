@@ -1,8 +1,6 @@
 package ca.mcgill.ecse321.petshelter.controller;
 
-import ca.mcgill.ecse321.petshelter.dto.CommentDTO;
 import ca.mcgill.ecse321.petshelter.dto.ForumDTO;
-import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.Comment;
 import ca.mcgill.ecse321.petshelter.model.Forum;
 import ca.mcgill.ecse321.petshelter.model.User;
@@ -15,8 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -33,26 +33,6 @@ public class ForumController {
 	ForumService forumService;
 
 	/**
-	 * Convert a forum thread to a forum DTO.
-	 *
-	 * @param forum The forum to convert.
-	 * @return A forum DTO.
-	 */
-	static ForumDTO forumToDto(Forum forum) {
-		ForumDTO forumDTO = new ForumDTO();
-		Set<UserDTO> subscribers = new HashSet<UserDTO>();
-		Set<CommentDTO> comments = new HashSet<CommentDTO>();
-		forum.getSubscribers().forEach(u -> subscribers.add(UserController.userToDto(u)));
-		forum.getComments().forEach(c -> comments.add(CommentController.commentToDto(c)));
-		forumDTO.setId(forum.getId());
-		forumDTO.setTitle(forum.getTitle());
-		forumDTO.setComments(comments);
-		forumDTO.setSubscribers(subscribers);
-		forumDTO.setAuthor(UserController.userToDto(forum.getAuthor()));
-		return forumDTO;
-	}
-
-	/**
 	 * Gets the desired forum and its associated comments.
 	 *
 	 * @param id Forum ID of the desired forum.
@@ -61,9 +41,10 @@ public class ForumController {
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getForum(@PathVariable(required = true) Long id, @RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
-		Optional<Forum> forum = forumRepository.findById(id);
+		ForumDTO forumDTO = forumService.getForumWithID(id);
 		if (forum.isPresent() && requester != null) {
-			return new ResponseEntity<>(forumToDto(forum.get()), HttpStatus.OK);
+			return new ResponseEntity<>(forumDTO, HttpStatus.OK);
+
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -77,11 +58,11 @@ public class ForumController {
 	 * @return The list of all forums of a user.
 	 */
 	@GetMapping("/forums/{username}")
+
 	public ResponseEntity<?> getUserForums(@PathVariable String username, @RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
 		if (requester != null) {
-			List<ForumDTO> forums = forumService.getForumsByUser(userRepository.findUserByUserName(username).getId())
-					.stream().map(ForumController::forumToDto).collect(Collectors.toList());
+			List<ForumDTO> forums = forumService.getForumsByUser(userRepository.findUserByUserName(username).getId());
 			return new ResponseEntity<>(forums, HttpStatus.OK);
 		} else
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -93,20 +74,14 @@ public class ForumController {
 	 * @return List of all existing forum threads.
 	 */
 	@GetMapping("/all")
+
 	public ResponseEntity<?> getAllForums(@RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
 		if(requester == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		List<Forum> forums = new ArrayList<>();
-		List<ForumDTO> forumsDto = new ArrayList<>();
-		Iterable<Forum> usersIterable = forumRepository.findAll();
-		usersIterable.forEach(forums::add);
-		// Convert the forums into forumdtos
-		for (Forum f : forums) {
-			forumsDto.add(forumToDto(f));
-		}
-		return new ResponseEntity<>(forumsDto, HttpStatus.OK);
+		return new ResponseEntity<>(forumService.getAllForum(), HttpStatus.OK);
+
 	}
 
 	/**
@@ -120,8 +95,7 @@ public class ForumController {
 	public ResponseEntity<?> createForum(@RequestBody String title, @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
 		if (user != null && title != null && !title.trim().equals("")) {
-			Forum forum = forumService.addForum(title, user);
-			return new ResponseEntity<>(forumToDto(forum), HttpStatus.CREATED);
+			return new ResponseEntity<>(forumService.addForum(title, user), HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -144,8 +118,8 @@ public class ForumController {
 				&& oldForum.get().getAuthor().getId() == user.getId() // Check if the issuing user is the author.
 				&& title != null // Check if the new title is valid.
 				&& !title.trim().equals("")) {
-			Forum forum = forumService.updateForum(forumId, title);
-			return new ResponseEntity<ForumDTO>(forumToDto(forum), HttpStatus.OK);
+			ForumDTO forum = forumService.updateForum(forumId, title);
+			return new ResponseEntity<ForumDTO>(forum, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -165,13 +139,13 @@ public class ForumController {
 			@RequestBody Boolean isLocked) {
 		User user = userRepository.findUserByApiToken(token);
 		if (user != null && user.getUserType() == UserType.ADMIN) {
-			Forum forum;
+			ForumDTO forum;
 			if (isLocked) {
 				forum = forumService.lockForum(forumID);
 			} else {
 				forum = forumService.unlockForum(forumID);
 			}
-			return new ResponseEntity<ForumDTO>(forumToDto(forum), HttpStatus.OK);
+			return new ResponseEntity<ForumDTO>(forum, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -215,8 +189,8 @@ public class ForumController {
 		User user = userRepository.findUserByApiToken(token);
 		Optional<Forum> forum = forumRepository.findById(forumID);
 		if (user != null && forum.isPresent()) {
-			Forum newForum = forumService.subscribeTo(forumID, user.getId());
-			return new ResponseEntity<ForumDTO>(forumToDto(newForum), HttpStatus.OK);
+			ForumDTO newForum = forumService.subscribeTo(forumID, user.getId());
+			return new ResponseEntity<ForumDTO>(newForum, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -234,8 +208,8 @@ public class ForumController {
 		User user = userRepository.findUserByApiToken(token);
 		Optional<Forum> forum = forumRepository.findById(forumID);
 		if (user != null && forum.isPresent()) {
-			Forum newForum = forumService.unsubscribeFrom(forumID, user.getId());
-			return new ResponseEntity<ForumDTO>(forumToDto(newForum), HttpStatus.OK);
+			ForumDTO newForum = forumService.unsubscribeFrom(forumID, user.getId());
+			return new ResponseEntity<ForumDTO>(newForum, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}

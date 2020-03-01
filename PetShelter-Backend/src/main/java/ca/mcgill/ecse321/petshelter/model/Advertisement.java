@@ -10,42 +10,41 @@ public class Advertisement {
 	public void setDescription(String value) {
 		this.description = value;
 	}
-
-	public String getDescription() {
-		return this.description;
-	}
-
-	private long id;
-
-	public void setId(long value) {
-		this.id = value;
-	}
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	public long getId() {
-		return this.id;
-	}
-
-	private boolean isFulfilled;
-
-	public void setIsFulfilled(boolean value) {
-		this.isFulfilled = value;
-	}
-
-	public boolean isIsFulfilled() {
-		return this.isFulfilled;
-	}
     
-    private Set<AdoptionApplication> adoptionApplication;
-    
-    @OneToMany(mappedBy = "advertisement")
-    public Set<AdoptionApplication> getAdoptionApplication() {
-        return this.adoptionApplication;
+    public String getDescription() {
+        return this.description;
     }
     
-    public void setAdoptionApplication(Set<AdoptionApplication> adoptionApplications) {
-        this.adoptionApplication = adoptionApplications;
+    private long id;
+    
+    public void setId(long value) {
+        this.id = value;
+    }
+    
+    private boolean isFulfilled;
+    private Set<Application> application;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public long getId() {
+        return this.id;
+    }
+    
+    public boolean isIsFulfilled() {
+        return this.isFulfilled;
+    }
+    
+    public void setIsFulfilled(boolean value) {
+        this.isFulfilled = value;
+    }
+    
+    @OneToMany(mappedBy = "advertisement")
+    public Set<Application> getApplication() {
+        return this.application;
+    }
+    
+    public void setApplication(Set<Application> applications) {
+        this.application = applications;
     }
     
     
@@ -65,7 +64,7 @@ public class Advertisement {
                 "description='" + description + '\'' +
                 ", id=" + id +
                 ", isFulfilled=" + isFulfilled +
-                ", adoptionApplication=" + adoptionApplication +
+                ", adoptionApplication=" + application +
                 ", title='" + title + '\'' +
                 '}';
     }
