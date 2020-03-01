@@ -90,7 +90,7 @@ public class TestUserService {
 				User user = new User();
 				user.setUserName(USER_NAME);
 				user.setEmail(USER_EMAIL);
-				user.setPassword(USER_PASSWORD);
+				user.setPassword(passwordEncoder.encode(USER_PASSWORD));
 				return user;
 			} else {
 				return null;
