@@ -196,7 +196,7 @@ public class UserController {
         User requester = userRepo.findUserByApiToken(token);
         // find a user by username
         User user = userRepo.findUserByUserName(username);
-        if (requester != null && user != null
+        if ((requester != null && user != null)
                 && (requester.getUserType().equals(UserType.ADMIN) || requester.getUserName().equals(username))) {
             return new ResponseEntity<>(userToDto(user), HttpStatus.OK);
             // if the user making the request is not an admin or the one we are searching

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -34,16 +35,17 @@ public class CommentController {
 	 * Get all the comments in the database and return them. Only the admin may get
 	 * those.
 	 *
+	 * @param threadID
+	 * @param token    admin's token
 	 * @return The list of all comments.
 	 */
-	@GetMapping("/all")
-	public ResponseEntity<?> getAllComments(@RequestHeader String token) {
+	@GetMapping("/all/{threadID}")
+	public ResponseEntity<?> getAllComments(@RequestHeader String token, @PathVariable long threadID) throws CommentException {
 		User requester = userRepository.findUserByApiToken(token);
-		if(requester!=null && requester.getUserType().equals(UserType.ADMIN)) {
-			List<CommentDTO> comments = commentService.getComments();
+		if (requester != null && requester.getUserType().equals(UserType.ADMIN)) {
+			Set<CommentDTO> comments = commentService.getComments(threadID);
 			return new ResponseEntity<>(comments, HttpStatus.OK);
-		}
-		else {
+		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
