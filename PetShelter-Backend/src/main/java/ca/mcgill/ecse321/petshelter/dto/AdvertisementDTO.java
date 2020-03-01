@@ -12,15 +12,8 @@ public class AdvertisementDTO {
     private Set<Application> application;
     private Long adId;
     
+    public AdvertisementDTO() {
     
-    public AdvertisementDTO(String title, boolean isfullfilled, long[] petIds, Long adId, Set<Application> application,
-                            String des) {
-        this.title = title;
-        this.description = des;
-        this.isFulfilled = isfullfilled;
-        this.petIds = petIds;
-        this.application.addAll(application);
-        adId = null;
     }
     
     
