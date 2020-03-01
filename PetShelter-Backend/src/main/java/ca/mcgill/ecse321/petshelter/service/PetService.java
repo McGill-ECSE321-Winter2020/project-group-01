@@ -26,21 +26,6 @@ public class PetService {
     @Autowired
     private AdvertisementRepository advertisementRepository;
     
-    /**
-     * Finds pet by id
-     *
-     * @param petId id of the pet
-     * @return pet object
-     */
-    @Transactional
-    public Pet getPet(long petId) {
-        Pet pet = petRepository.findPetById(petId);
-        if (pet == null) {
-            throw new PetException("Pet does not exist.");
-        } else {
-            return pet;
-        }
-    }
     
     /**
      * finds pet with the DTO
@@ -154,13 +139,11 @@ public class PetService {
      */
     @Transactional
     public Pet editPet(PetDTO petDTO) {
-        System.out.println("PET EDIT");
-        System.out.println(petDTO);
-        System.out.println(petDTO.getId());
-        Pet pet = petRepository.findPetById(petDTO.getId());
-        if (pet == null) {
+        if (petDTO.getId() == null) {
             throw new PetException("Cannot edit: Pet does not exist.");
         }
+        Pet pet = petRepository.findPetById(petDTO.getId());
+    
         if (petDTO.getName() == null || petDTO.getName().trim().equals("")) {
             throw new PetException("Cannot edit: A pet needs a name.");
         }
@@ -220,10 +203,10 @@ public class PetService {
      */
     @Transactional
     public boolean deletePet(PetDTO petDTO) {
-        Pet pet = petRepository.findPetById(petDTO.getId());
-        if (pet == null) {
+        if (petDTO.getId() == null) {
             throw new PetException("Cannot delete: Pet does not exist.");
         } else {
+            Pet pet = petRepository.findPetById(petDTO.getId());
             petRepository.delete(pet);
             return true;
         }

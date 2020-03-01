@@ -22,8 +22,7 @@ import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.lenient;
 
@@ -102,7 +101,6 @@ public class TestPetService {
                 return null;
             }
         });
-        
         
         lenient().when(userRepository.findUserByPets(any())).thenAnswer((InvocationOnMock invocation) -> {
             if (invocation.getArgument(0) instanceof Pet) {
@@ -440,7 +438,7 @@ public class TestPetService {
         petUpdateDTO.setSpecies(PET_SPECIES_UPDATE);
         petUpdateDTO.setUserName(USER_NAME);
         petUpdateDTO.setId(oldPet.getId());
-        
+    
         try {
             petService.editPet(petUpdateDTO);
         } catch (PetException e) {
@@ -448,4 +446,222 @@ public class TestPetService {
         }
     }
     
+    @Test
+    public void testEditPetNoNewOwner() {
+        
+        //creates pet
+        PetDTO petDTO = new PetDTO();
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setName(PET_NAME);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setUserName(USER_NAME);
+        
+        Pet oldPet = petService.createPet(petDTO);
+        
+        assertEquals(PET_NAME, oldPet.getName());
+        
+        //update the pet
+        PetDTO petUpdateDTO = new PetDTO();
+        petUpdateDTO.setBreed(PET_BREED_UPDATE);
+        petUpdateDTO.setDateOfBirth(PET_DOB_UPDATE);
+        petUpdateDTO.setDescription(PET_DESCRIPTION_UPDATE);
+        petUpdateDTO.setGender(PET_GENDER_UPDATE);
+        petUpdateDTO.setName(PET_NAME_UPDATE);
+        petUpdateDTO.setPicture(PET_PICTURE_UPDATE);
+        petUpdateDTO.setSpecies(PET_SPECIES_UPDATE);
+        //  petUpdateDTO.setUserName(USER_NAME);
+        petUpdateDTO.setId(oldPet.getId());
+        
+        try {
+            petService.editPet(petUpdateDTO);
+        } catch (PetException e) {
+            assertEquals("Cannot edit: User not found.", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testEditPetNoNewName() {
+        
+        //creates pet
+        PetDTO petDTO = new PetDTO();
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setName(PET_NAME);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setUserName(USER_NAME);
+        
+        Pet oldPet = petService.createPet(petDTO);
+        
+        assertEquals(PET_NAME, oldPet.getName());
+        
+        //update the pet
+        PetDTO petUpdateDTO = new PetDTO();
+        petUpdateDTO.setBreed(PET_BREED_UPDATE);
+        petUpdateDTO.setDateOfBirth(PET_DOB_UPDATE);
+        petUpdateDTO.setDescription(PET_DESCRIPTION_UPDATE);
+        petUpdateDTO.setGender(PET_GENDER_UPDATE);
+        // petUpdateDTO.setName(PET_NAME_UPDATE);
+        petUpdateDTO.setPicture(PET_PICTURE_UPDATE);
+        petUpdateDTO.setSpecies(PET_SPECIES_UPDATE);
+        petUpdateDTO.setUserName(USER_NAME);
+        petUpdateDTO.setId(oldPet.getId());
+        
+        try {
+            petService.editPet(petUpdateDTO);
+        } catch (PetException e) {
+            assertEquals("Cannot edit: A pet needs a name.", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testEditPetWrongPet() {
+        
+        //creates pet
+        PetDTO petDTO = new PetDTO();
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setName(PET_NAME);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setUserName(USER_NAME);
+        
+        Pet oldPet = petService.createPet(petDTO);
+        
+        assertEquals(PET_NAME, oldPet.getName());
+        
+        //update the pet
+        PetDTO petUpdateDTO = new PetDTO();
+        petUpdateDTO.setBreed(PET_BREED_UPDATE);
+        petUpdateDTO.setDateOfBirth(PET_DOB_UPDATE);
+        petUpdateDTO.setDescription(PET_DESCRIPTION_UPDATE);
+        petUpdateDTO.setGender(PET_GENDER_UPDATE);
+        petUpdateDTO.setName(PET_NAME_UPDATE);
+        petUpdateDTO.setPicture(PET_PICTURE_UPDATE);
+        petUpdateDTO.setSpecies(PET_SPECIES_UPDATE);
+        petUpdateDTO.setUserName(USER_NAME);
+        //   petUpdateDTO.setId(oldPet.getId());
+        
+        try {
+            petService.editPet(petUpdateDTO);
+        } catch (PetException e) {
+            assertEquals("Cannot edit: Pet does not exist.", e.getMessage());
+        }
+    }
+    
+    
+    @Test
+    public void deletePet() {
+        PetDTO petDTO = new PetDTO();
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setName(PET_NAME);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setUserName(USER_NAME);
+        
+        Pet pet = null;
+        
+        try {
+            pet = petService.createPet(petDTO);
+        } catch (PetException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(pet);
+        
+        petDTO.setId(pet.getId());
+        
+        boolean isDeleted = false;
+        try {
+            isDeleted = petService.deletePet(petDTO);
+        } catch (PetException e) {
+            e.printStackTrace();
+        }
+        assertTrue(isDeleted);
+    }
+    
+    @Test
+    public void deletePetFail() {
+        PetDTO petDTO = new PetDTO();
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setName(PET_NAME);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setUserName(USER_NAME);
+        try {
+            petService.deletePet(petDTO);
+        } catch (PetException e) {
+            assertEquals("Cannot delete: Pet does not exist.", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void findPet() {
+        PetDTO petDTO = new PetDTO();
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setName(PET_NAME);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setUserName(USER_NAME);
+        
+        Pet pet = null;
+        
+        try {
+            pet = petService.createPet(petDTO);
+        } catch (PetException e) {
+            e.printStackTrace();
+        }
+        
+        assertNotNull(pet);
+        petDTO.setId(pet.getId());
+        
+        Pet dbPet = petService.getPet(petDTO);
+        assertEquals(pet.getName(), dbPet.getName());
+        assertEquals(pet.getBreed(), dbPet.getBreed());
+    }
+    
+    
+    @Test
+    public void findPetNoID() {
+        PetDTO petDTO = new PetDTO();
+        petDTO.setBreed(PET_BREED);
+        petDTO.setDateOfBirth(PET_DOB);
+        petDTO.setDescription(PET_DESCRIPTION);
+        petDTO.setGender(PET_GENDER);
+        petDTO.setName(PET_NAME);
+        petDTO.setPicture(PET_PICTURE);
+        petDTO.setSpecies(PET_SPECIES);
+        petDTO.setUserName(USER_NAME);
+        
+        Pet pet = null;
+        
+        try {
+            pet = petService.createPet(petDTO);
+        } catch (PetException e) {
+            e.printStackTrace();
+        }
+        
+        assertNotNull(pet);
+        try {
+            petService.getPet(petDTO);
+        } catch (PetException e) {
+            assertEquals("Pet does not exist.", e.getMessage());
+        }
+    }
 }
