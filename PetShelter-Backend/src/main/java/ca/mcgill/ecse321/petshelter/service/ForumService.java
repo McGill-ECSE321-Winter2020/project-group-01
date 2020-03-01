@@ -65,10 +65,13 @@ public class ForumService {
 	 * @return The forum that was deleted. This value may be null;
 	 */
 	@Transactional
-	public void deleteForum(long forumID) {
+	public ForumDTO deleteForum(long forumID) {
 		Optional<Forum> forum = forumRepository.findById(forumID);
 		if (forum.isPresent()) {
 			forumRepository.deleteById(forumID);
+			return forumToDTO(forum.get());
+		} else {
+			return null;
 		}
 		
 	}
