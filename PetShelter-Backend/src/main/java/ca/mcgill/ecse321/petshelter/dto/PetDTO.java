@@ -1,8 +1,10 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
-import java.sql.Date;
-
+import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Gender;
+
+import java.sql.Date;
+import java.util.Arrays;
 
 
 public class PetDTO {
@@ -12,25 +14,25 @@ public class PetDTO {
 	private String breed;
 	private String description;
 	private byte[] picture;
-	public Long petId;
-    private Gender gender;
-    private Long advertisementId;
-    private String userName;
+	private Long id;
+	private Gender gender;
+	private Advertisement advertisement;
+	private String userName;
 	
-
-    public PetDTO() {
-        
-    }
-	public PetDTO(Date date, String name, String spec, String breed, String desc, byte [] pic, Gender gen, Long ad, String userName) {
+	public PetDTO() {
+	
+	}
+	
+	public PetDTO(Date date, String name, String spec, String breed, String desc, byte[] pic, Gender gen, Advertisement ad, String userName) {
 		this.dateOfBirth = date;
 		this.name = name;
 		this.description = desc;
 		this.species = spec;
 		this.breed = breed;
 		this.picture = pic;
-		this.petId = null;
+		this.id = null;
 		this.gender = gen;
-		this.advertisementId = ad;
+		this.advertisement = ad;
 		this.userName = userName;
 	}
 
@@ -96,7 +98,12 @@ public class PetDTO {
 
 
 	public Long getId() {
-		return petId;
+		return id;
+	}
+	public void setId(Long id) {
+	    if(this.id == null) {
+	    this.id = id;
+	    }  
 	}
 
 	public Gender getGender() {
@@ -109,22 +116,35 @@ public class PetDTO {
 	}
 
 
-	public long getAdvertisement() {
-		return advertisementId;
+	public Advertisement getAdvertisement() {
+		return advertisement;
 	}
-
-
-	public void setAdvertisement(long advertisement) {
-		this.advertisementId = advertisement;
+	
+	public void setAdvertisement(Advertisement advertisement) {
+		this.advertisement = advertisement;
 	}
 	
 	public String getUserName() {
 		return userName;
 	}
 	
-	public void SetUserName(String userName) {
+	public void setUserName(String userName) {
 		this.userName = userName;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "PetDTO{" +
+				"dateOfBirth=" + dateOfBirth +
+				", name='" + name + '\'' +
+				", species='" + species + '\'' +
+				", breed='" + breed + '\'' +
+				", description='" + description + '\'' +
+				", picture=" + Arrays.toString(picture) +
+				", id=" + id +
+				", gender=" + gender +
+				", advertisement=" + advertisement +
+				", userName='" + userName + '\'' +
+				'}';
+	}
 }

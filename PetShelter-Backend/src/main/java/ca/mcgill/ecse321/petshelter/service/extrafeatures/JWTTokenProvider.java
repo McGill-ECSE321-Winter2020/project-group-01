@@ -1,12 +1,9 @@
 package ca.mcgill.ecse321.petshelter.service.extrafeatures;
 
 
-
-import java.util.Base64;
-import java.util.Date;
-
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
+import ca.mcgill.ecse321.petshelter.model.User;
+import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -14,13 +11,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import ca.mcgill.ecse321.petshelter.model.User;
-import ca.mcgill.ecse321.petshelter.repository.UserRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.*;
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Base64;
+import java.util.Date;
 
 
 //taken from Baeldung's tutorials, not 100% sure how it works
@@ -75,7 +69,7 @@ public class JWTTokenProvider {
 	public String resolveToken(HttpServletRequest req) {
 		String bearerToken = req.getHeader("Authorization");
 		if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-			return bearerToken.substring(7, bearerToken.length());
+			return bearerToken.substring(7);
 		}
 		return null;
 	}
@@ -84,10 +78,7 @@ public class JWTTokenProvider {
 	public boolean validateToken(String token) {
 		try {
 			Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-			if (claims.getBody().getExpiration().before(new Date())) {
-				return true;
-			}
-			return false;
+			return claims.getBody().getExpiration().before(new Date());
 		} catch (JwtException | IllegalArgumentException e) {
 			throw new RuntimeException(ms.getMessage("invalidToken", null, LocaleContextHolder.getLocale()));
 		}

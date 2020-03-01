@@ -21,7 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ca.mcgill.ecse321.petshelter.dto.AdvertisementDTO;
 import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
-import ca.mcgill.ecse321.petshelter.model.AdoptionApplication;
+import ca.mcgill.ecse321.petshelter.dto.PetDTO;
+import ca.mcgill.ecse321.petshelter.model.Application;
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.model.User;
@@ -57,10 +58,10 @@ public class AdvertisementController {
 
 	AdvertisementDTO advertisementToDto(Advertisement ad) {
 		AdvertisementDTO adDto = new AdvertisementDTO();
-		Set<ApplicationDTO> applications = new HashSet<ApplicationDTO>();
-		ad.getAdoptionApplication().forEach(u -> applications.add(applicationToDto(u)));
-		adDto.adId = ad.getId();
-		adDto.setApplicationDTO(applications);
+		Set<Application> applications = new HashSet<Application>();
+		ad.getApplication().forEach(u -> applications.add(u));
+		adDto.setAdId(ad.getId());
+		adDto.setApplication(applications);
 		adDto.setDescription(ad.getDescription());
 		adDto.setTitle(ad.getTitle());
 		adDto.setDescription(ad.getDescription());
@@ -72,7 +73,8 @@ public class AdvertisementController {
 				petIds.add(pet.getId());
 			}
 		}
-		adDto.setPetIds(petIds);
+		Long[] ids = (Long[]) petIds.toArray();
+		adDto.setPetIds(ids);
 		return adDto;
 	}
 
@@ -101,12 +103,12 @@ public class AdvertisementController {
 	 */
 	@GetMapping("/advertisements/{title}")
 	public ResponseEntity<?> getAdvertisementByTitle(@PathVariable String title, @RequestHeader String token) {
-		List<Advertisement> ads = advertisementService.getAdvertisementByTitle(title);
+		List<AdvertisementDTO> ads = advertisementService.getAdvertisementByTitle(title);
 		User requester = userRepository.findUserByApiToken(token);
 		if (requester != null) {
 			List<AdvertisementDTO> adDtos = new ArrayList<AdvertisementDTO>();
-			for (Advertisement ad : ads) {
-				adDtos.add(advertisementToDto(ad));
+			for (AdvertisementDTO ad : ads) {
+				adDtos.add(ad);
 			}
 			return new ResponseEntity<>(adDtos, HttpStatus.OK);
 		} else {
@@ -123,12 +125,12 @@ public class AdvertisementController {
 	public ResponseEntity<?> getAllAdvertisements(@RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
 		if (requester != null) {
-			List<Advertisement> ads = new ArrayList<>();
+			List<AdvertisementDTO> ads = new ArrayList<>();
 			List<AdvertisementDTO> adsDto = new ArrayList<>();
-			Iterable<Advertisement> adsIterable = advertisementService.getAllAdvertisements();
+			Iterable<AdvertisementDTO> adsIterable = advertisementService.getAllAdvertisements();
 			adsIterable.forEach(ads::add);
-			for (Advertisement ad : ads) {
-				adsDto.add(advertisementToDto(ad));
+			for (AdvertisementDTO ad : ads) {
+				adsDto.add(ad);
 			}
 			return new ResponseEntity<>(adsDto, HttpStatus.OK);
 		} else
@@ -153,9 +155,9 @@ public class AdvertisementController {
 				&& !description.trim().equals("")) {
 			List<Long> petIds = new ArrayList<Long>();
 			petIds.add(petId);
-			AdvertisementDTO adDto = createAdDto(title, false, petIds, new HashSet<ApplicationDTO>(), description);
-			Advertisement ad = advertisementService.createAdvertisement(adDto);
-			if (ad != null) {
+			AdvertisementDTO adDto = createAdDto(title, false, petIds, new HashSet<Application>(), description);
+			adDto = advertisementService.createAdvertisement(adDto);
+			if (adDto != null) {
 				return new ResponseEntity<>(adDto, HttpStatus.CREATED);
 			} else {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -184,7 +186,7 @@ public class AdvertisementController {
 				&& !title.trim().equals("")) {
 			AdvertisementDTO adDto = advertisementToDto(ad);
 			adDto.setTitle(title);
-			ad = advertisementService.editAdvertisement(adDto);
+			adDto = advertisementService.editAdvertisement(adDto);
 			return new ResponseEntity<AdvertisementDTO>(adDto, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -209,7 +211,7 @@ public class AdvertisementController {
 		{
 			AdvertisementDTO adDto = advertisementToDto(ad);
 			adDto.setDescription(description);
-			ad = advertisementService.editAdvertisement(adDto);
+			adDto = advertisementService.editAdvertisement(adDto);
 			return new ResponseEntity<AdvertisementDTO>(adDto, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -232,7 +234,7 @@ public class AdvertisementController {
 		if (user != null && hasRightsForAd(user, ad)) {
 			AdvertisementDTO adDto = advertisementToDto(ad);
 			adDto.setFulfilled(fulfilled);
-			ad = advertisementService.editAdvertisement(adDto);
+			adDto = advertisementService.editAdvertisement(adDto);
 			return new ResponseEntity<AdvertisementDTO>(adDto, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -246,19 +248,19 @@ public class AdvertisementController {
 	public ResponseEntity<?> updateAdPets(@PathVariable long adId, @RequestBody long[] petIds, @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
 		Advertisement ad = advertisementService.getAdvertisementById(adId);
-		Set<Pet> pets = petService.getPetsByUser(user.getUserName());
+		Set<PetDTO> pets = petService.getPetsByUser(user.getUserName());
 		List<Long> newIds = new ArrayList<Long>();
 		for (Long id : petIds) {
-			Pet pet = petService.getPet(id);
-			if (!(pets.contains(pet))) {
+			PetDTO petDto = petToPetDTO(petService.getPet(id));
+			if (!(pets.contains(petDto))) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 			newIds.add(id);
 		}
 		if (user != null && hasRightsForAd(user, ad)) {
 			AdvertisementDTO adDto = advertisementToDto(ad);
-			adDto.setPetIds(newIds);
-			ad = advertisementService.editAdvertisement(adDto);
+			adDto.setPetIds((Long[]) newIds.toArray());
+			adDto = advertisementService.editAdvertisement(adDto);
 			return new ResponseEntity<AdvertisementDTO>(adDto, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -278,13 +280,13 @@ public class AdvertisementController {
 		User user = userRepository.findUserByApiToken(token);
 		Advertisement ad = advertisementService.getAdvertisementById(adId);
 		if (user != null && hasRightsForAd(user, ad) && ad != null) {
-			advertisementService.deleteAdvertisement(ad);
+			advertisementService.deleteAdvertisement(advertisementToDto(ad));
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
-	public static ApplicationDTO applicationToDto(AdoptionApplication application) {
+	public static ApplicationDTO applicationToDto(Application application) {
 		ApplicationDTO applicationDTO = new ApplicationDTO();
 		applicationDTO.setDescription(application.getDescription());
 		applicationDTO.setUsername(application.getUser().getUserName());
@@ -296,23 +298,45 @@ public class AdvertisementController {
 	}
 
 	private AdvertisementDTO createAdDto(String title, boolean isfulfilled, List<Long> aD_PET_IDS,
-			Set<ApplicationDTO> adoptionApplication, String description) {
-		AdvertisementDTO dto = new AdvertisementDTO(title, isfulfilled, aD_PET_IDS, adoptionApplication, description);
+			Set<Application> adoptionApplication, String description) {
+		AdvertisementDTO dto = new AdvertisementDTO();
+		dto.setApplication(adoptionApplication);
+		dto.setDescription(description);
+		dto.setTitle(title);
+		dto.setFulfilled(isfulfilled);
+		dto.setPetIds((Long[]) aD_PET_IDS.toArray()); 
 		return dto;
 	}
 
 	public boolean hasRightsForAd(User user, Advertisement ad) {
 		boolean hasRights = false;
-		List<Pet> pets = petService.getPetsByAdvertisement(ad.getId());
+		List<PetDTO> pets = petService.getPetsByAdvertisement(ad.getId());
 		if (user.getUserType().equals(UserType.USER)) {
-			for (Pet pet : pets) {
-				if (user.getPets().contains(pet)) {
-					hasRights = true;
-				}
+			for (PetDTO pet : pets) {
+			    for (Pet pet1 : user.getPets()) {
+			        PetDTO pet1Dto = petToPetDTO(pet1);
+			        if(pet1Dto.equals(pet)) {
+			            hasRights = true;
+			        }
+			    }
 			}
 		} else {
 			hasRights = true;
 		}
 		return hasRights;
 	}
+	
+    public PetDTO petToPetDTO(Pet pet) {
+        PetDTO petDTO = new PetDTO();
+        petDTO.setId(pet.getId());
+        petDTO.setDateOfBirth(pet.getDateOfBirth());
+        petDTO.setSpecies(pet.getSpecies());
+        petDTO.setPicture(pet.getPicture());
+        petDTO.setName(pet.getName());
+        petDTO.setGender(pet.getGender());
+        petDTO.setDescription(pet.getDescription());
+        petDTO.setBreed(pet.getBreed());
+        petDTO.setAdvertisement(pet.getAdvertisement());
+        return petDTO;
+    }
 }

@@ -3,24 +3,24 @@ package ca.mcgill.ecse321.petshelter.model;
 import javax.persistence.*;
 
 @Entity
-public class AdoptionApplication {
-    
-    private String description;
-    
-    public void setDescription(String value) {
-        this.description = value;
-    }
-    
-    public String getDescription() {
-        return this.description;
-    }
-    
-    private long id;
-
+public class Application {
+	
+	private String description;
+	
+	public String getDescription() {
+		return this.description;
+	}
+	
+	public void setDescription(String value) {
+		this.description = value;
+	}
+	
+	private long id;
+	
 	public void setId(long value) {
 		this.id = value;
 	}
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public long getId() {
@@ -61,12 +61,12 @@ public class AdoptionApplication {
     
     @Override
     public String toString() {
-        return "AdoptionApplication{" +
-                "description='" + description + '\'' +
-                ", id=" + id +
-                ", isAccepted=" + isAccepted +
-                ", user=" + user +
-                ", advertisement=" + advertisement +
-                '}';
-    }
+		return "Application{" +
+				"description='" + description + '\'' +
+				", id=" + id +
+				", isAccepted=" + isAccepted +
+				", user=" + user +
+				", advertisement=" + advertisement +
+				'}';
+	}
 }

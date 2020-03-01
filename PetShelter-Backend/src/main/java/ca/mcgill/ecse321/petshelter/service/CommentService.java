@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.petshelter.service;
 
+import ca.mcgill.ecse321.petshelter.dto.CommentDTO;
 import ca.mcgill.ecse321.petshelter.model.Comment;
 import ca.mcgill.ecse321.petshelter.model.Forum;
 import ca.mcgill.ecse321.petshelter.model.User;
@@ -7,7 +8,6 @@ import ca.mcgill.ecse321.petshelter.repository.CommentRepository;
 import ca.mcgill.ecse321.petshelter.repository.ForumRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.exception.CommentException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +17,7 @@ import java.sql.Time;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Service for interacting with comments.
@@ -36,6 +37,12 @@ public class CommentService {
 	@Autowired
 	private ForumRepository forumRepository;
 	
+	/*
+	some stuff doenst work:
+	1- comments seems to be erased after
+	2- multiple comments are not saved, even with different names
+	 */
+	
 	/**
 	 * Add a comment to a thread.
 	 *
@@ -45,7 +52,7 @@ public class CommentService {
 	 * @return The created comment.
 	 */
 	@Transactional
-	public Comment addComment(String text, long forumID, long userID) {
+	public CommentDTO addComment(String text, long forumID, long userID) throws CommentException {
 		Optional<User> user = userRepository.findById(userID);
 		Optional<Forum> forum = forumRepository.findById(forumID);
 		if (user.isPresent()) {
@@ -60,8 +67,9 @@ public class CommentService {
 					Set<Comment> comments = newForum.getComments();
 					comments.add(newComment);
 					newForum.setComments(comments);
+					commentRepository.save(newComment);
 					forumRepository.save(newForum);
-					return newComment;
+					return commentToDto(newComment);
 				} else {
 					throw new CommentException("Forum thread is locked.");
 				}
@@ -79,15 +87,16 @@ public class CommentService {
 	 * @param commentID Comment ID.
 	 * @param comment   Comment update.
 	 * @return The updated comment.
+	 * @throws CommentException
 	 */
 	@Transactional
-	public Comment updateComment(long commentID, String comment) {
+	public CommentDTO updateComment(long commentID, String comment) throws CommentException {
 		Optional<Comment> oldComment = commentRepository.findById(commentID);
 		if (oldComment.isPresent()) {
 			Comment updatedComment = oldComment.get();
 			updatedComment.setText(comment);
 			commentRepository.save(updatedComment);
-			return updatedComment;
+			return commentToDto(updatedComment);
 		} else {
 			throw new CommentException("No such comment.");
 		}
@@ -98,13 +107,14 @@ public class CommentService {
 	 *
 	 * @param commentID The ID of the comment.
 	 * @return The deleted comment.
+	 * @throws CommentException
 	 */
 	@Transactional
-	public Comment deleteComment(long commentID) {
+	public CommentDTO deleteComment(long commentID) throws CommentException {
 		Optional<Comment> oldComment = commentRepository.findById(commentID);
 		if (oldComment.isPresent()) {
 			commentRepository.deleteById(commentID);
-			return oldComment.get();
+			return commentToDto(oldComment.get());
 		} else {
 			throw new CommentException("No such comment.");
 		}
@@ -116,9 +126,8 @@ public class CommentService {
 	 * @return The list of all comments.
 	 */
 	@Transactional
-	public List<Comment> getComments() {
-		List<Comment> comments = commentRepository.findAll();
-		return comments;
+	public List<CommentDTO> getComments() {
+		return commentRepository.findAll().stream().map(this::commentToDto).collect(Collectors.toList());
 	}
 	
 	/**
@@ -128,14 +137,29 @@ public class CommentService {
 	 * @return The list of all comments by the user.
 	 */
 	@Transactional
-	public List<Comment> getCommentsByUser(long userID) {
+	public List<CommentDTO> getCommentsByUser(long userID) throws CommentException {
 		Optional<User> user = userRepository.findById(userID);
 		if (user.isPresent()) {
-			List<Comment> comments = commentRepository.findCommentsByUser(user.get());
-			return comments;
+			return commentRepository.findCommentsByUser(user.get()).stream().map(this::commentToDto).collect(Collectors.toList());
 		} else {
 			throw new CommentException("No such user.");
 		}
+	}
+	
+	/**
+	 * Convert a comment entity to a comment DTO.
+	 *
+	 * @param comment The comment to convert.
+	 * @return A comment DTO.
+	 */
+	public CommentDTO commentToDto(Comment comment) {
+		CommentDTO commentDTO = new CommentDTO();
+		commentDTO.setDatePosted(comment.getDatePosted());
+		commentDTO.setId(comment.getId());
+		commentDTO.setText(comment.getText());
+		commentDTO.setTime(comment.getTime());
+		commentDTO.setUsername(comment.getUser().getUserName());
+		return commentDTO;
 	}
 	
 }
