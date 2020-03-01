@@ -39,7 +39,7 @@ public class PetController {
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 	
-	@GetMapping("/all/{user}")
+	@GetMapping("/all/user/{user}")
 	public ResponseEntity<?> getAllPetsFromUser(@RequestHeader String token, @PathVariable String user) {
 		User requester = userRepository.findUserByApiToken(token);
 		if (requester != null) {
@@ -48,16 +48,16 @@ public class PetController {
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 	
-	@GetMapping("/all/{advertisement}")
+	@GetMapping("/all/ad/{advertisement}")
 	public ResponseEntity<?> getAllPetsFromAdvertisement(@RequestHeader String token,
-			@PathVariable long advertisement) {
+														 @PathVariable long advertisement) {
 		User requester = userRepository.findUserByApiToken(token);
 		if (requester != null) {
 			return new ResponseEntity<>(petService.getPetsByAdvertisement(advertisement), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
-
+	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deletePet(@RequestHeader String token, @PathVariable long id) {
 		User requester = userRepository.findUserByApiToken(token);
@@ -68,17 +68,16 @@ public class PetController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
-
+	
 	/**
 	 * Changes the ownership of a pet
-	 * 
+	 *
 	 * @param token
-	 * @param id
 	 * @param pet
 	 * @return
 	 */
-	@PutMapping("/{id}")
-	public ResponseEntity<?> updatePet(@RequestHeader String token, @PathVariable long id, @RequestBody PetDTO pet) {
+	@PutMapping("/update")
+	public ResponseEntity<?> updatePet(@RequestHeader String token, @RequestBody PetDTO pet) {
 		User requester = userRepository.findUserByApiToken(token);
 		if (requester != null) {
 			PetDTO pet2 = petService.editPet(pet);
@@ -88,6 +87,16 @@ public class PetController {
 		}
 	}
 	
+	@PutMapping("/changeOwner")
+	public ResponseEntity<?> changeOwner(@RequestHeader String token, @RequestBody PetDTO pet) {
+		User requester = userRepository.findUserByApiToken(token);
+		if (requester != null) {
+			PetDTO petDTO = petService.changeOwner(pet, token);
+			return new ResponseEntity<>(petDTO, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
 	/**
 	 * Creates a pet
 	 *
