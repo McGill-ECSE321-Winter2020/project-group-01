@@ -142,4 +142,69 @@ public class ApplicationController {
 		
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
+	
+	/**
+	 * Updates the description of an application
+	 * @param applicationId the application id
+	 * @param newDescription the new description
+	 * @param token the session token of the user
+	 * @return the updated application dto
+	 */
+	@PutMapping("/{applicationId}")
+	public ResponseEntity<?> updateApplication(@PathVariable long applicationId, @RequestBody String newDescription, @RequestHeader String token) {
+		User user = userRepository.findUserByApiToken(token);
+		Optional<Application> oldApplication = applicationRepository.findById(applicationId);
+		if (
+				user != null // verify user exists
+				&& oldApplication.isPresent() // verify application exists  
+				&& oldApplication.get().getUser().getId() == user.getId() // verify the user is the author of the application
+				&& newDescription != null // verify that the description is valid
+				&& !newDescription.trim().equals("") // verify that the description is valid
+			) { 
+			// Update application
+			
+			ApplicationDTO applicationDTO = applicationService.updateApplication(applicationId, newDescription);
+			return new ResponseEntity<>(applicationDTO, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	/**
+	 * Accept an application
+	 * @param applicationId the application id
+	 * @param token the session token of the user 
+	 * @return the accepted application dto
+	 */
+	/*@PutMapping("/{applicationId}")
+	public ResponseEntity<?> acceptApplication(@PathVariable long applicationId, @RequestHeader String token) {
+		User user = userRepository.findUserByApiToken(token);
+		Optional<Application> application = applicationRepository.findById(applicationId);
+		if (user != null && application.isPresent() && user.getUserType() == UserType.ADMIN) { 
+			// accept application
+			ApplicationDTO applicationDTO = applicationService.acceptApplication(applicationId);
+			return new ResponseEntity<>(applicationDTO, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}*/
+	
+	/**
+	 * Unaccept an application
+	 * @param applicationId the application id
+	 * @param token the session token of the user 
+	 * @return the unaccepted application dto
+	 */
+	/*@PutMapping("/{applicationId}")
+	public ResponseEntity<?> unacceptApplication(@PathVariable long applicationId, @RequestHeader String token) {
+		User user = userRepository.findUserByApiToken(token);
+		Optional<Application> application = applicationRepository.findById(applicationId);
+		if (user != null && application.isPresent() && user.getUserType() == UserType.ADMIN) { 
+			// accept application
+			ApplicationDTO applicationDTO = applicationService.unacceptApplication(applicationId);
+			return new ResponseEntity<>(applicationDTO, HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}*/
 }
