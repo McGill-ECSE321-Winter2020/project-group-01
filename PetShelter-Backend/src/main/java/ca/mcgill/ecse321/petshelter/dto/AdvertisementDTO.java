@@ -73,9 +73,7 @@ public class AdvertisementDTO {
     
     
     public void setAdId(Long adId) {
-        if (this.adId == null) {
-            this.adId = adId;
-        }
+        this.adId = adId;
     }
     
     @Override

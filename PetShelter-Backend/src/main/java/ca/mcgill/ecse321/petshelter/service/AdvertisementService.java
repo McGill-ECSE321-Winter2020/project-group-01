@@ -39,12 +39,11 @@ public class AdvertisementService {
      */
     @Transactional
     public AdvertisementDTO getAdvertisement(AdvertisementDTO adDTO) {
-        Advertisement ad = advertisementRepository.findAdvertisementById(adDTO.getAdId());
-        if (ad == null) {
+        if (adDTO.getAdId() == null || advertisementRepository.findAdvertisementById(adDTO.getAdId()) == null) {
             throw new AdvertisementException("Advertisement does not exist.");
-        } else {
-            return convertToDTO(ad);
         }
+        Advertisement ad = advertisementRepository.findAdvertisementById(adDTO.getAdId());
+        return convertToDTO(ad);
     }
     
     /**
@@ -55,6 +54,9 @@ public class AdvertisementService {
      */
     @Transactional
     public List<AdvertisementDTO> getAdvertisementByTitle(String title) {
+        if (title == null || advertisementRepository.findAdvertisementByTitle(title) == null) {
+            throw new AdvertisementException("No advertisement found");
+        }
         return advertisementRepository.findAdvertisementByTitle(title).stream().map(this::convertToDTO).collect(Collectors.toList());
     }
     
@@ -92,7 +94,7 @@ public class AdvertisementService {
     /**
      * Creates and advertisement and stores it in the database
      *
-     * @param adDTO advertisement DTO (JSON format)
+     * @param id advertisement DTO (JSON format)
      * @return advertisement object
      */
     @Transactional
@@ -137,6 +139,9 @@ public class AdvertisementService {
      */
     @Transactional
     public AdvertisementDTO editAdvertisement(AdvertisementDTO adDTO) {
+        if (adDTO.getAdId() == null) {
+            throw new AdvertisementException("Advertisement does not exist");
+        }
         Advertisement ad = advertisementRepository.findAdvertisementById(adDTO.getAdId());
         Set<Pet> newPets = validateParametersEdit(adDTO);
         Set<Application> applications = new HashSet<Application>();
@@ -145,7 +150,7 @@ public class AdvertisementService {
         applications.addAll(adDTO.getApplication());
         ad.setApplication(applications);
         ad.setApplication(applications);
-        
+    
         ad.setTitle(adDTO.getTitle());
         ad.setDescription(adDTO.getDescription());
         ad.setIsFulfilled(adDTO.isFulfilled());
@@ -165,17 +170,19 @@ public class AdvertisementService {
      */
     @Transactional
     public boolean deleteAdvertisement(AdvertisementDTO adDTO) {
+        if (adDTO.getAdId() == null) {
+            throw new AdvertisementException("Advertisement not found");
+        }
         Advertisement ad = getAdvertisementById(adDTO.getAdId());
-        if (ad == null) {
-            Set<Application> apps = ad.getApplication();
+        Set<Application> apps = ad.getApplication();
+        if (apps != null) {
             for (Application app : apps) {
                 applicationService.deleteApplication(app.getId());
             }
-            advertisementRepository.delete(ad);
-            return true;
-        } else {
-            throw new AdvertisementException("Cannot delete: Advertisement does not exist.");
         }
+        advertisementRepository.delete(ad);
+        return true;
+    
     }
     
     public AdvertisementDTO convertToDTO(Advertisement advertisement) {
@@ -220,20 +227,19 @@ public class AdvertisementService {
     
     public Set<Pet> validateParametersEdit(AdvertisementDTO adDTO) {
         Advertisement ad = advertisementRepository.findAdvertisementById(adDTO.getAdId());
-        if (ad == null) {
-            throw new AdvertisementException("Advertisement does not exist");
-        }
+    
         if (adDTO.getTitle() == null || adDTO.getTitle().trim().equals("")) {
             throw new AdvertisementException("Title cannot be empty");
         }
         if (adDTO.getDescription() == null || adDTO.getDescription().trim().equals("")) {
             throw new AdvertisementException("Description cannot be empty");
         }
-        Pet pet0 = petRepository.findPetById(adDTO.getPetIds()[0]);
-        if (pet0 == null) {
+        //what if the first one doesnt but the rest exists?
+        if (adDTO.getPetIds() == null || petRepository.findPetById(adDTO.getPetIds()[0]) == null) {
             throw new AdvertisementException("One or more pets do not exist.");
         }
-        
+        Pet pet0 = petRepository.findPetById(adDTO.getPetIds()[0]);
+    
         int numOfPets = adDTO.getPetIds().length;
         Set<Pet> newPets = new HashSet<Pet>();
         newPets.add(pet0);
@@ -245,7 +251,8 @@ public class AdvertisementService {
                 newPets.add(petI);
             }
         }
-        for (Pet pet : petService.getAllPets()) {
+        // System.out.println(petRepository.findAll());
+        for (Pet pet : petRepository.findAll()) {
             if (pet.getAdvertisement().equals(ad)) {
                 if (!(newPets.contains(pet))) {
                     pet.setAdvertisement(null);
