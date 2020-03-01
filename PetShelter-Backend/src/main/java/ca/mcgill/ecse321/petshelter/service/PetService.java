@@ -75,22 +75,6 @@ public class PetService {
 		return petDTO;
 	}
 
-	private Set<Pet> convertToObject(Set<PetDTO> allUserPets) {
-		Set<Pet> petSet = new HashSet<>();
-		for (PetDTO petDTO : allUserPets) {
-			Pet pet = new Pet();
-			pet.setName(petDTO.getName());
-			pet.setDateOfBirth(petDTO.getDateOfBirth());
-			pet.setBreed(petDTO.getBreed());
-			pet.setSpecies(petDTO.getSpecies());
-			pet.setDescription(petDTO.getDescription());
-			pet.setGender(petDTO.getGender());
-			pet.setPicture(petDTO.getPicture());
-			petSet.add(pet);
-		}
-		return petSet;
-	}
-
 	/**
 	 * finds pet with the DTO
 	 *
@@ -130,11 +114,12 @@ public class PetService {
 	 */
 	@Transactional
 	public List<PetDTO> getPetsByAdvertisement(long adId) {
-		List<Pet> pets = petRepository.findPetByAdvertisement(advertisementRepository.findAdvertisementById(adId));
-		if (pets == null) {
-			throw new PetException("Advertisement does not exist.");
-		} else {
+		Advertisement advertisement = advertisementRepository.findAdvertisementById(adId);
+		if (advertisement != null) {
+			List<Pet> pets = petRepository.findPetByAdvertisement(advertisement);
 			return pets.stream().map(this::petToPetDTO).collect(Collectors.toList());
+		} else {
+			throw new PetException("Advertisement does not exist.");
 		}
 	}
 
