@@ -221,6 +221,25 @@ public class TestUserService {
 			Assert.assertEquals("Password can't be null.", e.getMessage());
 		}
 	}
+	
+	@Test
+	public void testRegisterWithEmptyPassword() {
+		UserDTO userDTO = new UserDTO();
+
+		String password = "";
+		UserType userType = USER;
+
+		userDTO.setEmail(USER_EMAIL);
+		userDTO.setPassword(password);
+		userDTO.setUsername(USER_NAME);
+		userDTO.setUserType(userType);
+
+		try {
+			userService.createUser(userDTO);
+		} catch (RegisterException e) {
+			Assert.assertEquals("Password can't be null.", e.getMessage());
+		}
+	}
 
 	@Test
 	public void testChangeUserPassword() {
@@ -274,6 +293,21 @@ public class TestUserService {
 		PasswordChangeDTO passwordChangeDTO = new PasswordChangeDTO();
 		passwordChangeDTO.setUserName(USER_NAME);
 		passwordChangeDTO.setNewPassword(null);
+		passwordChangeDTO.setOldPassword(USER_PASSWORD);
+		
+		try {
+			userService.updateUser(passwordChangeDTO);
+		} catch (PasswordException e) {
+			assertEquals("Password cannot be null.", e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testChangeUserPasswordToEmpty() {
+		
+		PasswordChangeDTO passwordChangeDTO = new PasswordChangeDTO();
+		passwordChangeDTO.setUserName(USER_NAME);
+		passwordChangeDTO.setNewPassword("");
 		passwordChangeDTO.setOldPassword(USER_PASSWORD);
 		
 		try {
