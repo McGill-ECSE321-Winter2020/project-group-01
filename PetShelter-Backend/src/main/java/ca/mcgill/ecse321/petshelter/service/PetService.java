@@ -108,7 +108,7 @@ public class PetService {
 		pet.setDescription(petDTO.getDescription());
 		pet.setGender(petDTO.getGender());
 		pet.setPicture(petDTO.getPicture());
-		pet.setAdvertisement(petDTO.getAdvertisement());
+		pet.setAdvertisement(advertisementRepository.findAdvertisementById(petDTO.getAdvertisement()));
 		Set<Pet> allUserPets = getPetsByUser(petDTO.getUserName());
 		allUserPets.add(pet);
 		petRepository.save(pet);
