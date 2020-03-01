@@ -1,8 +1,6 @@
 package ca.mcgill.ecse321.petshelter.controller;
 
 import ca.mcgill.ecse321.petshelter.dto.DonationDTO;
-
-import ca.mcgill.ecse321.petshelter.model.Donation;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;

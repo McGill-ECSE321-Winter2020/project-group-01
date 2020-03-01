@@ -4,7 +4,6 @@ import ca.mcgill.ecse321.petshelter.dto.PetDTO;
 import ca.mcgill.ecse321.petshelter.model.Gender;
 import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.model.User;
-import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.PetRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.exception.PetException;
@@ -44,7 +43,6 @@ public class TestPetService {
     private static final String USER_NAME = "testUN";
     private static final String USER_EMAIL = "username@gmail.com";
     private static final String USER_PASSWORD = "testUN";
-    private static final UserType USER_TYPE = UserType.USER;
     
     
     //Pet parameters
