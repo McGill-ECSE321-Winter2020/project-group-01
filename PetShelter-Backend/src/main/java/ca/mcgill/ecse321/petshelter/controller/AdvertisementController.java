@@ -67,8 +67,8 @@ public class AdvertisementController {
 		adDto.setDescription(ad.getDescription());
 		adDto.setFulfilled(ad.isIsFulfilled());
 		List<Long> petIds = new ArrayList<Long>();
-		Set<Pet> allPets = petService.getAllPets();
-		for (Pet pet : allPets) {
+		Set<PetDTO> allPets = petService.getAllPets();
+		for (PetDTO pet : allPets) {
 			if (pet.getAdvertisement().equals(ad)) {
 				petIds.add(pet.getId());
 			}
@@ -86,10 +86,10 @@ public class AdvertisementController {
 	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getAdvertisement(@PathVariable(required = true) Long id, @RequestHeader String token) {
-		Advertisement ad = advertisementService.getAdvertisementById(id);
+		AdvertisementDTO ad = advertisementService.getAdvertisementById(id);
 		User requester = userRepository.findUserByApiToken(token);
 		if (ad != null && requester != null) {
-			return new ResponseEntity<>(advertisementToDto(ad), HttpStatus.OK);
+			return new ResponseEntity<>(ad, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -146,9 +146,9 @@ public class AdvertisementController {
 	 */
 	@PostMapping("/{petId}/newAd")
 	public ResponseEntity<?> createAdvertisement(@PathVariable(required = true) long petId, @RequestBody String title,
-			String description, @RequestHeader String token) {
+												 String description, @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
-		Pet pet = petService.getPet(petId);
+		PetDTO pet = petService.getPet(petId);
 		boolean isOwner = user.getPets().contains(pet);
 
 		if (user != null && isOwner && title != null && !title.trim().equals("") && description != null
@@ -179,12 +179,11 @@ public class AdvertisementController {
 	public ResponseEntity<?> updateAdTitle(@PathVariable long adId, @RequestBody String title,
 			@RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
-		Advertisement ad = advertisementService.getAdvertisementById(adId);
-		if (user != null && ad != null // Verify the ad already exists.
-				&& hasRightsForAd(user, ad) // Check if the issuing user is the author.
+		AdvertisementDTO adDto = advertisementService.getAdvertisementById(adId);
+		if (user != null && adDto != null // Verify the ad already exists.
+				&& hasRightsForAd(user, adDto) // Check if the issuing user is the author.
 				&& title != null // Check if the new title is valid.
 				&& !title.trim().equals("")) {
-			AdvertisementDTO adDto = advertisementToDto(ad);
 			adDto.setTitle(title);
 			adDto = advertisementService.editAdvertisement(adDto);
 			return new ResponseEntity<AdvertisementDTO>(adDto, HttpStatus.OK);
@@ -197,7 +196,7 @@ public class AdvertisementController {
 	 * Update the description of an advertisement.
 	 *
 	 * @param adId  The id of a given ad.
-	 * @param desc  The new description of the ad.
+	 * @param description  The new description of the ad.
 	 * @param token The session token of the user.
 	 * @return The modified advertisement.
 	 */
@@ -205,14 +204,13 @@ public class AdvertisementController {
 	public ResponseEntity<?> updateAdDescription(@PathVariable long adId, @RequestBody String description,
 			@RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
-		Advertisement ad = advertisementService.getAdvertisementById(adId);
+		AdvertisementDTO ad = advertisementService.getAdvertisementById(adId);
 		if (user != null && ad != null // Verify the ad already exists.
 				&& hasRightsForAd(user, ad)) // Check if the issuing user is the author.
 		{
-			AdvertisementDTO adDto = advertisementToDto(ad);
-			adDto.setDescription(description);
-			adDto = advertisementService.editAdvertisement(adDto);
-			return new ResponseEntity<AdvertisementDTO>(adDto, HttpStatus.OK);
+			ad.setDescription(description);
+			ad = advertisementService.editAdvertisement(ad);
+			return new ResponseEntity<AdvertisementDTO>(ad, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -221,7 +219,7 @@ public class AdvertisementController {
 	/**
 	 * Fulfill an advertisement.
 	 *
-	 * @param adID      The id of a given ad.
+	 * @param adId      The id of a given ad.
 	 * @param token     The session token of a user.
 	 * @param fulfilled The status f the advertisement.
 	 * @return The modified advertisement.
@@ -230,9 +228,8 @@ public class AdvertisementController {
 	public ResponseEntity<?> fulfillAd(@PathVariable long adId, @RequestHeader String token,
 			@RequestBody Boolean fulfilled) {
 		User user = userRepository.findUserByApiToken(token);
-		Advertisement ad = advertisementService.getAdvertisementById(adId);
-		if (user != null && hasRightsForAd(user, ad)) {
-			AdvertisementDTO adDto = advertisementToDto(ad);
+		AdvertisementDTO adDto = advertisementService.getAdvertisementById(adId);
+		if (user != null && hasRightsForAd(user, adDto)) {
 			adDto.setFulfilled(fulfilled);
 			adDto = advertisementService.editAdvertisement(adDto);
 			return new ResponseEntity<AdvertisementDTO>(adDto, HttpStatus.OK);
@@ -247,18 +244,18 @@ public class AdvertisementController {
 	@PutMapping("/{adId}/pets")
 	public ResponseEntity<?> updateAdPets(@PathVariable long adId, @RequestBody long[] petIds, @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
-		Advertisement ad = advertisementService.getAdvertisementById(adId);
+		AdvertisementDTO adDto = advertisementService.getAdvertisementById(adId);
 		Set<PetDTO> pets = petService.getPetsByUser(user.getUserName());
 		List<Long> newIds = new ArrayList<Long>();
 		for (Long id : petIds) {
-			PetDTO petDto = petToPetDTO(petService.getPet(id));
+			PetDTO petDto = petService.getPet(id);
 			if (!(pets.contains(petDto))) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 			newIds.add(id);
 		}
-		if (user != null && hasRightsForAd(user, ad)) {
-			AdvertisementDTO adDto = advertisementToDto(ad);
+		if (user != null && hasRightsForAd(user, adDto)) {
+
 			adDto.setPetIds((Long[]) newIds.toArray());
 			adDto = advertisementService.editAdvertisement(adDto);
 			return new ResponseEntity<AdvertisementDTO>(adDto, HttpStatus.OK);
@@ -278,9 +275,9 @@ public class AdvertisementController {
 	@DeleteMapping("/{adId}")
 	public ResponseEntity<?> deleteAd(@PathVariable long adId, @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
-		Advertisement ad = advertisementService.getAdvertisementById(adId);
+		AdvertisementDTO ad = advertisementService.getAdvertisementById(adId);
 		if (user != null && hasRightsForAd(user, ad) && ad != null) {
-			advertisementService.deleteAdvertisement(advertisementToDto(ad));
+			advertisementService.deleteAdvertisement(ad);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -308,9 +305,9 @@ public class AdvertisementController {
 		return dto;
 	}
 
-	public boolean hasRightsForAd(User user, Advertisement ad) {
+	public boolean hasRightsForAd(User user, AdvertisementDTO ad) {
 		boolean hasRights = false;
-		List<PetDTO> pets = petService.getPetsByAdvertisement(ad.getId());
+		List<PetDTO> pets = petService.getPetsByAdvertisement(ad.getAdId());
 		if (user.getUserType().equals(UserType.USER)) {
 			for (PetDTO pet : pets) {
 			    for (Pet pet1 : user.getPets()) {

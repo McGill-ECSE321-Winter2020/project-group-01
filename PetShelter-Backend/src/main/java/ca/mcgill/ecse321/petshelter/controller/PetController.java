@@ -29,9 +29,8 @@ public class PetController {
 
 	@Autowired
 	private PetService petService;
-
-	// TODO
-	// NEEDS TO RETURN A DTO
+	
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getPet(@RequestHeader String token, @PathVariable long id) {
 		User requester = userRepository.findUserByApiToken(token);
@@ -40,8 +39,7 @@ public class PetController {
 		}
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
-
-	// TODO NEEDS TO RETURN LIST OF DTOS
+	
 	@GetMapping("/all")
 	public ResponseEntity<?> getAllPets(@RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
@@ -50,8 +48,7 @@ public class PetController {
 		}
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
-
-	// TODO NEEDS TO RETURN DTOS
+	
 	@GetMapping("/all/{user}")
 	public ResponseEntity<?> getAllPetsFromUser(@RequestHeader String token, @PathVariable String user) {
 		User requester = userRepository.findUserByApiToken(token);
@@ -60,8 +57,7 @@ public class PetController {
 		}
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
-
-	// TODO NEEDS TO RETURN DTOS
+	
 	@GetMapping("/all/{advertisement}")
 	public ResponseEntity<?> getAllPetsFromAdvertisement(@RequestHeader String token,
 			@PathVariable long advertisement) {

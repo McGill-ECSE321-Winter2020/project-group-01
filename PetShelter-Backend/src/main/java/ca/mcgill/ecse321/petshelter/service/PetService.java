@@ -33,18 +33,18 @@ public class PetService {
 	private AdvertisementService advertisementService;
 
 	@Transactional
-	public Pet getPet(long petId) {
+	public PetDTO getPet(long petId) {
 		Pet pet = petRepository.findPetById(petId);
 		if (pet == null) {
 			throw new PetException("Pet does not exist.");
 		} else {
-			return pet;
+			return petToPetDTO(pet);
 		}
 	}
 
 	@Transactional
-	public Set<Pet> getAllPets() {
-		return petRepository.findAll();
+	public Set<PetDTO> getAllPets() {
+		return petRepository.findAll().stream().map(this::petToPetDTO).collect(Collectors.toSet());
 	}
 
 	/**
@@ -156,7 +156,7 @@ public class PetService {
 	/**
 	 * Removes a pet from the database
 	 *
-	 * @param petDTO   given by dto
+	 * @param id id of the pet
 	 * @param userName requester
 	 * @return ok if deleted
 	 */
