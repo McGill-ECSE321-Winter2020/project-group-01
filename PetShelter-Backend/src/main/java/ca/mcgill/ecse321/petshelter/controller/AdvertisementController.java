@@ -336,7 +336,7 @@ public class AdvertisementController {
         petDTO.setGender(pet.getGender());
         petDTO.setDescription(pet.getDescription());
         petDTO.setBreed(pet.getBreed());
-        petDTO.setAdvertisement(pet.getAdvertisement());
+        petDTO.setAdvertisement(pet.getAdvertisement().getId());
         return petDTO;
     }
 }

@@ -1,13 +1,8 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
 import ca.mcgill.ecse321.petshelter.model.Application;
-
-import java.util.Set;
 
 public class AdvertisementDTO {
     private String title;
