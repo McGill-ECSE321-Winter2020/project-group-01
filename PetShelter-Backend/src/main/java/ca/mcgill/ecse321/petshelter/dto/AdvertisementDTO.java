@@ -1,8 +1,9 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
-import java.util.Set;
-
 import ca.mcgill.ecse321.petshelter.model.Application;
+
+import java.util.Arrays;
+import java.util.Set;
 
 public class AdvertisementDTO {
     private String title;
@@ -72,8 +73,18 @@ public class AdvertisementDTO {
     
     
     public void setAdId(Long adId) {
-        if (this.adId == null) {
-            this.adId = adId;
-        }
+        this.adId = adId;
+    }
+    
+    @Override
+    public String toString() {
+        return "AdvertisementDTO{" +
+                "title='" + title + '\'' +
+                ", petIds=" + Arrays.toString(petIds) +
+                ", description='" + description + '\'' +
+                ", isFulfilled=" + isFulfilled +
+                ", application=" + application +
+                ", adId=" + adId +
+                '}';
     }
 }
