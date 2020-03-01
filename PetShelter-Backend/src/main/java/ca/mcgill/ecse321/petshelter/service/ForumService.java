@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.petshelter.service;
 
+import ca.mcgill.ecse321.petshelter.dto.CommentDTO;
 import ca.mcgill.ecse321.petshelter.dto.ForumDTO;
 import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.Comment;
@@ -18,6 +19,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static ca.mcgill.ecse321.petshelter.service.CommentService.commentToDto;
 import static ca.mcgill.ecse321.petshelter.service.UserService.userToDto;
 
 /**
@@ -28,8 +30,10 @@ import static ca.mcgill.ecse321.petshelter.service.UserService.userToDto;
 
 @Service
 public class ForumService {
+
 	@Autowired
 	private ForumRepository forumRepository;
+
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -219,11 +223,14 @@ public class ForumService {
 		forumDTO.setTitle(forum.getTitle());
 		forumDTO.setId(forum.getId());
 		forumDTO.setLocked(forum.isLocked());
-		Set<UserDTO> forumSubsDTO = null;
-		for (User user : forum.getSubscribers()){
-			forumSubsDTO.add(userToDto(user));
-		}
+		Set<UserDTO> forumSubsDTO = new HashSet<>();
+		forum.getSubscribers()
+				.forEach(u -> forumSubsDTO.add(userToDto(u)));
+		Set<CommentDTO> forumCommentsDTO = new HashSet<>();
+		forum.getComments()
+				.forEach(c -> forumCommentsDTO.add(commentToDto(c)));
 		forumDTO.setSubscribers(forumSubsDTO);
+		forumDTO.setComments(forumCommentsDTO);
 		return forumDTO;
 	}
 }
