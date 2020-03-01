@@ -648,20 +648,20 @@ public class TestPetService {
         petDTO.setPicture(PET_PICTURE);
         petDTO.setSpecies(PET_SPECIES);
         petDTO.setUserName(USER_NAME);
-        
-        Pet pet = null;
-        
-        try {
-            pet = petService.createPet(petDTO);
-        } catch (PetException e) {
-            e.printStackTrace();
-        }
-        
-        assertNotNull(pet);
+    
         try {
             petService.getPet(petDTO);
         } catch (PetException e) {
             assertEquals("Pet does not exist.", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void getPetsByWrongUserName() {
+        try {
+            petService.getPetsByUser("bob");
+        } catch (PetException e) {
+            assertEquals("User does not exist.", e.getMessage());
         }
     }
 }
