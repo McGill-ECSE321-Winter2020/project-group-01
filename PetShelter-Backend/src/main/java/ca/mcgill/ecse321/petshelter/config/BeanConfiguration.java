@@ -1,6 +1,5 @@
 package ca.mcgill.ecse321.petshelter.config;
 
-import java.util.Locale;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
@@ -17,49 +16,49 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 @Configuration
 @ConfigurationProperties
 @EnableScheduling
-//@EnableSwagger2
 /**
+ * Class that configures the beans used throughout the application.
  * 
  * @author louis
  *
  */
-public class BeanConfiguration implements WebMvcConfigurer{
+public class BeanConfiguration implements WebMvcConfigurer {
 
 	// retrieves properties from application.properties
 	@Autowired
 	private ApplicationProperties configProp;
-	
-	// Specify Bcrypt as the PW encoder
+
+	/**
+	 * Specify Bcrypt as the PW encoder
+	 * 
+	 * @return
+	 */
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	//defined to retrieve properties from app.properties
+
+	/**
+	 * Retrieves the data from application.properties
+	 * 
+	 * @return
+	 */
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
 		return new PropertySourcesPlaceholderConfigurer();
 	}
-	//bean needed for swagger
-//    @Bean
-//    public Docket api() { 
-//        return new Docket(DocumentationType.SWAGGER_2)  
-//          .select()                                  
-//          .apis(RequestHandlerSelectors.any())              
-//          .paths(PathSelectors.any())                          
-//          .build();                                           
-//    }
 
-	// Email sending config
+	/**
+	 * Bean used to send emails.
+	 * 
+	 * @return
+	 */
 	@Bean
 	@PostConstruct
 	public JavaMailSender getJavaMailSender() {
@@ -69,47 +68,27 @@ public class BeanConfiguration implements WebMvcConfigurer{
 		mailSender.setPort(Integer.parseInt(port));
 		mailSender.setUsername(configProp.getConfigValue("spring.mail.username"));
 		mailSender.setPassword(configProp.getConfigValue("spring.mail.password"));
-
 		Properties props = mailSender.getJavaMailProperties();
 		props.put("mail.transport.protocol", "smtp");
 		props.put("mail.smtp.auth", true);
 		props.put("mail.smtp.starttls.enable", true);
 		props.put("mail.debug", true);
-
 		return mailSender;
 	}
-	
 
-	// setting the locale of the app; english by default
-	@Bean
-	public LocaleResolver localeResolver() {
-		SessionLocaleResolver slr = new SessionLocaleResolver();
-		slr.setDefaultLocale(Locale.CANADA);
-		return slr;
-	}
-
-	// setting a listener to language change
-	@Bean
-	public LocaleChangeInterceptor localeChangeInterceptor() {
-		LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-		lci.setParamName("lang");
-		return lci;
-	}
-	
-
-	// listener to locale changes
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(localeChangeInterceptor());
-	}
-
-	//allows for @Scheduled tasks
+	/**
+	 * Allows for @Scheduled tasks
+	 * 
+	 * @return
+	 */
 	@Bean
 	public AsyncTaskExecutor asyncTaskExecutor() {
 		return new SimpleAsyncTaskExecutor("async");
 	}
-	
-	//allows for @Scheduled tasks
+
+	/**
+	 * Configures @Scheduled tasks
+	 */
 	@Override
 	public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
 		configurer.setDefaultTimeout(-1);
