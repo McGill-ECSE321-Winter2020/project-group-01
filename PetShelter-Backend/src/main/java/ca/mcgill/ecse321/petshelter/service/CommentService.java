@@ -87,7 +87,7 @@ public class CommentService {
 	 * @param commentID Comment ID.
 	 * @param comment   Comment update.
 	 * @return The updated comment.
-	 * @throws CommentException
+	 * @throws CommentException If the user doesn't exists.
 	 */
 	@Transactional
 	public CommentDTO updateComment(long commentID, String comment) throws CommentException {
@@ -107,7 +107,7 @@ public class CommentService {
 	 *
 	 * @param commentID The ID of the comment.
 	 * @return The deleted comment.
-	 * @throws CommentException
+	 * @throws CommentException If the user doesn't exists.
 	 */
 	@Transactional
 	public CommentDTO deleteComment(long commentID) throws CommentException {
@@ -128,7 +128,7 @@ public class CommentService {
 	@Transactional
 	public List<CommentDTO> getComments() {
 		return commentRepository.findAll().stream()
-				.map(c -> commentToDto(c))
+				.map(CommentService::commentToDto)
 				.collect(Collectors.toList());
 	}
 	
@@ -143,7 +143,7 @@ public class CommentService {
 		Optional<User> user = userRepository.findById(userID);
 		if (user.isPresent()) {
 			return commentRepository.findCommentsByUser(user.get()).stream()
-					.map(c -> commentToDto(c))
+					.map(CommentService::commentToDto)
 					.collect(Collectors.toList());
 		} else {
 			throw new CommentException("No such user.");
