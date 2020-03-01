@@ -17,6 +17,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     
     Application findApplicationByUserUserNameAndAdvertisement(String applicant, Advertisement advertisement);
     
+    List<Application> findApplicationsByAdvertisement(Advertisement advertisement);
+    
     List<Application> findApplicationsByUser(User user);
     
     List<Application> findApplicationsByUserUserName(String username);

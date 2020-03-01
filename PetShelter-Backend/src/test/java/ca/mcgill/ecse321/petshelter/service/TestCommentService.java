@@ -185,7 +185,7 @@ public class TestCommentService {
 			comments.add(comment);
 			return comments;
 		});
-		
+
 		// Set a reflexive return answer.
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> invocation.getArgument(0);
 		lenient().when(commentRepository.save(any(Comment.class))).thenAnswer(returnParameterAsAnswer);
@@ -205,7 +205,7 @@ public class TestCommentService {
 			assertEquals(0, comment.getId());
 			assertEquals(COMMENT_TEXT, comment.getText());
 		} catch (CommentException e) {
-			fail();
+			fail(e.getMessage());
 		}
 	}
 
@@ -251,7 +251,7 @@ public class TestCommentService {
 			assertEquals(newText, comment.getText());
 			assertEquals(COMMENT_ID, comment.getId());
 		} catch (CommentException e) {
-			fail();
+			fail(e.getMessage());
 		}
 	}
 
@@ -278,9 +278,9 @@ public class TestCommentService {
 			assertEquals(COMMENT_ID, comment.getId());
 			assertEquals(COMMENT_TEXT, comment.getText());
 		} catch (CommentException e) {
-			fail();
+			fail(e.getMessage());
 		}
-		
+
 	}
 
 	/**
@@ -292,7 +292,7 @@ public class TestCommentService {
 		CommentException thrown = assertThrows(CommentException.class, () -> commentService.deleteComment(0));
 		assertTrue(thrown.getMessage().contains("No such comment."));
 	}
-	
+
 	/**
 	 * This test verifies get all comments works.
 	 */
@@ -305,6 +305,18 @@ public class TestCommentService {
 	}
 
 	/**
+	 * This test verifies get all comments works.
+	 */
+	@Test
+	public void testGetAllCommentsNoComments(){
+		try {
+			commentService.getComments(FORUM_ID + 1);
+		} catch (CommentException e) {
+			assertEquals(e.getMessage(),"No comments found");
+		}
+	}
+
+	/**
 	 * This test verifies get comments by user works.
 	 */
 	@Test
@@ -312,12 +324,12 @@ public class TestCommentService {
 		List<CommentDTO> comments;
 		try {
 			comments = commentService.getCommentsByUser(USER_ID);
-			
+
 			assertEquals(1, comments.size()); // List contains a single element.
 			assertEquals(COMMENT_ID, comments.get(0).getId()); // List contains the correct comment.
 			assertEquals(USER_NAME, comments.get(0).getUsername()); // Comment has the correct author.
 		} catch (CommentException e) {
-			fail();
+			fail(e.getMessage());
 		}
 	}
 
@@ -329,6 +341,40 @@ public class TestCommentService {
 	public void testGetMissingUserComments() {
 		CommentException thrown = assertThrows(CommentException.class, () -> commentService.getCommentsByUser(0));
 		assertTrue(thrown.getMessage().contains("No such user."));
+	}
+
+	/**
+	 * Test the DTO conversion.
+	 */
+	@Test
+	public void testCommentToDTO() {
+		try {
+			// Create comment and user.
+			User user = new User();
+			user.setId(USER_ID);
+			user.setUserName(USER_NAME);
+			user.setEmail(USER_EMAIL);
+			user.setPassword(USER_PASSWORD);
+			Comment comment = new Comment();
+			comment.setUser(user);
+			comment.setText(COMMENT_TEXT);
+			comment.setId(COMMENT_ID);
+			comment.setDatePosted(COMMENT_DATE);
+			comment.setTime(COMMENT_TIME);
+
+			// Convert.
+			CommentDTO commentDTO = CommentService.commentToDto(comment);
+
+			// Test values.
+			assertEquals(COMMENT_ID, commentDTO.getId());
+			assertEquals(USER_NAME, commentDTO.getUsername());
+			assertEquals(COMMENT_TEXT, commentDTO.getText());
+			assertEquals(COMMENT_DATE, commentDTO.getDatePosted());
+			assertEquals(COMMENT_TIME, commentDTO.getTime());
+
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
 	}
 
 }

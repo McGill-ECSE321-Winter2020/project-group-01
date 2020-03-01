@@ -8,7 +8,7 @@ requires requirements engineering, software development, validation of the syste
 delivery process.
 
 ## Running the Project
-The backend is hosted at https://petshelter-backend.herokuapp.com/. The backend can be run locally by cloning this repository, and running the PetShelter-Backend repository as a Spring Boot App.
+The backend is hosted at https://petshelter-backend.herokuapp.com/. The backend can be run locally by cloning this repository, and running the PetShelter-Backend repository as a Spring Boot App. Using a terminal/command line from the root of the project, one can instead use "gradle run" to run the project locally. In that case, the application will be hosted at http://localhost:8080/. To use the application, see the API documentation [here](https://github.com/McGill-ECSE321-Winter2020/project-group-01/wiki/RESTful-services-documentation).
 
 ### About us
 We are 5 McGill University students from the Faculty of Engineering
@@ -16,7 +16,7 @@ We are 5 McGill University students from the Faculty of Engineering
 | Name | GitHub | Major | Year |
 | ------------- | ------------- | ------------- | ------------- |
 |Louis Barrette-Vanasse | [Louismousine](https://github.com/Louismousine) | Software Engineering | U2 |
-|Mathieu Bissonnette | [Mat-san](https://github.com/Mat-san) | Software Engineering | U2 |
+|Mathieu Bissonnette | [Mat-san](https://github.com/Mat-san) | Computer Engineering | U2 |
 |Christopher Boustros | [cboustros](https://github.com/cboustros) | Software Engineering | U2 |
 |Ding Ma | [ding-ma](https://github.com/ding-ma) | Software Engineering | U2 |
 |Katrina Poulin | [katrinapoulin](https://github.com/katrinapoulin) | Computer Engineering | U2 |
