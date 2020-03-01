@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * Entry point of the application.
  * @author louis
  *
  */
@@ -15,10 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableJpaRepositories
 public class PetShelterApplication {
 
+	/**
+	 * Main method; launches the application.
+	 * @param args
+	 */
   public static void main(String[] args) {
     SpringApplication.run(PetShelterApplication.class, args);
   }
 
+  /**
+   * Just an arbitrary welcome message to the root of the application.
+   * @return
+   */
   @RequestMapping("/")
   public String greeting(){
     return "Does it actually deploy automatically with travis to heroku?";
