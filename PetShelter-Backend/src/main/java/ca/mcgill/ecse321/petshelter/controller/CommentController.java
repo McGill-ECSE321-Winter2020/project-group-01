@@ -31,7 +31,8 @@ public class CommentController {
 	CommentService commentService;
 	
 	/**
-	 * Get all the comments in the database and return them. Only the admin may get those.
+	 * Get all the comments in the database and return them. Only the admin may get
+	 * those.
 	 *
 	 * @return The list of all comments.
 	 */
@@ -55,14 +56,19 @@ public class CommentController {
 	 * @return The list of all comments of a user.
 	 */
 	@GetMapping("/{username}")
-	public ResponseEntity<?> getUserComments(@PathVariable String username) {
-		try {
-			List<CommentDTO> comments = commentService
-					.getCommentsByUser(userRepository.findUserByUserName(username).getId());
-			return new ResponseEntity<>(comments, HttpStatus.OK);
-		} catch (CommentException e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<?> getUserComments(@PathVariable String username, @RequestHeader String token) {
+		User requester = userRepository.findUserByApiToken(token);
+		if (requester != null) {
+			try {
+				List<CommentDTO> comments = commentService
+                    .getCommentsByUser(userRepository.findUserByUserName(username).getId());
+				return new ResponseEntity<>(comments, HttpStatus.OK);
+			} catch (CommentException e) {
+				return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			}
+		} else
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
 	}
 	
 	/**
