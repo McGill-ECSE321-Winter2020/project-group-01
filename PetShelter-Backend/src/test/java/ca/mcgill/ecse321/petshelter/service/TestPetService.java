@@ -45,6 +45,10 @@ public class TestPetService {
 	private static final String USER_NAME = "testUN";
 	private static final String USER_EMAIL = "username@gmail.com";
 	private static final String USER_PASSWORD = "testUN";
+	private static final String USER_NAME2 = "testUN2";
+	private static final String USER_EMAIL2 = "username2@gmail.com";
+	private static final String USER_PASSWORD2 = "testUN2";
+	private static final String USER_TOKEN = "qwe";
 
 	// Pet parameters
 	private static final Date PET_DOB = new Date(119, 10, 20);
@@ -83,11 +87,32 @@ public class TestPetService {
 				USER_PETS.add(PET);
 				user.setPets(USER_PETS);
 				return user;
+			} else if (invocation.getArgument(0).equals(USER_NAME2)) {
+				User user = new User();
+				user.setUserName(USER_NAME);
+				user.setEmail(USER_EMAIL);
+				user.setPassword(USER_PASSWORD);
+				USER_PETS.add(PET);
+				return user;
 			} else {
 				return null;
 			}
 		});
 
+		lenient().when(userRepository.findUserByApiToken(anyString())).thenAnswer((InvocationOnMock invocation) -> {
+			if (invocation.getArgument(0).equals(USER_TOKEN)) {
+				User user = new User();
+				user.setUserName(USER_NAME);
+				user.setEmail(USER_EMAIL);
+				user.setPassword(USER_PASSWORD);
+				USER_PETS.add(PET);
+				user.setPets(USER_PETS);
+				user.setApiToken(USER_TOKEN);
+				return user;
+			} else {
+				return null;
+			}
+		});
 		// this will never work because petid is null.....
 		lenient().when(petRepository.findPetById(anyLong())).thenAnswer((InvocationOnMock invocation) -> {
 			if (invocation.getArgument(0).equals(PET_ID)) {
@@ -205,6 +230,25 @@ public class TestPetService {
 	}
 
 	@Test
+	public void testCreatePetEmptyUser() {
+		PetDTO petDTO = new PetDTO();
+		petDTO.setBreed(PET_BREED);
+		petDTO.setDateOfBirth(PET_DOB);
+		petDTO.setDescription(PET_DESCRIPTION);
+		petDTO.setGender(PET_GENDER);
+		petDTO.setName(PET_NAME);
+		petDTO.setPicture(PET_PICTURE);
+		petDTO.setSpecies(PET_SPECIES);
+		petDTO.setUserName("");
+
+		try {
+			petService.createPet(petDTO);
+		} catch (PetException e) {
+			assertEquals("Cannot add: User does not exist.", e.getMessage());
+		}
+	}
+
+	@Test
 	public void testCreatePetNoName() {
 		PetDTO petDTO = new PetDTO();
 		petDTO.setBreed(PET_BREED);
@@ -214,6 +258,26 @@ public class TestPetService {
 		petDTO.setPicture(PET_PICTURE);
 		petDTO.setSpecies(PET_SPECIES);
 		petDTO.setUserName(USER_NAME);
+		petDTO.setAdvertisement(new Long(0));
+
+		try {
+			petService.createPet(petDTO);
+		} catch (PetException e) {
+			assertEquals("Cannot add: A pet needs a name.", e.getMessage());
+		}
+	}
+
+	@Test
+	public void testCreatePetEmptyName() {
+		PetDTO petDTO = new PetDTO();
+		petDTO.setBreed(PET_BREED);
+		petDTO.setDateOfBirth(PET_DOB);
+		petDTO.setDescription(PET_DESCRIPTION);
+		petDTO.setGender(PET_GENDER);
+		petDTO.setPicture(PET_PICTURE);
+		petDTO.setSpecies(PET_SPECIES);
+		petDTO.setUserName(USER_NAME);
+		petDTO.setName("");
 		petDTO.setAdvertisement(new Long(0));
 
 		try {
@@ -261,6 +325,25 @@ public class TestPetService {
 	}
 
 	@Test
+	public void testCreatePetEmptyBreed() {
+		PetDTO petDTO = new PetDTO();
+		petDTO.setDateOfBirth(PET_DOB);
+		petDTO.setDescription(PET_DESCRIPTION);
+		petDTO.setGender(PET_GENDER);
+		petDTO.setName(PET_NAME);
+		petDTO.setPicture(PET_PICTURE);
+		petDTO.setSpecies(PET_SPECIES);
+		petDTO.setUserName(USER_NAME);
+		petDTO.setBreed("");
+
+		try {
+			petService.createPet(petDTO);
+		} catch (PetException e) {
+			assertEquals("Cannot add: A pet needs a breed.", e.getMessage());
+		}
+	}
+
+	@Test
 	public void testCreatePetNoDesc() {
 		PetDTO petDTO = new PetDTO();
 		petDTO.setBreed(PET_BREED);
@@ -297,6 +380,25 @@ public class TestPetService {
 			petService.createPet(petDTO);
 		} catch (PetException e) {
 			assertEquals("Cannot add: A pet needs a gender.", e.getMessage());
+		}
+	}
+
+	@Test
+	public void testCreatePetEmptySpecies() {
+
+		PetDTO petDTO = new PetDTO();
+		petDTO.setBreed(PET_BREED);
+		petDTO.setDateOfBirth(PET_DOB);
+		petDTO.setDescription(PET_DESCRIPTION);
+		petDTO.setName(PET_NAME);
+		petDTO.setPicture(PET_PICTURE);
+		petDTO.setUserName(USER_NAME);
+		petDTO.setSpecies("");
+
+		try {
+			petService.createPet(petDTO);
+		} catch (PetException e) {
+			assertEquals("Cannot add: A pet needs a species.", e.getMessage());
 		}
 	}
 
@@ -401,6 +503,80 @@ public class TestPetService {
 		petUpdateDTO.setSpecies(PET_SPECIES_UPDATE);
 		petUpdateDTO.setUserName(USER_NAME);
 		petUpdateDTO.setId(oldPet.getId());
+
+		try {
+			petService.editPet(petUpdateDTO);
+		} catch (PetException e) {
+			assertEquals("Cannot edit: A pet needs a breed.", e.getMessage());
+		}
+	}
+
+	@Test
+	public void testEditPetEmptySpecies() {
+		PetDTO petDTO = new PetDTO();
+		petDTO.setBreed(PET_BREED);
+		petDTO.setDateOfBirth(PET_DOB);
+		petDTO.setDescription(PET_DESCRIPTION);
+		petDTO.setGender(PET_GENDER);
+		petDTO.setName(PET_NAME);
+		petDTO.setPicture(PET_PICTURE);
+		petDTO.setSpecies(PET_SPECIES);
+		petDTO.setUserName(USER_NAME);
+		petDTO.setAdvertisement(new Long(0));
+
+		PetDTO oldPet = petService.createPet(petDTO);
+
+		assertEquals(PET_NAME, oldPet.getName());
+
+		// update the pet
+		PetDTO petUpdateDTO = new PetDTO();
+		petUpdateDTO.setBreed(PET_BREED_UPDATE);
+		petUpdateDTO.setDateOfBirth(PET_DOB_UPDATE);
+		petUpdateDTO.setDescription(PET_DESCRIPTION_UPDATE);
+		petUpdateDTO.setGender(PET_GENDER_UPDATE);
+		petUpdateDTO.setName(PET_NAME_UPDATE);
+		petUpdateDTO.setPicture(PET_PICTURE_UPDATE);
+		petUpdateDTO.setUserName(USER_NAME);
+		petUpdateDTO.setId(oldPet.getId());
+		petUpdateDTO.setSpecies("");
+
+		try {
+			petService.editPet(petUpdateDTO);
+		} catch (PetException e) {
+			assertEquals("Cannot edit: A pet needs a species.", e.getMessage());
+		}
+	}
+
+	@Test
+	public void testEditPetEmptyBreed() {
+
+		// creates pet
+		PetDTO petDTO = new PetDTO();
+		petDTO.setBreed(PET_BREED);
+		petDTO.setDateOfBirth(PET_DOB);
+		petDTO.setDescription(PET_DESCRIPTION);
+		petDTO.setGender(PET_GENDER);
+		petDTO.setName(PET_NAME);
+		petDTO.setPicture(PET_PICTURE);
+		petDTO.setSpecies(PET_SPECIES);
+		petDTO.setUserName(USER_NAME);
+
+		PetDTO oldPet = petService.createPet(petDTO);
+
+		assertEquals(PET_NAME, oldPet.getName());
+
+		// update the pet
+		PetDTO petUpdateDTO = new PetDTO();
+		// petUpdateDTO.setBreed(PET_BREED_UPDATE);
+		petUpdateDTO.setDateOfBirth(PET_DOB_UPDATE);
+		petUpdateDTO.setDescription(PET_DESCRIPTION_UPDATE);
+		petUpdateDTO.setGender(PET_GENDER_UPDATE);
+		petUpdateDTO.setName(PET_NAME_UPDATE);
+		petUpdateDTO.setPicture(PET_PICTURE_UPDATE);
+		petUpdateDTO.setSpecies(PET_SPECIES_UPDATE);
+		petUpdateDTO.setUserName(USER_NAME);
+		petUpdateDTO.setId(oldPet.getId());
+		petUpdateDTO.setBreed("");
 
 		try {
 			petService.editPet(petUpdateDTO);
@@ -558,6 +734,43 @@ public class TestPetService {
 	}
 
 	@Test
+	public void testEditPetEmptyName() {
+
+		// creates pet
+		PetDTO petDTO = new PetDTO();
+		petDTO.setBreed(PET_BREED);
+		petDTO.setDateOfBirth(PET_DOB);
+		petDTO.setDescription(PET_DESCRIPTION);
+		petDTO.setGender(PET_GENDER);
+		petDTO.setName(PET_NAME);
+		petDTO.setPicture(PET_PICTURE);
+		petDTO.setSpecies(PET_SPECIES);
+		petDTO.setUserName(USER_NAME);
+
+		PetDTO oldPet = petService.createPet(petDTO);
+
+		assertEquals(PET_NAME, oldPet.getName());
+
+		// update the pet
+		PetDTO petUpdateDTO = new PetDTO();
+		petUpdateDTO.setBreed(PET_BREED_UPDATE);
+		petUpdateDTO.setDateOfBirth(PET_DOB_UPDATE);
+		petUpdateDTO.setDescription(PET_DESCRIPTION_UPDATE);
+		petUpdateDTO.setGender(PET_GENDER_UPDATE);
+		petUpdateDTO.setName("");
+		petUpdateDTO.setPicture(PET_PICTURE_UPDATE);
+		petUpdateDTO.setSpecies(PET_SPECIES_UPDATE);
+		petUpdateDTO.setUserName(USER_NAME);
+		petUpdateDTO.setId(oldPet.getId());
+
+		try {
+			petService.editPet(petUpdateDTO);
+		} catch (PetException e) {
+			assertEquals("Cannot edit: A pet needs a name.", e.getMessage());
+		}
+	}
+
+	@Test
 	public void testEditPetWrongPet() {
 
 		// creates pet
@@ -594,30 +807,25 @@ public class TestPetService {
 			assertEquals("Cannot edit: Pet does not exist.", e.getMessage());
 		}
 	}
-    
-    @Test
-    public void testdeletePet() {
-        PetDTO petDTO = new PetDTO();
-        petDTO.setBreed(PET_BREED);
-        petDTO.setDateOfBirth(PET_DOB);
-        petDTO.setDescription(PET_DESCRIPTION);
-        petDTO.setGender(PET_GENDER);
-        petDTO.setName(PET_NAME);
-        petDTO.setPicture(PET_PICTURE);
-        petDTO.setSpecies(PET_SPECIES);
-        petDTO.setUserName(USER_NAME);
 
+	@Test
+	public void testdeletePet() {
+		PetDTO petDTO = new PetDTO();
+		petDTO.setBreed(PET_BREED);
+		petDTO.setDateOfBirth(PET_DOB);
+		petDTO.setDescription(PET_DESCRIPTION);
+		petDTO.setGender(PET_GENDER);
+		petDTO.setName(PET_NAME);
+		petDTO.setPicture(PET_PICTURE);
+		petDTO.setSpecies(PET_SPECIES);
+		petDTO.setUserName(USER_NAME);
 		PetDTO pet = null;
-
 		try {
 			pet = petService.createPet(petDTO);
 		} catch (PetException e) {
-			e.printStackTrace();
 		}
 		assertNotNull(pet);
-
 		petDTO.setId(pet.getId());
-
 		boolean isDeleted = false;
 		try {
 			isDeleted = petService.deletePet(petDTO.getId(), USER_NAME);
@@ -625,38 +833,77 @@ public class TestPetService {
 		}
 		assertTrue(isDeleted);
 	}
-    
-    @Test
-    public void testdeletePetFail() {
-        PetDTO petDTO = new PetDTO();
-        petDTO.setBreed(PET_BREED);
-        petDTO.setDateOfBirth(PET_DOB);
-        petDTO.setDescription(PET_DESCRIPTION);
-        petDTO.setGender(PET_GENDER);
-        petDTO.setName(PET_NAME);
-        petDTO.setPicture(PET_PICTURE);
-        petDTO.setSpecies(PET_SPECIES);
-        petDTO.setUserName(USER_NAME);
-        petDTO.setId(new Long(0));
+
+	@Test
+	public void testdeletePetNoUser() {
+		PetDTO petDTO = new PetDTO();
+		petDTO.setBreed(PET_BREED);
+		petDTO.setDateOfBirth(PET_DOB);
+		petDTO.setDescription(PET_DESCRIPTION);
+		petDTO.setGender(PET_GENDER);
+		petDTO.setName(PET_NAME);
+		petDTO.setPicture(PET_PICTURE);
+		petDTO.setSpecies(PET_SPECIES);
+		petDTO.setUserName(USER_NAME);
+		petDTO.setId(new Long(0));
 		try {
-			petService.deletePet(petDTO.getId(), USER_NAME);
+			petService.deletePet(petDTO.getId(), null);
+		} catch (PetException e) {
+			assertEquals("Cannot delete: User does not exist.", e.getMessage());
+		}
+	}
+
+	@Test
+	public void testdeletePetWrongUser() {
+		PetDTO petDTO = new PetDTO();
+		petDTO.setBreed(PET_BREED);
+		petDTO.setDateOfBirth(PET_DOB);
+		petDTO.setDescription(PET_DESCRIPTION);
+		petDTO.setGender(PET_GENDER);
+		petDTO.setName(PET_NAME);
+		petDTO.setPicture(PET_PICTURE);
+		petDTO.setSpecies(PET_SPECIES);
+		petDTO.setUserName("WrongUser");
+		petDTO.setId(new Long(0));
+		try {
+			petService.deletePet(petDTO.getId(), USER_NAME2);
 		} catch (PetException e) {
 			assertEquals("Cannot delete: The requester is not the owner of the pet.", e.getMessage());
 		}
+
 	}
-    
-    @Test
-    public void testfindPet() {
-        PetDTO petDTO = new PetDTO();
-        petDTO.setBreed(PET_BREED);
-        petDTO.setDateOfBirth(PET_DOB);
-        petDTO.setDescription(PET_DESCRIPTION);
-        petDTO.setGender(PET_GENDER);
-        petDTO.setName(PET_NAME);
-        petDTO.setPicture(PET_PICTURE);
-        petDTO.setSpecies(PET_SPECIES);
-        petDTO.setUserName(USER_NAME);
-        petDTO.setAdvertisement(new Long(0));
+
+	@Test
+	public void testdeletePetNoId() {
+		PetDTO petDTO = new PetDTO();
+		petDTO.setBreed(PET_BREED);
+		petDTO.setDateOfBirth(PET_DOB);
+		petDTO.setDescription(PET_DESCRIPTION);
+		petDTO.setGender(PET_GENDER);
+		petDTO.setName(PET_NAME);
+		petDTO.setPicture(PET_PICTURE);
+		petDTO.setSpecies(PET_SPECIES);
+		petDTO.setUserName(USER_NAME);
+		petDTO.setId(new Long(1));
+		try {
+			petService.deletePet(petDTO.getId(), USER_NAME);
+		} catch (PetException e) {
+			assertEquals("Cannot delete: Pet does not exist.", e.getMessage());
+		}
+	}
+
+	@Test
+	public void testfindPet() {
+		PetDTO petDTO = new PetDTO();
+		petDTO.setBreed(PET_BREED);
+		petDTO.setDateOfBirth(PET_DOB);
+		petDTO.setDescription(PET_DESCRIPTION);
+		petDTO.setGender(PET_GENDER);
+		petDTO.setName(PET_NAME);
+		petDTO.setPicture(PET_PICTURE);
+		petDTO.setSpecies(PET_SPECIES);
+		petDTO.setUserName(USER_NAME);
+		petDTO.setAdvertisement(new Long(0));
 
 		PetDTO pet = null;
 		try {
@@ -672,18 +919,18 @@ public class TestPetService {
 		assertEquals(pet.getName(), dbPet.getName());
 		assertEquals(pet.getBreed(), dbPet.getBreed());
 	}
-    
-    @Test
-    public void testfindPetNoID() {
-        PetDTO petDTO = new PetDTO();
-        petDTO.setBreed(PET_BREED);
-        petDTO.setDateOfBirth(PET_DOB);
-        petDTO.setDescription(PET_DESCRIPTION);
-        petDTO.setGender(PET_GENDER);
-        petDTO.setName(PET_NAME);
-        petDTO.setPicture(PET_PICTURE);
-        petDTO.setSpecies(PET_SPECIES);
-        petDTO.setUserName(USER_NAME);
+
+	@Test
+	public void testfindPetNoID() {
+		PetDTO petDTO = new PetDTO();
+		petDTO.setBreed(PET_BREED);
+		petDTO.setDateOfBirth(PET_DOB);
+		petDTO.setDescription(PET_DESCRIPTION);
+		petDTO.setGender(PET_GENDER);
+		petDTO.setName(PET_NAME);
+		petDTO.setPicture(PET_PICTURE);
+		petDTO.setSpecies(PET_SPECIES);
+		petDTO.setUserName(USER_NAME);
 
 		try {
 			petService.getPet(petDTO);
@@ -691,14 +938,69 @@ public class TestPetService {
 			assertEquals("Pet does not exist.", e.getMessage());
 		}
 	}
-    
-    @Test
-    public void testGetPetsByWrongUserName() {
-        try {
-            petService.getPetsByUser("bob");
-        } catch (PetException e) {
-            assertEquals("User does not exist.", e.getMessage());
-        }
-    }
 
+	@Test
+	public void testGetPetsByWrongUserName() {
+		try {
+			petService.getPetsByUser("bob");
+		} catch (PetException e) {
+			assertEquals("User does not exist.", e.getMessage());
+		}
+	}
+
+	@Test
+	public void testChangePetOwnership() {
+		PetDTO petDTO = new PetDTO();
+		petDTO.setBreed(PET_BREED);
+		petDTO.setDateOfBirth(PET_DOB);
+		petDTO.setDescription(PET_DESCRIPTION);
+		petDTO.setGender(PET_GENDER);
+		petDTO.setName(PET_NAME);
+		petDTO.setPicture(PET_PICTURE);
+		petDTO.setSpecies(PET_SPECIES);
+		petDTO.setUserName(USER_NAME);
+		petDTO.setId(PET_ID);
+		petDTO = petService.changeOwner(petDTO, USER_TOKEN);
+		assertEquals(petDTO.getDescription(), PET_DESCRIPTION);
+	}
+
+	@Test
+	public void testChangePetOwnershipNoOldUser() {
+		PetDTO petDTO = new PetDTO();
+		petDTO.setBreed(PET_BREED);
+		petDTO.setDateOfBirth(PET_DOB);
+		petDTO.setDescription(PET_DESCRIPTION);
+		petDTO.setGender(PET_GENDER);
+		petDTO.setName(PET_NAME);
+		petDTO.setPicture(PET_PICTURE);
+		petDTO.setSpecies(PET_SPECIES);
+		petDTO.setUserName(USER_NAME);
+		petDTO.setId(PET_ID);
+		try {
+			petDTO = petService.changeOwner(petDTO, null);
+		} catch (PetException e) {
+			assertEquals(e.getMessage(), "Cannot edit: User not found.");
+		}
+
+	}
+
+	@Test
+	public void testChangePetOwnershipNoNewUser() {
+		PetDTO petDTO = new PetDTO();
+		petDTO.setBreed(PET_BREED);
+		petDTO.setDateOfBirth(PET_DOB);
+		petDTO.setDescription(PET_DESCRIPTION);
+		petDTO.setGender(PET_GENDER);
+		petDTO.setName(PET_NAME);
+		petDTO.setPicture(PET_PICTURE);
+		petDTO.setSpecies(PET_SPECIES);
+		petDTO.setUserName(null);
+		petDTO.setId(PET_ID);
+		try {
+			petDTO = petService.changeOwner(petDTO, USER_TOKEN);
+		} catch (PetException e) {
+			assertEquals(e.getMessage(), "Cannot edit: User not found.");
+		}
+
+	}
 }
