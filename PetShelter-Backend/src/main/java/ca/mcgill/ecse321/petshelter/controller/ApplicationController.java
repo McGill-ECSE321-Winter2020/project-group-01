@@ -49,6 +49,34 @@ public class ApplicationController {
 		else
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
+	
+	/**
+	 * Returns all applications.
+	 * @return the list of all applications
+	 * @param token The requester's token.
+	 */
+	@GetMapping("/allAccepted")
+	public ResponseEntity<?> getAllAcceptedApplications(@RequestHeader String token) {
+		User requester = userRepository.findUserByApiToken(token);
+		if (requester != null)
+			return new ResponseEntity<>(applicationService.getAllAcceptedApplications(), HttpStatus.OK);
+		else
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	}
+	
+	/**
+	 * Returns all applications.
+	 * @return the list of all applications
+	 * @param token The requester's token.
+	 */
+	@GetMapping("/allUnaccepted")
+	public ResponseEntity<?> getAllUnacceptedApplications(@RequestHeader String token) {
+		User requester = userRepository.findUserByApiToken(token);
+		if (requester != null)
+			return new ResponseEntity<>(applicationService.getAllUnacceptedApplications(), HttpStatus.OK);
+		else
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	}
 
 	/**
 	 * Returns applications made by a user.
