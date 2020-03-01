@@ -1,10 +1,9 @@
 package ca.mcgill.ecse321.petshelter.controller;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -159,6 +158,45 @@ public class AdvertisementController {
 			adDto = advertisementService.createAdvertisement(adDto);
 			if (adDto != null) {
 				return new ResponseEntity<>(adDto, HttpStatus.CREATED);
+			} else {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+		} else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	/**
+	 * Update an advertisement.
+	 *
+	 * @param adID The ID of the advertisement to update.
+	 * @param advertisementDTO The advertisement DTO containing the information to change.
+	 * @param token The user session token.
+	 * @return The modified advertisement as a DTO.
+	 */
+	@PutMapping
+	public ResponseEntity<?> updateAd(@PathVariable long adID,
+									  @RequestBody AdvertisementDTO advertisementDTO,
+									  @RequestBody String token) {
+		User user = userRepository.findUserByApiToken(token);
+		AdvertisementDTO advertisementOld = advertisementService.getAdvertisementById(adID);
+		if ( user != null // Check if user an advert exist and if user can modify it.
+				&& advertisementOld != null
+				&& hasRightsForAd(user, advertisementOld)
+				&& advertisementDTO.getTitle() != null // Check if the new title is valid.
+				&& !advertisementDTO.getTitle().trim().equals("") )
+		{
+			// Converts all the pets of the user to a set of their IDs.
+			Set<Long> petsID = petService.getPetsByUser(user.getUserName()).stream()
+					.map(PetDTO::getId)
+					.collect(Collectors.toSet());
+			// Then verify if the pets of the new advertisement are contained in that set.
+			if (petsID.containsAll(Arrays.asList(advertisementDTO.getPetIds()))) {
+				advertisementDTO.setAdId(adID); // Make sure the advertisement ID remains the same.
+				return new ResponseEntity<AdvertisementDTO>(
+						advertisementService.editAdvertisement(advertisementDTO),
+						HttpStatus.OK
+				);
 			} else {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
