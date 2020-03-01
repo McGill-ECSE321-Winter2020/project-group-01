@@ -60,17 +60,7 @@ public class TestDonationService {
                 return null;
             }
         });
-        lenient().when(userRepository.findUserByEmail(anyString())).thenAnswer((InvocationOnMock invocation) -> {
-            if (invocation.getArgument(0).equals(USER_EMAIL)) {
-                User user = new User();
-                user.setUserName(USER_NAME);
-                user.setEmail(USER_EMAIL);
-                user.setPassword(USER_PASSWORD);
-                return user;
-            } else {
-                return null;
-            }
-        });
+
         lenient().when(donationRepository.findDonationsByUserUserNameAndAmount(anyString(), anyDouble())).thenAnswer((InvocationOnMock invocation) -> {
             
             if (invocation.getArgument(0).equals(USER_NAME)) {
@@ -231,7 +221,15 @@ public class TestDonationService {
     @Test
     public  void testWrongDonationName(){
         try {
-            donationService.getAllUserDonations("bob");
+            donationService.getAllUserDonations("b");
+        } catch (DonationException e){
+            assertEquals("Donations not found", e.getMessage());
+        }
+    }
+    @Test
+    public  void testNullDonationName(){
+        try {
+            donationService.getAllUserDonations(null);
         } catch (DonationException e){
             assertEquals("Donations not found", e.getMessage());
         }
