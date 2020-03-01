@@ -48,7 +48,7 @@ The project report for this deliverable can be found [here](https://github.com/M
 
 | Name | Contributions | Hours |
 | ------------- | ------------- | ------------- |
-| Louis Barrette-Vanasse | <ul><li>User controller and service</li><li>Extra features</li><li>Fixing the team's bugs</>| 20 |
+| Louis Barrette-Vanasse | <ul><li>Fixing the team's bugs</li><li>User controller and service</li><li>Extra features</li><li>Mockito tests</li></ul>| 15 |
 | Mathieu Bissonnette |... | 0 |
 | Christopher Boustros | ... | 0 |
 | Ding Ma | <ul><li>RESTful services tests through Postman, Newman, and Documentation </li><li>Donation and User service tests </li><li>Donation controller and Service </li><li>Heroku deployment</li></ul> | 35 |
