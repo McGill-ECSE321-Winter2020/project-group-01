@@ -1,6 +1,5 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
-import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Gender;
 
 import java.sql.Date;
@@ -16,14 +15,14 @@ public class PetDTO {
 	private byte[] picture;
 	private Long id;
 	private Gender gender;
-	private Advertisement advertisement;
+	private Long advertisementId;
 	private String userName;
 	
 	public PetDTO() {
 	
 	}
 	
-	public PetDTO(Date date, String name, String spec, String breed, String desc, byte[] pic, Gender gen, Advertisement ad, String userName) {
+	public PetDTO(Date date, String name, String spec, String breed, String desc, byte[] pic, Gender gen, Long ad, String userName) {
 		this.dateOfBirth = date;
 		this.name = name;
 		this.description = desc;
@@ -32,7 +31,7 @@ public class PetDTO {
 		this.picture = pic;
 		this.id = null;
 		this.gender = gen;
-		this.advertisement = ad;
+		this.advertisementId = ad;
 		this.userName = userName;
 	}
 
@@ -116,12 +115,12 @@ public class PetDTO {
 	}
 
 
-	public Advertisement getAdvertisement() {
-		return advertisement;
+	public Long getAdvertisement() {
+		return advertisementId;
 	}
 	
-	public void setAdvertisement(Advertisement advertisement) {
-		this.advertisement = advertisement;
+	public void setAdvertisement(Long advertisement) {
+		this.advertisementId = advertisement;
 	}
 	
 	public String getUserName() {
@@ -143,7 +142,7 @@ public class PetDTO {
 				", picture=" + Arrays.toString(picture) +
 				", id=" + id +
 				", gender=" + gender +
-				", advertisement=" + advertisement +
+				", advertisement=" + advertisementId +
 				", userName='" + userName + '\'' +
 				'}';
 	}
