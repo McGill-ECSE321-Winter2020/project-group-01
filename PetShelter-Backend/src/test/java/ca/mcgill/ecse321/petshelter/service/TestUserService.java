@@ -148,73 +148,69 @@ public class TestUserService {
 	}
 	
 	@Test
-	public void testRegisterWithInvalidEmail() {
+	public void testCreateWithInvalidEmail() {
 		UserDTO userDTO = new UserDTO();
 		
 		String email = "myEmail@";
-		UserType userType = USER;
 		
 		userDTO.setEmail(email);
 		userDTO.setPassword(USER_PASSWORD);
 		userDTO.setUsername(USER_NAME);
-		userDTO.setUserType(userType);
-
+		userDTO.setUserType(USER);
+		
 		try {
 			userService.createUser(userDTO);
 		} catch (RegisterException e) {
 			assertEquals("The provided email is not a valid email address.", e.getMessage());
 		}
 	}
-
+	
 	@Test
-	public void testRegisterWithMissingAtEmail() {
+	public void testCreateWithMissingAtEmail() {
 		UserDTO userDTO = new UserDTO();
-
+		
 		String email = "myEmailgmail.com";
-		UserType userType = USER;
-
+		
 		userDTO.setEmail(email);
 		userDTO.setPassword(USER_PASSWORD);
 		userDTO.setUsername(USER_NAME);
-		userDTO.setUserType(userType);
-
+		userDTO.setUserType(USER);
+		
 		try {
 			userService.createUser(userDTO);
 		} catch (Exception e) {
 			Assert.assertEquals("The provided email is not a valid email address.", e.getMessage());
 		}
 	}
-
+	
 	@Test
-	public void testRegisterWithMissingUsername() {
+	public void testCreateWithMissingUsername() {
 		UserDTO userDTO = new UserDTO();
-
+		
 		String username = null;
-		UserType userType = USER;
-
+		
 		userDTO.setEmail(USER_EMAIL);
 		userDTO.setPassword(USER_PASSWORD);
 		userDTO.setUsername(username);
-		userDTO.setUserType(userType);
+		userDTO.setUserType(USER);
 		try {
 			userService.createUser(userDTO);
 		} catch (RegisterException e) {
 			Assert.assertEquals("Username cannot be empty.", e.getMessage());
 		}
 	}
-
+	
 	@Test
-	public void testRegisterWithMissingPassword() {
+	public void testCreateWithMissingPassword() {
 		UserDTO userDTO = new UserDTO();
-
+		
 		String password = null;
-		UserType userType = USER;
-
+		
 		userDTO.setEmail(USER_EMAIL);
 		userDTO.setPassword(password);
 		userDTO.setUsername(USER_NAME);
-		userDTO.setUserType(userType);
-
+		userDTO.setUserType(USER);
+		
 		try {
 			userService.createUser(userDTO);
 		} catch (RegisterException e) {
@@ -223,17 +219,16 @@ public class TestUserService {
 	}
 	
 	@Test
-	public void testRegisterWithEmptyPassword() {
+	public void testCreateWithEmptyPassword() {
 		UserDTO userDTO = new UserDTO();
-
+		
 		String password = "";
-		UserType userType = USER;
-
+		
 		userDTO.setEmail(USER_EMAIL);
 		userDTO.setPassword(password);
 		userDTO.setUsername(USER_NAME);
-		userDTO.setUserType(userType);
-
+		userDTO.setUserType(USER);
+		
 		try {
 			userService.createUser(userDTO);
 		} catch (RegisterException e) {
@@ -331,66 +326,60 @@ public class TestUserService {
 			assertEquals("Password must be at least 8 characters in length.", e.getMessage());
 		}
 	}
-
+	
 	@Test
-	public void testRegisterWithSameUsername() {
+	public void testCreateWithSameUsername() {
 		UserDTO user1 = new UserDTO();
-
-		UserType userType = USER;
-
+		
 		user1.setEmail(USER_EMAIL);
 		user1.setPassword(USER_PASSWORD);
-		user1.setUserType(userType);
+		user1.setUserType(USER);
 		user1.setUsername(USER_NAME);
-
+		
 		try {
 			userService.createUser(user1);
 		} catch (RegisterException ignored) {
 			// fail(); this doesnt work idk why, it fails the test
 		} // we know that the first one will register for sure
-
+		
 		UserDTO user2 = new UserDTO();
 		String email2 = "myEmail1234@gmail.com";
-
-		UserType userType2 = USER;
-
+		
 		user2.setUsername(USER_NAME);
-		user2.setUserType(userType2);
+		user2.setUserType(USER);
 		user2.setEmail(email2);
 		user2.setPassword(USER_PASSWORD);
-
+		
 		try {
 			userService.createUser(user2);
 		} catch (RegisterException e) {
 			Assert.assertEquals("Username is already taken.", e.getMessage());
 		}
 	}
-
+	
 	@Test
-	public void testRegisterWithSameEmail() {
+	public void testCreateWithSameEmail() {
 		UserDTO user1 = new UserDTO();
-		UserType userType = USER;
-
+		
 		user1.setEmail(USER_EMAIL);
 		user1.setPassword(USER_PASSWORD);
-		user1.setUserType(userType);
+		user1.setUserType(USER);
 		user1.setUsername(USER_NAME);
-
+		
 		try {
 			userService.createUser(user1);
 		} catch (RegisterException ignore) {
 			// Assert.fail();
 		} // we know that the first one will register for sure
-
+		
 		UserDTO user2 = new UserDTO();
 		String username2 = "myUsernameIsDiff";
-		UserType userType2 = USER;
-
+		
 		user2.setUsername(username2);
-		user2.setUserType(userType2);
+		user2.setUserType(USER);
 		user2.setEmail(USER_EMAIL);
 		user2.setPassword(USER_PASSWORD);
-
+		
 		try {
 			userService.createUser(user2);
 		} catch (RegisterException e) {
@@ -401,55 +390,52 @@ public class TestUserService {
 	@Test
 	public void testPasswordShorterThan8() {
 		UserDTO userDTO = new UserDTO();
-
+		
 		String password = "1A/c";
-		UserType userType = USER;
-
+		
 		userDTO.setEmail(USER_EMAIL);
 		userDTO.setPassword(password);
 		userDTO.setUsername(USER_NAME);
-		userDTO.setUserType(userType);
-
+		userDTO.setUserType(USER);
+		
 		try {
 			userService.createUser(userDTO);
 		} catch (RegisterException e) {
 			Assert.assertEquals("Password must be at least 8 characters in length.", e.getMessage());
 		}
-
+		
 	}
 
 	@Test
 	public void testPasswordNoNumber() {
 		UserDTO userDTO = new UserDTO();
-
+		
 		String password = "/aAasdfg";
-		UserType userType = USER;
-
+		
 		userDTO.setEmail(USER_EMAIL);
 		userDTO.setPassword(password);
 		userDTO.setUsername(USER_NAME);
-		userDTO.setUserType(userType);
-
+		userDTO.setUserType(USER);
+		
 		try {
 			userService.createUser(userDTO);
 		} catch (RegisterException e) {
 			Assert.assertEquals("Password must contain at least 1 digit characters.", e.getMessage());
 		}
-
+		
 	}
 
 	@Test
 	public void testPasswordNoUpperCase() {
 		UserDTO userDTO = new UserDTO();
-
+		
 		String password = "/1abcdasdasdasdqdqw";
-		UserType userType = USER;
-
+		
 		userDTO.setEmail(USER_EMAIL);
 		userDTO.setPassword(password);
 		userDTO.setUsername(USER_NAME);
-		userDTO.setUserType(userType);
-
+		userDTO.setUserType(USER);
+		
 		try {
 			userService.createUser(userDTO);
 		} catch (RegisterException e) {
@@ -460,15 +446,14 @@ public class TestUserService {
 	@Test
 	public void testPasswordNoSpecialCharacter() {
 		UserDTO userDTO = new UserDTO();
-
+		
 		String password = "ACSW1abcd";
-		UserType userType = USER;
-
+		
 		userDTO.setEmail(USER_EMAIL);
 		userDTO.setPassword(password);
 		userDTO.setUsername(USER_NAME);
-		userDTO.setUserType(userType);
-
+		userDTO.setUserType(USER);
+		
 		try {
 			userService.createUser(userDTO);
 		} catch (RegisterException e) {
