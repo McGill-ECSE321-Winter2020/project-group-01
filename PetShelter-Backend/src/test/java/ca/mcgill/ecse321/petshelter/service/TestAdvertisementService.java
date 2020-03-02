@@ -64,7 +64,7 @@ public class TestAdvertisementService {
     private static final String PET_SPECIES = "testSpecies";
     private static final String PET_BREED = "testBreed";
     private static final String PET_DESCRIPTION = "testDesc";
-    private static final byte[] PET_PICTURE = new byte[10];
+    private static final String PET_PICTURE = "picturelink";
     private static final Gender PET_GENDER = Gender.FEMALE;
     private static Long[] AD_PET_IDS = new Long[1];
     @Mock

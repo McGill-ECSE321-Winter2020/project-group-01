@@ -3,7 +3,6 @@ package ca.mcgill.ecse321.petshelter.model;
 import ca.mcgill.ecse321.petshelter.service.extrafeatures.ValidPassword;
 
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.Set;
 
 @Entity
@@ -85,7 +84,7 @@ public class User {
 	}
 	
 	private Set<Application> applications;
-	private byte[] picture;
+	private String pictureLink;
 	@Enumerated
 	private UserType userType;
 	
@@ -98,12 +97,12 @@ public class User {
 		this.applications = applicationss;
 	}
 	
-	public byte[] getPicture() {
-		return this.picture;
+	public String getPicture() {
+		return this.pictureLink;
 	}
 	
-	public void setPicture(byte[] value) {
-		this.picture = value;
+	public void setPicture(String value) {
+		this.pictureLink = value;
 	}
 	
 	public UserType getUserType() {
@@ -125,7 +124,7 @@ public class User {
                 ", apiToken='" + apiToken + '\'' +
                 ", pets=" + pets +
                 ", applications=" + applications +
-                ", picture=" + Arrays.toString(picture) +
+                ", picture=" + pictureLink +
                 ", userType=" + userType +
                 '}';
     }
