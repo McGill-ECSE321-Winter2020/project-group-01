@@ -1,12 +1,23 @@
 package ca.mcgill.ecse321.petshelter.service;
 
-import ca.mcgill.ecse321.petshelter.dto.PetDTO;
-import ca.mcgill.ecse321.petshelter.model.*;
-import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
-import ca.mcgill.ecse321.petshelter.repository.PetRepository;
-import ca.mcgill.ecse321.petshelter.repository.UserRepository;
-import ca.mcgill.ecse321.petshelter.service.exception.ForumException;
-import ca.mcgill.ecse321.petshelter.service.exception.PetException;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
+
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,18 +28,16 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
-import javax.validation.constraints.AssertTrue;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.lenient;
+import ca.mcgill.ecse321.petshelter.dto.PetDTO;
+import ca.mcgill.ecse321.petshelter.model.Advertisement;
+import ca.mcgill.ecse321.petshelter.model.Gender;
+import ca.mcgill.ecse321.petshelter.model.Pet;
+import ca.mcgill.ecse321.petshelter.model.User;
+import ca.mcgill.ecse321.petshelter.model.UserType;
+import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
+import ca.mcgill.ecse321.petshelter.repository.PetRepository;
+import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import ca.mcgill.ecse321.petshelter.service.exception.PetException;
 
 //TODO Javadoc
 @ExtendWith(MockitoExtension.class)
@@ -52,8 +61,6 @@ public class TestPetService {
 	private static final String USER_EMAIL = "username@gmail.com";
 	private static final String USER_PASSWORD = "testUN";
 	private static final String USER_NAME2 = "testUN2";
-	private static final String USER_EMAIL2 = "username2@gmail.com";
-	private static final String USER_PASSWORD2 = "testUN2";
 	private static final String USER_TOKEN = "qwe";
 
 	// Pet parameters
