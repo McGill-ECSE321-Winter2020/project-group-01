@@ -142,8 +142,6 @@ public class AdvertisementService {
         Advertisement ad = advertisementRepository.findAdvertisementById(adDTO.getAdId());
         Set<Pet> newPets = validateParametersEdit(adDTO);
         Set<Application> applications = new HashSet<Application>();
-        //TODO change with fixed master
-        //applications.addAll(adDTO.getAdoptionApplication());
         applications.addAll(adDTO.getApplication());
         ad.setApplication(applications);
         ad.setApplication(applications);
