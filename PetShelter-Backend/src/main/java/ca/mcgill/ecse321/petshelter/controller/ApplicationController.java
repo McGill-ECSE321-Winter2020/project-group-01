@@ -1,9 +1,11 @@
 package ca.mcgill.ecse321.petshelter.controller;
 
 import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
+import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Application;
 import ca.mcgill.ecse321.petshelter.model.User;
 import ca.mcgill.ecse321.petshelter.model.UserType;
+import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import ca.mcgill.ecse321.petshelter.repository.ApplicationRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.ApplicationService;
@@ -33,6 +35,9 @@ public class ApplicationController {
 	private ApplicationRepository applicationRepository;
 	
 	@Autowired
+	private AdvertisementRepository advertisementRepository;
+	
+	@Autowired
 	private UserRepository userRepository;
 
 	
@@ -56,7 +61,7 @@ public class ApplicationController {
 	@GetMapping("/all")
 	public ResponseEntity<?> getAllApplications(@RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
-		if (requester != null)
+		if (requester != null && requester.getUserType() == UserType.ADMIN)
 			return new ResponseEntity<>(applicationService.getAllApplications(), HttpStatus.OK);
 		else
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -70,7 +75,7 @@ public class ApplicationController {
 	@GetMapping("/allAccepted")
 	public ResponseEntity<?> getAllAcceptedApplications(@RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
-		if (requester != null)
+		if (requester != null && requester.getUserType() == UserType.ADMIN)
 			return new ResponseEntity<>(applicationService.getAllAcceptedApplications(), HttpStatus.OK);
 		else
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -84,7 +89,7 @@ public class ApplicationController {
 	@GetMapping("/allUnaccepted")
 	public ResponseEntity<?> getAllUnacceptedApplications(@RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
-		if (requester != null)
+		if (requester != null && requester.getUserType() == UserType.ADMIN)
 			return new ResponseEntity<>(applicationService.getAllUnacceptedApplications(), HttpStatus.OK);
 		else
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -99,8 +104,25 @@ public class ApplicationController {
 	@GetMapping("/{user}")
 	public ResponseEntity<?> getUserApplication(@PathVariable String user, @RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
-		if (requester != null) {
+		if (requester != null && (requester.getUserType() == UserType.ADMIN || requester.getUserName().equals(user))) {
 			return new ResponseEntity<>(applicationService.getAllUserApplications(requester.getUserName()), HttpStatus.OK);
+		} else
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+	}
+	
+	/**
+	 * Returns applications for a particular advertisement.
+	 * @param advertisement the advertisement targeted
+	 * @param token the requester's token.
+	 * @return the advertisement's applications
+	 */
+	@GetMapping("/{allAdvertisementApplications}")
+	public ResponseEntity<?> getAdvertisementApplication(@PathVariable long advertisementId, @RequestHeader String token) {
+		User requester = userRepository.findUserByApiToken(token);
+		Advertisement advertisement = advertisementRepository.findAdvertisementById(advertisementId);
+		if (requester != null && (requester.getUserType() == UserType.ADMIN)) {
+			return new ResponseEntity<>(applicationService.getAllAdvertisementApplications(advertisement), HttpStatus.OK);
 		} else
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
