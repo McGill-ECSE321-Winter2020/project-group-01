@@ -1,198 +1,245 @@
 package ca.mcgill.ecse321.petshelter.service;
 
+import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
+import ca.mcgill.ecse321.petshelter.dto.ForumDTO;
+import ca.mcgill.ecse321.petshelter.dto.UserDTO;
+import ca.mcgill.ecse321.petshelter.model.Advertisement;
+import ca.mcgill.ecse321.petshelter.model.Application;
+import ca.mcgill.ecse321.petshelter.model.User;
+import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
+import ca.mcgill.ecse321.petshelter.repository.ApplicationRepository;
+import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import ca.mcgill.ecse321.petshelter.service.exception.ApplicationException;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
+
+import java.sql.Date;
+import java.sql.Time;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
 public class TestApplicationService {
 
-    /*
+    private static final long USER_ID = 13;
     private static final String USER_NAME = "TestPerson";
     private static final String USER_EMAIL = "TestPerson@email.com";
     private static final String USER_PASSWORD = "myP1+abc";
-	private static final String APPLICATION_DESCRIPTION = "I will watch Kim's Convinience and Trailer Park Boys with your pet every day if you accept my application. But, I hate JavaScript, so if you code in JavaScript, I am not interested in your pet.";
-	private static final boolean IS_ACCEPTED = false;
-	private static final String ADVERTISEMENT_DESCRIPTION = "My pet likes to watch Kim's Convinience and Trailer Park Boys.";
-	private static final String ADVERTISEMENT_TITLE = "I HAVE THE BEST PET!";
-	private static final boolean IS_FULFILLED = false;
 
-	@Mock
-	private UserRepository userRepository;
-	private ApplicationRepository applicationRepository;
-	private AdvertisementRepository advertisementRepository;
+    private static final long USER_ID_2 = 14;
+    private static final String USER_NAME_2 = "TestPerson2";
+    private static final String USER_EMAIL_2 = "TestPerson2@email.com";
+    private static final String USER_PASSWORD_2 = "myP1+abccdzc";
 
-	@InjectMocks
-	private UserService userService;
-	private ApplicationService applicationService;
+    private static final long APPLICATION_ID = 42;
+    private static final String APPLICATION_DESCRIPTION = "SomeDescription123@";
+    private static final boolean APPLICATION_IS_ACCEPTED = false;
+    
+    private static final long ADVERTISEMENT_ID = 69;
+    private static final boolean ADVERTISEMENT_IS_FULFILLED = false;
+    private static final String ADVERTISEMENT_DESCRIPTION = "Thebestdescription3ver!";
+    private static final String ADVERTISEMENT_TITLE = "T1tle!";
+    
+    private static final long APPLICATION_ID_2 = 420;
+    private static final String APPLICATION_DESCRIPTION_2 = "SomasdeDwqefescriptgwergion123@";
+    private static final boolean APPLICATION_IS_ACCEPTED_2 = true;
+    
+    private static final long ADVERTISEMENT_ID_2 = 690;
+    private static final boolean ADVERTISEMENT_IS_FULFILLED_2 = true;
+    private static final String ADVERTISEMENT_DESCRIPTION_2 = "Thebrefestdescrggthiption3ver!";
+    private static final String ADVERTISEMENT_TITLE_2 = "T1tweqrle!";
 
-	@BeforeEach
-	public void setMockOutput() {
-		MockitoAnnotations.initMocks(this);
-		lenient().when(userRepository.findUserByUserName(anyString())).thenAnswer((InvocationOnMock invocation) -> {
-			if (invocation.getArgument(0).equals(USER_NAME)) {
-				User user = new User();
-				user.setUserName(USER_NAME);
-				user.setEmail(USER_EMAIL);
-				user.setPassword(USER_PASSWORD);
-				return user;
-			} else {
-				return null;
-			}
-		});
-		lenient().when(userRepository.findUserByEmail(anyString())).thenAnswer((InvocationOnMock invocation) -> {
-			if (invocation.getArgument(0).equals(USER_EMAIL)) {
-				User user = new User();
-				user.setUserName(USER_NAME);
-				user.setEmail(USER_EMAIL);
-				user.setPassword(USER_PASSWORD);
-				return user;
-			} else {
-				return null;
-			}
-		});
-		lenient().when(applicationRepository.findApplicationByUserUserNameAndAdvertisement(anyString(), advertisementRepository.findAdvertisementByTitle(anyString()))).thenAnswer((InvocationOnMock invocation) -> {
+    @Mock
+    private ApplicationRepository applicationRepository;
+    
+    @Mock
+    private AdvertisementRepository advertisementRepository;
 
-            if (invocation.getArgument(0).equals(USER_NAME)) {
+    @Mock
+    private UserRepository userRepository;
+
+    @InjectMocks
+    private ApplicationService applicationService;
+
+    @BeforeEach
+    public void setMockOutput() {
+        MockitoAnnotations.initMocks(this);
+
+        lenient().when(userRepository.findById(anyLong())).thenAnswer((InvocationOnMock invocation) -> {
+            if (invocation.getArgument(0).equals(USER_ID)) {
                 User user = new User();
+                user.setId(USER_ID);
                 user.setUserName(USER_NAME);
                 user.setEmail(USER_EMAIL);
                 user.setPassword(USER_PASSWORD);
-                Advertisement advertisement = new Advertisement();
-                advertisement.setAdoptionApplication(null);
-                advertisement.setDescription(ADVERTISEMENT_DESCRIPTION);
-                advertisement.setTitle(ADVERTISEMENT_TITLE);
-                advertisement.setIsFulfilled(IS_FULFILLED);
-                if (invocation.getArgument(1).equals(APPLICATION_DESCRIPTION)) {
-                    AdoptionApplication application = new AdoptionApplication();
-                    application.setAdvertisement(advertisement);
-                    application.setDescription(APPLICATION_DESCRIPTION);
-                    application.setIsAccepted(IS_ACCEPTED);
-                    application.setUser(user);
-                    return application;
-                }
+                return Optional.of(user);
+            } else if (invocation.getArgument(0).equals(USER_ID_2)) {
+                User user = new User();
+                user.setId(USER_ID_2);
+                user.setUserName(USER_NAME_2);
+                user.setEmail(USER_EMAIL_2);
+                user.setPassword(USER_PASSWORD_2);
+                return Optional.of(user);
+            } else {
+                return Optional.empty();
             }
-            return null;
         });
 
-		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> invocation.getArgument(0);
-		lenient().when(userRepository.save(any(User.class))).thenAnswer(returnParameterAsAnswer);
-        lenient().when(applicationRepository.save(any(AdoptionApplication.class))).thenAnswer(returnParameterAsAnswer);
-	}
+        lenient().when(applicationRepository.findById(anyLong())).thenAnswer((InvocationOnMock invocation) -> {
+            if (invocation.getArgument(0).equals(APPLICATION_ID)) {
+                User user = new User();
+                user.setId(USER_ID);
+                user.setUserName(USER_NAME);
+                user.setEmail(USER_EMAIL);
+                user.setPassword(USER_PASSWORD);
 
-	@Test
+                Set<Application> applications = new HashSet<>();
+                Advertisement advertisement = new Advertisement();
+                advertisement.setId(ADVERTISEMENT_ID);
+                advertisement.setApplication(applications);
+                advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED);
+                advertisement.setDescription(ADVERTISEMENT_DESCRIPTION);
+                advertisement.setTitle(ADVERTISEMENT_TITLE);
+                
+                Application application = new Application();
+                application.setId(APPLICATION_ID);
+                application.setDescription(APPLICATION_DESCRIPTION);
+                application.setIsAccepted(APPLICATION_IS_ACCEPTED);
+                application.setUser(user);
+
+                return Optional.of(application);
+            } else {
+                return Optional.empty();
+            }
+        });
+
+        lenient().when(applicationRepository.findApplicationsByUser(any(User.class))).thenAnswer((InvocationOnMock invocation) -> {
+            if (((User)invocation.getArgument(0)).getId() == (USER_ID)) {
+                // Create user.
+                User user = new User();
+                user.setId(USER_ID);
+                user.setUserName(USER_NAME);
+                user.setEmail(USER_EMAIL);
+                user.setPassword(USER_PASSWORD);
+
+                Set<Application> applications = new HashSet<>();
+                Advertisement advertisement = new Advertisement();
+                advertisement.setId(ADVERTISEMENT_ID);
+                advertisement.setApplication(applications);
+                advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED);
+                advertisement.setDescription(ADVERTISEMENT_DESCRIPTION);
+                advertisement.setTitle(ADVERTISEMENT_TITLE);
+                
+                Application application = new Application();
+                application.setId(APPLICATION_ID);
+                application.setDescription(APPLICATION_DESCRIPTION);
+                application.setIsAccepted(APPLICATION_IS_ACCEPTED);
+                application.setUser(user);
+                
+                Set<Application> applications2 = new HashSet<>();
+                Advertisement advertisement2 = new Advertisement();
+                advertisement.setId(ADVERTISEMENT_ID_2);
+                advertisement.setApplication(applications2);
+                advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED_2);
+                advertisement.setDescription(ADVERTISEMENT_DESCRIPTION_2);
+                advertisement.setTitle(ADVERTISEMENT_TITLE_2);
+                
+                Application application2 = new Application();
+                application.setId(APPLICATION_ID_2);
+                application.setDescription(APPLICATION_DESCRIPTION_2);
+                application.setIsAccepted(APPLICATION_IS_ACCEPTED_2);
+                application.setUser(user);
+
+                List<Application> apps = new ArrayList<>();
+                apps.add(application);
+                apps.add(application2);
+
+                return apps;
+            } else {
+                return new ArrayList<ForumDTO>();
+            }
+        });
+
+        lenient().when(applicationRepository.findAll()).thenAnswer((InvocationOnMock invocation) -> {
+            // Create user.
+            User user = new User();
+            user.setId(USER_ID);
+            user.setUserName(USER_NAME);
+            user.setEmail(USER_EMAIL);
+            user.setPassword(USER_PASSWORD);
+
+            Set<Application> applications = new HashSet<>();
+            Advertisement advertisement = new Advertisement();
+            advertisement.setId(ADVERTISEMENT_ID);
+            advertisement.setApplication(applications);
+            advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED);
+            advertisement.setDescription(ADVERTISEMENT_DESCRIPTION);
+            advertisement.setTitle(ADVERTISEMENT_TITLE);
+            
+            Application application = new Application();
+            application.setId(APPLICATION_ID);
+            application.setDescription(APPLICATION_DESCRIPTION);
+            application.setIsAccepted(APPLICATION_IS_ACCEPTED);
+            application.setUser(user);
+            
+            Set<Application> applications2 = new HashSet<>();
+            Advertisement advertisement2 = new Advertisement();
+            advertisement.setId(ADVERTISEMENT_ID_2);
+            advertisement.setApplication(applications2);
+            advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED_2);
+            advertisement.setDescription(ADVERTISEMENT_DESCRIPTION_2);
+            advertisement.setTitle(ADVERTISEMENT_TITLE_2);
+            
+            Application application2 = new Application();
+            application.setId(APPLICATION_ID_2);
+            application.setDescription(APPLICATION_DESCRIPTION_2);
+            application.setIsAccepted(APPLICATION_IS_ACCEPTED_2);
+            application.setUser(user);
+
+            List<Application> apps = new ArrayList<>();
+            apps.add(application);
+            apps.add(application2);
+
+            return apps;
+        });
+
+        // Set a reflexive return answer.
+        Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> invocation.getArgument(0);
+        lenient().when(advertisementRepository.save(any(Advertisement.class))).thenAnswer(returnParameterAsAnswer);
+        lenient().when(applicationRepository.save(any(Application.class))).thenAnswer(returnParameterAsAnswer);
+
+    }
+
+    @Test
     public void testCreateApplication() {
-        assertEquals(0, applicationService.getAllApplications().size());
+        //assertEquals(0, applicationService.getAllApplications().size());
         ApplicationDTO applicationDTO = new ApplicationDTO();
-
-        applicationDTO.setUsername(USER_NAME);
+        
+        applicationDTO.setAdId(ADVERTISEMENT_ID);
         applicationDTO.setAdvertisementTitle(ADVERTISEMENT_TITLE);
+        applicationDTO.setAppId(APPLICATION_ID);
         applicationDTO.setDescription(APPLICATION_DESCRIPTION);
-        applicationDTO.setIsAccepted(IS_ACCEPTED);
+        applicationDTO.setIsAccepted(APPLICATION_IS_ACCEPTED);
+        applicationDTO.setUsername(USER_NAME);
 
         try {
-            applicationService.createApplication(applicationDTO);
+        	applicationService.createApplication(applicationDTO);
         } catch (ApplicationException e) {
             e.printStackTrace();
         }
-
-        AdoptionApplication application = applicationRepository.findApplicationByUserUserNameAndAdvertisement(USER_NAME, advertisementRepository.findAdvertisementByTitle(ADVERTISEMENT_TITLE));
-        assertEquals(USER_NAME, application.getUser().getUserName());
-        assertEquals(ADVERTISEMENT_TITLE, application.getAdvertisement().getTitle());
-        assertEquals(APPLICATION_DESCRIPTION, application.getDescription());
-        assertEquals(IS_ACCEPTED, application.isIsAccepted());
     }
-
-    //todo cant test this with mockito
-    @Test
-    public void testAnonymousDonation() {
-        DonationDTO donationDTO = new DonationDTO();
-        Date date = Date.valueOf("2020-01-22");
-        Time time = Time.valueOf("11:22:00");
-        double amount = 11.22;
-
-        donationDTO.setUser(null);
-        donationDTO.setTime(time);
-        donationDTO.setDate(date);
-        donationDTO.setAmount(amount);
-
-        try {
-            donationService.createDonation(donationDTO);
-        } catch (DonationException e) {
-            e.printStackTrace();
-        }
-
-        List<Donation> allDonations = donationRepository.findAllByUser(null);
-        System.out.println(allDonations);
-        //  assertNull(allDonations.get(0).getUser());
-    }
-
-    @Test
-    public void testNegativeDonation() {
-        DonationDTO donationDTO = new DonationDTO();
-        Date date = Date.valueOf("2020-01-22");
-        Time time = Time.valueOf("11:22:00");
-        double amount = -11.22;
-        donationDTO.setUser(USER_NAME);
-        donationDTO.setTime(time);
-        donationDTO.setDate(date);
-        donationDTO.setAmount(amount);
-        try {
-            donationService.createDonation(donationDTO);
-        } catch (DonationException e) {
-            assertEquals("Donation amount can't be less than 0$", e.getMessage());
-        }
-    }
-
-    @Test
-    public void testZeroDonation() {
-        DonationDTO donationDTO = new DonationDTO();
-        Date date = Date.valueOf("2020-01-22");
-        Time time = Time.valueOf("11:22:00");
-        double amount = 0;
-        donationDTO.setUser(USER_NAME);
-        donationDTO.setTime(time);
-        donationDTO.setDate(date);
-        donationDTO.setAmount(amount);
-        try {
-            donationService.createDonation(donationDTO);
-        } catch (DonationException e) {
-            assertEquals("Donation amount can't be less than 0$", e.getMessage());
-        }
-    }
-
-    @Test
-    public void testMinimumDonation() {
-        DonationDTO donationDTO = new DonationDTO();
-        Date date = Date.valueOf("2020-01-22");
-        Time time = Time.valueOf("11:22:00");
-        double amount = 0.01;
-        donationDTO.setUser(USER_NAME);
-        donationDTO.setTime(time);
-        donationDTO.setDate(date);
-        donationDTO.setAmount(amount);
-        try {
-            donationService.createDonation(donationDTO);
-        } catch (DonationException e) {
-            assertEquals("Donation amount can't be less than 0$", e.getMessage());
-        }
-    }
-
-    // no donation amount
-    @Test
-    public void testNullDonation() {
-        DonationDTO donationDTO = new DonationDTO();
-        Date date = Date.valueOf("2020-01-22");
-        Time time = Time.valueOf("11:22:00");
-        donationDTO.setUser(USER_NAME);
-        donationDTO.setTime(time);
-        donationDTO.setDate(date);
-        donationDTO.setAmount(null);
-        try {
-            donationService.createDonation(donationDTO);
-        } catch (DonationException e) {
-            assertEquals("Donation can't be null!", e.getMessage());
-        }
-    }
-    
-     */
 }
