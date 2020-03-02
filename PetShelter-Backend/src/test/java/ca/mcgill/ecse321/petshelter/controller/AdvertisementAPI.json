@@ -1,0 +1,616 @@
+{
+  "info": {
+    "_postman_id": "9dc257cb-6fde-4c03-b845-3db86daefcb5",
+    "name": "API Advertisement",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Register Admin",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "9246b584-0714-4fc6-881e-abfcafc0745a",
+            "exec": [
+              "var jsonData = JSON.parse(responseBody);",
+              "pm.globals.set(\"AdminToken\", jsonData.token);",
+              "",
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "55b5d71a-7ffd-4f7b-afff-61ceb6b48f21",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"username\":\"NeverUnlucky\",\n\t\"password\":\"123!@#qweQWE\",\n\t\"email\":\"Louis@mail.com\",\n\t\"userType\":\"ADMIN\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/user/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "user",
+            "register"
+          ]
+        },
+        "description": "AdminCreation"
+      },
+      "response": []
+    },
+    {
+      "name": "Register User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "e51489fa-15c8-42fc-82d7-749d9b20d443",
+            "exec": [
+              "var jsonData = JSON.parse(responseBody);",
+              "pm.globals.set(\"RegisterUser\", jsonData.token);",
+              "",
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "type": "text",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"username\":\"Iamabaws\",\n\t\"password\":\"123!@#qweQWE\",\n\t\"email\":\"ding@mail.com\",\n\t\"userType\":\"USER\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/user/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "user",
+            "register"
+          ]
+        },
+        "description": "AdminCreation"
+      },
+      "response": []
+    },
+    {
+      "name": "Confirm User Account",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "6e925581-0e9f-432e-9497-b128a5cff91c",
+            "exec": [
+              "pm.globals.get(\"Register\");"
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "880e961c-5ab0-4c45-9351-7a547db355de",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "token",
+            "type": "text",
+            "value": "{{RegisterUser}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/user/registrationConfirmation",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "user",
+            "registrationConfirmation"
+          ]
+        },
+        "description": "Get all users\n"
+      },
+      "response": []
+    },
+    {
+      "name": "Login User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "55f30c2c-1770-460c-af20-aef360377078",
+            "exec": [
+              "var jsonData = JSON.parse(responseBody);",
+              "pm.globals.set(\"UserToken\", jsonData.token);",
+              "",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"username\":\"Iamabaws\",\n\t\"password\":\"123!@#qweQWE\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/user/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "user",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login User Admin",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "55f30c2c-1770-460c-af20-aef360377078",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "var jsonData = JSON.parse(responseBody);",
+              "pm.globals.set(\"AdminToken\", jsonData.token);",
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "type": "text",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"username\":\"NeverUnlucky\",\n\t\"password\":\"123!@#qweQWE\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/user/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "user",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Pet",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "37854b47-91e2-4785-8852-e78a7f334a5d",
+            "exec": [
+              "var jsonData = JSON.parse(responseBody);",
+              "pm.globals.set(\"PetID\", jsonData.id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "token",
+            "value": "{{UserToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"dateOfBirth\":\"2019-01-29\",\n\t\"name\":\"bobb\",\n\t\"species\":\"dog\",\n\t\"breed\":\"lab\",\n\t\"description\":\"My dog bob to give\",\n\t\"gender\":\"MALE\",\n\t\"userName\":\"Iamabaws\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/pet/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "pet",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Advertisement",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "c0b602b5-666a-4227-98e9-72d044c90bf1",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "4de9f8e7-33d9-4771-b403-9ee8cc920b68",
+            "exec": [
+              "var jsonData = JSON.parse(responseBody);",
+              "pm.globals.set(\"AdID\", Number(jsonData.id));"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "token",
+            "value": "{{UserToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"title\":\"my title\",\n\t\"description\":\"this is my description\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/advertisement/{{PetID}}/newAd",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "advertisement",
+            "{{PetID}}",
+            "newAd"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Advertisement ID",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "82fc40f1-e3a4-469c-ab6b-4e198166ca1f",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "token",
+            "value": "{{UserToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/advertisement/id/4",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "advertisement",
+            "id",
+            "4"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Advertisement Title",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "token",
+            "type": "text",
+            "value": "{{UserToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "my title"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/advertisement/title",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "advertisement",
+            "title"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Advertisement All",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "token",
+            "type": "text",
+            "value": "{{UserToken}}"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/advertisement/all",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "advertisement",
+            "all"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Edit Advertisement",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "token",
+            "value": "{{UserToken}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "name": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"title\":\"my new ad\",\n\t\"description\":\"this is my new desc\",\n\t\"isFulfilled\":false,\n\t\"adId\":4\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/advertisement/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "advertisement",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Advertisement",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "token",
+            "value": "{{UserToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/advertisement/4",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "advertisement",
+            "4"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "e906b154-acaa-4e1b-a49e-d44033e0c575",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "b2e45524-45ca-43cb-a8b2-5269edd158e6",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "protocolProfileBehavior": {}
+}
