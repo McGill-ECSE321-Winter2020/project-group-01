@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/*
+/**
  * Service to handle login and registration of users.
  */
 @Service
@@ -49,14 +49,6 @@ public class UserService {
 	}
 
 	/**
-	 * Creates a user if the input is valid and sends an email to the specified
-	 * email address.
-	 *
-	 * @param user userDTO
-	 * @return user
-	 */
-
-	/**
 	 * takes in user object to transform into dto
 	 *
 	 * @param user user object
@@ -72,20 +64,42 @@ public class UserService {
 		return userDto;
 	}
 
+	/**
+	 * Creates a user if the input is valid and sends an email to the specified
+	 * email address.
+	 *
+	 * @param user userDTO
+	 * @return user
+	 */
 	public UserDTO createUser(UserDTO user) throws RegisterException {
-		if (user.getPassword() == null || user.getPassword().trim().length() == 0) {
+		if (user.getPassword() == null || user.getPassword().trim().length() == 0)
 			throw new RegisterException("Password can't be null.");
-		}
 		String validationError = isUserDtoValid(user);
-		if (validationError != null) {
+		if (validationError != null)
 			throw new RegisterException(validationError);
-		}
-		// check that the email and username are unique
 		if (userRepository.findUserByEmail(user.getEmail()) != null)
 			throw new RegisterException("Email is already taken.");
 		if (userRepository.findUserByUserName(user.getUsername()) != null)
 			throw new RegisterException("Username is already taken.");
-		// create the user and set its attributes
+		User user1 = createUserHelper(user);
+		if (user.getUserType().equals(UserType.ADMIN)) {// if the user is an admin, no need to validate (there is only
+														// one admin)
+			user1.setIsEmailValidated(true);
+		} // otherwise a validation email must be sent to the user
+		else {
+			emailingService.userCreationEmail(user.getEmail(), user.getUsername(), user1.getApiToken());
+		}
+		userRepository.save(user1);
+		return userToDto(user1);
+	}
+
+	/**
+	 * Method that creates a user object to reduce lines.
+	 * 
+	 * @param user
+	 * @return
+	 */
+	private User createUserHelper(UserDTO user) {
 		User user1 = new User();
 		user1.setPassword(passwordEncoder.encode(user.getPassword()));
 		user1.setEmail(user.getEmail());
@@ -93,17 +107,7 @@ public class UserService {
 		user1.setUserType(user.getUserType());
 		String token = jwtTokenProvider.createToken(user1.getUserName());
 		user1.setApiToken(token);
-		// if the user is an admin, no need to validate (there is only one admin)
-		if (user.getUserType().equals(UserType.ADMIN)) {
-			user1.setIsEmailValidated(true);
-		}
-		// otherwise a validation email must be sent to the user
-		else {
-			emailingService.userCreationEmail(user.getEmail(), user.getUsername(), token);
-		}
-		// save it
-		userRepository.save(user1);
-		return userToDto(user1);
+		return user1;
 	}
 
 	/**
@@ -206,25 +210,21 @@ public class UserService {
 		for (Donation donation : donations) {
 			donation.setUser(null);
 		}
-
 		List<Forum> forumList = forumRepository.findForumByAuthorUserName(username);
 		for (Forum forum : forumList) {
 			forum.setAuthor(null);
 			Set<User> subs = forum.getSubscribers();
 			subs.remove(user);
 		}
-
 		List<Comment> commentList = commentRepository.findCommentByUserUserName(username);
 		for (Comment comment : commentList) {
 			comment.setUser(null);
 		}
-
 		applicationRepository.deleteAdoptionApplicationsByUserUserName(username);
 		// petRepository.deletePetsByUserUserName(username);
 		if (user.getPets() != null) { // this is needed for the tests to pass
 			user.getPets().clear(); // check if this will work
 		}
-
 		userRepository.deleteById(user.getId());
 		return true;
 	}
