@@ -188,12 +188,15 @@ public class AdvertisementController {
 			// Create a set with all IDs.
 			Long[] idArray = advertisementDTO.getPetIds();
 			Set<Long> idSet = new HashSet<>();
-			Collections.addAll(idSet, idArray);
+			if (idArray != null) {
+				Collections.addAll(idSet, idArray);
+			}
 
 			// Then verify if the pets of the new advertisement are contained in that set.
 			if (petsID.containsAll(idSet)) {
+				AdvertisementDTO adDTO = advertisementService.editAdvertisement(advertisementDTO);
 				return new ResponseEntity<AdvertisementDTO>(
-						advertisementService.editAdvertisement(advertisementDTO),
+						adDTO,
 						HttpStatus.OK
 				);
 			} else {

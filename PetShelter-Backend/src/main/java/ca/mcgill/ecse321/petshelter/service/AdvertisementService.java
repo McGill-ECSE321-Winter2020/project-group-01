@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -236,27 +233,33 @@ public class AdvertisementService {
             throw new AdvertisementException("Description cannot be empty");
         }
         //what if the first one doesnt but the rest exists?
-        if (adDTO.getPetIds() == null || petRepository.findPetById(adDTO.getPetIds()[0]) == null) {
+        Set<Pet> petSet = Arrays.stream(adDTO.getPetIds())
+                .map(id -> petRepository.findPetById(id))
+                .collect(Collectors.toSet());
+        if (petSet.contains(null)) {
             throw new AdvertisementException("One or more pets do not exist.");
         }
-        Pet pet0 = petRepository.findPetById(adDTO.getPetIds()[0]);
-    
-        int numOfPets = adDTO.getPetIds().length;
+
         Set<Pet> newPets = new HashSet<Pet>();
-        newPets.add(pet0);
-        for (int i = 1; i < numOfPets; i++) {
-            Pet petI = petRepository.findPetById(adDTO.getPetIds()[i]);
-            if ((petI.getAdvertisement() != ad) && (petI.getAdvertisement() != null)) {
-                throw new AdvertisementException("One or more pets have a different advertisement.");
-            } else {
-                newPets.add(petI);
+        if (!petSet.isEmpty()) {
+            Pet pet0 = petRepository.findPetById(adDTO.getPetIds()[0]);
+
+            int numOfPets = adDTO.getPetIds().length;
+            newPets.add(pet0);
+            for (int i = 1; i < numOfPets; i++) {
+                Pet petI = petRepository.findPetById(adDTO.getPetIds()[i]);
+                if ((petI.getAdvertisement() != ad) && (petI.getAdvertisement() != null)) {
+                    throw new AdvertisementException("One or more pets have a different advertisement.");
+                } else {
+                    newPets.add(petI);
+                }
             }
-        }
-        // System.out.println(petRepository.findAll());
-        for (Pet pet : petRepository.findAll()) {
-            if (pet.getAdvertisement().equals(ad)) {
-                if (!(newPets.contains(pet))) {
-                    pet.setAdvertisement(null);
+            // System.out.println(petRepository.findAll());
+            for (Pet pet : petRepository.findAll()) {
+                if (pet.getAdvertisement().equals(ad)) {
+                    if (!(newPets.contains(pet))) {
+                        pet.setAdvertisement(null);
+                    }
                 }
             }
         }
