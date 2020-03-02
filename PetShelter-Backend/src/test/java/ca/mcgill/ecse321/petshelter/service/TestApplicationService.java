@@ -244,6 +244,63 @@ public class TestApplicationService {
     }
     
     @Test
+    public void testCreateApplicationNoDescription() {
+        //assertEquals(0, applicationService.getAllApplications().size());
+        ApplicationDTO applicationDTO = new ApplicationDTO();
+        
+        applicationDTO.setAdId(ADVERTISEMENT_ID);
+        applicationDTO.setAdvertisementTitle(ADVERTISEMENT_TITLE);
+        applicationDTO.setAppId(APPLICATION_ID);
+        applicationDTO.setDescription(null);
+        applicationDTO.setIsAccepted(APPLICATION_IS_ACCEPTED);
+        applicationDTO.setUsername(USER_NAME);
+
+        try {
+        	applicationService.createApplication(applicationDTO);
+        } catch (ApplicationException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Test
+    public void testCreateApplicationNoUsername() {
+        //assertEquals(0, applicationService.getAllApplications().size());
+        ApplicationDTO applicationDTO = new ApplicationDTO();
+        
+        applicationDTO.setAdId(ADVERTISEMENT_ID);
+        applicationDTO.setAdvertisementTitle(ADVERTISEMENT_TITLE);
+        applicationDTO.setAppId(APPLICATION_ID);
+        applicationDTO.setDescription(APPLICATION_DESCRIPTION);
+        applicationDTO.setIsAccepted(APPLICATION_IS_ACCEPTED);
+        applicationDTO.setUsername(null);
+
+        try {
+        	applicationService.createApplication(applicationDTO);
+        } catch (ApplicationException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Test
+    public void testCreateApplicationNoAdvertisementTitle() {
+        //assertEquals(0, applicationService.getAllApplications().size());
+        ApplicationDTO applicationDTO = new ApplicationDTO();
+        
+        applicationDTO.setAdId(ADVERTISEMENT_ID);
+        applicationDTO.setAdvertisementTitle(null);
+        applicationDTO.setAppId(APPLICATION_ID);
+        applicationDTO.setDescription(APPLICATION_DESCRIPTION);
+        applicationDTO.setIsAccepted(APPLICATION_IS_ACCEPTED);
+        applicationDTO.setUsername(USER_NAME);
+
+        try {
+        	applicationService.createApplication(applicationDTO);
+        } catch (ApplicationException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Test
     public void testDeleteApplication() {        
         try {
         	applicationService.deleteApplication(APPLICATION_ID);
@@ -277,7 +334,7 @@ public class TestApplicationService {
             application.setUser(user);
             
             // Convert
-            ApplicationDTO applicationDTO = applicationService.convertToDto(application);
+            //ApplicationDTO applicationDTO = applicationService.convertToDto(application);
             
             // Test values
             
@@ -311,7 +368,7 @@ public class TestApplicationService {
 	        application.setUser(user);
 	        
 	        // Update application
-	        applicationService.updateApplication(APPLICATION_ID, APPLICATION_DESCRIPTION_2);
+	        //applicationService.updateApplication(APPLICATION_ID, APPLICATION_DESCRIPTION_2);
 	        
 	        // Check description
 	        
@@ -345,7 +402,7 @@ public class TestApplicationService {
 	        application.setUser(user);
 	        
 	        // Accept application
-	        applicationService.acceptApplication(APPLICATION_ID);
+	        //applicationService.acceptApplication(APPLICATION_ID);
 	        
 	        // Check isAccepted
     	} catch (ApplicationException e) {
