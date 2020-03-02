@@ -3,6 +3,8 @@ before_install:
 - chmod +x gradlew
 script:
 - gradle build
+after_script:
+- curl -s https://assertible.com/apis/4f4ff831-1846-4c84-84e0-53e94a80519a/run?api_token=U0bS1o6ELYFvuxaq
 deploy:
   provider: heroku
   api_key: 03273874-ad50-428a-b7d2-d55ecd114926
