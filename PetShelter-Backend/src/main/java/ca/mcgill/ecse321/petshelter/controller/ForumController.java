@@ -18,6 +18,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * This class implements the REST controller for the forum related features of the backend.
+ */
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/forum")
@@ -36,6 +40,7 @@ public class ForumController {
 	 * Gets the desired forum and its associated comments.
 	 *
 	 * @param id Forum ID of the desired forum.
+	 * @param token The user access token.
 	 * @return The forum DTO.
 	 */
 	@GetMapping("/{id}")
@@ -55,6 +60,7 @@ public class ForumController {
 	 *
 	 * @param username The username of the user which is the author of all desired
 	 *                 comments.
+	 * @param token The user access token.
 	 * @return The list of all forums of a user.
 	 */
 	@GetMapping("/forums/{username}")
@@ -70,7 +76,7 @@ public class ForumController {
 
 	/**
 	 * Gets all existing forums thread.
-	 *
+	 * @param token The user access token.
 	 * @return List of all existing forum threads.
 	 */
 	@GetMapping("/all")
