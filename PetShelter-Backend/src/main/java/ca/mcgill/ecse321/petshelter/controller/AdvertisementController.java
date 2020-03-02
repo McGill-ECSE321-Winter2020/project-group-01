@@ -75,13 +75,13 @@ public class AdvertisementController {
 	/**
 	 * Gets the desired advertisement.
 	 *
-	 * @param id    Advertisement ID.
+	 * @param adId  Advertisement ID.
 	 * @param token The requester's token.
 	 * @return The advertisement DTO.
 	 */
-	@GetMapping("/id/{id}")
-	public ResponseEntity<?> getAdvertisement(@PathVariable(required = true) Long id, @RequestHeader String token) {
-		AdvertisementDTO ad = advertisementService.getAdvertisementById(id);
+	@GetMapping("/id/{adId}")
+	public ResponseEntity<?> getAdvertisement(@PathVariable(required = true) Long adId, @RequestHeader String token) {
+		AdvertisementDTO ad = advertisementService.getAdvertisementById(adId);
 		User requester = userRepository.findUserByApiToken(token); // make sure the requester is logged in
 		if (ad != null && requester != null) {
 			return new ResponseEntity<>(ad, HttpStatus.OK);
