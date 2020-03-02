@@ -198,17 +198,17 @@ public class TestApplicationService {
             
             Set<Application> applications2 = new HashSet<>();
             Advertisement advertisement2 = new Advertisement();
-            advertisement.setId(ADVERTISEMENT_ID_2);
-            advertisement.setApplication(applications2);
-            advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED_2);
-            advertisement.setDescription(ADVERTISEMENT_DESCRIPTION_2);
-            advertisement.setTitle(ADVERTISEMENT_TITLE_2);
+            advertisement2.setId(ADVERTISEMENT_ID_2);
+            advertisement2.setApplication(applications2);
+            advertisement2.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED_2);
+            advertisement2.setDescription(ADVERTISEMENT_DESCRIPTION_2);
+            advertisement2.setTitle(ADVERTISEMENT_TITLE_2);
             
             Application application2 = new Application();
-            application.setId(APPLICATION_ID_2);
-            application.setDescription(APPLICATION_DESCRIPTION_2);
-            application.setIsAccepted(APPLICATION_IS_ACCEPTED_2);
-            application.setUser(user);
+            application2.setId(APPLICATION_ID_2);
+            application2.setDescription(APPLICATION_DESCRIPTION_2);
+            application2.setIsAccepted(APPLICATION_IS_ACCEPTED_2);
+            application2.setUser(user);
 
             List<Application> apps = new ArrayList<>();
             apps.add(application);
