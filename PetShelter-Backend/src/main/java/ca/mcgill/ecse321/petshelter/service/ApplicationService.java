@@ -61,6 +61,15 @@ public class ApplicationService {
         return toList(applicationRepository.findApplicationsByUserUserName(name)).stream().map(this::convertToDto).collect(Collectors.toList());
     }
     
+    /**
+     * @param name user object
+     * @return all the applications that matches that user
+     */
+    @Transactional
+    public List<ApplicationDTO> getAllAdvertisementApplications(Advertisement advertisement) {
+        return toList(applicationRepository.findApplicationsByAdvertisement(advertisement)).stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+    
 
     
     /**
