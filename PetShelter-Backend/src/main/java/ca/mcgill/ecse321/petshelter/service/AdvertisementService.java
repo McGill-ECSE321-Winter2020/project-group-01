@@ -231,11 +231,15 @@ public class AdvertisementService {
             throw new AdvertisementException("Description cannot be empty");
         }
         //what if the first one doesnt but the rest exists?
-        Set<Pet> petSet = Arrays.stream(adDTO.getPetIds())
-                .map(id -> petRepository.findPetById(id))
-                .collect(Collectors.toSet());
-        if (petSet.contains(null)) {
-            throw new AdvertisementException("One or more pets do not exist.");
+
+        Set<Pet> petSet = new HashSet<>();
+        if (adDTO.getPetIds() != null) {
+            petSet = Arrays.stream(adDTO.getPetIds())
+                    .map(id -> petRepository.findPetById(id))
+                    .collect(Collectors.toSet());
+            if (petSet.contains(null)) {
+                throw new AdvertisementException("One or more pets do not exist.");
+            }
         }
 
         Set<Pet> newPets = new HashSet<Pet>();
