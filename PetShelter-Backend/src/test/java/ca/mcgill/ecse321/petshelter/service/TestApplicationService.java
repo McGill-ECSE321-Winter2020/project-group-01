@@ -1,18 +1,14 @@
 package ca.mcgill.ecse321.petshelter.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.lenient;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
+import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
+import ca.mcgill.ecse321.petshelter.dto.ForumDTO;
+import ca.mcgill.ecse321.petshelter.model.Advertisement;
+import ca.mcgill.ecse321.petshelter.model.Application;
+import ca.mcgill.ecse321.petshelter.model.User;
+import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
+import ca.mcgill.ecse321.petshelter.repository.ApplicationRepository;
+import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import ca.mcgill.ecse321.petshelter.service.exception.ApplicationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,15 +19,11 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
-import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
-import ca.mcgill.ecse321.petshelter.dto.ForumDTO;
-import ca.mcgill.ecse321.petshelter.model.Advertisement;
-import ca.mcgill.ecse321.petshelter.model.Application;
-import ca.mcgill.ecse321.petshelter.model.User;
-import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
-import ca.mcgill.ecse321.petshelter.repository.ApplicationRepository;
-import ca.mcgill.ecse321.petshelter.repository.UserRepository;
-import ca.mcgill.ecse321.petshelter.service.exception.ApplicationException;
+import java.util.*;
+
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
 public class TestApplicationService {
@@ -113,49 +105,56 @@ public class TestApplicationService {
 				user.setPassword(USER_PASSWORD);
 
 				Set<Application> applications = new HashSet<>();
+				
 				Advertisement advertisement = new Advertisement();
 				advertisement.setId(ADVERTISEMENT_ID);
 				advertisement.setApplication(applications);
 				advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED);
 				advertisement.setDescription(ADVERTISEMENT_DESCRIPTION);
 				advertisement.setTitle(ADVERTISEMENT_TITLE);
-
+				
 				Application application = new Application();
 				application.setId(APPLICATION_ID);
 				application.setDescription(APPLICATION_DESCRIPTION);
 				application.setIsAccepted(APPLICATION_IS_ACCEPTED);
 				application.setUser(user);
-
-				return application;
+				application.setAdvertisement(advertisement);
+				
+				return Optional.of(application);
 			} else {
 				return Optional.empty();
 			}
 		});
-
-		lenient().when(applicationRepository.findApplicationsByUser(any(User.class)))
+		
+		lenient().when(applicationRepository.findApplicationsByUserUserName(anyString()))
 				.thenAnswer((InvocationOnMock invocation) -> {
-					if (((User) invocation.getArgument(0)).getId() == (USER_ID)) {
+					if ((invocation.getArgument(0)).equals(USER_NAME)) {
 						// Create user.
 						User user = new User();
 						user.setId(USER_ID);
 						user.setUserName(USER_NAME);
 						user.setEmail(USER_EMAIL);
 						user.setPassword(USER_PASSWORD);
-
+						
 						Set<Application> applications = new HashSet<>();
 						Advertisement advertisement = new Advertisement();
 						advertisement.setId(ADVERTISEMENT_ID);
-						advertisement.setApplication(applications);
 						advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED);
 						advertisement.setDescription(ADVERTISEMENT_DESCRIPTION);
 						advertisement.setTitle(ADVERTISEMENT_TITLE);
-
+						
+						
+						advertisement.setApplication(applications);
 						Application application = new Application();
 						application.setId(APPLICATION_ID);
 						application.setDescription(APPLICATION_DESCRIPTION);
 						application.setIsAccepted(APPLICATION_IS_ACCEPTED);
 						application.setUser(user);
-
+						application.setAdvertisement(advertisement);
+						
+						applications.add(application);
+						
+						
 						Set<Application> applications2 = new HashSet<>();
 						Advertisement advertisement2 = new Advertisement();
 						advertisement2.setId(ADVERTISEMENT_ID_2);
@@ -163,17 +162,20 @@ public class TestApplicationService {
 						advertisement2.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED_2);
 						advertisement2.setDescription(ADVERTISEMENT_DESCRIPTION_2);
 						advertisement2.setTitle(ADVERTISEMENT_TITLE_2);
-
+						
 						Application application2 = new Application();
-						application.setId(APPLICATION_ID_2);
-						application.setDescription(APPLICATION_DESCRIPTION_2);
-						application.setIsAccepted(APPLICATION_IS_ACCEPTED_2);
-						application.setUser(user);
-
+						application2.setId(APPLICATION_ID_2);
+						application2.setDescription(APPLICATION_DESCRIPTION_2);
+						application2.setIsAccepted(APPLICATION_IS_ACCEPTED_2);
+						application2.setUser(user);
+						application2.setAdvertisement(advertisement2);
+						
+						applications2.add(application2);
+						
 						List<Application> apps = new ArrayList<>();
 						apps.add(application);
 						apps.add(application2);
-
+						
 						return apps;
 					} else {
 						return new ArrayList<ForumDTO>();
@@ -195,13 +197,14 @@ public class TestApplicationService {
 			advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED);
 			advertisement.setDescription(ADVERTISEMENT_DESCRIPTION);
 			advertisement.setTitle(ADVERTISEMENT_TITLE);
-
+			
 			Application application = new Application();
 			application.setId(APPLICATION_ID);
 			application.setDescription(APPLICATION_DESCRIPTION);
 			application.setIsAccepted(APPLICATION_IS_ACCEPTED);
 			application.setUser(user);
-
+			application.setAdvertisement(advertisement);
+			
 			Set<Application> applications2 = new HashSet<>();
 			Advertisement advertisement2 = new Advertisement();
 			advertisement2.setId(ADVERTISEMENT_ID_2);
@@ -209,17 +212,18 @@ public class TestApplicationService {
 			advertisement2.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED_2);
 			advertisement2.setDescription(ADVERTISEMENT_DESCRIPTION_2);
 			advertisement2.setTitle(ADVERTISEMENT_TITLE_2);
-
+			
 			Application application2 = new Application();
 			application2.setId(APPLICATION_ID_2);
 			application2.setDescription(APPLICATION_DESCRIPTION_2);
 			application2.setIsAccepted(APPLICATION_IS_ACCEPTED_2);
 			application2.setUser(user);
-
+			application2.setAdvertisement(advertisement2);
+			
 			List<Application> apps = new ArrayList<>();
 			apps.add(application);
 			apps.add(application2);
-
+			
 			return apps;
 		});
 
@@ -244,14 +248,34 @@ public class TestApplicationService {
 		try {
 			app2 = applicationService.createApplication(applicationDTO);
 		} catch (ApplicationException e) {
+			e.printStackTrace();
 		}
+		assertNotNull(app2);
 		assertEquals(app2.getUsername(), USER_NAME);
 	}
-
+	
+	@Test
+	public void testCreateApplicationNoId() {
+		ApplicationDTO applicationDTO = new ApplicationDTO();
+		
+		applicationDTO.setAdId(ADVERTISEMENT_ID);
+		applicationDTO.setAdvertisementTitle(ADVERTISEMENT_TITLE);
+		applicationDTO.setAppId(22L);
+		applicationDTO.setDescription(APPLICATION_DESCRIPTION);
+		applicationDTO.setIsAccepted(APPLICATION_IS_ACCEPTED);
+		applicationDTO.setUsername(USER_NAME);
+		
+		try {
+			applicationService.createApplication(applicationDTO);
+		} catch (ApplicationException e) {
+			assertEquals("Advertisement can't be null!", e.getMessage());
+		}
+	}
+	
 	@Test
 	public void testCreateApplicationNoDescription() {
 		ApplicationDTO applicationDTO = new ApplicationDTO();
-
+		
 		applicationDTO.setAdId(ADVERTISEMENT_ID);
 		applicationDTO.setAdvertisementTitle(ADVERTISEMENT_TITLE);
 		applicationDTO.setAppId(APPLICATION_ID);
@@ -303,16 +327,25 @@ public class TestApplicationService {
 			assertEquals(e.getMessage(), "Advertisement Title can't be null!");
 		}
 	}
-
+	
 	@Test
 	public void testDeleteApplication() {
 		try {
-			//applicationService.deleteApplication(APPLICATION_ID);
+			applicationService.deleteApplication(APPLICATION_ID);
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 		}
 	}
-
+	
+	@Test
+	public void testDeleteApplicationNoExist() {
+		try {
+			applicationService.deleteApplication(2222L);
+		} catch (ApplicationException e) {
+			assertEquals("Application does not exist", e.getMessage());
+		}
+	}
+	
 	@Test
 	public void testConvertToDto() {
 		try {
@@ -365,18 +398,18 @@ public class TestApplicationService {
 			advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED);
 			advertisement.setDescription(ADVERTISEMENT_DESCRIPTION);
 			advertisement.setTitle(ADVERTISEMENT_TITLE);
-
+			
 			Application application = new Application();
 			application.setId(APPLICATION_ID);
 			application.setDescription(APPLICATION_DESCRIPTION);
 			application.setIsAccepted(APPLICATION_IS_ACCEPTED);
+			
 			application.setUser(user);
-
+			
 			// Update application
-			//applicationService.updateApplication(APPLICATION_ID, APPLICATION_DESCRIPTION_2);
-
+			applicationService.updateApplication(APPLICATION_ID, APPLICATION_DESCRIPTION_2);
+			
 			// Check description
-
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 		}
@@ -399,16 +432,16 @@ public class TestApplicationService {
 			advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED);
 			advertisement.setDescription(ADVERTISEMENT_DESCRIPTION);
 			advertisement.setTitle(ADVERTISEMENT_TITLE);
-
+			
 			Application application = new Application();
 			application.setId(APPLICATION_ID);
 			application.setDescription(APPLICATION_DESCRIPTION);
 			application.setIsAccepted(false);
 			application.setUser(user);
-
+			
 			// Accept application
-			// applicationService.acceptApplication(APPLICATION_ID);
-
+			//applicationService.acceptApplication(APPLICATION_ID);
+			
 			// Check isAccepted
 		} catch (ApplicationException e) {
 			e.printStackTrace();
@@ -432,20 +465,127 @@ public class TestApplicationService {
 			advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED);
 			advertisement.setDescription(ADVERTISEMENT_DESCRIPTION);
 			advertisement.setTitle(ADVERTISEMENT_TITLE);
-
+			
 			Application application = new Application();
 			application.setId(APPLICATION_ID);
 			application.setDescription(APPLICATION_DESCRIPTION);
 			application.setIsAccepted(true);
 			application.setUser(user);
-
+			
 			// Unaccept application
-			//applicationService.unacceptApplication(APPLICATION_ID);
-
+			//	applicationService.unacceptApplication(APPLICATION_ID);
+			
 			// Check isAccepted
-
+			
 		} catch (ApplicationException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void testUpdateApplicationSameTitle() {
+		try {
+			// Create application
+			User user = new User();
+			user.setId(USER_ID);
+			user.setUserName(USER_NAME);
+			user.setEmail(USER_EMAIL);
+			user.setPassword(USER_PASSWORD);
+			
+			Set<Application> applications = new HashSet<>();
+			Advertisement advertisement = new Advertisement();
+			advertisement.setId(ADVERTISEMENT_ID);
+			advertisement.setApplication(applications);
+			advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED);
+			advertisement.setDescription(ADVERTISEMENT_DESCRIPTION);
+			advertisement.setTitle(ADVERTISEMENT_TITLE);
+			
+			Application application = new Application();
+			application.setId(APPLICATION_ID);
+			application.setDescription(APPLICATION_DESCRIPTION);
+			application.setIsAccepted(APPLICATION_IS_ACCEPTED);
+			
+			application.setUser(user);
+			
+			// Update application
+			applicationService.updateApplication(APPLICATION_ID, APPLICATION_DESCRIPTION);
+			
+			// Check description
+		} catch (ApplicationException e) {
+			assertEquals("Description is the same!", e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testUpdateApplicationNoAd() {
+		try {
+			// Create application
+			User user = new User();
+			user.setId(USER_ID);
+			user.setUserName(USER_NAME);
+			user.setEmail(USER_EMAIL);
+			user.setPassword(USER_PASSWORD);
+			
+			Set<Application> applications = new HashSet<>();
+			Advertisement advertisement = new Advertisement();
+			advertisement.setId(ADVERTISEMENT_ID);
+			advertisement.setApplication(applications);
+			advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED);
+			advertisement.setDescription(ADVERTISEMENT_DESCRIPTION);
+			advertisement.setTitle(ADVERTISEMENT_TITLE);
+			
+			Application application = new Application();
+			application.setId(APPLICATION_ID);
+			application.setDescription(APPLICATION_DESCRIPTION);
+			application.setIsAccepted(APPLICATION_IS_ACCEPTED);
+			
+			application.setUser(user);
+			
+			// Update application
+			applicationService.updateApplication(22, APPLICATION_DESCRIPTION);
+			
+			// Check description
+		} catch (ApplicationException e) {
+			assertEquals("No such application.", e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testGetAllUnacceptedApplications() {
+		List<ApplicationDTO> allApplications = applicationService.getAllUnacceptedApplications();
+		assertFalse(allApplications.get(0).getIsAccepted());
+	}
+	
+	@Test
+	public void testGetAllAcceptedApplications() {
+		List<ApplicationDTO> allApplications = applicationService.getAllAcceptedApplications();
+		assertTrue(allApplications.get(0).getIsAccepted());
+	}
+	
+	@Test
+	public void testGetApplicationById() {
+		ApplicationDTO applicationDTO = applicationService.getApplicationById(APPLICATION_ID);
+		assertEquals(APPLICATION_DESCRIPTION, applicationDTO.getDescription());
+	}
+	
+	@Test
+	public void testGetApplicationByNoId() {
+		try {
+			applicationService.getApplicationById(11L);
+		} catch (ApplicationException e) {
+			assertEquals("Application not found", e.getMessage());
+		}
+	}
+	
+	@Test
+	public void tetGetAllUserApplications() {
+		List<ApplicationDTO> applicationDTOList = applicationService.getAllUserApplications(USER_NAME);
+		assertEquals(USER_NAME, applicationDTOList.get(0).getUsername());
+	}
+	
+	@Test
+	public void testGetAllApplications() {
+		List<ApplicationDTO> applicationDTOList = applicationService.getAllApplications();
+		assertEquals(USER_NAME, applicationDTOList.get(0).getUsername());
 	}
 }
