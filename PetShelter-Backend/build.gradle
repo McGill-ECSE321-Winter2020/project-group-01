@@ -1,7 +1,7 @@
 plugins {
-	id 'org.springframework.boot' version '2.2.4.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.2.4.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
 }
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -11,88 +11,97 @@ apply plugin: "org.springframework.boot" // Added this
 group = 'ca.mcgill.ecse321.group1'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
-mainClassName='ca.mcgill.ecse321.petshelter.PetShelterApplication'
+mainClassName = 'ca.mcgill.ecse321.petshelter.PetShelterApplication'
 
 configurations {
-	developmentOnly
-	runtimeClasspath {
-		extendsFrom developmentOnly
-	}
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 sourceSets {
-  main {
-    java {
-		srcDir 'src/main/java'
-	}
-  }
-  test {
-    java { srcDir 'src/test/java'}
-  }
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+    }
+    test {
+        java { srcDir 'src/test/java' }
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	//classpath "org.springframework.boot:spring-boot-gradle-plugin:2.2.4.RELEASE" // Added this
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'org.postgresql:postgresql'
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
-	    testImplementation "junit:junit:4.12"
+    //classpath "org.springframework.boot:spring-boot-gradle-plugin:2.2.4.RELEASE" // Added this
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation "junit:junit:4.12"
     testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
-	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
-	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
-	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
-	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
-	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
-	compile group: 'org.springframework.security', name: 'spring-security-web', version: '5.2.2.RELEASE'
-	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
-	compile group: 'org.springframework.security', name: 'spring-security-config', version: '5.2.2.RELEASE'
-	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-jwt
-	compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.9.RELEASE'
-	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.2.0.RELEASE'
-	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
-	// https://mvnrepository.com/artifact/org.passay/passay
-	compile group: 'org.passay', name: 'passay', version: '1.0'
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+    compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
+    compile group: 'org.springframework.security', name: 'spring-security-web', version: '5.2.2.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
+    compile group: 'org.springframework.security', name: 'spring-security-config', version: '5.2.2.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-jwt
+    compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.9.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.2.0.RELEASE'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+    // https://mvnrepository.com/artifact/org.passay/passay
+    compile group: 'org.passay', name: 'passay', version: '1.0'
 
-	//https://mvnrepository.com/artifact/org.mockito/mockito-core
-	testImplementation 'org.mockito:mockito-core:2.+'
-	//https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
-	testImplementation 'org.mockito:mockito-junit-jupiter:2.18.3'
-	testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
-	testImplementation 'org.junit.platform:junit-platform-launcher:1.4.1'
+    //https://mvnrepository.com/artifact/org.mockito/mockito-core
+    testImplementation 'org.mockito:mockito-core:2.+'
+    //https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter
+    testImplementation 'org.mockito:mockito-junit-jupiter:2.18.3'
+    testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+    testImplementation 'org.junit.platform:junit-platform-launcher:1.4.1'
 
 }
 
 task compile(type: JavaCompile) {
-  classpath = sourceSets.main.compileClasspath
-  classpath += sourceSets.test.runtimeClasspath
-  sourceSets.test.java.outputDir = file('build/bin')
-  sourceSets.main.java.outputDir = file('build/bin')
+    classpath = sourceSets.main.compileClasspath
+    classpath += sourceSets.test.runtimeClasspath
+    sourceSets.test.java.outputDir = file('build/bin')
+    sourceSets.main.java.outputDir = file('build/bin')
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
+  //  exclude 'src/test/java/ca/mcgill/ecse321/tutor/integration/RESTfulServicesTests.class'
 }
 jar {
-  destinationDir=file('distributable')
-  manifest {
-    // It is smart to reuse the name of the main class variable instead of hardcoding it
-    attributes "Main-Class": "$mainClassName"
-  }
+    destinationDir = file('distributable')
+    manifest {
+        // It is smart to reuse the name of the main class variable instead of hardcoding it
+        attributes "Main-Class": "$mainClassName"
+    }
+
+//    task integrationTests(type: Test) {
+//        // we define a task with name 'integrationTests'
+//        useTestNG() {
+//            useDefaultListeners = true
+//            suites 'src/test/resources/testng.xml'
+//        }
+//    }
 }
