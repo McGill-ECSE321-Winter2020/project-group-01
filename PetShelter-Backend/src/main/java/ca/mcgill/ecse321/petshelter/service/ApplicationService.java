@@ -155,6 +155,8 @@ public class ApplicationService {
         Optional<Application> app = applicationRepository.findById(appId);
         if (app.isPresent()) {
             applicationRepository.deleteById(appId);
+        } else {
+        	throw new ApplicationException("Application does not exist");
         }
     }
     

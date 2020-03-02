@@ -242,4 +242,148 @@ public class TestApplicationService {
             e.printStackTrace();
         }
     }
+    
+    @Test
+    public void testDeleteApplication() {        
+        try {
+        	applicationService.deleteApplication(APPLICATION_ID);
+        } catch (ApplicationException e) {
+        	e.printStackTrace();
+        }
+    }
+    
+    @Test
+    public void testConvertToDto() {
+    	try {
+    		// Create an application
+    		User user = new User();
+            user.setId(USER_ID);
+            user.setUserName(USER_NAME);
+            user.setEmail(USER_EMAIL);
+            user.setPassword(USER_PASSWORD);
+
+            Set<Application> applications = new HashSet<>();
+            Advertisement advertisement = new Advertisement();
+            advertisement.setId(ADVERTISEMENT_ID);
+            advertisement.setApplication(applications);
+            advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED);
+            advertisement.setDescription(ADVERTISEMENT_DESCRIPTION);
+            advertisement.setTitle(ADVERTISEMENT_TITLE);
+            
+            Application application = new Application();
+            application.setId(APPLICATION_ID);
+            application.setDescription(APPLICATION_DESCRIPTION);
+            application.setIsAccepted(APPLICATION_IS_ACCEPTED);
+            application.setUser(user);
+            
+            // Convert
+            //ApplicationDTO applicationDTO = applicationService.convertToDto(application);
+            
+            // Test values
+            
+    	} catch (ApplicationException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    @Test
+    public void testUpdateApplication() {
+		try {
+			// Create application
+			User user = new User();
+	        user.setId(USER_ID);
+	        user.setUserName(USER_NAME);
+	        user.setEmail(USER_EMAIL);
+	        user.setPassword(USER_PASSWORD);
+
+	        Set<Application> applications = new HashSet<>();
+	        Advertisement advertisement = new Advertisement();
+	        advertisement.setId(ADVERTISEMENT_ID);
+	        advertisement.setApplication(applications);
+	        advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED);
+	        advertisement.setDescription(ADVERTISEMENT_DESCRIPTION);
+	        advertisement.setTitle(ADVERTISEMENT_TITLE);
+	        
+	        Application application = new Application();
+	        application.setId(APPLICATION_ID);
+	        application.setDescription(APPLICATION_DESCRIPTION);
+	        application.setIsAccepted(APPLICATION_IS_ACCEPTED);
+	        application.setUser(user);
+	        
+	        // Update application
+	        //applicationService.updateApplication(APPLICATION_ID, APPLICATION_DESCRIPTION_2);
+	        
+	        // Check description
+	        
+		} catch (ApplicationException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    @Test
+    public void testAcceptApplication() {
+    	try {
+    		// Create application
+    		User user = new User();
+	        user.setId(USER_ID);
+	        user.setUserName(USER_NAME);
+	        user.setEmail(USER_EMAIL);
+	        user.setPassword(USER_PASSWORD);
+
+	        Set<Application> applications = new HashSet<>();
+	        Advertisement advertisement = new Advertisement();
+	        advertisement.setId(ADVERTISEMENT_ID);
+	        advertisement.setApplication(applications);
+	        advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED);
+	        advertisement.setDescription(ADVERTISEMENT_DESCRIPTION);
+	        advertisement.setTitle(ADVERTISEMENT_TITLE);
+	        
+	        Application application = new Application();
+	        application.setId(APPLICATION_ID);
+	        application.setDescription(APPLICATION_DESCRIPTION);
+	        application.setIsAccepted(false);
+	        application.setUser(user);
+	        
+	        // Accept application
+	        //applicationService.acceptApplication(APPLICATION_ID);
+	        
+	        // Check isAccepted
+    	} catch (ApplicationException e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    @Test
+    public void testUnacceptApplication() {
+    	try {
+    		// Create application
+    		User user = new User();
+	        user.setId(USER_ID);
+	        user.setUserName(USER_NAME);
+	        user.setEmail(USER_EMAIL);
+	        user.setPassword(USER_PASSWORD);
+
+	        Set<Application> applications = new HashSet<>();
+	        Advertisement advertisement = new Advertisement();
+	        advertisement.setId(ADVERTISEMENT_ID);
+	        advertisement.setApplication(applications);
+	        advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED);
+	        advertisement.setDescription(ADVERTISEMENT_DESCRIPTION);
+	        advertisement.setTitle(ADVERTISEMENT_TITLE);
+	        
+	        Application application = new Application();
+	        application.setId(APPLICATION_ID);
+	        application.setDescription(APPLICATION_DESCRIPTION);
+	        application.setIsAccepted(true);
+	        application.setUser(user);
+	        
+	        // Unaccept application
+	        //applicationService.UnacceptApplication(APPLICATION_ID);
+	        
+	        // Check isAccepted
+	        
+    	} catch (ApplicationException e) {
+    		e.printStackTrace();
+    	}
+    }
 }
