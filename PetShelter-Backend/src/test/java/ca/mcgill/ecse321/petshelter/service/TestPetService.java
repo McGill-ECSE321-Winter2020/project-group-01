@@ -1,6 +1,5 @@
 package ca.mcgill.ecse321.petshelter.service;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -69,7 +68,7 @@ public class TestPetService {
 	private static final String PET_BREED = "testBreed";
 	private static final String PET_DESCRIPTION = "testDesc";
 	private static final Gender PET_GENDER = Gender.FEMALE;
-	private static final byte[] PET_PICTURE = new byte[5];
+	private static final String PET_PICTURE = "hi";
 	// Updated pet parameter
 	private static final Date PET_DOB_UPDATE = new Date(11, 2, 3);
 	private static final String PET_NAME_UPDATE = "newPetName";
@@ -77,7 +76,7 @@ public class TestPetService {
 	private static final String PET_BREED_UPDATE = "newTestBreed";
 	private static final String PET_DESCRIPTION_UPDATE = "newTestDesc";
 	private static final Gender PET_GENDER_UPDATE = Gender.MALE;
-	private static final byte[] PET_PICTURE_UPDATE = new byte[10];
+	private static final String PET_PICTURE_UPDATE = "hii";
 	private long PET_ID = 0;
 	private Pet PET = new Pet();
 
@@ -159,26 +158,27 @@ public class TestPetService {
 			return pets;
 		});
 
-		lenient().when(petRepository.findPetByAdvertisement(any(Advertisement.class))).thenAnswer((InvocationOnMock invocation) -> {
-			if (((Advertisement)invocation.getArgument(0)).getId() == AD_ID) {
-				PET.setBreed(PET_BREED);
-				PET.setDateOfBirth(PET_DOB);
-				PET.setDescription(PET_DESCRIPTION);
-				PET.setName(PET_NAME);
-				PET.setSpecies(PET_SPECIES);
-				PET.setPicture(PET_PICTURE);
-				PET.setId(PET_ID);
-				PET.setAdvertisement(new Advertisement());
-				List<Pet> pets = new ArrayList<>();
-				pets.add(PET);
-				return pets;
-			} else if (((Advertisement)invocation.getArgument(0)).getId() == AD_ID2) {
-				List<Pet> pets = new ArrayList<>();
-				return pets;
-			} else {
-				return null;
-			}
-		});
+		lenient().when(petRepository.findPetByAdvertisement(any(Advertisement.class)))
+				.thenAnswer((InvocationOnMock invocation) -> {
+					if (((Advertisement) invocation.getArgument(0)).getId() == AD_ID) {
+						PET.setBreed(PET_BREED);
+						PET.setDateOfBirth(PET_DOB);
+						PET.setDescription(PET_DESCRIPTION);
+						PET.setName(PET_NAME);
+						PET.setSpecies(PET_SPECIES);
+						PET.setPicture(PET_PICTURE);
+						PET.setId(PET_ID);
+						PET.setAdvertisement(new Advertisement());
+						List<Pet> pets = new ArrayList<>();
+						pets.add(PET);
+						return pets;
+					} else if (((Advertisement) invocation.getArgument(0)).getId() == AD_ID2) {
+						List<Pet> pets = new ArrayList<>();
+						return pets;
+					} else {
+						return null;
+					}
+				});
 
 		lenient().when(userRepository.findUserByPets(any())).thenAnswer((InvocationOnMock invocation) -> {
 			if (invocation.getArgument(0) instanceof Pet) {
@@ -215,7 +215,6 @@ public class TestPetService {
 
 	}
 
-	// TODO are we doing this?
 	/**
 	 * Creates a test user in the database.
 	 * 
@@ -253,7 +252,7 @@ public class TestPetService {
 			assertEquals(PET_DOB, petDTO.getDateOfBirth());
 			assertEquals(PET_GENDER, petDTO.getGender());
 			assertEquals(PET_SPECIES, petDTO.getSpecies());
-			assertArrayEquals(PET_PICTURE, petDTO.getPicture());
+			assertEquals(PET_PICTURE, petDTO.getPicture());
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
@@ -264,8 +263,7 @@ public class TestPetService {
 	 */
 	@Test
 	public void testGetMissingPet() {
-		PetException thrown = assertThrows(PetException.class,
-				() -> petService.getPet(344));
+		PetException thrown = assertThrows(PetException.class, () -> petService.getPet(344));
 		assertTrue(thrown.getMessage().contains("Pet does not exist."));
 	}
 
@@ -276,12 +274,7 @@ public class TestPetService {
 	public void testGetAllPets() {
 		try {
 			Set<PetDTO> pets = petService.getAllPets();
-			assertTrue(
-					pets.stream()
-							.map(PetDTO::getId)
-							.collect(Collectors.toSet())
-							.contains(PET_ID)
-			);
+			assertTrue(pets.stream().map(PetDTO::getId).collect(Collectors.toSet()).contains(PET_ID));
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
@@ -294,12 +287,7 @@ public class TestPetService {
 	public void getPetByAd() {
 		try {
 			List<PetDTO> pets = petService.getPetsByAdvertisement(AD_ID);
-			assertTrue(
-					pets.stream()
-							.map(PetDTO::getId)
-							.collect(Collectors.toSet())
-							.contains(PET_ID)
-			);
+			assertTrue(pets.stream().map(PetDTO::getId).collect(Collectors.toSet()).contains(PET_ID));
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
@@ -310,8 +298,7 @@ public class TestPetService {
 	 */
 	@Test
 	public void getPetByMissingAd() {
-		PetException thrown = assertThrows(PetException.class,
-				() -> petService.getPetsByAdvertisement(0));
+		PetException thrown = assertThrows(PetException.class, () -> petService.getPetsByAdvertisement(0));
 		assertTrue(thrown.getMessage().contains("Advertisement does not exist."));
 	}
 
