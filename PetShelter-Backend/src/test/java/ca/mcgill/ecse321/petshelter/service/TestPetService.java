@@ -39,7 +39,6 @@ import ca.mcgill.ecse321.petshelter.repository.PetRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.exception.PetException;
 
-//TODO Javadoc
 @ExtendWith(MockitoExtension.class)
 @SuppressWarnings("deprecation")
 public class TestPetService {
