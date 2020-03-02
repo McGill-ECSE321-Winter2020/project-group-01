@@ -277,7 +277,7 @@ public class TestApplicationService {
             application.setUser(user);
             
             // Convert
-            //ApplicationDTO applicationDTO = applicationService.convertToDto(application);
+            ApplicationDTO applicationDTO = applicationService.convertToDto(application);
             
             // Test values
             
@@ -311,7 +311,7 @@ public class TestApplicationService {
 	        application.setUser(user);
 	        
 	        // Update application
-	        //applicationService.updateApplication(APPLICATION_ID, APPLICATION_DESCRIPTION_2);
+	        applicationService.updateApplication(APPLICATION_ID, APPLICATION_DESCRIPTION_2);
 	        
 	        // Check description
 	        
@@ -345,7 +345,7 @@ public class TestApplicationService {
 	        application.setUser(user);
 	        
 	        // Accept application
-	        //applicationService.acceptApplication(APPLICATION_ID);
+	        applicationService.acceptApplication(APPLICATION_ID);
 	        
 	        // Check isAccepted
     	} catch (ApplicationException e) {
@@ -378,7 +378,7 @@ public class TestApplicationService {
 	        application.setUser(user);
 	        
 	        // Unaccept application
-	        //applicationService.UnacceptApplication(APPLICATION_ID);
+	        applicationService.unacceptApplication(APPLICATION_ID);
 	        
 	        // Check isAccepted
 	        
