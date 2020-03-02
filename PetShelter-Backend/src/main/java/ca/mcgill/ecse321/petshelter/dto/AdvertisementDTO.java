@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class AdvertisementDTO {
     private String title;
-    private Long[] petIds;
+    private Long petId;
     private String description;
     private boolean isFulfilled;
     private Set<Application> application;
@@ -28,13 +28,13 @@ public class AdvertisementDTO {
     }
     
     
-    public Long[] getPetIds() {
-        return petIds;
+    public Long getPetIds() {
+        return petId;
     }
     
     
-    public void setPetIds(Long[] ids) {
-        this.petIds = ids;
+    public void setPetIds(Long id) {
+        this.petId = id;
     }
     
     public String getDescription() {
@@ -80,7 +80,7 @@ public class AdvertisementDTO {
     public String toString() {
         return "AdvertisementDTO{" +
                 "title='" + title + '\'' +
-                ", petIds=" + Arrays.toString(petIds) +
+                ", petIds=" + petId +
                 ", description='" + description + '\'' +
                 ", isFulfilled=" + isFulfilled +
                 ", application=" + application +
