@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -142,8 +139,6 @@ public class AdvertisementService {
         Advertisement ad = advertisementRepository.findAdvertisementById(adDTO.getAdId());
         Set<Pet> newPets = validateParametersEdit(adDTO);
         Set<Application> applications = new HashSet<Application>();
-        //TODO change with fixed master
-        //applications.addAll(adDTO.getAdoptionApplication());
         applications.addAll(adDTO.getApplication());
         ad.setApplication(applications);
         ad.setApplication(applications);
@@ -179,6 +174,15 @@ public class AdvertisementService {
             }
         }
         advertisementRepository.deleteById(ad.getAdId());
+        // Remove reference to advertisement from pets.
+        if (ad.getPetIds() != null) {
+            Arrays.stream(ad.getPetIds())
+                    .forEach(petID -> {
+                        Pet pet = petRepository.findPetById(petID);
+                        pet.setAdvertisement(null);
+                        petRepository.save(pet);
+                    });
+        }
         return true;
     
     }
@@ -190,7 +194,15 @@ public class AdvertisementService {
         advertisementDTO.setDescription(advertisement.getDescription());
         advertisementDTO.setFulfilled(advertisement.isIsFulfilled());
         advertisementDTO.setTitle(advertisement.getTitle());
-        //	advertisementDTO.setPetIds(advertisement.get); hmmm this doesnt exist
+
+        List<Long> petIds = new ArrayList<>();
+        petRepository.findAll().forEach(pet -> {
+            if (pet.getAdvertisement().equals(advertisement.getId())) {
+                petIds.add(pet.getId());
+            }
+        });
+
+        advertisementDTO.setPetIds(petIds.toArray(new Long[petIds.size()]));
         return advertisementDTO;
     }
     
@@ -233,27 +245,37 @@ public class AdvertisementService {
             throw new AdvertisementException("Description cannot be empty");
         }
         //what if the first one doesnt but the rest exists?
-        if (adDTO.getPetIds() == null || petRepository.findPetById(adDTO.getPetIds()[0]) == null) {
-            throw new AdvertisementException("One or more pets do not exist.");
-        }
-        Pet pet0 = petRepository.findPetById(adDTO.getPetIds()[0]);
-    
-        int numOfPets = adDTO.getPetIds().length;
-        Set<Pet> newPets = new HashSet<Pet>();
-        newPets.add(pet0);
-        for (int i = 1; i < numOfPets; i++) {
-            Pet petI = petRepository.findPetById(adDTO.getPetIds()[i]);
-            if ((petI.getAdvertisement() != ad) && (petI.getAdvertisement() != null)) {
-                throw new AdvertisementException("One or more pets have a different advertisement.");
-            } else {
-                newPets.add(petI);
+
+        Set<Pet> petSet = new HashSet<>();
+        if (adDTO.getPetIds() != null) {
+            petSet = Arrays.stream(adDTO.getPetIds())
+                    .map(id -> petRepository.findPetById(id))
+                    .collect(Collectors.toSet());
+            if (petSet.contains(null)) {
+                throw new AdvertisementException("One or more pets do not exist.");
             }
         }
-        // System.out.println(petRepository.findAll());
-        for (Pet pet : petRepository.findAll()) {
-            if (pet.getAdvertisement().equals(ad)) {
-                if (!(newPets.contains(pet))) {
-                    pet.setAdvertisement(null);
+
+        Set<Pet> newPets = new HashSet<Pet>();
+        if (!petSet.isEmpty()) {
+            Pet pet0 = petRepository.findPetById(adDTO.getPetIds()[0]);
+
+            int numOfPets = adDTO.getPetIds().length;
+            newPets.add(pet0);
+            for (int i = 1; i < numOfPets; i++) {
+                Pet petI = petRepository.findPetById(adDTO.getPetIds()[i]);
+                if ((petI.getAdvertisement() != ad) && (petI.getAdvertisement() != null)) {
+                    throw new AdvertisementException("One or more pets have a different advertisement.");
+                } else {
+                    newPets.add(petI);
+                }
+            }
+            // System.out.println(petRepository.findAll());
+            for (Pet pet : petRepository.findAll()) {
+                if (pet.getAdvertisement().equals(ad)) {
+                    if (!(newPets.contains(pet))) {
+                        pet.setAdvertisement(null);
+                    }
                 }
             }
         }
