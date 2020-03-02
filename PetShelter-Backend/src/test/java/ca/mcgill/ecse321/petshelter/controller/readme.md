@@ -1,6 +1,6 @@
 To run the tests, use newman
 
-`newman run APITests.json`
+`newman run anyAPItestYouWant.json`
 
 The test will go through a general use-case of the program. It contains assertions to detect if something is failing.
 
