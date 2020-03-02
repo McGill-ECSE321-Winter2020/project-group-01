@@ -50,7 +50,7 @@ The project report for this deliverable can be found [here](https://github.com/M
 | ------------- | ------------- | ------------- |
 | Louis Barrette-Vanasse | <ul><li>Fixing the team's bugs</li><li>User and pet controller and service</li><li>Extra features such as encryption, mailing, token generation and password strength</li><li>Mockito tests for user and pet</li></ul>| 20 |
 | Mathieu Bissonnette |... | 0 |
-| Christopher Boustros | ... | 0 |
+| Christopher Boustros | <ul><li>Setting up backlog</li><li>Application DTO, service, and controller</li><li>Mockito tests for Application</li><li>Javadocs</li></ul></li><li>Javadocs</li></ul> | 25 |
 | Ding Ma | <ul><li>RESTful services tests through Postman, Newman, and Documentation </li><li>Donation and User service tests </li><li>Donation controller and Service </li><li>Heroku deployment</li></ul> | 35 |
 | Katrina Poulin | ... | 0 |
 
