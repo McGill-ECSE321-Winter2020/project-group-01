@@ -60,7 +60,7 @@ public class UserController {
      * @return user's parameter
      */
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody(required = true) UserDTO user) {
+    public ResponseEntity<?> register(@RequestBody UserDTO user) {
         try {
             UserDTO user1 = userService.createUser(user);
             return new ResponseEntity<>(user1, HttpStatus.CREATED); // return created HTTP status
@@ -79,7 +79,7 @@ public class UserController {
      * Verification of account through email.
      *
      * @param token randomly generated token
-     * @return
+     * @return confirmation msg
      */
     @GetMapping("/registrationConfirmation")
     public ResponseEntity<?> confirmRegistration(@RequestHeader String token) {
@@ -105,7 +105,7 @@ public class UserController {
      * Resets the password and emails the user a link with the new password.
      *
      * @param email user's email to reset password
-     * @return
+     * @return check if pwd is reset
      */
     @PostMapping("/resetPassword")
     public ResponseEntity<?> resetPassword(@RequestBody String email) {
@@ -134,7 +134,7 @@ public class UserController {
      * account must exist. Generates a new token on successful login.
      *
      * @param userDto user's login credentials
-     * @return
+     * @return check if can login
      */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserDTO userDto) {
@@ -189,7 +189,7 @@ public class UserController {
      *
      * @param username user to be deleted
      * @param token    admin only token
-     * @return
+     * @return error if cant get user
      */
     @GetMapping("/{username}")
     public ResponseEntity<?> getUser(@PathVariable String username, @RequestHeader String token) {
@@ -210,10 +210,10 @@ public class UserController {
      * Updates a specified user's information. Only the user tied to the account can
      * * make the request.
      *
-     * @param username
-     * @param userDto
-     * @param token
-     * @return
+     * @param username username
+     * @param userDto  userDTO
+     * @param token    user's token
+     * @return picture changed
      */
     @PutMapping("/{username}")
     // note: the username and email cannot be changed
@@ -237,8 +237,8 @@ public class UserController {
     /**
      * Returns all users' information. The requester must be an admin.
      *
-     * @param token
-     * @return
+     * @param token user's token
+     * @return targeted user
      */
     @GetMapping("/all")
     public ResponseEntity<?> getUsers(@RequestHeader String token) {
@@ -283,7 +283,7 @@ public class UserController {
      * Deletes the user's token from the database. The user is now seen as logged out.
      *
      * @param token user's token
-     * @return
+     * @return deletes user token
      */
     @GetMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader String token) {

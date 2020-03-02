@@ -36,13 +36,13 @@ public class CommentController {
 	CommentService commentService;
 	
 	/**
-	 * Get all the comments in the database and return them. Only the admin may get
-	 * those.
-	 *
-	 * @param threadID
-	 * @param token    admin's token
-	 * @return The list of all comments.
-	 */
+     * Get all the comments in the database and return them. Only the admin may get
+     * those.
+     *
+     * @param threadID thread ID
+     * @param token    admin's token
+     * @return The list of all comments.
+     */
 	@GetMapping("/all/{threadID}")
 	public ResponseEntity<?> getAllComments(@RequestHeader String token, @PathVariable long threadID) throws CommentException {
 		User requester = userRepository.findUserByApiToken(token);

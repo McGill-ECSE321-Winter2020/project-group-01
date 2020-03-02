@@ -104,8 +104,7 @@ public class AdvertisementService {
     @Transactional
     public AdvertisementDTO createAdvertisement(AdvertisementDTO adDTO) {
         List<Pet> petsInAd = validateParametersAdd(adDTO);
-        Set<Application> applications = new HashSet<>();
-        applications.addAll(adDTO.getApplication());
+        Set<Application> applications = new HashSet<>(adDTO.getApplication());
         Advertisement ad = new Advertisement();
         ad.setTitle(adDTO.getTitle());
         ad.setIsFulfilled(adDTO.isFulfilled());
@@ -138,8 +137,7 @@ public class AdvertisementService {
         }
         Advertisement ad = advertisementRepository.findAdvertisementById(adDTO.getAdId());
         Set<Pet> newPets = validateParametersEdit(adDTO);
-        Set<Application> applications = new HashSet<Application>();
-        applications.addAll(adDTO.getApplication());
+        Set<Application> applications = new HashSet<>(adDTO.getApplication());
         ad.setApplication(applications);
         ad.setApplication(applications);
     
@@ -159,7 +157,7 @@ public class AdvertisementService {
      * Deletes advertisement from the database
      *
      * @param adDTO advertisement DTO
-     * @return
+     * @return isDeleted
      */
     @Transactional
     public boolean deleteAdvertisement(AdvertisementDTO adDTO) {
@@ -255,8 +253,8 @@ public class AdvertisementService {
                 throw new AdvertisementException("One or more pets do not exist.");
             }
         }
-
-        Set<Pet> newPets = new HashSet<Pet>();
+    
+        Set<Pet> newPets = new HashSet<>();
         if (!petSet.isEmpty()) {
             Pet pet0 = petRepository.findPetById(adDTO.getPetIds()[0]);
 
