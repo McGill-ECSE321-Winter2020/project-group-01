@@ -29,7 +29,7 @@ We are 5 McGill University students from the Faculty of Engineering
 | Mathieu Bissonnette    |Software Developer| 10        |     25     |          |          |
 | Christopher Boustros   | Backend Lead| 17        |      17   |          |          |
 | Ding Ma                |   Testing Lead | 18        |     47     |          |          |
-| Katrina Poulin         | Documentation Lead | 16        |    13      |          |          |
+| Katrina Poulin         | Documentation Lead | 16        |    20      |          |          |
 ### Deliverable 1
 
 The project report for this deliverable can be found [here](https://github.com/McGill-ECSE321-Winter2020/project-group-01/wiki/Project-Report:-Sprint-1).
