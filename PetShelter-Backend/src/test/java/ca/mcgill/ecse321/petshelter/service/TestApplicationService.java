@@ -588,4 +588,18 @@ public class TestApplicationService {
 		List<ApplicationDTO> applicationDTOList = applicationService.getAllApplications();
 		assertEquals(USER_NAME, applicationDTOList.get(0).getUsername());
 	}
+	
+	@Test
+	public void testGetAllAdvertisementApplications() {
+		Set<Application> applications = new HashSet<>();
+		Advertisement advertisement = new Advertisement();
+		advertisement.setId(ADVERTISEMENT_ID);
+		advertisement.setApplication(applications);
+		advertisement.setIsFulfilled(ADVERTISEMENT_IS_FULFILLED);
+		advertisement.setDescription(ADVERTISEMENT_DESCRIPTION);
+		advertisement.setTitle(ADVERTISEMENT_TITLE);
+		List<ApplicationDTO> applicationDTOList = applicationService.getAllAdvertisementApplications(advertisement);
+		
+		assertEquals(0, applicationDTOList.size());
+	}
 }
