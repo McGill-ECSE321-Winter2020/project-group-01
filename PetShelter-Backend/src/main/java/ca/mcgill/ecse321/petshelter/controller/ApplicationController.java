@@ -100,8 +100,7 @@ public class ApplicationController {
 	public ResponseEntity<?> getUserApplication(@PathVariable String user, @RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
 		if (requester != null) {
-			return new ResponseEntity<>(
-					applicationService.getAllUserApplications(userRepository.findUserByUserName(user)), HttpStatus.OK);
+			return new ResponseEntity<>(applicationService.getAllUserApplications(requester.getUserName()), HttpStatus.OK);
 		} else
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 

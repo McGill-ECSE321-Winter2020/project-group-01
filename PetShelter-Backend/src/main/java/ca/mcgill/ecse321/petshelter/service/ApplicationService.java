@@ -39,7 +39,7 @@ public class ApplicationService {
     }
     
     /**
-     * @param applicantionId the applicationId
+     * @param applicationId the applicationId
      * @return applicationDTO that matches the application found
      */
     @Transactional
@@ -57,34 +57,26 @@ public class ApplicationService {
      * @return all the applications that matches that user
      */
     @Transactional
-    public List<ApplicationDTO> getAllUserApplications(User name) {
-        return toList(applicationRepository.findApplicationsByUser(name)).stream().map(this::convertToDto).collect(Collectors.toList());
+    public List<ApplicationDTO> getAllUserApplications(String name) {
+        return toList(applicationRepository.findApplicationsByUserUserName(name)).stream().map(this::convertToDto).collect(Collectors.toList());
     }
     
-    @Transactional
-    public List<ApplicationDTO> getApplicationsByAdvertisement(long advertisementId) {
-    	Optional<Advertisement> advertisement = advertisementRepository.findById(advertisementId);
-    	if (advertisement.isPresent()) {
-    		return applicationRepository.findApplicationsByAdvertisement(advertisement.get()).stream().map(this::convertToDto).collect(Collectors.toList());
-    	} else {
-    		throw new ApplicationException("No such advertisement.");
-    	}
-    }
+
     
     /**
      * @return all the accepted applications
      */
     @Transactional
     public List<ApplicationDTO> getAllAcceptedApplications() {
-    	List<Application> allApplications = toList(applicationRepository.findAll());
-    	List<Application> acceptedApplications = new ArrayList<Application>();
-    	for (Application a : allApplications) {
-    		if (a.isIsAccepted()) {
-    			acceptedApplications.add(a);
-    		}
-    	}
-
-    	return toList(acceptedApplications.stream().map(this::convertToDto).collect(Collectors.toList()));
+        List<Application> allApplications = toList(applicationRepository.findAll());
+        List<Application> acceptedApplications = new ArrayList<>();
+        for (Application a : allApplications) {
+            if (a.isIsAccepted()) {
+                acceptedApplications.add(a);
+            }
+        }
+    
+        return toList(acceptedApplications.stream().map(this::convertToDto).collect(Collectors.toList()));
     }
 
     /**
@@ -92,16 +84,17 @@ public class ApplicationService {
      */
     @Transactional
     public List<ApplicationDTO> getAllUnacceptedApplications() {
-    	List<Application> allApplications = toList(applicationRepository.findAll());
-    	List<Application> unacceptedApplications = new ArrayList<Application>();
-
-    	for (Application a : allApplications) {
-    		if (! a.isIsAccepted()) {
-    			unacceptedApplications.add(a);
-    		}
-    	}
-
-    	return toList(unacceptedApplications.stream().map(this::convertToDto).collect(Collectors.toList()));
+        List<Application> allApplications = toList(applicationRepository.findAll());
+        System.out.println(allApplications);
+        List<Application> unacceptedApplications = new ArrayList<>();
+    
+        for (Application a : allApplications) {
+            if (!a.isIsAccepted()) {
+                unacceptedApplications.add(a);
+            }
+        }
+    
+        return toList(unacceptedApplications.stream().map(this::convertToDto).collect(Collectors.toList()));
     }
     
     /**
@@ -186,66 +179,23 @@ public class ApplicationService {
     @Transactional
     public ApplicationDTO updateApplication(long applicationId, String newDescription) {
     	Optional<Application> application = applicationRepository.findById(applicationId);
-    	if (application.isPresent()) {
-    		Application newApplication = application.get();
-    		
-    		if (newApplication.getDescription() == newDescription) {
-        		throw new ApplicationException("Description is the same!");
-        	}
-    		
-    		newApplication.setDescription(newDescription);
-    		applicationRepository.save(newApplication);
-    		return convertToDto(newApplication);
-    	} else {
-    		throw new ApplicationException("No such application.");
-    	}    	
+        if (application.isPresent()) {
+            Application newApplication = application.get();
+            if (newApplication.getDescription().equals(newDescription)) {
+                throw new ApplicationException("Description is the same!");
+            }
+        
+            newApplication.setDescription(newDescription);
+            applicationRepository.save(newApplication);
+            return convertToDto(newApplication);
+        } else {
+            throw new ApplicationException("No such application.");
+        }
     }
     
-    /**
-     * Accepts the application
-     * @param applicationId the application id
-     * @return applicationDTO that matches the new application
-     */
-    @Transactional
-    public ApplicationDTO acceptApplication(long applicationId) {
-    	Optional<Application> application = applicationRepository.findById(applicationId);
-    	if (application.isPresent()) {
-    		Application newApplication = application.get();
-    		
-    		if (newApplication.isIsAccepted() == true) {
-        		throw new ApplicationException("Application is already accepted!");
-        	}
-    		
-    		newApplication.setIsAccepted(true);
-    		applicationRepository.save(newApplication);
-    		return convertToDto(newApplication);
-    	} else {
-    		throw new ApplicationException("No such application.");
-    	}    
-    }
+
     
-    /**
-     * Rejects the application
-     * @param applicationId the application id
-     * @return applicationDTO that matches the new application
-     */
-    @Transactional
-    public ApplicationDTO unacceptApplication(long applicationId) {
-    	Optional<Application> application = applicationRepository.findById(applicationId);
-    	if (application.isPresent()) {
-    		Application newApplication = application.get();
-    		
-    		if (newApplication.isIsAccepted() == false) {
-        		throw new ApplicationException("Application is already not accepted!");
-        	}
-    		
-    		newApplication.setIsAccepted(false);
-    		applicationRepository.save(newApplication);
-    		return convertToDto(newApplication);
-    	} else {
-    		throw new ApplicationException("No such application.");
-    	}    	
-    }
+
     
     //From tutorial
     private <T> List<T> toList(Iterable<T> iterable) {

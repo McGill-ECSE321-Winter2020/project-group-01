@@ -28,9 +28,6 @@ public class AdvertisementService {
     @Autowired
     private ApplicationService applicationService;
     
-    @Autowired
-    private PetService petService;
-    
     /**
      * Finds an advertisement by the DTO
      *
