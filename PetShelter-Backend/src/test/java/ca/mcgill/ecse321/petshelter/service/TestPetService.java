@@ -5,6 +5,7 @@ import ca.mcgill.ecse321.petshelter.model.*;
 import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import ca.mcgill.ecse321.petshelter.repository.PetRepository;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
+import ca.mcgill.ecse321.petshelter.service.exception.ForumException;
 import ca.mcgill.ecse321.petshelter.service.exception.PetException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,11 +17,16 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
+import javax.validation.constraints.AssertTrue;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.lenient;
 
@@ -68,6 +74,9 @@ public class TestPetService {
 	private static final byte[] PET_PICTURE_UPDATE = new byte[10];
 	private long PET_ID = 0;
 	private Pet PET = new Pet();
+
+	private static final long AD_ID = 13;
+	private static final long AD_ID2 = 15;
 
 	@Mock
 	private PetRepository petRepository;
@@ -122,8 +131,44 @@ public class TestPetService {
 				PET.setName(PET_NAME);
 				PET.setSpecies(PET_SPECIES);
 				PET.setPicture(PET_PICTURE);
+				PET.setGender(PET_GENDER);
 				PET.setAdvertisement(new Advertisement());
 				return PET;
+			} else {
+				return null;
+			}
+		});
+
+		lenient().when(petRepository.findAll()).thenAnswer((InvocationOnMock invocation) -> {
+			PET.setBreed(PET_BREED);
+			PET.setDateOfBirth(PET_DOB);
+			PET.setDescription(PET_DESCRIPTION);
+			PET.setName(PET_NAME);
+			PET.setSpecies(PET_SPECIES);
+			PET.setPicture(PET_PICTURE);
+			PET.setId(PET_ID);
+			PET.setAdvertisement(new Advertisement());
+			Set<Pet> pets = new HashSet<>();
+			pets.add(PET);
+			return pets;
+		});
+
+		lenient().when(petRepository.findPetByAdvertisement(any(Advertisement.class))).thenAnswer((InvocationOnMock invocation) -> {
+			if (((Advertisement)invocation.getArgument(0)).getId() == AD_ID) {
+				PET.setBreed(PET_BREED);
+				PET.setDateOfBirth(PET_DOB);
+				PET.setDescription(PET_DESCRIPTION);
+				PET.setName(PET_NAME);
+				PET.setSpecies(PET_SPECIES);
+				PET.setPicture(PET_PICTURE);
+				PET.setId(PET_ID);
+				PET.setAdvertisement(new Advertisement());
+				List<Pet> pets = new ArrayList<>();
+				pets.add(PET);
+				return pets;
+			} else if (((Advertisement)invocation.getArgument(0)).getId() == AD_ID2) {
+				List<Pet> pets = new ArrayList<>();
+				return pets;
 			} else {
 				return null;
 			}
@@ -143,10 +188,17 @@ public class TestPetService {
 		});
 		lenient().when(advertisementRepository.findAdvertisementById(anyLong()))
 				.thenAnswer((InvocationOnMock invocation) -> {
-
-					Advertisement ad = new Advertisement();
-					return ad;
-
+					if (invocation.getArgument(0).equals(AD_ID)) {
+						Advertisement ad = new Advertisement();
+						ad.setId(AD_ID);
+						return ad;
+					} else if (invocation.getArgument(0).equals(AD_ID2)) {
+						Advertisement ad = new Advertisement();
+						ad.setId(AD_ID2);
+						return ad;
+					} else {
+						return null;
+					}
 				});
 
 		Answer<?> returnParameterAsAnswer = (InvocationOnMock invocation) -> {
@@ -178,6 +230,96 @@ public class TestPetService {
 		userRepository.save(user);
 
 		return user;
+	}
+
+	//////////////////////////// GETTER METHODS ////////////////////////////
+
+	/**
+	 * Test fetching a pet by its ID.
+	 */
+	@Test
+	public void testGetPet() {
+		try {
+			PetDTO petDTO = petService.getPet(PET_ID);
+			assertEquals(PET_ID, petDTO.getId().longValue());
+			assertEquals(PET_BREED, petDTO.getBreed());
+			assertEquals(PET_DESCRIPTION, petDTO.getDescription());
+			assertEquals(PET_DOB, petDTO.getDateOfBirth());
+			assertEquals(PET_GENDER, petDTO.getGender());
+			assertEquals(PET_SPECIES, petDTO.getSpecies());
+			assertArrayEquals(PET_PICTURE, petDTO.getPicture());
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+	}
+
+	/**
+	 * Test fetching a pet that doesn't exist.
+	 */
+	@Test
+	public void testGetMissingPet() {
+		PetException thrown = assertThrows(PetException.class,
+				() -> petService.getPet(344));
+		assertTrue(thrown.getMessage().contains("Pet does not exist."));
+	}
+
+	/**
+	 * Test fetching all pets.
+	 */
+	@Test
+	public void testGetAllPets() {
+		try {
+			Set<PetDTO> pets = petService.getAllPets();
+			assertTrue(
+					pets.stream()
+							.map(PetDTO::getId)
+							.collect(Collectors.toSet())
+							.contains(PET_ID)
+			);
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+	}
+
+	/**
+	 * Test fetching all the pets of an ad.
+	 */
+	@Test
+	public void getPetByAd() {
+		try {
+			List<PetDTO> pets = petService.getPetsByAdvertisement(AD_ID);
+			assertTrue(
+					pets.stream()
+							.map(PetDTO::getId)
+							.collect(Collectors.toSet())
+							.contains(PET_ID)
+			);
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+	}
+
+	/**
+	 * Test fetching pets of an ad that doesn't exist.
+	 */
+	@Test
+	public void getPetByMissingAd() {
+		PetException thrown = assertThrows(PetException.class,
+				() -> petService.getPetsByAdvertisement(0));
+		assertTrue(thrown.getMessage().contains("Advertisement does not exist."));
+	}
+
+	/**
+	 * Test fetching pets of an ad that doesn't exist.
+	 */
+	@Test
+	public void getMissingPetByAd() {
+		try {
+			List<PetDTO> pets = petService.getPetsByAdvertisement(AD_ID2);
+			assertTrue(pets.isEmpty());
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
 	}
 
 	////////////////////////////// CREATE PET //////////////////////////////
