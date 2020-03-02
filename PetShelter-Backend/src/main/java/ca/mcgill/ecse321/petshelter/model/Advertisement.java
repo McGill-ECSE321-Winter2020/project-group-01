@@ -46,8 +46,7 @@ public class Advertisement {
     public void setApplication(Set<Application> applications) {
         this.application = applications;
     }
-    
-    
+
     private String title;
     
     public String getTitle() {
@@ -56,6 +55,16 @@ public class Advertisement {
     
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    private Long petID;
+
+    public Long getPetID() {
+        return petID;
+    }
+
+    public void setPetID(Long petID) {
+        this.petID = petID;
     }
     
     @Override
@@ -66,6 +75,8 @@ public class Advertisement {
                 ", isFulfilled=" + isFulfilled +
                 ", adoptionApplication=" + application +
                 ", title='" + title + '\'' +
+                ", petID=" + petID +
                 '}';
     }
+
 }
