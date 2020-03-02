@@ -107,4 +107,16 @@ public class ApplicationDTO {
 	public Long getAppId() {
 		return appId;
 	}
+	
+	@Override
+	public String toString() {
+		return "ApplicationDTO{" +
+				"description='" + description + '\'' +
+				", advertisementTitle='" + advertisementTitle + '\'' +
+				", username='" + username + '\'' +
+				", isAccepted=" + isAccepted +
+				", adId=" + adId +
+				", appId=" + appId +
+				'}';
+	}
 }
