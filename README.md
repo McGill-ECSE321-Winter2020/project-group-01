@@ -50,9 +50,9 @@ The project report for this deliverable can be found [here](https://github.com/M
 | ------------- | ------------- | ------------- |
 | Louis Barrette-Vanasse | <ul><li>Fixing the team's bugs</li><li>User and pet controller and service</li><li>Extra features such as encryption, mailing, token generation and password strength</li><li>Mockito tests for user and pet</li></ul>| 32 |
 | Mathieu Bissonnette | <ul><li>Forum and comment controllers, services and tests</li><li>Postman tests</li><li>Advertisement service bug resolving</li></ul>| 25 |
-| Christopher Boustros | <ul><li>Setting up backlog</li><li>Application DTO, service, and controller</li><li>Javadocs</li> | 16 |
+| Christopher Boustros | <ul><li>Setting up backlog</li><li>Application DTO, service, and controller</li><li>Javadocs</li> | 17 |
 | Ding Ma | <ul><li>RESTful services tests through Postman, Newman, and Documentation </li><li>Donation, Application and User service tests </li><li>Donation controller and Service </li><li>Heroku deployment</li><li>PetSerives and Application Tests rewrite</li></ul> | 47 |
-| Katrina Poulin |<ul><li>Project minutes</li><li>Pet and advertisement service; advertisement controller</li></ul>| 13 |
+| Katrina Poulin |<ul><li>Project minutes</li><li>Pet and advertisement service; advertisement controller, Test plan, Sprint report</li></ul>| 20 |
 
 (*) *From ECSE321_Project_Description.pdf written by M. Kanaan, posted on myCourses.*
 
