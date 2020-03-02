@@ -177,6 +177,15 @@ public class AdvertisementService {
             }
         }
         advertisementRepository.deleteById(ad.getAdId());
+        // Remove reference to advertisement from pets.
+        if (ad.getPetIds() != null) {
+            Arrays.stream(ad.getPetIds())
+                    .forEach(petID -> {
+                        Pet pet = petRepository.findPetById(petID);
+                        pet.setAdvertisement(null);
+                        petRepository.save(pet);
+                    });
+        }
         return true;
     
     }
@@ -188,7 +197,15 @@ public class AdvertisementService {
         advertisementDTO.setDescription(advertisement.getDescription());
         advertisementDTO.setFulfilled(advertisement.isIsFulfilled());
         advertisementDTO.setTitle(advertisement.getTitle());
-        //	advertisementDTO.setPetIds(advertisement.get); hmmm this doesnt exist
+
+        List<Long> petIds = new ArrayList<>();
+        petRepository.findAll().forEach(pet -> {
+            if (pet.getAdvertisement().equals(advertisement.getId())) {
+                petIds.add(pet.getId());
+            }
+        });
+
+        advertisementDTO.setPetIds(petIds.toArray(new Long[petIds.size()]));
         return advertisementDTO;
     }
     
