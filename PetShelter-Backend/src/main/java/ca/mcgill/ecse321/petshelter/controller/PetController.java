@@ -70,12 +70,12 @@ public class PetController {
 	}
 	
 	/**
-	 * Changes the ownership of a pet
-	 *
-	 * @param token
-	 * @param pet
-	 * @return
-	 */
+     * Changes the ownership of a pet
+     *
+     * @param token user token
+     * @param pet   petDTO
+     * @return check if pet is updated
+     */
 	@PutMapping("/update")
 	public ResponseEntity<?> updatePet(@RequestHeader String token, @RequestBody PetDTO pet) {
 		User requester = userRepository.findUserByApiToken(token);
@@ -95,14 +95,15 @@ public class PetController {
 			return new ResponseEntity<>(petDTO, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	/**
-	 * Creates a pet
-	 *
-	 * @param token
-	 * @param pet
-	 * @return
+        }
+    }
+    
+    /**
+     * Creates a pet
+     *
+     * @param token user token
+     * @param pet petDTO
+     * @return check if pet is created
 	 */
 	@PostMapping("/")
 	public ResponseEntity<?> createPet(@RequestHeader String token, @RequestBody PetDTO pet) {
