@@ -37,12 +37,6 @@ public class CommentService {
 	@Autowired
 	private ForumRepository forumRepository;
 	
-	/*
-	some stuff doenst work:
-	1- comments seems to be erased after
-	2- multiple comments are not saved, even with different names
-	 */
-	
 	/**
 	 * Add a comment to a thread.
 	 *
@@ -61,6 +55,7 @@ public class CommentService {
 				if (!newForum.isLocked()) {
 					Comment newComment = new Comment();
 					newComment.setText(text);
+					// Use the backend system clock to create the time and date of the new comment.
 					newComment.setDatePosted(new Date(System.currentTimeMillis()));
 					newComment.setTime(new Time(System.currentTimeMillis()));
 					newComment.setUser(user.get());
