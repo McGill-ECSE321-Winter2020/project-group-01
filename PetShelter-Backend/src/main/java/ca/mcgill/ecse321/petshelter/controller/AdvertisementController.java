@@ -176,18 +176,22 @@ public class AdvertisementController {
 		AdvertisementDTO advertisementOld = advertisementService.getAdvertisementById(advertisementDTO.getAdId());
 		if (user != null // Check if user an advert exist and if user can modify it.
 				&& advertisementOld != null
-				//	&& hasRightsForAd(user, advertisementOld) this needs to be fixed later on THIS ALSO NEEDS TO BE FIXED
+				&& hasRightsForAd(user, advertisementOld)
 				&& advertisementDTO.getTitle() != null // Check if the new title is valid.
 				&& !advertisementDTO.getTitle().trim().equals("")) {
+
 			// Converts all the pets of the user to a set of their IDs.
 			Set<Long> petsID = petService.getPetsByUser(user.getUserName()).stream()
 					.map(PetDTO::getId)
 					.collect(Collectors.toSet());
-			
+
+			// Create a set with all IDs.
+			Long[] idArray = advertisementDTO.getPetIds();
+			Set<Long> idSet = new HashSet<>();
+			Collections.addAll(idSet, idArray);
+
 			// Then verify if the pets of the new advertisement are contained in that set.
-			
-			if (petsID.containsAll(Arrays.asList(advertisementDTO.getPetIds()))) { //this doesnt work either, CANT just cast like this
-				advertisementDTO.setAdId(advertisementDTO.getAdId()); // Make sure the advertisement ID remains the same.
+			if (petsID.containsAll(idSet)) {
 				return new ResponseEntity<AdvertisementDTO>(
 						advertisementService.editAdvertisement(advertisementDTO),
 						HttpStatus.OK
@@ -259,34 +263,31 @@ public class AdvertisementController {
 
 	/**
 	 * Determines if a user has rights to modify an ad.
-	 * 
-	 * @param user
-	 * @param ad
-	 * @return
+	 *
+	 * @param user An user.
+	 * @param ad An ad DTO.
+	 * @return Whether or not the user can modify the ad.
 	 */
 	public boolean hasRightsForAd(User user, AdvertisementDTO ad) {
 		boolean hasRights = false;
-		List<PetDTO> pets = petService.getPetsByAdvertisement(ad.getAdId());
-		if (user.getUserType().equals(UserType.USER)) {
-			for (PetDTO pet : pets) {
-				for (Pet pet1 : user.getPets()) {
-					PetDTO pet1Dto = petToPetDTO(pet1);
-					if (pet1Dto.equals(pet)) {
-						hasRights = true;
-					}
-				}
-			}
-		} else {
+		if (user.getUserType() == UserType.ADMIN) { // Override if user is an admin.
 			hasRights = true;
+		} else {
+			Set<Pet> pets = user.getPets(); // Otherwise, build a set of advertisements related to user.
+			Set<Long> advertisementIDs = new HashSet<>();
+			pets.stream().forEach(p -> advertisementIDs.add(p.getAdvertisement().getId()));
+			if (advertisementIDs.contains(ad.getAdId())) { // If the advert is in that set, user has rights.
+				hasRights = true;
+			}
 		}
 		return hasRights;
 	}
 
 	/**
-	 * COnverts a pet into a petdto.
+	 * Converts a pet into a pet DTO.
 	 * 
-	 * @param pet
-	 * @return
+	 * @param pet A pet entity.
+	 * @return The pet DTO.
 	 */
 	public PetDTO petToPetDTO(Pet pet) {
 		PetDTO petDTO = new PetDTO();
