@@ -7,7 +7,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Arrays;
 
 public class UserDTO {
 	
@@ -27,17 +26,17 @@ public class UserDTO {
 	private String password;
 	private String token;
 	private UserType userType;
-	private byte[] picture;
+	private String pictureLink;
 	
 	public UserDTO() {
 	}
 	
-	public UserDTO(@NotNull @Email String email, @NotNull String username, String password, UserType userType, byte[] picture) {
+	public UserDTO(@NotNull @Email String email, @NotNull String username, String password, UserType userType, String picture) {
 		this.email = email;
 		this.username = username;
 		this.password = password;
 		this.userType = userType;
-		this.picture = picture;
+		this.pictureLink = picture;
 	}
 	
 	/**
@@ -99,15 +98,15 @@ public class UserDTO {
 	/**
 	 * @return the picture
 	 */
-	public byte[] getPicture() {
-		return picture;
+	public String getPicture() {
+		return pictureLink;
 	}
 
 	/**
 	 * @param picture the picture to set
 	 */
-	public void setPicture(byte[] picture) {
-		this.picture = picture;
+	public void setPicture(String picture) {
+		this.pictureLink = picture;
 	}
 
 	/**
@@ -132,7 +131,7 @@ public class UserDTO {
 				", password='" + password + '\'' +
 				", token='" + token + '\'' +
 				", userType=" + userType +
-				", picture=" + Arrays.toString(picture) +
+				", picture=" + pictureLink +
 				'}';
 	}
 }

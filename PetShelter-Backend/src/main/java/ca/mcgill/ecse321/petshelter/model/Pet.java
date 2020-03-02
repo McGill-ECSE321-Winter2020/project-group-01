@@ -2,7 +2,6 @@ package ca.mcgill.ecse321.petshelter.model;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.Arrays;
 
 @Entity
 public class Pet {
@@ -63,14 +62,14 @@ public class Pet {
 		return this.description;
 	}
 
-	private byte[] picture;
+	private String pictureLink;
 
-	public void setPicture(byte[] value) {
-		this.picture = value;
+	public void setPicture(String value) {
+		this.pictureLink = value;
 	}
 
-	public byte[] getPicture() {
-		return this.picture;
+	public String getPicture() {
+		return this.pictureLink;
 	}
 
 	private long id;
@@ -115,7 +114,7 @@ public class Pet {
                 ", species='" + species + '\'' +
                 ", breed='" + breed + '\'' +
                 ", description='" + description + '\'' +
-                ", picture=" + Arrays.toString(picture) +
+                ", picture=" + pictureLink +
                 ", id=" + id +
                 ", gender=" + gender +
                 ", advertisement=" + advertisement +
