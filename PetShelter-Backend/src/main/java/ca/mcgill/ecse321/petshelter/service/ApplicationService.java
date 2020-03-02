@@ -221,7 +221,7 @@ public class ApplicationService {
     		return convertToDto(newApplication);
     	} else {
     		throw new ApplicationException("No such application.");
-    	}    	
+    	}    
     }
     
     /**
