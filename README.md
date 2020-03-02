@@ -25,11 +25,11 @@ We are 5 McGill University students from the Faculty of Engineering
 ### Project
 | NAME                   | ROLE |  SPRINT 1 | SPRINT 2 | SPRINT 3 | SPRINT 4 |
 |------------------------|------|-----------|----------|----------|----------|
-| Louis Barrette-Vanasse | Project Manager | 25        |          |          |          |
-| Mathieu Bissonnette    |Software Developer| 10        |          |          |          |
-| Christopher Boustros   | Backend Lead| 17        |          |          |          |
-| Ding Ma                |   Testing Lead | 18        |          |          |          |
-| Katrina Poulin         | Documentation Lead | 16        |          |          |          |
+| Louis Barrette-Vanasse | Project Manager | 25        |   32       |          |          |
+| Mathieu Bissonnette    |Software Developer| 10        |     25     |          |          |
+| Christopher Boustros   | Backend Lead| 17        |      17   |          |          |
+| Ding Ma                |   Testing Lead | 18        |     47     |          |          |
+| Katrina Poulin         | Documentation Lead | 16        |    13      |          |          |
 ### Deliverable 1
 
 The project report for this deliverable can be found [here](https://github.com/McGill-ECSE321-Winter2020/project-group-01/wiki/Project-Report:-Sprint-1).
@@ -48,11 +48,11 @@ The project report for this deliverable can be found [here](https://github.com/M
 
 | Name | Contributions | Hours |
 | ------------- | ------------- | ------------- |
-| Louis Barrette-Vanasse | <ul><li>Fixing the team's bugs</li><li>User and pet controller and service</li><li>Extra features such as encryption, mailing, token generation and password strength</li><li>Mockito tests for user and pet</li></ul>| 20 |
-| Mathieu Bissonnette |... | 0 |
-| Christopher Boustros | <ul><li>Setting up backlog</li><li>Application DTO, service, and controller</li><li>Mockito tests for Application</li><li>Javadocs</li> | 17 |
-| Ding Ma | <ul><li>RESTful services tests through Postman, Newman, and Documentation </li><li>Donation and User service tests </li><li>Donation controller and Service </li><li>Heroku deployment</li></ul> | 35 |
-| Katrina Poulin | ... | 0 |
+| Louis Barrette-Vanasse | <ul><li>Fixing the team's bugs</li><li>User and pet controller and service</li><li>Extra features such as encryption, mailing, token generation and password strength</li><li>Mockito tests for user and pet</li></ul>| 32 |
+| Mathieu Bissonnette | <ul><li>Forum and comment controllers, services and tests</li><li>Postman tests</li><li>Advertisement service bug resolving</li></ul>| 25 |
+| Christopher Boustros | <ul><li>Setting up backlog</li><li>Application DTO, service, and controller</li><li>Javadocs</li> | 17 |
+| Ding Ma | <ul><li>RESTful services tests through Postman, Newman, and Documentation </li><li>Donation, Application and User service tests </li><li>Donation controller and Service </li><li>Heroku deployment</li></ul> | 47 |
+| Katrina Poulin |<ul><li>Project minutes</li><li>Pet and advertisement service; advertisement controller</li></ul>| 13 |
 
 (*) *From ECSE321_Project_Description.pdf written by M. Kanaan, posted on myCourses.*
 
