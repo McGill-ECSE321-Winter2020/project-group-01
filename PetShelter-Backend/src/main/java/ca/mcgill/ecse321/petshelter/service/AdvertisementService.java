@@ -1,6 +1,8 @@
 package ca.mcgill.ecse321.petshelter.service;
 
 import ca.mcgill.ecse321.petshelter.dto.AdvertisementDTO;
+import ca.mcgill.ecse321.petshelter.dto.ApplicationDTO;
+import ca.mcgill.ecse321.petshelter.dto.PetDTO;
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Application;
 import ca.mcgill.ecse321.petshelter.model.Pet;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,6 +27,9 @@ public class AdvertisementService {
     
     @Autowired
     private ApplicationService applicationService;
+
+    @Autowired
+    private PetService petService;
     
     /**
      * Finds an advertisement by the DTO
@@ -281,3 +287,22 @@ public class AdvertisementService {
     }
 
 }
+
+    /**
+     * Convert an advertisement DTO to an advertisement entity.
+     * @param advertisementDTO The advertisement entity.
+     * @return The advertisement entity.
+     */
+    public Advertisement convertToEntity(AdvertisementDTO advertisementDTO) {
+        Advertisement advertisement = new Advertisement();
+        advertisement.setId(advertisementDTO.getAdId());
+        advertisement.setApplication(
+                advertisementDTO.getApplication().stream()
+                .map(applicationService::convertToEntity)
+                .collect(Collectors.toSet())
+        );
+        advertisement.setDescription(advertisementDTO.getDescription());
+        advertisement.setIsFulfilled(advertisementDTO.isFulfilled());
+        advertisement.setPet(petService.convertToEntity(advertisementDTO.getPet()));
+        advertisement.setTitle(advertisementDTO.getTitle());
+        return advertisement;
