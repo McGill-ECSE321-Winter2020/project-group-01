@@ -3,18 +3,20 @@
 }
 
 .App-logo {
-  height: 40vmin;
+  height: 50%;
+  width: 50%;
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
-  background-color: #282c34;
+  background: rgba(242,246,248,1);
+  background: -moz-linear-gradient(left, rgba(242,246,248,1) 0%, rgba(224,239,249,1) 42%, rgba(222,235,244,1) 49%, rgba(216,225,231,1) 68%, rgba(181,198,208,1) 100%);
+  background: -webkit-gradient(left top, right top, color-stop(0%, rgba(242,246,248,1)), color-stop(42%, rgba(224,239,249,1)), color-stop(49%, rgba(222,235,244,1)), color-stop(68%, rgba(216,225,231,1)), color-stop(100%, rgba(181,198,208,1)));
+  background: -webkit-linear-gradient(left, rgba(242,246,248,1) 0%, rgba(224,239,249,1) 42%, rgba(222,235,244,1) 49%, rgba(216,225,231,1) 68%, rgba(181,198,208,1) 100%);
+  background: -o-linear-gradient(left, rgba(242,246,248,1) 0%, rgba(224,239,249,1) 42%, rgba(222,235,244,1) 49%, rgba(216,225,231,1) 68%, rgba(181,198,208,1) 100%);
+  background: -ms-linear-gradient(left, rgba(242,246,248,1) 0%, rgba(224,239,249,1) 42%, rgba(222,235,244,1) 49%, rgba(216,225,231,1) 68%, rgba(181,198,208,1) 100%);
+  background: linear-gradient(to right, rgba(242,246,248,1) 0%, rgba(224,239,249,1) 42%, rgba(222,235,244,1) 49%, rgba(216,225,231,1) 68%, rgba(181,198,208,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6f8', endColorstr='#b5c6d0', GradientType=1 );
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -28,11 +30,3 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
