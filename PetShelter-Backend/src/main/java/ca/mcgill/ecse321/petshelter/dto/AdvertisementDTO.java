@@ -1,16 +1,13 @@
 package ca.mcgill.ecse321.petshelter.dto;
 
-import ca.mcgill.ecse321.petshelter.model.Application;
-
-import java.util.Arrays;
 import java.util.Set;
 
 public class AdvertisementDTO {
     private String title;
-    private Long petId;
+    private PetDTO pet;
     private String description;
     private boolean isFulfilled;
-    private Set<Application> application;
+    private Set<ApplicationDTO> application;
     private Long adId;
     
     public AdvertisementDTO() {
@@ -26,16 +23,7 @@ public class AdvertisementDTO {
     public void setTitle(String title) {
         this.title = title;
     }
-    
-    
-    public Long getPetIds() {
-        return petId;
-    }
-    
-    
-    public void setPetIds(Long id) {
-        this.petId = id;
-    }
+
     
     public String getDescription() {
         return description;
@@ -55,18 +43,18 @@ public class AdvertisementDTO {
     public void setFulfilled(boolean isFulfilled) {
         this.isFulfilled = isFulfilled;
     }
-    
-    
-    public Set<Application> getApplication() {
+
+
+    public Set<ApplicationDTO> getApplication() {
         return application;
     }
-    
-    
-    public void setApplication(Set<Application> application) {
+
+
+    public void setApplication(Set<ApplicationDTO> application) {
         this.application = application;
     }
-    
-    
+
+
     public Long getAdId() {
         return adId;
     }
@@ -80,11 +68,19 @@ public class AdvertisementDTO {
     public String toString() {
         return "AdvertisementDTO{" +
                 "title='" + title + '\'' +
-                ", petIds=" + petId +
+                ", pet=" + pet +
                 ", description='" + description + '\'' +
                 ", isFulfilled=" + isFulfilled +
                 ", application=" + application +
                 ", adId=" + adId +
                 '}';
+    }
+
+    public PetDTO getPet() {
+        return pet;
+    }
+
+    public void setPet(PetDTO pet) {
+        this.pet = pet;
     }
 }
