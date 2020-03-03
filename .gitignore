@@ -20,4 +20,9 @@ bin/
 PetShelter-Backend/psql
 PetShelter-Backend/src/main/java/ca/mcgill/ecse321/petshelter/model/PetShelter-Backend.uml
 PetShelter-Backend/src/main/java/ca/mcgill/ecse321/petshelter/model/PetShelter-Backend.umlcd
-PetShelter-Frontend/.idea
+
+#Frontend useless files
+petshelter-frontend/debug.log
+petshelter-frontend/node_modules/
+petshelter-frontend/.idea
+
