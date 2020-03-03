@@ -1,6 +1,5 @@
 package ca.mcgill.ecse321.petshelter.service;
 
-import ca.mcgill.ecse321.petshelter.dto.AdvertisementDTO;
 import ca.mcgill.ecse321.petshelter.dto.PetDTO;
 import ca.mcgill.ecse321.petshelter.model.Advertisement;
 import ca.mcgill.ecse321.petshelter.model.Pet;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,13 +38,13 @@ public class PetService {
 		if (pet == null) {
 			throw new PetException("Pet does not exist.");
 		} else {
-			return petToPetDTO(pet);
+			return convertToDTO(pet);
 		}
 	}
 
 	@Transactional
 	public Set<PetDTO> getAllPets() {
-		return petRepository.findAll().stream().map(this::petToPetDTO).collect(Collectors.toSet());
+		return petRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toSet());
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class PetService {
 		if (petDTO.getId() == null) {
 			throw new PetException("Pet does not exist.");
 		} else {
-			return petToPetDTO(petRepository.findPetById(petDTO.getId()));
+			return convertToDTO(petRepository.findPetById(petDTO.getId()));
 		}
 	}
 
@@ -101,7 +101,7 @@ public class PetService {
 		if (user == null) {
 			throw new PetException("User does not exist.");
 		} else {
-			return user.getPets().stream().map(this::petToPetDTO).collect(Collectors.toSet());
+			return user.getPets().stream().map(this::convertToDTO).collect(Collectors.toSet());
 		}
 	}
 
@@ -116,7 +116,7 @@ public class PetService {
 		Advertisement advertisement = advertisementRepository.findAdvertisementById(adId);
 		if (advertisement != null) {
 			List<Pet> pets = petRepository.findPetByAdvertisement(advertisement);
-			return pets.stream().map(this::petToPetDTO).collect(Collectors.toList());
+			return pets.stream().map(this::convertToDTO).collect(Collectors.toList());
 		} else {
 			throw new PetException("Advertisement does not exist.");
 		}
@@ -135,7 +135,7 @@ public class PetService {
 		Pet pet = validateParametersEdit(petDTO);
 		petSetters(pet, petDTO);
 		petRepository.save(pet);
-		return petToPetDTO(pet);
+		return convertToDTO(pet);
 	}
 
 	@Transactional
@@ -159,7 +159,7 @@ public class PetService {
 		userRepository.save(newUser);
 		petSetters(pet, petDTO);
 		petRepository.save(pet);
-		return petToPetDTO(pet);
+		return convertToDTO(pet);
 	}
 
 	// todo, check in DTO if it is the owner of the pet
@@ -184,7 +184,7 @@ public class PetService {
 		} else {
 			Advertisement petAd = pet.getAdvertisement();
 			if (petAd != null) {
-				advertisementService.deleteAdvertisement(adToDTO(petAd));
+				advertisementService.deleteAdvertisement(advertisementService.convertToDTO(petAd));
 			}
 			Set<Pet> userPet = user.getPets();
 			userPet.remove(pet);
@@ -196,7 +196,7 @@ public class PetService {
 		}
 	}
 
-	public PetDTO petToPetDTO(Pet pet) {
+	public PetDTO convertToDTO(Pet pet) {
 		PetDTO petDTO = new PetDTO();
 		petDTO.setId(pet.getId());
 		petDTO.setDateOfBirth(pet.getDateOfBirth());
@@ -211,14 +211,29 @@ public class PetService {
 		return petDTO;
 	}
 
-	public AdvertisementDTO adToDTO(Advertisement ad) {
-		AdvertisementDTO adDTO = new AdvertisementDTO();
-		adDTO.setAdId(ad.getId());
-		adDTO.setApplication(ad.getApplication());
-		adDTO.setDescription(ad.getDescription());
-		adDTO.setFulfilled(ad.isIsFulfilled());
-		adDTO.setTitle(ad.getTitle());
-		return adDTO;
+	/**
+	 * Convert a pet DTO to a pet entity.
+	 * @param petDTO A pet DTO with a valid advertisement.
+	 * @return A pet entity.
+	 */
+
+	public Pet convertToEntity(PetDTO petDTO) {
+		Pet pet = new Pet();
+		Optional<Advertisement> advertisement = advertisementRepository.findById(pet.getId());
+		if (advertisement.isPresent()) {
+			pet.setAdvertisement(advertisement.get());
+		} else {
+			throw new PetException("Advertisement does not exist.");
+		}
+		pet.setGender(petDTO.getGender());
+		pet.setId(petDTO.getId());
+		pet.setSpecies(petDTO.getSpecies());
+		pet.setDescription(petDTO.getDescription());
+		pet.setDateOfBirth(petDTO.getDateOfBirth());
+		pet.setBreed(petDTO.getBreed());
+		pet.setName(petDTO.getName());
+		pet.setPicture(petDTO.getPicture());
+		return pet;
 	}
 
 	public User validateParametersAdd(PetDTO petDTO) {

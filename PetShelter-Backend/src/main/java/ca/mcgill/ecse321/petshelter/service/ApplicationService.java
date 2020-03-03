@@ -178,6 +178,32 @@ public class ApplicationService {
         applicationDTO.setAppId(application.getId());
         return applicationDTO;
     }
+
+    /**
+     * Converts ApplicationDTO to Application
+     *
+     * @param applicationDTO application DTO
+     * @return application entity object./
+     */
+    public Application convertToEntity(ApplicationDTO applicationDTO) {
+        Application application = new Application();
+        application.setDescription(applicationDTO.getDescription());
+        User user = userRepository.findUserByUserName(applicationDTO.getUsername());
+        if (user != null) {
+            application.setUser(user);
+        } else {
+            throw new ApplicationException("User does not exist.");
+        }
+        Optional<Advertisement> advertisement = advertisementRepository.findById(applicationDTO.getAdId());
+        if (advertisement.isPresent()) {
+            application.setAdvertisement(advertisement.get());
+        } else {
+            throw new ApplicationException(("Advertisement does not exist."));
+        }
+        application.setIsAccepted(applicationDTO.getIsAccepted());
+        application.setId(applicationDTO.getAppId());
+        return application;
+    }
     
     /**
      * Updates the application description
