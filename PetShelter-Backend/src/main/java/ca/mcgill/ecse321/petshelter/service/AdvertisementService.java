@@ -106,30 +106,25 @@ public class AdvertisementService {
             return convertToDTO(ad);
         }
     }
-    
+
+    /**
+     * Create an advertisement.
+     * @param adDTO The advertisement DTO to create.
+     * @return The created advertisement.
+     */
     @Transactional
     public AdvertisementDTO createAdvertisement(AdvertisementDTO adDTO) {
-        List<Pet> petsInAd = validateParametersAdd(adDTO);
-        Set<Application> applications = new HashSet<>(adDTO.getApplication());
-        Advertisement ad = new Advertisement();
-        ad.setTitle(adDTO.getTitle());
-        ad.setIsFulfilled(adDTO.isFulfilled());
-        ad.setDescription(adDTO.getDescription());
-        ad.setApplication(applications);
-        
-        advertisementRepository.save(ad);
-        for (Pet pet : petsInAd) {
-            pet.setAdvertisement(ad);
-            petRepository.save(pet);
-        }
-        adDTO.setAdId(ad.getId());
-        return convertToDTO(ad);
+        Long adID = (new Advertisement()).getId();
+        Advertisement advertisement = convertToEntity(adDTO);
+        advertisement.setId(adID);
+        validateParameters(advertisement);
+        advertisementRepository.save(advertisement);
+        PetDTO petDTO = petService.convertToDTO(petRepository.findById(advertisement.getPet().getId()).get());
+        petDTO.setAdvertisement(advertisement.getId());
+        petService.editPet(petDTO);
+        return convertToDTO(advertisement);
     }
-    
-    
-    //todo: check if edit and delete is the original user in order to delete
-    
-    
+
     /**
      * Allows user to edit advertisement
      *
@@ -138,25 +133,13 @@ public class AdvertisementService {
      */
     @Transactional
     public AdvertisementDTO editAdvertisement(AdvertisementDTO adDTO) {
-        if (adDTO.getAdId() == null) {
+        if (adDTO.getAdId() == null || !advertisementRepository.findById(adDTO.getAdId()).isPresent()) {
             throw new AdvertisementException("Advertisement does not exist");
         }
-        Advertisement ad = advertisementRepository.findAdvertisementById(adDTO.getAdId());
-        Set<Pet> newPets = validateParametersEdit(adDTO);
-        Set<Application> applications = new HashSet<>(adDTO.getApplication());
-        ad.setApplication(applications);
-        ad.setApplication(applications);
-    
-        ad.setTitle(adDTO.getTitle());
-        ad.setDescription(adDTO.getDescription());
-        ad.setIsFulfilled(adDTO.isFulfilled());
-        advertisementRepository.save(ad);
-        for (Pet pet : newPets) {
-            pet.setAdvertisement(ad);
-            petRepository.save(pet);
-        }
-        System.out.println(convertToDTO(ad));
-        return convertToDTO(ad);
+        Advertisement advertisement = convertToEntity(adDTO);
+        validateParameters(advertisement);
+        advertisementRepository.save(advertisement);
+        return convertToDTO(advertisement);
     }
     
     /**
@@ -166,47 +149,35 @@ public class AdvertisementService {
      * @return isDeleted
      */
     @Transactional
-    public boolean deleteAdvertisement(AdvertisementDTO adDTO) {
-        if (adDTO.getAdId() == null) {
-            throw new AdvertisementException("Advertisement not found");
+    public AdvertisementDTO deleteAdvertisement(AdvertisementDTO adDTO) {
+        Optional<Advertisement> advertisement = advertisementRepository.findById(adDTO.getAdId());
+        if (adDTO.getAdId() == null || !advertisement.isPresent()) {
+            throw new AdvertisementException("Advertisement does not exist");
         }
-        AdvertisementDTO ad = getAdvertisementById(adDTO.getAdId());
-        Set<Application> apps = ad.getApplication();
-        if (apps != null) {
-            for (Application app : apps) {
-                applicationService.deleteApplication(app.getId());
-            }
-        }
-        advertisementRepository.deleteById(ad.getAdId());
-        // Remove reference to advertisement from pets.
-        if (ad.getPetIds() != null) {
-            Arrays.stream(ad.getPetIds())
-                    .forEach(petID -> {
-                        Pet pet = petRepository.findPetById(petID);
-                        pet.setAdvertisement(null);
-                        petRepository.save(pet);
-                    });
-        }
-        return true;
-    
+        Pet pet = advertisement.get().getPet();
+        pet.setAdvertisement(null);
+        petRepository.save(pet);
+        advertisementRepository.delete(advertisement.get());
+        return convertToDTO(advertisement.get());
     }
-    
+
+    /**
+     * Convert an advertisement entity to an advertisement DTO.
+     * @param advertisement An application entity.
+     * @return An application DTO.
+     */
     public AdvertisementDTO convertToDTO(Advertisement advertisement) {
         AdvertisementDTO advertisementDTO = new AdvertisementDTO();
         advertisementDTO.setAdId(advertisement.getId());
-        advertisementDTO.setApplication(advertisement.getApplication());
+        advertisementDTO.setApplication(
+                advertisement.getApplication().stream()
+                .map(applicationService::convertToDto)
+                .collect(Collectors.toSet())
+        );
         advertisementDTO.setDescription(advertisement.getDescription());
         advertisementDTO.setFulfilled(advertisement.isIsFulfilled());
         advertisementDTO.setTitle(advertisement.getTitle());
-
-        List<Long> petIds = new ArrayList<>();
-        petRepository.findAll().forEach(pet -> {
-            if (pet.getAdvertisement().equals(advertisement.getId())) {
-                petIds.add(pet.getId());
-            }
-        });
-
-        advertisementDTO.setPetIds(petIds.toArray(new Long[petIds.size()]));
+        advertisementDTO.setPet(petService.convertToDTO(advertisement.getPet()));
         return advertisementDTO;
     }
 
