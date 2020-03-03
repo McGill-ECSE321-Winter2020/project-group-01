@@ -9,6 +9,7 @@ import {MdPersonPin} from 'react-icons/md';
 import {MdMonetizationOn} from 'react-icons/md';
 import { IconContext } from "react-icons";
 
+
 // The landing page of the website.
 function App() {
     return (
