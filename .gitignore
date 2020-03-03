@@ -22,5 +22,5 @@ PetShelter-Backend/src/main/java/ca/mcgill/ecse321/petshelter/model/PetShelter-B
 PetShelter-Backend/src/main/java/ca/mcgill/ecse321/petshelter/model/PetShelter-Backend.umlcd
 
 #Frontend useless files
-petshelter-frontend/package-lock.json
-debug.log
+petshelter-frontend/debug.log
+petshelter-frontend/node_modules/
