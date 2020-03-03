@@ -209,84 +209,6 @@ public class AdvertisementService {
         advertisementDTO.setPetIds(petIds.toArray(new Long[petIds.size()]));
         return advertisementDTO;
     }
-    
-    public List<Pet> validateParametersAdd(AdvertisementDTO adDTO) {
-        if (adDTO.getPetIds() == null || adDTO.getPetIds().length == 0) {
-            throw new AdvertisementException("A pet must be linked to an advertisement.");
-    
-        }
-        //finding all pets that are on this ad
-        int numOfPets = adDTO.getPetIds().length;
-        
-        List<Pet> petsInAd = new ArrayList<>();
-        for (int i = 0; i < numOfPets; i++) {
-            Pet pet = petRepository.findPetById(adDTO.getPetIds()[i]);
-            //    System.out.println(pet);
-            if (pet == null) {
-                throw new AdvertisementException("One or more pets do not exist.");
-            } else if (pet.getAdvertisement() != null) {
-                throw new AdvertisementException("One or more pets already have an advertisement.");
-            }
-            petsInAd.add(pet);
-        }
-        
-        if (adDTO.getTitle() == null || adDTO.getTitle().equals("")) {
-            throw new AdvertisementException("An advertisement needs a title");
-        }
-        if (adDTO.getDescription() == null || adDTO.getDescription().trim().equals("")) {
-            throw new AdvertisementException("An advertisement needs a description");
-        }
-        return petsInAd;
-    }
-    
-    public Set<Pet> validateParametersEdit(AdvertisementDTO adDTO) {
-        Advertisement ad = advertisementRepository.findAdvertisementById(adDTO.getAdId());
-    
-        if (adDTO.getTitle() == null || adDTO.getTitle().trim().equals("")) {
-            throw new AdvertisementException("Title cannot be empty");
-        }
-        if (adDTO.getDescription() == null || adDTO.getDescription().trim().equals("")) {
-            throw new AdvertisementException("Description cannot be empty");
-        }
-        //what if the first one doesnt but the rest exists?
-
-        Set<Pet> petSet = new HashSet<>();
-        if (adDTO.getPetIds() != null) {
-            petSet = Arrays.stream(adDTO.getPetIds())
-                    .map(id -> petRepository.findPetById(id))
-                    .collect(Collectors.toSet());
-            if (petSet.contains(null)) {
-                throw new AdvertisementException("One or more pets do not exist.");
-            }
-        }
-    
-        Set<Pet> newPets = new HashSet<>();
-        if (!petSet.isEmpty()) {
-            Pet pet0 = petRepository.findPetById(adDTO.getPetIds()[0]);
-
-            int numOfPets = adDTO.getPetIds().length;
-            newPets.add(pet0);
-            for (int i = 1; i < numOfPets; i++) {
-                Pet petI = petRepository.findPetById(adDTO.getPetIds()[i]);
-                if ((petI.getAdvertisement() != ad) && (petI.getAdvertisement() != null)) {
-                    throw new AdvertisementException("One or more pets have a different advertisement.");
-                } else {
-                    newPets.add(petI);
-                }
-            }
-            // System.out.println(petRepository.findAll());
-            for (Pet pet : petRepository.findAll()) {
-                if (pet.getAdvertisement().equals(ad)) {
-                    if (!(newPets.contains(pet))) {
-                        pet.setAdvertisement(null);
-                    }
-                }
-            }
-        }
-        return newPets;
-    }
-
-}
 
     /**
      * Convert an advertisement DTO to an advertisement entity.
@@ -306,3 +228,29 @@ public class AdvertisementService {
         advertisement.setPet(petService.convertToEntity(advertisementDTO.getPet()));
         advertisement.setTitle(advertisementDTO.getTitle());
         return advertisement;
+    }
+
+    /**
+     * Validate the parameters of an advertisement entity object.
+     * @param advertisement An advertisement entity object.
+     * @return If the advertisement is valid.
+     */
+    public void validateParameters(Advertisement advertisement) {
+        if (advertisement.getTitle() == null || advertisement.getTitle().trim().equals("")) {
+            throw new AdvertisementException("Title must not be null or empty.");
+        }
+        if (advertisement.getDescription() == null || advertisement.getDescription().trim().equals("")) {
+            throw new AdvertisementException("Description must not be null or empty.");
+        }
+        if (advertisement.getPet() == null) {
+            throw new AdvertisementException("Pet must not be null.");
+        }
+        if (advertisement.getPet().getAdvertisement() != null) {
+            throw new AdvertisementException("Pet must not already have an advertisement.");
+        }
+        if (!petRepository.findById(advertisement.getPet().getId()).isPresent()) {
+            throw new AdvertisementException("Pet doesn't exist.");
+        }
+    }
+
+}
