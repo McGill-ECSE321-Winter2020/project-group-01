@@ -57,14 +57,15 @@ public class Advertisement {
         this.title = title;
     }
 
-    private Long petID;
+    @OneToOne(optional = true)
+    private Pet pet;
 
-    public Long getPetID() {
-        return petID;
+    public Pet getPet() {
+        return pet;
     }
 
-    public void setPetID(Long petID) {
-        this.petID = petID;
+    public void setPet(Pet pet) {
+        this.pet = pet;
     }
     
     @Override
@@ -75,7 +76,7 @@ public class Advertisement {
                 ", isFulfilled=" + isFulfilled +
                 ", adoptionApplication=" + application +
                 ", title='" + title + '\'' +
-                ", petID=" + petID +
+                ", pet=" + pet +
                 '}';
     }
 
