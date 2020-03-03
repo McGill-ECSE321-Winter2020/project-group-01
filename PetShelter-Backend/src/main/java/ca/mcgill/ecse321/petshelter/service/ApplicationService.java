@@ -54,7 +54,7 @@ public class ApplicationService {
     
     /**
      * @param name user object
-     * @return all the applications that matches that user
+     * @return all the applications that match that user
      */
     @Transactional
     public List<ApplicationDTO> getAllUserApplications(String name) {
@@ -62,8 +62,8 @@ public class ApplicationService {
     }
     
     /**
-     * @param name user object
-     * @return all the applications that matches that user
+     * @param advertisement Advertisement entity object.
+     * @return all the applications that match that advertisement.
      */
     @Transactional
     public List<ApplicationDTO> getAllAdvertisementApplications(Advertisement advertisement) {
