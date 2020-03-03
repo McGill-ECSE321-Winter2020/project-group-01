@@ -3,8 +3,8 @@
 }
 
 .App-logo {
-  height: 50%;
-  width: 50%;
+  height: 40%;
+  width: 40%;
   pointer-events: none;
 }
 
@@ -17,7 +17,7 @@
   background: -ms-linear-gradient(left, rgba(242,246,248,1) 0%, rgba(224,239,249,1) 42%, rgba(222,235,244,1) 49%, rgba(216,225,231,1) 68%, rgba(181,198,208,1) 100%);
   background: linear-gradient(to right, rgba(242,246,248,1) 0%, rgba(224,239,249,1) 42%, rgba(222,235,244,1) 49%, rgba(216,225,231,1) 68%, rgba(181,198,208,1) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f6f8', endColorstr='#b5c6d0', GradientType=1 );
-  min-height: 100vh;
+  min-height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -25,8 +25,23 @@
   font-size: calc(10px + 2vmin);
   color: white;
 }
-
-.App-link {
-  color: #61dafb;
+.nav-link{
+  color:white
 }
 
+.bg {
+  width: 0%;
+  background: -moz-linear-gradient(to right, #25aae1, #40e495, #30dd8a, #2bb673);
+  transition: all 0.6s ease-out;
+}
+.nav-link:hover .bg {
+  width: 100%;
+}
+
+span{
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  color: white;
+}
