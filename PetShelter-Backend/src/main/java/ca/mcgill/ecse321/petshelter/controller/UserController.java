@@ -146,12 +146,15 @@ public class UserController {
 			if (!passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
 				throw new LoginException("Incorrect password");
 			}
+
 			// if the user has not verified their account through email
 			if (!user.isIsEmailValidated())
 				throw new LoginException("Account not verified");
-			// generate a new token and save the token
-			user.setApiToken(jwtTokenProvider.createToken(userDto.getUsername()));
-			userRepo.save(user);
+			// generate a new token and save the token if user is not admin
+			if (!user.getUserType().equals(UserType.ADMIN)) {
+				user.setApiToken(jwtTokenProvider.createToken(userDto.getUsername()));
+				userRepo.save(user);
+			}
 			userDto.setUserType(user.getUserType());
 			userDto.setEmail(user.getEmail());
 			userDto.setPassword(null);
