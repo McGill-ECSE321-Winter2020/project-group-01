@@ -26,3 +26,7 @@ petshelter-frontend/debug.log
 petshelter-frontend/node_modules/
 petshelter-frontend/.idea
 
+petshelter-frontend/.idea/vcs.xml
+petshelter-frontend/yarn.lock
+petshelter-frontend/.idea/vcs.xml
+petshelter-frontend/debug.log
