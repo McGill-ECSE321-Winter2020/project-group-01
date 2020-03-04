@@ -20,6 +20,7 @@ after_deploy:
     api_key: f10025c4-000a-4948-a036-6e5a016dec9c
     app: pet-pawlace
 env:
-  - SKIP_PREFLIGHT_CHECK=true
   - TESTFOLDER=ca/mcgill/ecse321/petshelter/repository
+    SKIP_PREFLIGHT_CHECK=true
   - TESTFOLDER=ca/mcgill/ecse321/petshelter/service
+    SKIP_PREFLIGHT_CHECK=true
