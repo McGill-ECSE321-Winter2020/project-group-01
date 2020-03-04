@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,7 +9,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {green} from "@material-ui/core/colors";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -30,6 +29,7 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(3, 0, 2),
     },
 }));
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 let loginConfirmOrReset: string = 'Login';
 export default function Register() {
     const classes = useStyles();
@@ -83,6 +83,7 @@ export default function Register() {
                             variant="contained"
                             color="primary"
                             className={classes.submit}
+                            onClick={()=>submitForm}
                         >
                             Sign Up
                         </Button>
@@ -94,6 +95,11 @@ export default function Register() {
         );
 }
 
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const changeState = (state => ({
     loginConfirmOrReset: state,
+}));
+const submitForm = (() => ({
+    changeState(){}
 }));
