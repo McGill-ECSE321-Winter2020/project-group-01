@@ -3,7 +3,7 @@
 }
 
 .App-logo {
-  height: 40%;
+
   width: 40%;
   pointer-events: none;
 }
@@ -28,14 +28,9 @@
 .nav-link{
   color:white
 }
-
-.bg {
-  width: 0%;
-  background: -moz-linear-gradient(to right, #25aae1, #40e495, #30dd8a, #2bb673);
-  transition: all 0.6s ease-out;
-}
-.nav-link:hover .bg {
-  width: 100%;
+.a2:hover{
+  color:white!important;
+  text-shadow: 2px 2px gray;
 }
 
 span{
