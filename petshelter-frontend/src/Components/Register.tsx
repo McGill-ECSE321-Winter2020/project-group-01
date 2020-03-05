@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -7,43 +7,29 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-const useStyles = makeStyles(theme => ({
-    paper: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: "#2BE0A2",
-    },
-    form: {
-        width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(3),
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-}));
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-let loginConfirmOrReset: string = 'Login';
-export default function Register() {
-    const classes = useStyles();
+class Register extends Component {
+
+    loginConfirmOrReset: string = 'Login';
+
+    render(){
         return (
             <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
+                <CssBaseline/>
+                <div style={{marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center'}}>
+                    <Avatar style={{margin: 1,
+                        backgroundColor: "#2BE0A2",}}>
                         <LockOutlinedIcon/>
                     </Avatar>
-                    <Typography component="h1" variant="h5" style={{ color: "black" }}>
+                    <Typography component="h1" variant="h5" style={{color: "black"}}>
                         Sign up
                     </Typography>
-                    <form className={classes.form} noValidate>
+                    <form style={{width: '100%',
+                        marginTop: 3}} noValidate>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -82,8 +68,8 @@ export default function Register() {
                             fullWidth
                             variant="contained"
                             color="primary"
-                            className={classes.submit}
-                            onClick={()=>submitForm}
+                            style={{marginTop: 5,}}
+                            onClick={() => this.submitForm}
                         >
                             Sign Up
                         </Button>
@@ -93,13 +79,12 @@ export default function Register() {
                 </Box>
             </Container>
         );
+    }
+    changeState(state: string){
+        this.loginConfirmOrReset= state
+    }
+    submitForm() {
+
+    }
 }
-
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const changeState = (state => ({
-    loginConfirmOrReset: state,
-}));
-const submitForm = (() => ({
-    changeState(){}
-}));
+export default Register
