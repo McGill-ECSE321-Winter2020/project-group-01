@@ -9,9 +9,25 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
-class Register extends Component {
+interface IProps {
+}
 
-    loginConfirmOrReset: string = 'Login';
+interface IState {
+    password: string,
+    email: string,
+    username: string,
+    registerOrConfirm?: string
+}
+class Register extends Component<IProps, IState> {
+    constructor(props: IProps) {
+        super(props);
+        this.state = {
+            password: '',
+            email: '',
+            username: '',
+            registerOrConfirm: 'Register'
+        };
+    }
 
     render(){
         return (
@@ -29,7 +45,7 @@ class Register extends Component {
                         Sign up
                     </Typography>
                     <form style={{width: '100%',
-                        marginTop: "2%"}} noValidate>
+                        marginTop: "2%"}} noValidate onSubmit={this.submitForm}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -39,6 +55,7 @@ class Register extends Component {
                                     label="Username"
                                     name="username"
                                     autoComplete="username"
+                                    onChange={this.handleUsernameChange}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -49,6 +66,7 @@ class Register extends Component {
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
+                                    onChange={this.handleEmailChange}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -60,6 +78,7 @@ class Register extends Component {
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
+                                    onChange={this.handlePasswordChange}
                                 />
                             </Grid>
                         </Grid>
@@ -79,12 +98,45 @@ class Register extends Component {
                 </Box>
             </Container>
         );
-    }
+    };
     changeState(state: string){
-        this.loginConfirmOrReset= state
+        this.setState({registerOrConfirm: state})
     }
-    submitForm() {
+    handleEmailChange(e){
+        this.setState({email: e.target.value});
+    }
+    handlePasswordChange(e){
+        this.setState({password: e.target.value});
+    }
+    handleUsernameChange(e){
+        this.setState({username: e.target.value});
+    }
 
+    submitForm(event) {
+        fetch("http://petshelter-backend.herokuapp.com/api/user/register",{
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                password: this.state.password,
+                username: this.state.username,
+                email: this.state.email,
+            })
+        }).then(function(response){
+            if(response.ok) {
+                console.log(response);
+                return response;
+            }
+            throw new Error('Network response was not ok.');
+        }).then(function(data) {
+            console.log(data);
+        }).catch(function(error) {
+            console.log('There has been a problem with your fetch operation: ' + error);
+        });
+        event.preventDefault();
+        this.changeState('Confirm');
     }
 }
-export default Register
+
+export default Register;
