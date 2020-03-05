@@ -17,11 +17,11 @@ class Register extends Component {
         return (
             <Container component="main" maxWidth="xs">
                 <CssBaseline/>
-                <div style={{marginTop: 8,
+                <div style={{marginTop: "10%",
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center'}}>
-                    <Avatar style={{margin: 1,
+                    <Avatar style={{margin: "2%",
                         backgroundColor: "#2BE0A2",}}>
                         <LockOutlinedIcon/>
                     </Avatar>
@@ -29,7 +29,7 @@ class Register extends Component {
                         Sign up
                     </Typography>
                     <form style={{width: '100%',
-                        marginTop: 3}} noValidate>
+                        marginTop: "2%"}} noValidate>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -68,7 +68,7 @@ class Register extends Component {
                             fullWidth
                             variant="contained"
                             color="primary"
-                            style={{marginTop: 5,}}
+                            style={{marginTop: "5%",}}
                             onClick={() => this.submitForm}
                         >
                             Sign Up
