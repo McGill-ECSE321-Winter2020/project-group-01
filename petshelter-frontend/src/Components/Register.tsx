@@ -27,6 +27,20 @@ class Register extends Component<IProps, IState> {
             username: '',
             registerOrConfirm: 'Register'
         };
+        this.handleUsername = this.handleUsername.bind(this);
+        this.handleEmail = this.handleEmail.bind(this);
+        this.handlePassword = this.handlePassword.bind(this);
+    }
+
+    handleEmail(event) {
+        this.setState({email: event.target.value});
+    }
+    handlePassword(event) {
+        this.setState({password: event.target.value});
+    }
+
+    handleUsername(event) {
+        this.setState({username: event.target.value});
     }
 
     render(){
@@ -55,7 +69,8 @@ class Register extends Component<IProps, IState> {
                                     label="Username"
                                     name="username"
                                     autoComplete="username"
-                                    onChange={this.handleUsernameChange}
+                                    onChange={this.handleUsername}
+                                    value={this.state.username}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -66,7 +81,8 @@ class Register extends Component<IProps, IState> {
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
-                                    onChange={this.handleEmailChange}
+                                    onChange={this.handleEmail}
+                                    value={this.state.email}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -78,7 +94,8 @@ class Register extends Component<IProps, IState> {
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
-                                    onChange={this.handlePasswordChange}
+                                    onChange={this.handlePassword}
+                                    value={this.state.password}
                                 />
                             </Grid>
                         </Grid>
@@ -101,15 +118,6 @@ class Register extends Component<IProps, IState> {
     };
     changeState(state: string){
         this.setState({registerOrConfirm: state})
-    }
-    handleEmailChange(e){
-        this.setState({email: e.target.value});
-    }
-    handlePasswordChange(e){
-        this.setState({password: e.target.value});
-    }
-    handleUsernameChange(e){
-        this.setState({username: e.target.value});
     }
 
     submitForm(event) {
