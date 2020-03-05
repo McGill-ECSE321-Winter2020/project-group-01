@@ -30,6 +30,7 @@ class Register extends Component<IProps, IState> {
         this.handleUsername = this.handleUsername.bind(this);
         this.handleEmail = this.handleEmail.bind(this);
         this.handlePassword = this.handlePassword.bind(this);
+        this.submitForm = this.submitForm.bind(this);
     }
 
     handleEmail(event) {
@@ -42,6 +43,7 @@ class Register extends Component<IProps, IState> {
     handleUsername(event) {
         this.setState({username: event.target.value});
     }
+
 
     render(){
         return (
@@ -121,6 +123,7 @@ class Register extends Component<IProps, IState> {
     }
 
     submitForm(event) {
+        console.log(this.state.password)
         fetch("http://petshelter-backend.herokuapp.com/api/user/register",{
             method: 'post',
             headers: {
@@ -130,9 +133,10 @@ class Register extends Component<IProps, IState> {
                 password: this.state.password,
                 username: this.state.username,
                 email: this.state.email,
+                userType: 'USER',
             })
         }).then(function(response){
-            if(response.ok) {
+            if(response.status===201) {
                 console.log(response);
                 return response;
             }
