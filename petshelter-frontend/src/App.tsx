@@ -44,19 +44,19 @@ class App extends Component<IProps, IState>{
                     <Navbar.Collapse className="justify-content-end">
                         <IconContext.Provider value={{ color: "white", className: "global-class-name", size:"2em" }}>
                             <Nav.Link className="a2" href="#register" onClick={() => this.changeState('Register')}>
-                                <MdPersonAdd></MdPersonAdd>
+                                <MdPersonAdd/>
                                 <div className="bg">
                                     Register
                                 </div>
                             </Nav.Link>
                             <Nav.Link href="#login" className="a2" onClick={() => this.changeState('Login')}>
-                                <MdPersonPin></MdPersonPin>
+                                <MdPersonPin/>
                                 <div className="bg">
                                     Login
                                 </div>
                             </Nav.Link>
                             <Nav.Link href="#donate" className="a2" onClick={() => this.changeState('Donate')}>
-                                <MdMonetizationOn></MdMonetizationOn>
+                                <MdMonetizationOn/>
                                 <div className="bg">
                                     Donate
                                 </div>
