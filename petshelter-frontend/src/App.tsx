@@ -29,8 +29,8 @@ class App extends Component<IProps, IState>{
     render() {
         return (
             <div className="App">
-                <Navbar bg="dark" expand={true} collapseOnSelect={false}>
-                    <Navbar.Brand href="#home" onClick={() => this.changeState('Home')}>
+                <Navbar bg="dark" expand={true} collapseOnSelect={false} style={{maxHeight:"10vh"}}>
+                    <Navbar.Brand href="" onClick={() => this.changeState('Home')}>
                         <span>
                             <img
                                 src={profile}
@@ -43,19 +43,19 @@ class App extends Component<IProps, IState>{
                     </Navbar.Brand>
                     <Navbar.Collapse className="justify-content-end">
                         <IconContext.Provider value={{ color: "white", className: "global-class-name", size:"2em" }}>
-                            <Nav.Link className="a2" href="#register" onClick={() => this.changeState('Register')}>
+                            <Nav.Link className="a2" onClick={() => this.changeState('Register')}>
                                 <MdPersonAdd/>
                                 <div className="bg">
                                     Register
                                 </div>
                             </Nav.Link>
-                            <Nav.Link href="#login" className="a2" onClick={() => this.changeState('Login')}>
+                            <Nav.Link className="a2" onClick={() => this.changeState('Login')}>
                                 <MdPersonPin/>
                                 <div className="bg">
                                     Login
                                 </div>
                             </Nav.Link>
-                            <Nav.Link href="#donate" className="a2" onClick={() => this.changeState('Donate')}>
+                            <Nav.Link className="a2" onClick={() => this.changeState('Donate')}>
                                 <MdMonetizationOn/>
                                 <div className="bg">
                                     Donate
@@ -65,7 +65,7 @@ class App extends Component<IProps, IState>{
                     </Navbar.Collapse>
                 </Navbar>
                 <header className="App-header">
-                    {this.state.donateRegisterLoginHome === 'Home' && <img src={logo} className="App-logo" alt="logo" />}
+                    {this.state.donateRegisterLoginHome === 'Home' && <img src={logo} className="App-logo" alt="logo"/>}
                     {this.state.donateRegisterLoginHome === 'Register' && <Register/>}
                     {this.state.donateRegisterLoginHome === 'Login' && <SignUp/>}
                     {this.state.donateRegisterLoginHome === 'Donate' && <img src={logo} className="App-logo" alt="logo" />}
