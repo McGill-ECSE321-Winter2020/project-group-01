@@ -71,6 +71,7 @@ class Register extends Component<IProps, IState> {
                                     label="Username"
                                     name="username"
                                     autoComplete="username"
+                                    autoFocus
                                     onChange={this.handleUsername}
                                     value={this.state.username}
                                 />
@@ -123,8 +124,8 @@ class Register extends Component<IProps, IState> {
     }
 
     submitForm(event) {
-        console.log(this.state.password)
-        fetch("http://petshelter-backend.herokuapp.com/api/user/register",{
+        console.log(this.state.password);
+        fetch("http://petshelter-backend.herokuapp.com/api/user/register", {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',

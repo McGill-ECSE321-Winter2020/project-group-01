@@ -1,0 +1,19 @@
+.pos {
+    margin-bottom: 12px;
+}
+
+.title {
+    font-size: 14px;
+}
+
+.root {
+    min-width: 500px;
+}
+
+.button {
+    padding: 5px;
+    height: 200px;
+    width: 200px;
+    border-radius: 400px;
+    background-color: rgb(195, 125, 198);
+}
