@@ -5,7 +5,7 @@ script:
 - gradle build
 - cd petshelter-frontend/
 - npm install
-- set "SKIP_PREFLIGHT_CHECK=true" && yarn build
+- yarn build
 - cd ..
 after_script:
 - curl -s https://assertible.com/apis/4f4ff831-1846-4c84-84e0-53e94a80519a/run?api_token=U0bS1o6ELYFvuxaq
