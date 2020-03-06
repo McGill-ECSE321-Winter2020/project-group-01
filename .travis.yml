@@ -4,7 +4,7 @@ before_install:
 script:
 - gradle build
 - cd petshelter-frontend/
-- npm install
+- yarn install
 - yarn build
 - cd ..
 after_script:
