@@ -4,10 +4,8 @@ import profile from './profile.png';
 import './App.css';
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
-import {MdPersonAdd} from 'react-icons/md';
-import {MdPersonPin} from 'react-icons/md';
-import {MdMonetizationOn} from 'react-icons/md';
-import { IconContext } from "react-icons";
+import {MdMonetizationOn, MdPersonAdd, MdPersonPin} from 'react-icons/md';
+import {IconContext} from "react-icons";
 import SignUp from './Components/SignUp'
 import Register from './Components/Register'
 import Donate from "./Components/Donate";
@@ -69,13 +67,14 @@ class App extends Component<IProps, IState>{
                     {this.state.donateRegisterLoginHome === 'Home' && <img src={logo} className="App-logo" alt="logo"/>}
                     {this.state.donateRegisterLoginHome === 'Register' && <Register/>}
                     {this.state.donateRegisterLoginHome === 'Login' && <SignUp/>}
-                    {this.state.donateRegisterLoginHome === 'Donate' && <Donate isHome={true} />}
+                    {this.state.donateRegisterLoginHome === 'Donate' && <Donate isHome={true}/>}
                 </header>
 
             </div>
         );
     }
 
+//<DonationCard amount={11} date={"today"} email={"email"} username={"this is my username"}/>
     changeState(state: string){
         this.setState({
             donateRegisterLoginHome: state

@@ -71,6 +71,7 @@ class Donate extends Component<IProps, IState> {
                             label="Email Address (Optional)"
                             name="email"
                             autoComplete="email"
+                            type="email"
                         />
                     </Grid>
                 )
@@ -111,6 +112,7 @@ class Donate extends Component<IProps, IState> {
                                     label="amount"
                                     type="amount"
                                     id="amount"
+                                    autoFocus
                                 />
                             </Grid>
                         </Grid>
