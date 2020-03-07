@@ -7,15 +7,17 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
+import {bool} from "aws-sdk/clients/signer";
 
 interface IProps {
-    isHome:boolean
+    isHome: boolean
 }
 
 interface IState {
     email: string,
-    amount: number,
-    token: string
+    amount: string,
+    token: string,
+    isDone: boolean
 }
 
 /*
@@ -31,13 +33,15 @@ class Donate extends Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state = {
-            amount: 0,
+            amount: '',
             email: '',
-            token: ''
+            token: '',
+            isDone: false
         };
         this.handleAmount = this.handleAmount.bind(this);
         this.handleEmail = this.handleEmail.bind(this);
         this.handleToken = this.handleToken.bind(this);
+        this.submitDonation = this.submitDonation.bind(this);
     }
 
     handleAmount(event) {
@@ -60,9 +64,9 @@ class Donate extends Component<IProps, IState> {
 
     render() {
 
-        const renderEmail = () =>{
-            if(this.props.isHome){
-                return(
+        const renderEmail = () => {
+            if (this.props.isHome) {
+                return (
                     <Grid item xs={12}>
                         <TextField
                             variant="outlined"
@@ -72,6 +76,8 @@ class Donate extends Component<IProps, IState> {
                             name="email"
                             autoComplete="email"
                             type="email"
+                            onChange={this.handleEmail}
+                            value={this.state.email}
                         />
                     </Grid>
                 )
@@ -99,7 +105,7 @@ class Donate extends Component<IProps, IState> {
                     <form style={{
                         width: '100%',
                         marginTop: "2%"
-                    }} noValidate>
+                    }} noValidate onSubmit={this.submitDonation}>
                         <Grid container spacing={2}>
 
                             {renderEmail()}
@@ -113,6 +119,8 @@ class Donate extends Component<IProps, IState> {
                                     type="amount"
                                     id="amount"
                                     autoFocus
+                                    onChange={this.handleAmount}
+                                    value={this.state.amount}
                                 />
                             </Grid>
                         </Grid>
@@ -134,17 +142,26 @@ class Donate extends Component<IProps, IState> {
         );
     };
 
+    changeState(state: boolean) {
+        this.setState(
+            {isDone: state}
+        )
+    }
+
     submitDonation(event) {
+        console.log(this.state);
         fetch("http://petshelter-backend.herokuapp.com/api/donation/", {
             method: "post",
-            headers: {'Content-Type': 'application/json',},
+            headers: {'Content-Type': 'application/json',
+                "Access-Control-Allow-Origin": "*"
+            },
             body: JSON.stringify({
                 email: this.state.email,
-                amount: this.state.amount,
+                amount: parseFloat(this.state.amount),
                 token: this.state.token
             })
         }).then(function (response) {
-            if (response.status == 200) {
+            if (response.status === 200) {
                 return response;
             }
             throw new Error('Network response was not ok.');
@@ -154,8 +171,10 @@ class Donate extends Component<IProps, IState> {
             console.log('There has been a problem with your fetch operation: ' + error);
         });
         event.preventDefault();
+        this.changeState(true)
     }
 }
 
+//https://medium.com/@fabianopb/upload-files-with-node-and-react-to-aws-s3-in-3-steps-fdaa8581f2bd
 // @ts-ignore
 export default Donate;

@@ -124,7 +124,7 @@ class Register extends Component<IProps, IState> {
     }
 
     submitForm(event) {
-        console.log(this.state.password);
+        console.log(this.state);
         fetch("http://petshelter-backend.herokuapp.com/api/user/register", {
             method: 'post',
             headers: {
