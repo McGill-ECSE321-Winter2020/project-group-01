@@ -9,6 +9,7 @@ import {IconContext} from "react-icons";
 import SignUp from './Components/SignUp'
 import Register from './Components/Register'
 import Donate from "./Components/Donate";
+import DonationCard from "./Components/DonationCard";
 
 
 // The landing page of the website.
@@ -73,7 +74,7 @@ class App extends Component<IProps, IState>{
             </div>
         );
     }
-
+//<Donate isHome={true}/>
 //<DonationCard amount={11} date={"today"} email={"email"} username={"this is my username"}/>
     changeState(state: string){
         this.setState({
