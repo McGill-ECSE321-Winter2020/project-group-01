@@ -9,7 +9,6 @@ import {IconContext} from "react-icons";
 import SignUp from './Components/SignUp'
 import Register from './Components/Register'
 import Donate from "./Components/Donate";
-import DonationCard from "./Components/DonationCard";
 
 
 // The landing page of the website.
