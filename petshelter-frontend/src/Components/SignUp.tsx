@@ -10,15 +10,44 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
+interface IProps {
+}
 
-class SignUp extends Component{
-    loginOrReset: string = 'Login';
+interface IState {
+    password: string,
+    username: string,
+    loginOrReset?: string,
+    hasError: boolean,
+    error: string
+}
+class SignUp extends Component<IProps, IState>{
+    constructor(props: IProps) {
+        super(props);
+        this.state = {
+            password: '',
+            username: '',
+            loginOrReset: 'Login',
+            hasError: false,
+            error: ''
+        };
+        this.handleUsername = this.handleUsername.bind(this);
+        this.handlePassword = this.handlePassword.bind(this);
+        this.submitForm = this.submitForm.bind(this);
+    }
+
+    handlePassword(event) {
+        this.setState({password: event.target.value});
+    }
+
+    handleUsername(event) {
+        this.setState({username: event.target.value});
+    }
 
     render(){
         return (
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
-                {this.loginOrReset === 'Login' &&
+                {this.state.loginOrReset === 'Login' &&
                 <div style={{marginTop: "10%",
                     display: 'flex',
                     flexDirection: 'column',
@@ -70,11 +99,48 @@ class SignUp extends Component{
                         </Grid>
                     </form>
                 </div> }
-                {this.loginOrReset === 'Reset'}
+                {this.state.loginOrReset === 'Reset'}
                 <Box mt={8}>
                 </Box>
             </Container>
-        )}
+        );
+    };
+
+    submitForm(event) {
+        fetch("http://petshelter-backend.herokuapp.com/api/user/login",{
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                password: this.state.password,
+                username: this.state.username,
+                userType: 'USER',
+            })
+        }).then((response) =>{
+            if(response.status===200) {
+                console.log(response);
+                this.setState({hasError: false});
+                this.setState({error: ''});
+                this.setState({loginOrReset: 'Done'});
+                return response.text();
+            }
+            else{
+                this.setState({hasError: true});
+
+                console.log(this.state.hasError);
+                return response.text();
+            }
+        }).then((data) => {
+            if(this.state.hasError){
+                this.setState({error: data});
+            }
+            console.log(data);
+        }).catch(function(error) {
+            console.log('There has been a problem with your fetch operation: ' + error);
+        });
+        event.preventDefault();
+    }
 }
 
-export default SignUp
+export default SignUp;
