@@ -234,8 +234,8 @@ public class UserService {
 	 * @return randomly generated password
 	 * @throws RegisterException
 	 */
-	public String resetPassword(String email) throws RegisterException {
-		User user = userRepository.findUserByEmail(email);
+	public String resetPassword(String username) throws RegisterException {
+		User user = userRepository.findUserByUserName(username);
 		if (user == null) {
 			throw new RegisterException("User not found");
 		}
