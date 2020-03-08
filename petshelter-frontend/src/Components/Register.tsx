@@ -16,7 +16,9 @@ interface IState {
     password: string,
     email: string,
     username: string,
-    registerOrConfirm?: string
+    registerOrConfirm?: string,
+    hasError: boolean,
+    error: string
 }
 class Register extends Component<IProps, IState> {
     constructor(props: IProps) {
@@ -25,7 +27,9 @@ class Register extends Component<IProps, IState> {
             password: '',
             email: '',
             username: '',
-            registerOrConfirm: 'Register'
+            registerOrConfirm: 'Register',
+            hasError: false,
+            error: ''
         };
         this.handleUsername = this.handleUsername.bind(this);
         this.handleEmail = this.handleEmail.bind(this);
@@ -106,11 +110,14 @@ class Register extends Component<IProps, IState> {
                             fullWidth
                             variant="contained"
                             color="primary"
-                            style={{marginTop: "5%",}}
+                            style={{marginTop: "5%", marginBottom: "5%"}}
                             onClick={() => this.submitForm}
                         >
                             Sign Up
                         </Button>
+                        {this.state.hasError && <p style={{color: "red", fontSize: "0.7em", fontWeight: "bold"}}>
+                            {this.state.error}
+                        </p>}
                     </form>
                 </div>
                 <Box mt={5}>
@@ -135,13 +142,21 @@ class Register extends Component<IProps, IState> {
                 email: this.state.email,
                 userType: 'USER',
             })
-        }).then(function(response){
+        }).then((response) =>{
             if(response.status===201) {
                 console.log(response);
-                return response;
+                this.setState({hasError: false});
+                return response.text();
             }
-            throw new Error('Network response was not ok.');
-        }).then(function(data) {
+            else{
+                this.setState({hasError: true});
+                console.log(this.state.hasError);
+                return response.text();
+            }
+        }).then((data) => {
+            if(this.state.hasError){
+                this.setState({error: data});
+            }
             console.log(data);
         }).catch(function(error) {
             console.log('There has been a problem with your fetch operation: ' + error);
