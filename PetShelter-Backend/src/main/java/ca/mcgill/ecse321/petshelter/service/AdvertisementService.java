@@ -9,6 +9,7 @@ import ca.mcgill.ecse321.petshelter.model.Pet;
 import ca.mcgill.ecse321.petshelter.repository.AdvertisementRepository;
 import ca.mcgill.ecse321.petshelter.repository.PetRepository;
 import ca.mcgill.ecse321.petshelter.service.exception.AdvertisementException;
+import ca.mcgill.ecse321.petshelter.service.exception.PetException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +56,7 @@ public class AdvertisementService {
     @Transactional
     public List<AdvertisementDTO> getAdvertisementByTitle(String title) {
         if (title == null || advertisementRepository.findAdvertisementByTitle(title) == null) {
-            throw new AdvertisementException("No advertisement found");
+            throw new AdvertisementException("No advertisement found.");
         }
         return advertisementRepository.findAdvertisementByTitle(title).stream().map(this::convertToDTO).collect(Collectors.toList());
     }
@@ -119,7 +120,7 @@ public class AdvertisementService {
         advertisement.setId(adID);
         validateParameters(advertisement);
         advertisementRepository.save(advertisement);
-        PetDTO petDTO = petService.convertToDTO(petRepository.findById(advertisement.getPet().getId()).get());
+        PetDTO petDTO = petService.convertToDTO(petRepository.findPetById(advertisement.getPet().getId()));
         petDTO.setAdvertisement(advertisement.getId());
         petService.editPet(petDTO);
         return convertToDTO(advertisement);
@@ -133,11 +134,11 @@ public class AdvertisementService {
      */
     @Transactional
     public AdvertisementDTO editAdvertisement(AdvertisementDTO adDTO) {
-        if (adDTO.getAdId() == null || !advertisementRepository.findById(adDTO.getAdId()).isPresent()) {
-            throw new AdvertisementException("Advertisement does not exist");
-        }
         Advertisement advertisement = convertToEntity(adDTO);
         validateParameters(advertisement);
+        if (adDTO.getAdId() == null || advertisementRepository.findAdvertisementById(adDTO.getAdId()) == null) {
+            throw new AdvertisementException("Advertisement does not exist.");
+        }
         advertisementRepository.save(advertisement);
         return convertToDTO(advertisement);
     }
@@ -150,15 +151,18 @@ public class AdvertisementService {
      */
     @Transactional
     public AdvertisementDTO deleteAdvertisement(AdvertisementDTO adDTO) {
-        Optional<Advertisement> advertisement = advertisementRepository.findById(adDTO.getAdId());
-        if (adDTO.getAdId() == null || !advertisement.isPresent()) {
-            throw new AdvertisementException("Advertisement does not exist");
+        if (adDTO == null || adDTO.getAdId() == null) {
+            throw new AdvertisementException("Advertisement does not exist.");
         }
-        Pet pet = advertisement.get().getPet();
+        Advertisement advertisement = advertisementRepository.findAdvertisementById(adDTO.getAdId());
+        if (advertisement == null) {
+            throw new AdvertisementException("Advertisement does not exist.");
+        }
+        Pet pet = advertisement.getPet();
         pet.setAdvertisement(null);
         petRepository.save(pet);
-        advertisementRepository.delete(advertisement.get());
-        return convertToDTO(advertisement.get());
+        advertisementRepository.delete(advertisement);
+        return convertToDTO(advertisement);
     }
 
     /**
@@ -188,15 +192,38 @@ public class AdvertisementService {
      */
     public Advertisement convertToEntity(AdvertisementDTO advertisementDTO) {
         Advertisement advertisement = new Advertisement();
-        advertisement.setId(advertisementDTO.getAdId());
-        advertisement.setApplication(
-                advertisementDTO.getApplication().stream()
-                .map(applicationService::convertToEntity)
-                .collect(Collectors.toSet())
-        );
+        if (!advertisementDTO.getApplication().isEmpty()) {
+            advertisement.setApplication(
+                    advertisementDTO.getApplication().stream()
+                            .map(applicationService::convertToEntity)
+                            .collect(Collectors.toSet())
+            );
+        } else {
+            advertisement.setApplication(new HashSet<Application>());
+        }
         advertisement.setDescription(advertisementDTO.getDescription());
         advertisement.setIsFulfilled(advertisementDTO.isFulfilled());
-        advertisement.setPet(petService.convertToEntity(advertisementDTO.getPet()));
+
+        Pet pet = new Pet();
+        pet.setAdvertisement(advertisement);
+
+        if (advertisementDTO.getPet() == null) {
+            throw new AdvertisementException("One or more pets do not exist.");
+        }
+        Pet databasePet = petRepository.findPetById(advertisementDTO.getPet().getId());
+        if (databasePet == null) {
+            throw new AdvertisementException("One or more pets do not exist.");
+        }
+        pet.setGender(databasePet.getGender());
+        pet.setId(databasePet.getId());
+        pet.setSpecies(databasePet.getSpecies());
+        pet.setDescription(databasePet.getDescription());
+        pet.setDateOfBirth(databasePet.getDateOfBirth());
+        pet.setBreed(databasePet.getBreed());
+        pet.setName(databasePet.getName());
+        pet.setPicture(databasePet.getPicture());
+
+        advertisement.setPet(pet);
         advertisement.setTitle(advertisementDTO.getTitle());
         return advertisement;
     }
@@ -216,10 +243,10 @@ public class AdvertisementService {
         if (advertisement.getPet() == null) {
             throw new AdvertisementException("Pet must not be null.");
         }
-        if (advertisement.getPet().getAdvertisement() != null) {
+        if (advertisement.getPet().getAdvertisement().getId() != advertisement.getId()) {
             throw new AdvertisementException("Pet must not already have an advertisement.");
         }
-        if (!petRepository.findById(advertisement.getPet().getId()).isPresent()) {
+        if (petRepository.findPetById(advertisement.getPet().getId()) == null) {
             throw new AdvertisementException("Pet doesn't exist.");
         }
     }
