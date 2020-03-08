@@ -219,11 +219,11 @@ public class PetService {
 
 	public Pet convertToEntity(PetDTO petDTO) {
 		Pet pet = new Pet();
-		Optional<Advertisement> advertisement = advertisementRepository.findById(pet.getId());
+		Optional<Advertisement> advertisement = advertisementRepository.findById(pet.getAdvertisement().getId());
 		if (advertisement.isPresent()) {
 			pet.setAdvertisement(advertisement.get());
 		} else {
-			throw new PetException("Advertisement does not exist.");
+			pet.setAdvertisement(null);
 		}
 		pet.setGender(petDTO.getGender());
 		pet.setId(petDTO.getId());
