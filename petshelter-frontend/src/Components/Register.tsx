@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import CheckCircleIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
@@ -59,11 +60,19 @@ class Register extends Component<IProps, IState> {
                     alignItems: 'center'}}>
                     <Avatar style={{margin: "2%",
                         backgroundColor: "#2BE0A2",}}>
-                        <LockOutlinedIcon/>
+                        {this.state.registerOrConfirm === 'Register' && <LockOutlinedIcon/>}
+                        {this.state.registerOrConfirm === 'Confirm' && <CheckCircleIcon/>}
                     </Avatar>
+                    {this.state.registerOrConfirm === 'Register' &&
                     <Typography component="h1" variant="h5" style={{color: "black"}}>
                         Sign up
-                    </Typography>
+                    </Typography>}
+                    {this.state.registerOrConfirm === 'Confirm' &&
+                    <Typography component="h1" variant="h5" style={{color: "black"}}>
+                        Account created!
+                        Verify your account by clicking the link that was sent by email.
+                    </Typography>}
+                    {this.state.registerOrConfirm === 'Register' &&
                     <form style={{width: '100%',
                         marginTop: "2%"}} noValidate onSubmit={this.submitForm}>
                         <Grid container spacing={2}>
@@ -118,7 +127,7 @@ class Register extends Component<IProps, IState> {
                         {this.state.hasError && <p style={{color: "red", fontSize: "0.7em", fontWeight: "bold"}}>
                             {this.state.error}
                         </p>}
-                    </form>
+                    </form>}
                 </div>
                 <Box mt={5}>
                 </Box>
@@ -130,7 +139,6 @@ class Register extends Component<IProps, IState> {
     }
 
     submitForm(event) {
-        console.log(this.state.password)
         fetch("http://petshelter-backend.herokuapp.com/api/user/register",{
             method: 'post',
             headers: {
@@ -146,10 +154,13 @@ class Register extends Component<IProps, IState> {
             if(response.status===201) {
                 console.log(response);
                 this.setState({hasError: false});
+                this.setState({error: ''});
+                this.setState({registerOrConfirm: 'Confirm'});
                 return response.text();
             }
             else{
                 this.setState({hasError: true});
+
                 console.log(this.state.hasError);
                 return response.text();
             }
