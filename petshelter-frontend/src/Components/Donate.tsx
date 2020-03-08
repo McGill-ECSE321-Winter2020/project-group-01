@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import {bool} from "aws-sdk/clients/signer";
+import ThankYou from "./ThankYou";
 
 interface IProps {
     isHome: boolean
@@ -115,7 +116,7 @@ class Donate extends Component<IProps, IState> {
                                     variant="outlined"
                                     fullWidth
                                     name="amount"
-                                    label="amount"
+                                    label="Amount"
                                     type="amount"
                                     id="amount"
                                     autoFocus
@@ -143,9 +144,8 @@ class Donate extends Component<IProps, IState> {
     };
 
     changeState(state: boolean) {
-        this.setState(
-            {isDone: state}
-        )
+        this.setState({isDone: state
+        })
     }
 
     submitDonation(event) {
@@ -171,7 +171,7 @@ class Donate extends Component<IProps, IState> {
             console.log('There has been a problem with your fetch operation: ' + error);
         });
         event.preventDefault();
-        this.changeState(true)
+        this.changeState(true);
     }
 }
 
