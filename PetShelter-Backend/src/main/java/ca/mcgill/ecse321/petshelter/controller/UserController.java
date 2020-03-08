@@ -107,11 +107,11 @@ public class UserController {
 	 * @return check if pwd is reset
 	 */
 	@PostMapping("/resetPassword")
-	public ResponseEntity<?> resetPassword(@RequestBody String email) {
-		User ue = userRepo.findUserByEmail(email);
+	public ResponseEntity<?> resetPassword(@RequestBody String username) {
+		User ue = userRepo.findUserByUserName(username);
 		// if no user is found with that email, bad request
 		if (ue == null) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("No account has that username",HttpStatus.BAD_REQUEST);
 		}
 		// if the account is not validated, the password cant be changed
 		if (!ue.isIsEmailValidated()) {
@@ -120,7 +120,7 @@ public class UserController {
 		// generate a random password for the user to log in and change later
 
 		try {
-			String tempPw = userService.resetPassword(email);
+			String tempPw = userService.resetPassword(username);
 			emailingService.userForgotPasswordEmail(ue.getEmail(), tempPw, ue.getUserName());
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (MailException | RegisterException x) {
@@ -179,10 +179,10 @@ public class UserController {
 			if (userService.deleteUser(username)) { // if the user is successfully deleted
 				return new ResponseEntity<>(HttpStatus.OK);
 			} else {
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<>("Something went wrong",HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		} else {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // if the requester is not an admin
+			return new ResponseEntity<>("Only admins may delete accounts",HttpStatus.BAD_REQUEST); // if the requester is not an admin
 		}
 
 	}
@@ -205,7 +205,7 @@ public class UserController {
 			// if the user making the request is not an admin or the one we are searching
 			// for, bad request
 		} else {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("You do not have permission to get that account",HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -233,7 +233,7 @@ public class UserController {
 			}
 			return new ResponseEntity<>(userToDto(user), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("You may not edit another user's picture", HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -252,11 +252,11 @@ public class UserController {
 				Iterable<User> usersIterable = userRepo.findAll();
 				usersIterable.forEach(users::add);
 			} catch (Exception e) {
-				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<>("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			return new ResponseEntity<>(users, HttpStatus.OK);
 		} else { // if user isnt an admin
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("Only admins may do this",HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -280,7 +280,7 @@ public class UserController {
 				return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 			}
 		}
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>("You may only change your own password",HttpStatus.BAD_REQUEST);
 	}
 
 	/**
@@ -295,7 +295,7 @@ public class UserController {
 		User user = userRepo.findUserByApiToken(token);
 		// if the user cannot be found
 		if (user == null) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("Account not found",HttpStatus.BAD_REQUEST);
 		} else {
 			// For ease of use, the admin will not have their token deleted
 			if (user.getUserType().equals(UserType.ADMIN)) {
