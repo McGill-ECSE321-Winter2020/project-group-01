@@ -81,7 +81,7 @@ public class UserController {
 	 * @return confirmation msg
 	 */
 	@GetMapping("/registrationConfirmation")
-	public ResponseEntity<?> confirmRegistration(@RequestHeader String token) {
+	public ResponseEntity<?> confirmRegistration(@RequestParam String token) {
 		// find a user by the verif. token; if none is found, the user does not exist
 		User user = userRepo.findUserByApiToken(token);
 		if (user == null) {
