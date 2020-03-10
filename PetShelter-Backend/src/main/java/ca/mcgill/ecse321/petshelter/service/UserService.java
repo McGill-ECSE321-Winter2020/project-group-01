@@ -230,7 +230,7 @@ public class UserService {
 	}
 
 	/**
-	 * @param email user's email
+	 * @param username takes username
 	 * @return randomly generated password
 	 * @throws RegisterException
 	 */
