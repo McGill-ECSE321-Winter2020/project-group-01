@@ -134,9 +134,6 @@ class Register extends Component<IProps, IState> {
             </Container>
         );
     };
-    changeState(state: string){
-        this.setState({registerOrConfirm: state})
-    }
 
     submitForm(event) {
         fetch("http://petshelter-backend.herokuapp.com/api/user/register",{
@@ -173,7 +170,6 @@ class Register extends Component<IProps, IState> {
             console.log('There has been a problem with your fetch operation: ' + error);
         });
         event.preventDefault();
-        this.changeState('Confirm');
     }
 }
 
