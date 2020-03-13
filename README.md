@@ -66,7 +66,7 @@ The project report for this deliverable can be found [here](https://github.com/M
 | Louis Barrette-Vanasse | <ul><li>Landing page</li><li>Navbar</li><li>Logo</li><li>Deploying to heroku</li></ul>| 12 |
 | Mathieu Bissonnette | | 0 |
 | Christopher Boustros |  | 0 |
-| Ding Ma | | 0 |
+| Ding Ma |<ul><li>Landing page</li><li>Donation</li><li>Dashboard</li><li>Fixed auto deploy to heroku</li></ul> |10 |
 | Katrina Poulin || 0 |
 
 (*) *From ECSE321_Project_Description.pdf written by M. Kanaan, posted on myCourses.*
