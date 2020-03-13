@@ -7,7 +7,9 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import {Dropdown} from "react-bootstrap";
+import datepicker from '@material-ui/pickers';
+import PetsIcon from '@material-ui/icons/Pets';
+
 
 interface IProps {
 }
@@ -15,7 +17,7 @@ interface IProps {
 interface IState {
 
     name: string,
-    dateOfBirth: string, //need to change this
+    dateOfBirth: Date, //need to change this
     species: string,
     breed: string,
     description: string,
@@ -30,7 +32,7 @@ class AddPet extends Component<IProps, IState> {
         super(props);
         this.state = {
             name: '',
-            dateOfBirth: '',
+            dateOfBirth: new Date(),
             species: '',
             breed: '',
             description: '',
@@ -56,7 +58,7 @@ class AddPet extends Component<IProps, IState> {
         this.setState({name: event.target.value});
     }
     handleDateOfBirth(event) {
-        this.setState({dateOfBirth: event.target.value});
+        this.setState({dateOfBirth: event.value});
     }
     handleSpecies(event) {
         this.setState({species: event.target.value});
@@ -73,7 +75,6 @@ class AddPet extends Component<IProps, IState> {
 
 
     render(){
-        // @ts-ignore
         return <Container component="main" maxWidth="xs">
             <CssBaseline/>
             <div style={{
@@ -82,10 +83,9 @@ class AddPet extends Component<IProps, IState> {
                 flexDirection: 'column',
                 alignItems: 'center'
             }}>
-                <Avatar style={{
-                    margin: "2%",
-                    backgroundColor: "#2BE0A2",
-                }}>
+                <Avatar style={{margin: "2%",
+                    backgroundColor: "#2BE0A2",}}>
+                    <PetsIcon/>
                 </Avatar>
                 <Typography component="h1" variant="h5" style={{color: "black"}}>
                     Add new pet
@@ -100,9 +100,9 @@ class AddPet extends Component<IProps, IState> {
                 }} noValidate onSubmit={this.submitForm}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
+                            <label>Name:</label>
                             <TextField
                                 variant="outlined"
-                                fullWidth
                                 id="name"
                                 label="name"
                                 name="name"
@@ -112,21 +112,20 @@ class AddPet extends Component<IProps, IState> {
                             />
                         </Grid>
                         <Grid item xs={12}>
+                            <label>Date of Birth:</label>
                             <TextField
-                                variant="outlined"
-                                fullWidth
                                 id="dateOfBirth"
-                                label="dateOfBirth"
-                                name="dateOfBirth"
-                                autoComplete="dateOfBirth"
-                                onChange={this.handleDateOfBirth}
-                                value={this.state.dateOfBirth}
+                                type="date"
+                                defaultValue="2020-01-01"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                             />
                         </Grid>
                         <Grid item xs={12}>
+                            <label>Species:</label>
                             <TextField
                                 variant="outlined"
-                                fullWidth
                                 name="species"
                                 label="species"
                                 type="species"
@@ -137,9 +136,9 @@ class AddPet extends Component<IProps, IState> {
                             />
                         </Grid>
                         <Grid item xs={12}>
+                            <label>Breed:</label>
                             <TextField
                                 variant="outlined"
-                                fullWidth
                                 name="breed"
                                 label="breed"
                                 type="breed"
@@ -150,9 +149,9 @@ class AddPet extends Component<IProps, IState> {
                             />
                         </Grid>
                         <Grid item xs={12}>
+                            <label>Description:</label>
                             <TextField
                                 variant="outlined"
-                                fullWidth
                                 name="description"
                                 label="description"
                                 type="description"
@@ -164,13 +163,12 @@ class AddPet extends Component<IProps, IState> {
                         </Grid>
                         <Grid item xs={12}>
                             <div className="radio">
+                                <label>Gender:</label>
                                 <label>
                                     <input type="radio" value="MALE" checked={this.state.gender === 'MALE'}
                                            onChange={this.handleGender}/>
                                     Male
                                 </label>
-                            </div>
-                            <div className="radio">
                                 <label>
                                     <input type="radio" value="FEMALE" checked={this.state.gender === 'FEMALE'}
                                            onChange={this.handleGender}/>

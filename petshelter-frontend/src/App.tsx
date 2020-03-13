@@ -8,6 +8,7 @@ import {MdPersonAdd} from 'react-icons/md';
 import {MdPersonPin} from 'react-icons/md';
 import {MdMonetizationOn} from 'react-icons/md';
 import { IconContext } from "react-icons";
+import {FaDog} from "react-icons/all";
 import SignUp from './Components/SignUp'
 import Register from './Components/Register'
 import AddPet from './Components/AddPet'
@@ -63,9 +64,9 @@ class App extends Component<IProps, IState>{
                                 </div>
                             </Nav.Link>
                             <Nav.Link className="a2" onClick={() => this.changeState('Add Pet')}>
-                                <MdMonetizationOn/>
+                                <FaDog/>
                                 <div className="bg">
-                                    AddPet
+                                    Add new pet
                                 </div>
                             </Nav.Link>
                         </IconContext.Provider>

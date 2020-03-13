@@ -39,3 +39,13 @@ span{
   flex-direction: row;
   color: white;
 }
+
+label{
+  alignment: left;
+  justify-content: left;
+  color: black;
+  font-size: 15px;
+  align-items: baseline;
+  padding-top: 18px;
+  padding-right: 20px;
+}
