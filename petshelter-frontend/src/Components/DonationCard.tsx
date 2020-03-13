@@ -8,7 +8,7 @@ import Button from "@material-ui/core/Button";
 interface IProps {
     username: string
     email: string,
-    amount: number,
+    amount: string,
     date: string
 }
 
@@ -20,6 +20,18 @@ interface IState {
 class DonationCard extends Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
+        //implement props handling
+    }
+
+    checkDate(fetchedTime:string):string{
+        let fetchedDate = new Date(fetchedTime);
+        let today = new Date();
+        if(today - fetchedDate ===0){
+            return "Today";
+        } else if (today - fetchedDate ===1){
+            return "Yesterday";
+        }
+        return fetchedTime; //format the date time object
     }
 
     render() {

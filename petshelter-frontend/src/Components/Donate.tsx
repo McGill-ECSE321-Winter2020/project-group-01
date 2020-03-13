@@ -151,7 +151,6 @@ class Donate extends Component<IProps, IState> {
         fetch("http://petshelter-backend.herokuapp.com/api/donation/", {
             method: "post",
             headers: {'Content-Type': 'application/json',
-                "Access-Control-Allow-Origin": "*"
             },
             body: JSON.stringify({
                 email: this.state.email,
