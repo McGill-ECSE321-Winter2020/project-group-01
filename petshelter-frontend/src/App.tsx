@@ -4,11 +4,8 @@ import profile from './profile.png';
 import './App.css';
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
-import {MdPersonAdd} from 'react-icons/md';
-import {MdPersonPin} from 'react-icons/md';
-import {MdMonetizationOn} from 'react-icons/md';
-import {MdAssignment} from 'react-icons/md';
-import { IconContext } from "react-icons";
+import {MdAssignment, MdMonetizationOn, MdPersonAdd, MdPersonPin} from 'react-icons/md';
+import {IconContext} from "react-icons";
 import SignUp from './Components/SignUp'
 import Register from './Components/Register'
 import Application from './Components/Application'
@@ -40,7 +37,7 @@ class App extends Component<IProps, IState>{
                                 height="60"
                                 className="d-inline-block align-top"
                                 alt="logo"
-                            /> Pet Pawlace
+                            /> Pawlace
                         </span>
                     </Navbar.Brand>
                     <Navbar.Collapse className="justify-content-end">
