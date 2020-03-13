@@ -84,8 +84,14 @@ public class DonationController {
 		DonationDTO donation = donationService.createDonation(donationDTO);
 		try {
 			//if the person is a registered user, we will send him a email
+			// and we log that donation under that username
 			if (donation.getUsername() != null && userRepository.findUserByApiToken(token).getUserName().equals(donation.getUsername())) {
 				donationDTO.setUser(donation.getUsername());
+				emailingService.donationConfirmationEmail(donation.getEmail(), donationDTO.getUsername(),
+						donationDTO.getAmount(), donationDTO.getTime(), donationDTO.getDate());
+				//if there is an email but the token is null, this means that it is a home page donation and we will only send a email to the donator and log is as anonymous
+			} else if(donationDTO.getEmail() != null && token == null){
+				donationDTO.setUser(null);
 				emailingService.donationConfirmationEmail(donation.getEmail(), donationDTO.getUsername(),
 						donationDTO.getAmount(), donationDTO.getTime(), donationDTO.getDate());
 			}

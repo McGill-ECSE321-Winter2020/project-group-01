@@ -103,7 +103,7 @@ public class UserController {
 	/**
 	 * Resets the password and emails the user a link with the new password.
 	 *
-	 * @param email user's email to reset password
+	 * @param username username to reset password
 	 * @return check if pwd is reset
 	 */
 	@PostMapping("/resetPassword")
@@ -111,6 +111,7 @@ public class UserController {
 		User ue = userRepo.findUserByUserName(username);
 		// if no user is found with that email, bad request
 		if (ue == null) {
+
 			return new ResponseEntity<>("No account has that username",HttpStatus.BAD_REQUEST);
 		}
 		// if the account is not validated, the password cant be changed
@@ -179,6 +180,7 @@ public class UserController {
 			if (userService.deleteUser(username)) { // if the user is successfully deleted
 				return new ResponseEntity<>(HttpStatus.OK);
 			} else {
+
 				return new ResponseEntity<>("Something went wrong",HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		} else {
@@ -205,6 +207,7 @@ public class UserController {
 			// if the user making the request is not an admin or the one we are searching
 			// for, bad request
 		} else {
+
 			return new ResponseEntity<>("You do not have permission to get that account",HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -233,6 +236,7 @@ public class UserController {
 			}
 			return new ResponseEntity<>(userToDto(user), HttpStatus.OK);
 		} else {
+
 			return new ResponseEntity<>("You may not edit another user's picture", HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -256,6 +260,7 @@ public class UserController {
 			}
 			return new ResponseEntity<>(users, HttpStatus.OK);
 		} else { // if user isnt an admin
+
 			return new ResponseEntity<>("Only admins may do this",HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -280,6 +285,7 @@ public class UserController {
 				return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 			}
 		}
+
 		return new ResponseEntity<>("You may only change your own password",HttpStatus.BAD_REQUEST);
 	}
 

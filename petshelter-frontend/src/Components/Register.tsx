@@ -54,12 +54,16 @@ class Register extends Component<IProps, IState> {
         return (
             <Container component="main" maxWidth="xs">
                 <CssBaseline/>
-                <div style={{marginTop: "10%",
+                <div style={{
+                    marginTop: "10%",
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: 'center'}}>
-                    <Avatar style={{margin: "2%",
-                        backgroundColor: "#2BE0A2",}}>
+                    alignItems: 'center'
+                }}>
+                    <Avatar style={{
+                        margin: "2%",
+                        backgroundColor: "#2BE0A2",
+                    }}>
                         {this.state.registerOrConfirm === 'Register' && <LockOutlinedIcon/>}
                         {this.state.registerOrConfirm === 'Confirm' && <CheckCircleIcon/>}
                     </Avatar>
@@ -73,8 +77,10 @@ class Register extends Component<IProps, IState> {
                         Verify your account by clicking the link that was sent by email.
                     </Typography>}
                     {this.state.registerOrConfirm === 'Register' &&
-                    <form style={{width: '100%',
-                        marginTop: "2%"}} noValidate onSubmit={this.submitForm}>
+                    <form style={{
+                        width: '100%',
+                        marginTop: "2%"
+                    }} noValidate onSubmit={this.submitForm}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -136,7 +142,7 @@ class Register extends Component<IProps, IState> {
     };
 
     submitForm(event) {
-        fetch("http://petshelter-backend.herokuapp.com/api/user/register",{
+        fetch("http://petshelter-backend.herokuapp.com/api/user/register", {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
@@ -147,22 +153,21 @@ class Register extends Component<IProps, IState> {
                 email: this.state.email,
                 userType: 'USER',
             })
-        }).then((response) =>{
-            if(response.status===201) {
+        }).then((response) => {
+            if (response.status === 201) {
                 console.log(response);
                 this.setState({hasError: false});
                 this.setState({error: ''});
                 this.setState({registerOrConfirm: 'Confirm'});
                 return response.text();
-            }
-            else{
+            } else {
                 this.setState({hasError: true});
 
                 console.log(this.state.hasError);
                 return response.text();
             }
         }).then((data) => {
-            if(this.state.hasError){
+            if (this.state.hasError) {
                 this.setState({error: data});
             }
             console.log(data);

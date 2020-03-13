@@ -1,0 +1,21 @@
+.pos {
+    margin-bottom: 12px;
+}
+
+.title {
+    font-size: 14px;
+}
+
+.root {
+    min-width: 30px;
+    max-width: 200px;
+    background-color: black;
+}
+
+.button {
+    padding: 5px;
+    height: 200px;
+    width: 200px;
+    border-radius: 400px;
+    background-color: rgb(195, 125, 198);
+}

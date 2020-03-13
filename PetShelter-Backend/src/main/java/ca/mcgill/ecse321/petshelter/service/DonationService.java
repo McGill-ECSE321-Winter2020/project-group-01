@@ -111,11 +111,17 @@ public class DonationService {
         donationDTO.setDate(donation.getDate());
         donationDTO.setTime(donation.getTime());
         donationDTO.setAmount(donation.getAmount());
+        
+        // need to split them because if the user provides and email but is not registered, we will only send them a confirmation email
         try {
             donationDTO.setUser(donation.getUser().getUserName());
-            donationDTO.setEmail(donation.getUser().getEmail());
         } catch (NullPointerException e) {
             donationDTO.setUser(null); // occurs when it is an anonymous donor, no account.
+        }
+        
+        try {
+            donationDTO.setEmail(donation.getUser().getEmail());
+        } catch (NullPointerException e){
             donationDTO.setEmail(null);
         }
         return donationDTO;
