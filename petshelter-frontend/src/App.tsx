@@ -6,9 +6,9 @@ import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import {MdMonetizationOn, MdPersonAdd, MdPersonPin} from 'react-icons/md';
 import {IconContext} from "react-icons";
-import SignUp from './Components/SignUp'
 import Register from './Components/Register'
 import Donate from "./Components/Donate";
+import SignIn from "./Components/SignIn";
 
 
 // The landing page of the website.
@@ -66,7 +66,7 @@ class App extends Component<IProps, IState>{
                 <header className="App-header">
                     {this.state.donateRegisterLoginHome === 'Home' && <img src={logo} className="App-logo" alt="logo"/>}
                     {this.state.donateRegisterLoginHome === 'Register' && <Register/>}
-                    {this.state.donateRegisterLoginHome === 'Login' && <SignUp/>}
+                    {this.state.donateRegisterLoginHome === 'Login' && <SignIn/>}
                     {this.state.donateRegisterLoginHome === 'Donate' && <Donate isHome={true}/>}
                 </header>
             </div>
