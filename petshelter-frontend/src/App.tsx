@@ -33,9 +33,9 @@ class App extends Component<IProps, IState>{
                         <span>
                             <img
                                 src={profile}
-                                width="60"
-                                height="60"
-                                className="d-inline-block align-top"
+                                width="70"
+                                height="70"
+                                className="d-inline-block align-middle"
                                 alt="logo"
                             /> Pet Pawlace
                         </span>
@@ -69,7 +69,6 @@ class App extends Component<IProps, IState>{
                     {this.state.donateRegisterLoginHome === 'Login' && <SignUp/>}
                     {this.state.donateRegisterLoginHome === 'Donate' && <Donate isHome={true}/>}
                 </header>
-
             </div>
         );
     }
