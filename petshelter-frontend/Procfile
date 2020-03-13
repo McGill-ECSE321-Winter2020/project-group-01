@@ -1,1 +1,1 @@
-web bin/boot
+web: cd petshelter-frontend && echo $PORT && export PORT && npm start 
