@@ -8,6 +8,7 @@ import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import SignIn from "./SignIn";
 
 interface IProps {
 }
@@ -47,7 +48,8 @@ class Register extends Component<IProps, IState> {
 
     render(){
         return (
-            <Container component="main" maxWidth="xs">
+            <div>
+                {this.state.registerOrConfirm === 'Register' &&  <Container component="main" maxWidth="xs">
                 <CssBaseline/>
                 <div style={{marginTop: "10%",
                     display: 'flex',
@@ -116,7 +118,11 @@ class Register extends Component<IProps, IState> {
                 </div>
                 <Box mt={5}>
                 </Box>
-            </Container>
+            </Container>}
+                {this.state.registerOrConfirm === 'Confirm' && <SignIn/>}
+            </div>
+
+
         );
     };
     changeState(state: string){
@@ -125,7 +131,7 @@ class Register extends Component<IProps, IState> {
 
     submitForm(event) {
         console.log(this.state);
-        fetch("http://petshelter-backend.herokuapp.com/api/user/register", {
+        fetch("http://localhost:8080/api/user/register", {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',

@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
 
-class SignUp extends Component{
+class SignIn extends Component{
     loginOrReset: string = 'Login';
 
     render(){
@@ -77,4 +77,4 @@ class SignUp extends Component{
         )}
 }
 
-export default SignUp
+export default SignIn

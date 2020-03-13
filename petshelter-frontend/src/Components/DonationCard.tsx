@@ -22,7 +22,7 @@ class DonationCard extends Component<IProps, IState> {
         super(props);
         //implement props handling
     }
-
+/*
     checkDate(fetchedTime:string):string{
         let fetchedDate = new Date(fetchedTime);
         let today = new Date();
@@ -34,6 +34,8 @@ class DonationCard extends Component<IProps, IState> {
         return fetchedTime; //format the date time object
     }
 
+
+ */
     render() {
         return (
             <Card className="root" color="textSecondary">
