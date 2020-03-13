@@ -7,6 +7,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
+import ThankYou from "./ThankYou";
 
 interface IProps {
     isHome: boolean
@@ -84,65 +85,69 @@ class Donate extends Component<IProps, IState> {
         };
 
         return (
-            <Container component="main" maxWidth="xs">
-                <CssBaseline/>
-                <div style={{
-                    marginTop: "10%",
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center'
-                }}>
-                    <Avatar style={{
-                        margin: "2%",
-                        backgroundColor: "#2BE0A2",
+            <div>
+                {!this.state.isDone && <Container component="main" maxWidth="xs">
+                    <CssBaseline/>
+                    <div style={{
+                        marginTop: "10%",
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center'
                     }}>
-                        <LockOutlinedIcon/>
-                    </Avatar>
-                    <Typography component="h1" variant="h5" style={{color: "black"}}>
-                        Donation
-                    </Typography>
-                    <form style={{
-                        width: '100%',
-                        marginTop: "2%"
-                    }} noValidate onSubmit={this.submitDonation}>
-                        <Grid container spacing={2}>
+                        <Avatar style={{
+                            margin: "2%",
+                            backgroundColor: "#2BE0A2",
+                        }}>
+                            <LockOutlinedIcon/>
+                        </Avatar>
+                        <Typography component="h1" variant="h5" style={{color: "black"}}>
+                            Donation
+                        </Typography>
+                        <form style={{
+                            width: '100%',
+                            marginTop: "2%"
+                        }} noValidate onSubmit={this.submitDonation}>
+                            <Grid container spacing={2}>
 
-                            {renderEmail()}
+                                {renderEmail()}
 
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth
-                                    name="amount"
-                                    label="Amount"
-                                    type="amount"
-                                    id="amount"
-                                    autoFocus
-                                    onChange={this.handleAmount}
-                                    value={this.state.amount}
-                                />
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        fullWidth
+                                        name="amount"
+                                        label="Amount"
+                                        type="amount"
+                                        id="amount"
+                                        autoFocus
+                                        onChange={this.handleAmount}
+                                        value={this.state.amount}
+                                    />
+                                </Grid>
                             </Grid>
-                        </Grid>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            style={{marginTop: "5%",}}
-                            onClick={() => this.submitDonation}
-                        >
-                            Donate!
-                        </Button>
-                    </form>
-                </div>
-                <Box mt={5}>
-                </Box>
-            </Container>
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                style={{marginTop: "5%",}}
+                                onClick={() => this.submitDonation}
+                            >
+                                Donate!
+                            </Button>
+                        </form>
+                    </div>
+                    <Box mt={5}>
+                    </Box>
+                </Container>}
+                {this.state.isDone && <ThankYou isHome={true} username={""}/>}
+            </div>
         );
     };
 
     changeState(state: boolean) {
-        this.setState({isDone: state
+        this.setState({
+            isDone: state
         })
     }
 
@@ -150,7 +155,8 @@ class Donate extends Component<IProps, IState> {
         console.log(this.state);
         fetch("http://petshelter-backend.herokuapp.com/api/donation/", {
             method: "post",
-            headers: {'Content-Type': 'application/json',
+            headers: {
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 email: this.state.email,
