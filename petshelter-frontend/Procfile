@@ -1,1 +1,1 @@
-web: cd petshelter-frontend && echo $PORT && export PORT && yarn start 
+web: yarn start 
