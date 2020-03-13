@@ -2,7 +2,8 @@ matrix:
   include:
     - language: java
       script:
-        - ./gradlew build
+      - chmod +x gradlew
+      - ./gradlew build
 
     - language: node_js
       node_js:
