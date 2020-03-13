@@ -1,24 +1,33 @@
-language: java
-before_install:
-- chmod +x gradlew
-script:
-- gradle build
-- cd petshelter-frontend/
-- npm install
-- set "SKIP_PREFLIGHT_CHECK=true" && yarn build
-- cd ..
-after_script:
-- curl -s https://assertible.com/apis/4f4ff831-1846-4c84-84e0-53e94a80519a/run?api_token=U0bS1o6ELYFvuxaq
-deploy:
-- provider: heroku
-  api_key: 03273874-ad50-428a-b7d2-d55ecd114926
-  app: petshelter-backend
-after_deploy:
-- cd petshelter-frontend/
-- deploy:
-  - provider: heroku
-    api_key: 03273874-ad50-428a-b7d2-d55ecd114926
-    app: pet-pawlace
-env:
-  - TESTFOLDER=ca/mcgill/ecse321/petshelter
-    SKIP_PREFLIGHT_CHECK=true
+matrix:
+  include:
+        #Frontend Job
+    - language: node_js
+      node_js:
+        - "10.15"
+
+      before_install:
+        - cd petshelter-frontend
+        - npm install
+
+      script:
+        - npm run build
+
+      deploy:
+       provider: heroku
+       api_key: 03273874-ad50-428a-b7d2-d55ecd114926
+       app: pet-pawlace
+
+
+    #Backend Job
+    - language: java
+       
+      before_install: 
+        - chmod +x gradlew
+      script:
+        - ./gradlew build
+
+      deploy:
+        provider: heroku
+        api_key: 03273874-ad50-428a-b7d2-d55ecd114926
+        app: petshelter-backend
+    
