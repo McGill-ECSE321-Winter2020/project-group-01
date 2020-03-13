@@ -6,9 +6,9 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import CheckCircleIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import SignIn from "./SignIn";
 
 interface IProps {
 }
@@ -17,7 +17,9 @@ interface IState {
     password: string,
     email: string,
     username: string,
-    registerOrConfirm?: string
+    registerOrConfirm?: string,
+    hasError: boolean,
+    error: string
 }
 class Register extends Component<IProps, IState> {
     constructor(props: IProps) {
@@ -26,7 +28,9 @@ class Register extends Component<IProps, IState> {
             password: '',
             email: '',
             username: '',
-            registerOrConfirm: 'Register'
+            registerOrConfirm: 'Register',
+            hasError: false,
+            error: ''
         };
         this.handleUsername = this.handleUsername.bind(this);
         this.handleEmail = this.handleEmail.bind(this);
@@ -48,22 +52,35 @@ class Register extends Component<IProps, IState> {
 
     render(){
         return (
-            <div>
-                {this.state.registerOrConfirm === 'Register' &&  <Container component="main" maxWidth="xs">
+            <Container component="main" maxWidth="xs">
                 <CssBaseline/>
-                <div style={{marginTop: "10%",
+                <div style={{
+                    marginTop: "10%",
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: 'center'}}>
-                    <Avatar style={{margin: "2%",
-                        backgroundColor: "#2BE0A2",}}>
-                        <LockOutlinedIcon/>
+                    alignItems: 'center'
+                }}>
+                    <Avatar style={{
+                        margin: "2%",
+                        backgroundColor: "#2BE0A2",
+                    }}>
+                        {this.state.registerOrConfirm === 'Register' && <LockOutlinedIcon/>}
+                        {this.state.registerOrConfirm === 'Confirm' && <CheckCircleIcon/>}
                     </Avatar>
+                    {this.state.registerOrConfirm === 'Register' &&
                     <Typography component="h1" variant="h5" style={{color: "black"}}>
                         Sign up
-                    </Typography>
-                    <form style={{width: '100%',
-                        marginTop: "2%"}} noValidate onSubmit={this.submitForm}>
+                    </Typography>}
+                    {this.state.registerOrConfirm === 'Confirm' &&
+                    <Typography component="h1" variant="h5" style={{color: "black"}}>
+                        Account created!
+                        Verify your account by clicking the link that was sent by email.
+                    </Typography>}
+                    {this.state.registerOrConfirm === 'Register' &&
+                    <form style={{
+                        width: '100%',
+                        marginTop: "2%"
+                    }} noValidate onSubmit={this.submitForm}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -73,7 +90,6 @@ class Register extends Component<IProps, IState> {
                                     label="Username"
                                     name="username"
                                     autoComplete="username"
-                                    autoFocus
                                     onChange={this.handleUsername}
                                     value={this.state.username}
                                 />
@@ -109,29 +125,24 @@ class Register extends Component<IProps, IState> {
                             fullWidth
                             variant="contained"
                             color="primary"
-                            style={{marginTop: "5%",}}
+                            style={{marginTop: "5%", marginBottom: "5%"}}
                             onClick={() => this.submitForm}
                         >
                             Sign Up
                         </Button>
-                    </form>
+                        {this.state.hasError && <p style={{color: "red", fontSize: "0.7em", fontWeight: "bold"}}>
+                            {this.state.error}
+                        </p>}
+                    </form>}
                 </div>
                 <Box mt={5}>
                 </Box>
-            </Container>}
-                {this.state.registerOrConfirm === 'Confirm' && <SignIn/>}
-            </div>
-
-
+            </Container>
         );
     };
-    changeState(state: string){
-        this.setState({registerOrConfirm: state})
-    }
 
     submitForm(event) {
-        console.log(this.state);
-        fetch("http://localhost:8080/api/user/register", {
+        fetch("http://petshelter-backend.herokuapp.com/api/user/register", {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
@@ -142,19 +153,28 @@ class Register extends Component<IProps, IState> {
                 email: this.state.email,
                 userType: 'USER',
             })
-        }).then(function(response){
-            if(response.status===201) {
+        }).then((response) => {
+            if (response.status === 201) {
                 console.log(response);
-                return response;
+                this.setState({hasError: false});
+                this.setState({error: ''});
+                this.setState({registerOrConfirm: 'Confirm'});
+                return response.text();
+            } else {
+                this.setState({hasError: true});
+
+                console.log(this.state.hasError);
+                return response.text();
             }
-            throw new Error('Network response was not ok.');
-        }).then(function(data) {
+        }).then((data) => {
+            if (this.state.hasError) {
+                this.setState({error: data});
+            }
             console.log(data);
         }).catch(function(error) {
             console.log('There has been a problem with your fetch operation: ' + error);
         });
         event.preventDefault();
-        this.changeState('Confirm');
     }
 }
 

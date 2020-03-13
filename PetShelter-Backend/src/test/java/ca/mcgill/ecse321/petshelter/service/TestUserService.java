@@ -478,7 +478,7 @@ public class TestUserService {
 	@Test
 	public void testResetPassword() {
 		try {
-			userService.resetPassword(USER_EMAIL);
+			userService.resetPassword(USER_NAME);
 		} catch (RegisterException e) {
 			fail();
 		}

@@ -3,11 +3,11 @@ import Container from '@material-ui/core/Container';
 import {Grid, TextField} from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Avatar from "@material-ui/core/Avatar";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import ThankYou from "./ThankYou";
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 
 interface IProps {
     isHome: boolean
@@ -98,7 +98,7 @@ class Donate extends Component<IProps, IState> {
                             margin: "2%",
                             backgroundColor: "#2BE0A2",
                         }}>
-                            <LockOutlinedIcon/>
+                            <AttachMoneyIcon/>
                         </Avatar>
                         <Typography component="h1" variant="h5" style={{color: "black"}}>
                             Donation

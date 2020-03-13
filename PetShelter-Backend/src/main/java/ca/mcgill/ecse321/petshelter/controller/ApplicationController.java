@@ -135,7 +135,7 @@ public class ApplicationController {
 	 * @param token          The requester's token.
 	 * @return check if all the fields are good
 	 */
-	@PostMapping("/")
+	@PostMapping("/create")
 	public ResponseEntity<?> createApplication(@RequestBody ApplicationDTO applicationDTO,
 											   @RequestHeader String token) {
 		User requester = userRepository.findUserByApiToken(token);
