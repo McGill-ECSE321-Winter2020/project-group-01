@@ -115,14 +115,14 @@ public class ApplicationService {
     @Transactional
     public ApplicationDTO createApplication(ApplicationDTO applicationDTO) {
         //condition checks
-        if (applicationDTO.getDescription() == null) {
-            throw new ApplicationException("Description can't be null!");
+        if (applicationDTO.getDescription() == null || applicationDTO.getDescription() == "") {
+            throw new ApplicationException("Description can't be empty!");
         }
         if (applicationDTO.getUsername() == null) {
             throw new ApplicationException("Username can't be null!");
         }
-        if (applicationDTO.getAdvertisementTitle() == null) {
-            throw new ApplicationException("Advertisement Title can't be null!");
+        if (applicationDTO.getAdvertisementTitle() == null || applicationDTO.getAdvertisementTitle() == "") {
+            throw new ApplicationException("Advertisement Title can't be empty!");
         }
         Advertisement advertisement = advertisementRepository.findAdvertisementById(applicationDTO.getAdId());
         if (advertisement == null) {
