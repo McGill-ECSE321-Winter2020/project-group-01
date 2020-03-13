@@ -1,33 +1,35 @@
 matrix:
   include:
-    #Frontend
+        #Frontend Job
     - language: node_js
       node_js:
-        - 10.15
+        - "10.15"
+
       before_install:
         - cd petshelter-frontend
         - npm install
-        
+
       script:
         - npm run build
-       deploy:
-        provider: heroku
-        api_key: 03273874-ad50-428a-b7d2-d55ecd114926
-        app: pet-pawlace
-        
-  #Backend
-    - language: java
-    before_install: 
-       - chmod +x gradlew
-      script:
-      - ./gradlew build
-     deploy:
-        provider: heroku
-        api_key: 03273874-ad50-428a-b7d2-d55ecd114926
-        app: petshelter-backend
-        
-   
-        
-   
 
-      
+      deploy:
+       provider: heroku
+       api_key:
+         secure: 03273874-ad50-428a-b7d2-d55ecd114926
+       app: pet-pawlace
+
+
+    #Backend Job
+    - language: java
+       
+      before_install: 
+        - chmod +x gradlew
+      script:
+        - ./gradlew build
+
+      deploy:
+        provider: heroku
+        api_key:
+          secure: 03273874-ad50-428a-b7d2-d55ecd114926
+        app: petshelter-backend
+    
