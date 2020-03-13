@@ -4,10 +4,9 @@ import profile from './profile.png';
 import './App.css';
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
-import {MdAssignment, MdMonetizationOn, MdPersonAdd, MdPersonPin} from 'react-icons/md';
+import {MdMonetizationOn, MdPersonAdd, MdPersonPin} from 'react-icons/md';
 import {IconContext} from "react-icons";
 import Register from './Components/Register'
-import Application from './Components/Application'
 import SignIn from "./Components/SignIn";
 import Donate from "./Components/Donate";
 
@@ -61,12 +60,6 @@ class App extends Component<IProps, IState>{
                                     Donate
                                 </div>
                             </Nav.Link>
-                            <Nav.Link className="a2" onClick={() => this.changeState('Application')}>
-                                <MdAssignment/>
-                                <div className="bg">
-                                    Application
-                                </div>
-                            </Nav.Link>
                         </IconContext.Provider>
                     </Navbar.Collapse>
                 </Navbar>
@@ -75,7 +68,6 @@ class App extends Component<IProps, IState>{
                     {this.state.donateRegisterLoginHome === 'Register' && <Register/>}
                     {this.state.donateRegisterLoginHome === 'Login' && <SignIn/>}
                     {this.state.donateRegisterLoginHome === 'Donate' && <Donate isHome={true}/>}
-                    {this.state.donateRegisterLoginHome === 'Application' && <Application/>}
                 </header>
             </div>
         );
