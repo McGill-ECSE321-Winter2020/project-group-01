@@ -14,11 +14,8 @@ matrix:
         - cd petshelter-frontend
       install:
         - npm install
-		- set "SKIP_PREFLIGHT_CHECK=true"
       script:
         - yarn build
-	after_script:
-		- curl -s https://assertible.com/apis/4f4ff831-1846-4c84-84e0-53e94a80519a/run?api_token=U0bS1o6ELYFvuxaq
     - stage: deploy to backend app
       script: skip
       deploy:
