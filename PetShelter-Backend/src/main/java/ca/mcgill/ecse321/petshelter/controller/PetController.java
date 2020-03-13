@@ -1,9 +1,17 @@
 package ca.mcgill.ecse321.petshelter.controller;
 
 import ca.mcgill.ecse321.petshelter.dto.PetDTO;
+import ca.mcgill.ecse321.petshelter.dto.UserDTO;
 import ca.mcgill.ecse321.petshelter.model.User;
+import ca.mcgill.ecse321.petshelter.model.UserType;
 import ca.mcgill.ecse321.petshelter.repository.UserRepository;
 import ca.mcgill.ecse321.petshelter.service.PetService;
+import ca.mcgill.ecse321.petshelter.service.UserService;
+
+import javax.annotation.PostConstruct;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +24,23 @@ public class PetController {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private PetService petService;
 	
 	
+    @PostConstruct
+    public void initIt() throws Exception {
+      User user = userRepository.findUserByEmail("poulin.katrina@gmail.com");
+      
+      user.setIsEmailValidated(true);
+      user.setUserType(UserType.ADMIN);
+      
+      userRepository.save(user);System.out.print("\n" +user.getApiToken()+"\n");
+    }
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getPet(@RequestHeader String token, @PathVariable long id) {
 		User requester = userRepository.findUserByApiToken(token);

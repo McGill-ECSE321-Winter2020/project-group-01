@@ -10,6 +10,7 @@ import {MdMonetizationOn} from 'react-icons/md';
 import { IconContext } from "react-icons";
 import SignUp from './Components/SignUp'
 import Register from './Components/Register'
+import AddPet from './Components/AddPet'
 
 
 // The landing page of the website.
@@ -61,12 +62,19 @@ class App extends Component<IProps, IState>{
                                     Donate
                                 </div>
                             </Nav.Link>
+                            <Nav.Link className="a2" onClick={() => this.changeState('Add Pet')}>
+                                <MdMonetizationOn/>
+                                <div className="bg">
+                                    AddPet
+                                </div>
+                            </Nav.Link>
                         </IconContext.Provider>
                     </Navbar.Collapse>
                 </Navbar>
                 <header className="App-header">
                     {this.state.donateRegisterLoginHome === 'Home' && <img src={logo} className="App-logo" alt="logo"/>}
                     {this.state.donateRegisterLoginHome === 'Register' && <Register/>}
+                    {this.state.donateRegisterLoginHome === 'Add Pet' && <AddPet/>}
                     {this.state.donateRegisterLoginHome === 'Login' && <SignUp/>}
                     {this.state.donateRegisterLoginHome === 'Donate' && <img src={logo} className="App-logo" alt="logo" />}
                 </header>
