@@ -3,7 +3,6 @@ matrix:
     - language: java
     before_install:
     - chmod +x gradlew
-      install: true
       script:
         - ./gradlew build
 
