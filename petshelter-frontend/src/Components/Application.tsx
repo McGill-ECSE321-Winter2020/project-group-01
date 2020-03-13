@@ -18,7 +18,7 @@ interface IProps {
 interface IState {
     description: string,
     adTitle: string,
-    loginOrReset?: string,
+    create?: string,
     hasError: boolean,
     error: string
 }
@@ -28,7 +28,7 @@ class Application extends Component<IProps, IState>{
         this.state = {
             description: '',
             adTitle: '',
-            loginOrReset: 'Login',
+            create: 'create',
             hasError: false,
             error: ''
         };
@@ -49,7 +49,7 @@ class Application extends Component<IProps, IState>{
         return (
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
-                {this.state.loginOrReset === 'Login' &&
+                {this.state.create === 'create' &&
                 <div style={{marginTop: "10%",
                     display: 'flex',
                     flexDirection: 'column',
@@ -98,17 +98,6 @@ class Application extends Component<IProps, IState>{
                         </Grid>
                     </form>
                 </div> }
-                {this.state.loginOrReset === 'Reset'&&
-                <div style={{marginTop: "10%",
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center'}}>
-                    <Avatar style={{margin: "2%",
-                        backgroundColor: "#2BE0A2",}}>
-                        <CheckCircleIcon/>
-                    </Avatar>
-                </div>
-                }
                 {this.state.hasError && <p style={{color: "red", fontSize: "0.7em", fontWeight: "bold"}}>
                     {this.state.error}
                 </p>}
@@ -119,7 +108,7 @@ class Application extends Component<IProps, IState>{
     };
 
     submitForm(event) {
-        fetch("http://petshelter-backend.herokuapp.com/api/user/login",{
+        fetch("http://petshelter-backend.herokuapp.com/api/application/create",{
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
@@ -133,7 +122,7 @@ class Application extends Component<IProps, IState>{
                 console.log(response);
                 this.setState({hasError: false});
                 this.setState({error: ''});
-                this.setState({loginOrReset: 'Done'});
+                this.setState({create: 'Done'});
                 return response.text();
             }
             else{
@@ -152,44 +141,6 @@ class Application extends Component<IProps, IState>{
         });
         event.preventDefault();
     }
-
-    submitReset() {
-        if (this.state.adTitle === '') {
-            this.setState({hasError: true});
-            this.setState({error: 'Enter your advertisement title first.'});
-        } else {
-            fetch("http://petshelter-backend.herokuapp.com/api/user/resetPassword", {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    adTitle: this.state.adTitle,
-                })
-            }).then((response) => {
-                if (response.status === 200) {
-                    console.log(response);
-                    this.setState({hasError: false});
-                    this.setState({error: ''});
-                    this.setState({loginOrReset: 'Reset'});
-                    return response.text();
-                } else {
-                    this.setState({hasError: true});
-
-                    console.log(this.state.hasError);
-                    return response.text();
-                }
-            }).then((data) => {
-                if (this.state.hasError) {
-                    this.setState({error: data});
-                }
-                console.log(data);
-            }).catch(function (error) {
-                console.log('There has been a problem with your fetch operation: ' + error);
-            });
-        }
-    }
-
 }
 
 export default Application;
