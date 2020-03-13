@@ -116,13 +116,13 @@ public class ApplicationService {
     public ApplicationDTO createApplication(ApplicationDTO applicationDTO) {
         //condition checks
         if (applicationDTO.getDescription() == null || applicationDTO.getDescription() == "") {
-            throw new ApplicationException("Description can't be empty!");
+            throw new ApplicationException("Description can't be null!");
         }
         if (applicationDTO.getUsername() == null) {
             throw new ApplicationException("Username can't be null!");
         }
         if (applicationDTO.getAdvertisementTitle() == null || applicationDTO.getAdvertisementTitle() == "") {
-            throw new ApplicationException("Advertisement Title can't be empty!");
+            throw new ApplicationException("Advertisement Title can't be null!");
         }
         Advertisement advertisement = advertisementRepository.findAdvertisementById(applicationDTO.getAdId());
         if (advertisement == null) {
