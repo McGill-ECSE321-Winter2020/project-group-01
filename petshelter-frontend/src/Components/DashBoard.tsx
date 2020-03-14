@@ -3,6 +3,7 @@ import Navbar from "react-bootstrap/Navbar";
 import {IconContext} from "react-icons";
 import Nav from "react-bootstrap/Nav";
 import {Search} from "@material-ui/icons";
+import Application from "./Application";
 
 interface IProps {
 
@@ -72,7 +73,6 @@ class DashBoard extends Component<IProps, IState> {
                                 </div>
                             </Nav.Link>
 
-
                             <Nav.Link className="a2" onClick={() => this.changeState('Forum')}>
                                 <div className="bg">
                                     Forum
@@ -91,7 +91,7 @@ class DashBoard extends Component<IProps, IState> {
                 <h1>Welcome {this.state.username} !</h1>
                 <header className="App-header">
                     {this.state.dashBoardStates === 'Home'}
-                    {this.state.dashBoardStates === 'AdoptPet'}
+                    {this.state.dashBoardStates === 'AdoptPet' && <Application/>}
                     {this.state.dashBoardStates === 'CreateAd'}
                     {this.state.dashBoardStates === 'Forum'}
                     {this.state.dashBoardStates === 'Search' && <Search/>}
