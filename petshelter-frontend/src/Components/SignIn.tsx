@@ -21,7 +21,8 @@ interface IState {
     hasError: boolean,
     error: string
 }
-class SignUp extends Component<IProps, IState>{
+
+class SignIn extends Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state = {
@@ -36,6 +37,7 @@ class SignUp extends Component<IProps, IState>{
         this.submitForm = this.submitForm.bind(this);
     }
 
+
     handlePassword(event) {
         this.setState({password: event.target.value});
     }
@@ -44,24 +46,30 @@ class SignUp extends Component<IProps, IState>{
         this.setState({username: event.target.value});
     }
 
-    render(){
+    render() {
         return (
             <Container component="main" maxWidth="xs">
-                <CssBaseline />
+                <CssBaseline/>
                 {this.state.loginOrReset === 'Login' &&
-                <div style={{marginTop: "10%",
+                <div style={{
+                    marginTop: "10%",
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: 'center'}}>
-                    <Avatar style={{margin: "2%",
-                        backgroundColor: "#2BE0A2",}}>
+                    alignItems: 'center'
+                }}>
+                    <Avatar style={{
+                        margin: "2%",
+                        backgroundColor: "#2BE0A2",
+                    }}>
                         <LockOutlinedIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5" style={{color: "black"}}>
                         Sign in
                     </Typography>
-                    <form style={{width: '100%',
-                        marginTop: "2%"}} noValidate onSubmit={this.submitForm}>
+                    <form style={{
+                        width: '100%',
+                        marginTop: "2%"
+                    }} noValidate onSubmit={this.submitForm}>
                         <TextField
                             variant="outlined"
                             margin="normal"
@@ -101,14 +109,18 @@ class SignUp extends Component<IProps, IState>{
                             </Grid>
                         </Grid>
                     </form>
-                </div> }
-                {this.state.loginOrReset === 'Reset'&&
-                <div style={{marginTop: "10%",
+                </div>}
+                {this.state.loginOrReset === 'Reset' &&
+                <div style={{
+                    marginTop: "10%",
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: 'center'}}>
-                    <Avatar style={{margin: "2%",
-                        backgroundColor: "#2BE0A2",}}>
+                    alignItems: 'center'
+                }}>
+                    <Avatar style={{
+                        margin: "2%",
+                        backgroundColor: "#2BE0A2",
+                    }}>
                         <CheckCircleIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5" style={{color: "black"}}>
@@ -127,7 +139,7 @@ class SignUp extends Component<IProps, IState>{
     };
 
     submitForm(event) {
-        fetch("http://petshelter-backend.herokuapp.com/api/user/login",{
+        fetch("http://petshelter-backend.herokuapp.com/api/user/login", {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
@@ -136,26 +148,25 @@ class SignUp extends Component<IProps, IState>{
                 password: this.state.password,
                 username: this.state.username,
             })
-        }).then((response) =>{
-            if(response.status===200) {
+        }).then((response) => {
+            if (response.status === 200) {
                 console.log(response);
                 this.setState({hasError: false});
                 this.setState({error: ''});
                 this.setState({loginOrReset: 'Done'});
                 return response.text();
-            }
-            else{
+            } else {
                 this.setState({hasError: true});
 
                 console.log(this.state.hasError);
                 return response.text();
             }
         }).then((data) => {
-            if(this.state.hasError){
+            if (this.state.hasError) {
                 this.setState({error: data});
             }
             console.log(data);
-        }).catch(function(error) {
+        }).catch(function (error) {
             console.log('There has been a problem with your fetch operation: ' + error);
         });
         event.preventDefault();
@@ -200,4 +211,4 @@ class SignUp extends Component<IProps, IState>{
 
 }
 
-export default SignUp;
+export default SignIn;

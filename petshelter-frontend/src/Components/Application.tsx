@@ -19,7 +19,8 @@ interface IState {
     hasError: boolean,
     error: string
 }
-class Application extends Component<IProps, IState>{
+
+class Application extends Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
         this.state = {
@@ -42,24 +43,30 @@ class Application extends Component<IProps, IState>{
         this.setState({adTitle: event.target.value});
     }
 
-    render(){
+    render() {
         return (
             <Container component="main" maxWidth="xs">
-                <CssBaseline />
+                <CssBaseline/>
                 {this.state.create === 'create' &&
-                <div style={{marginTop: "10%",
+                <div style={{
+                    marginTop: "10%",
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: 'center'}}>
-                    <Avatar style={{margin: "2%",
-                        backgroundColor: "#2BE0A2",}}>
+                    alignItems: 'center'
+                }}>
+                    <Avatar style={{
+                        margin: "2%",
+                        backgroundColor: "#2BE0A2",
+                    }}>
                         <AssignmentIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5" style={{color: "black"}}>
                         Create Application
                     </Typography>
-                    <form style={{width: '100%',
-                        marginTop: "2%"}} noValidate onSubmit={this.submitForm}>
+                    <form style={{
+                        width: '100%',
+                        marginTop: "2%"
+                    }} noValidate onSubmit={this.submitForm}>
                         <TextField
                             variant="outlined"
                             margin="normal"
@@ -94,7 +101,7 @@ class Application extends Component<IProps, IState>{
                         <Grid container>
                         </Grid>
                     </form>
-                </div> }
+                </div>}
                 {this.state.hasError && <p style={{color: "red", fontSize: "0.7em", fontWeight: "bold"}}>
                     {this.state.error}
                 </p>}
@@ -105,7 +112,7 @@ class Application extends Component<IProps, IState>{
     };
 
     submitForm(event) {
-        fetch("http://petshelter-backend.herokuapp.com/api/application/create",{
+        fetch("http://petshelter-backend.herokuapp.com/api/application/create", {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
@@ -114,26 +121,25 @@ class Application extends Component<IProps, IState>{
                 description: this.state.description,
                 adTitle: this.state.adTitle,
             })
-        }).then((response) =>{
-            if(response.status===200) {
+        }).then((response) => {
+            if (response.status === 200) {
                 console.log(response);
                 this.setState({hasError: false});
                 this.setState({error: ''});
                 this.setState({create: 'Done'});
                 return response.text();
-            }
-            else{
+            } else {
                 this.setState({hasError: true});
 
                 console.log(this.state.hasError);
                 return response.text();
             }
         }).then((data) => {
-            if(this.state.hasError){
+            if (this.state.hasError) {
                 this.setState({error: data});
             }
             console.log(data);
-        }).catch(function(error) {
+        }).catch(function (error) {
             console.log('There has been a problem with your fetch operation: ' + error);
         });
         event.preventDefault();
