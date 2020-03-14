@@ -10,17 +10,10 @@ public class DonationDTO {
     private Time time;
     private Double amount;
     private String email;
-    
     //Empty constructor
     public DonationDTO() {
     }
     
-    public DonationDTO(String username, Date date, Time time, Double amount) {
-        this.username = username;
-        this.date = date;
-        this.time = time;
-        this.amount = amount;
-    }
     
     public Double getAmount() {
         return amount;
@@ -61,6 +54,7 @@ public class DonationDTO {
     public void setEmail(String email) {
         this.email = email;
     }
+    
     
     @Override
     public String toString() {
