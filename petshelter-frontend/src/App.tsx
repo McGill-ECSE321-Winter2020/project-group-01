@@ -9,6 +9,7 @@ import {IconContext} from "react-icons";
 import Register from './Components/Register'
 import SignIn from "./Components/SignIn";
 import Donate from "./Components/Donate";
+import UserInformation from "./CurrentUserInformation";
 
 
 // The landing page of the website.
@@ -26,6 +27,7 @@ class App extends Component<IProps, IState>{
         };
     }
     render() {
+        this.isTheUserLoggedIn();
         return (
             <div className="App">
                 <Navbar bg="dark" expand={true} collapseOnSelect={false} style={{maxHeight:"10vh"}}>
@@ -78,6 +80,15 @@ class App extends Component<IProps, IState>{
         this.setState({
             donateRegisterLoginHome: state
         });
+    }
+
+    isTheUserLoggedIn(){
+        if(!UserInformation.loggedIn){
+            //make backend call with token, have to change the backend first
+        }
+        else{
+            UserInformation.token="";
+        }
     }
 }
 
