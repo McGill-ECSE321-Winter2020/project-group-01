@@ -6,7 +6,6 @@ import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import {MdAssignment, MdMonetizationOn, MdPersonAdd, MdPersonPin} from 'react-icons/md';
 import {IconContext} from "react-icons";
-import SignIn from './Components/SignIn'
 import Register from './Components/Register'
 import SignIn from "./Components/SignIn";
 import Donate from "./Components/Donate";
