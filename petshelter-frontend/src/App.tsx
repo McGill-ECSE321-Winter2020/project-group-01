@@ -122,7 +122,7 @@ class App extends Component<IProps, IState>{
     }
 
     isTheUserLoggedIn(){
-        if(!UserInformation.loggedIn){
+        if(UserInformation.token!==""){
             //make backend call with token
             fetch("http://petshelter-backend.herokuapp.com/api/user/register", {
                 method: 'post',
@@ -138,6 +138,7 @@ class App extends Component<IProps, IState>{
                 } else {
                     UserInformation.token="";
                     UserInformation.isAdmin=false;
+                    UserInformation.loggedIn=false;
                 }
             })
         }
