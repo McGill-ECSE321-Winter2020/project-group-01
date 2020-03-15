@@ -57,9 +57,10 @@ public class Advertisement {
         this.title = title;
     }
 
-    @OneToOne(optional = true)
     private Pet pet;
 
+    @OneToOne
+    @PrimaryKeyJoinColumn
     public Pet getPet() {
         return pet;
     }
