@@ -84,7 +84,10 @@ public class DonationService {
         if (donationDTO.getAmount() < 0.00) {
             throw new DonationException("Donation amount can't be less than 0$");
         }
-        
+        if (donationDTO.getAmount() >= 999999999.00) {
+            throw new DonationException("The amount is too large. Please make 2 donations!");
+        }
+    
         // System.out.println(donationDTO.toString());
         User user = userRepository.findUserByUserName(donationDTO.getUsername());
         Donation donation = new Donation();
