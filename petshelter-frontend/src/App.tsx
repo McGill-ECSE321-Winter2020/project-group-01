@@ -4,7 +4,7 @@ import profile from './profile.png';
 import './App.css';
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
-import {MdMonetizationOn, MdPersonAdd, MdPersonPin} from 'react-icons/md';
+import {MdMonetizationOn, MdPersonAdd, MdPersonPin, MdPets, MdShoppingCart, MdForum} from 'react-icons/md';
 import {IconContext} from "react-icons";
 import Register from './Components/Register'
 import SignIn from "./Components/SignIn";
@@ -70,25 +70,25 @@ class App extends Component<IProps, IState>{
                         <Navbar.Collapse className="justify-content-end">
                             <IconContext.Provider value={{ color: "white", className: "global-class-name", size:"2em" }}>
                                 <Nav.Link className="a2" onClick={() => this.changeState('Forums')}>
-                                    <MdPersonAdd/>
+                                    <MdForum/>
                                     <div className="bg">
                                         Forum
                                     </div>
                                 </Nav.Link>
                                 <Nav.Link className="a2" onClick={() => this.changeState('Advertisements')}>
-                                    <MdPersonPin/>
+                                    <MdShoppingCart/>
                                     <div className="bg">
                                         Advertisements
                                     </div>
                                 </Nav.Link>
                                 <Nav.Link className="a2" onClick={() => this.changeState('Pets')}>
-                                    <MdMonetizationOn/>
+                                    <MdPets/>
                                     <div className="bg">
                                         Pets
                                     </div>
                                 </Nav.Link>
                                 <Nav.Link className="a2" onClick={() => this.changeState('Profile')}>
-                                    <MdMonetizationOn/>
+                                    <MdPersonPin/>
                                     <div className="bg">
                                         Profile
                                     </div>
