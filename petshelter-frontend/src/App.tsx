@@ -4,7 +4,7 @@ import profile from './profile.png';
 import './App.css';
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
-import {MdMonetizationOn, MdPersonAdd, MdPersonPin, MdPets, MdShoppingCart, MdForum} from 'react-icons/md';
+import {MdMonetizationOn, MdPersonAdd, MdPersonPin, MdPets, MdShoppingCart, MdForum, MdFace} from 'react-icons/md';
 import {IconContext} from "react-icons";
 import Register from './Components/Register'
 import SignIn from "./Components/SignIn";
@@ -43,7 +43,7 @@ class App extends Component<IProps, IState>{
                             /> Pawlace
                         </span>
                     </Navbar.Brand>
-                        {UserInformation.loggedIn &&
+                        {!UserInformation.loggedIn &&
                         <Navbar.Collapse className="justify-content-end">
                         <IconContext.Provider value={{ color: "white", className: "global-class-name", size:"2em" }}>
                             <Nav.Link className="a2" onClick={() => this.changeState('Register')}>
@@ -66,7 +66,7 @@ class App extends Component<IProps, IState>{
                             </Nav.Link>
                         </IconContext.Provider>
                     </Navbar.Collapse>}
-                        {!UserInformation.loggedIn &&
+                        {UserInformation.loggedIn &&
                         <Navbar.Collapse className="justify-content-end">
                             <IconContext.Provider value={{ color: "white", className: "global-class-name", size:"2em" }}>
                                 <Nav.Link className="a2" onClick={() => this.changeState('Forums')}>
@@ -88,7 +88,7 @@ class App extends Component<IProps, IState>{
                                     </div>
                                 </Nav.Link>
                                 <Nav.Link className="a2" onClick={() => this.changeState('Profile')}>
-                                    <MdPersonPin/>
+                                    <MdFace/>
                                     <div className="bg">
                                         Profile
                                     </div>
@@ -144,6 +144,7 @@ class App extends Component<IProps, IState>{
         }
         else{
             UserInformation.token="";
+            UserInformation.loggedIn=false;
         }
     }
 }
