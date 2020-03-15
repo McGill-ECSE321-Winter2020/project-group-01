@@ -55,7 +55,7 @@ public class EmailingService {
         msg.setFrom(serviceEmail);
         msg.setTo(email);
         msg.setSubject("Pet Shelter - Account Creation Verification for " + username);
-        msg.setText("Hey " + username + " ,\n\nPlease confirm your email here: " + url + "registrationConfirmation?token=" + token + "\n\nYours, \nPetShelter");
+        msg.setText("Hey " + username + " ,\n\nPlease confirm your email here: " + url + "api/user/registrationConfirmation?token=" + token + "\n\nYours, \nPetShelter");
         javaMailSender.send(msg);
     }
     
