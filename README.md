@@ -10,6 +10,9 @@ delivery process.
 ## Running the Project
 The backend is hosted at https://petshelter-backend.herokuapp.com/. The backend can be run locally by cloning this repository, and running the PetShelter-Backend repository as a Spring Boot App. Using a terminal/command line from the root of the project, one can instead use "gradle run" to run the project locally. In that case, the application will be hosted at http://localhost:8080/. To use the application, see the API documentation [here](https://github.com/McGill-ECSE321-Winter2020/project-group-01/wiki/RESTful-services-documentation).
 
+## Using the Application
+The frontend is hosted at https://pet-pawlace.herokuapp.com/. To use it locally, see https://github.com/McGill-ECSE321-Winter2020/project-group-01/blob/master/petshelter-frontend/README.md for more information. The skip preflight check environment variable is used because I am running webpack 4.42.0 while yarn expects 4.41.5. This will be patched eventually as at the moment I am writing this webpack 4.42 was released yesterday so yarn start is not up to date with the webpack versioning.
+
 ### About us
 We are 5 McGill University students from the Faculty of Engineering
 
@@ -25,7 +28,7 @@ We are 5 McGill University students from the Faculty of Engineering
 ### Project
 | NAME                   | ROLE |  SPRINT 1 | SPRINT 2 | SPRINT 3 | SPRINT 4 |
 |------------------------|------|-----------|----------|----------|----------|
-| Louis Barrette-Vanasse | Project Manager | 25        |   32       |          |          |
+| Louis Barrette-Vanasse | Project Manager | 25        |   32       |    6      |          |
 | Mathieu Bissonnette    |Software Developer| 10        |     25     |          |          |
 | Christopher Boustros   | Backend Lead| 17        |      17   |          |          |
 | Ding Ma                |   Testing Lead | 18        |     47     |          |          |
@@ -53,6 +56,18 @@ The project report for this deliverable can be found [here](https://github.com/M
 | Christopher Boustros | <ul><li>Setting up backlog</li><li>Application DTO, service, and controller</li><li>Javadocs</li> | 17 |
 | Ding Ma | <ul><li>RESTful services tests through Postman, Newman, and Documentation </li><li>Donation, Application and User service tests </li><li>Donation controller and Service </li><li>Heroku deployment</li><li>PetSerives and Application Tests rewrite</li></ul> | 47 |
 | Katrina Poulin |<ul><li>Project minutes</li><li>Pet and advertisement service; advertisement controller, Test plan, Sprint report</li></ul>| 20 |
+
+### Deliverable 3
+
+The project report for this deliverable can be found [here](https://github.com/McGill-ECSE321-Winter2020/project-group-01/wiki/Project-Report:-Sprint-3).
+
+| Name | Contributions | Hours |
+| ------------- | ------------- | ------------- |
+| Louis Barrette-Vanasse | <ul><li>Landing page</li><li>Navbar</li><li>Logo</li><li>Deploying to heroku</li></ul>| 12 |
+| Mathieu Bissonnette | | 0 |
+| Christopher Boustros |  | 0 |
+| Ding Ma | | 0 |
+| Katrina Poulin || 0 |
 
 (*) *From ECSE321_Project_Description.pdf written by M. Kanaan, posted on myCourses.*
 

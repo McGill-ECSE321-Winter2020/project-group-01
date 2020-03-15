@@ -226,12 +226,48 @@ public class TestDonationService {
             assertEquals("Donations not found", e.getMessage());
         }
     }
+    
     @Test
-    public  void testNullDonationName(){
+    public void testNullDonationName() {
         try {
             donationService.getAllUserDonations(null);
-        } catch (DonationException e){
+        } catch (DonationException e) {
             assertEquals("Donations not found", e.getMessage());
+        }
+    }
+    
+    @Test
+    public void testAlmostBigDonation() {
+        DonationDTO donationDTO = new DonationDTO();
+        Date date = Date.valueOf("2020-01-22");
+        Time time = Time.valueOf("11:22:00");
+        donationDTO.setUser(USER_NAME);
+        donationDTO.setTime(time);
+        donationDTO.setDate(date);
+        donationDTO.setAmount(999999998.99);
+        DonationDTO dto = null;
+        try {
+            dto = donationService.createDonation(donationDTO);
+        } catch (DonationException e) {
+            e.printStackTrace();
+        }
+        assertNotNull(dto);
+        assertEquals(donationDTO.getAmount(), dto.getAmount());
+    }
+    
+    @Test
+    public void testTooBigDonation() {
+        DonationDTO donationDTO = new DonationDTO();
+        Date date = Date.valueOf("2020-01-22");
+        Time time = Time.valueOf("11:22:00");
+        donationDTO.setUser(USER_NAME);
+        donationDTO.setTime(time);
+        donationDTO.setDate(date);
+        donationDTO.setAmount(999999999.00);
+        try {
+            donationService.createDonation(donationDTO);
+        } catch (DonationException e) {
+            assertEquals("The amount is too large. Please make 2 donations!", e.getMessage());
         }
     }
 }
