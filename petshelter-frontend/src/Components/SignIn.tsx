@@ -10,6 +10,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import CheckCircleIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import DashBoard from "./DashBoard";
 
 interface IProps {
 }
@@ -132,6 +133,8 @@ class SignIn extends Component<IProps, IState> {
                 {this.state.hasError && <p style={{color: "red", fontSize: "0.7em", fontWeight: "bold"}}>
                     {this.state.error}
                 </p>}
+
+                {this.state.loginOrReset === "LoggedIn" && <DashBoard/>}
                 <Box mt={8}>
                 </Box>
             </Container>
@@ -170,6 +173,9 @@ class SignIn extends Component<IProps, IState> {
             console.log('There has been a problem with your fetch operation: ' + error);
         });
         event.preventDefault();
+        this.setState({
+            loginOrReset: "LoggedIn"
+        });
     }
 
     submitReset() {

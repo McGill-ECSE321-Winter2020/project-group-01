@@ -29,9 +29,10 @@ class App extends Component<IProps, IState>{
     render() {
         this.isTheUserLoggedIn();
         return (
-            <div className="App">
-                <Navbar bg="dark" expand={true} collapseOnSelect={false} style={{maxHeight:"10vh"}}>
-                    <Navbar.Brand href="" onClick={() => this.changeState('Home')}>
+            <div>
+                <div className="App" id="home">
+                    <Navbar bg="dark" expand={true} collapseOnSelect={false} style={{maxHeight: "10vh"}}>
+                        <Navbar.Brand href="" onClick={() => this.changeState('Home')}>
                         <span>
                             <img
                                 src={profile}
@@ -64,13 +65,15 @@ class App extends Component<IProps, IState>{
                             </Nav.Link>
                         </IconContext.Provider>
                     </Navbar.Collapse>
-                </Navbar>
-                <header className="App-header">
-                    {this.state.donateRegisterLoginHome === 'Home' && <img src={logo} className="App-logo" alt="logo"/>}
-                    {this.state.donateRegisterLoginHome === 'Register' && <Register/>}
-                    {this.state.donateRegisterLoginHome === 'Login' && <SignIn/>}
-                    {this.state.donateRegisterLoginHome === 'Donate' && <Donate isHome={true}/>}
-                </header>
+                    </Navbar>
+                    <header className="App-header">
+                        {this.state.donateRegisterLoginHome === 'Home' &&
+                        <img src={logo} className="App-logo" alt="logo"/>}
+                        {this.state.donateRegisterLoginHome === 'Register' && <Register/>}
+                        {this.state.donateRegisterLoginHome === 'Login' && <SignIn/>}
+                        {this.state.donateRegisterLoginHome === 'Donate' && <Donate isHome={true}/>}
+                    </header>
+                </div>
             </div>
         );
     }

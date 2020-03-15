@@ -86,6 +86,7 @@ class Register extends Component<IProps, IState> {
                                 <TextField
                                     variant="outlined"
                                     fullWidth
+                                    autoFocus
                                     id="username"
                                     label="Username"
                                     name="username"
