@@ -25,6 +25,7 @@ class App extends Component<IProps, IState>{
         this.state = {
             donateRegisterLoginHome: 'Home'
         };
+        this.handler = this.handler.bind(this)
     }
     render() {
         this.isTheUserLoggedIn();
@@ -106,7 +107,7 @@ class App extends Component<IProps, IState>{
                         {this.state.donateRegisterLoginHome === 'Home' &&
                         <img src={logo} className="App-logo" alt="logo"/>}
                         {this.state.donateRegisterLoginHome === 'Register' && <Register/>}
-                        {this.state.donateRegisterLoginHome === 'Login' && <SignIn/>}
+                        {this.state.donateRegisterLoginHome === 'Login' && <SignIn userInfo={UserInformation} handler={this.handler}/>}
                         {this.state.donateRegisterLoginHome === 'Donate' && <Donate isHome={true}/>}
                     </header>
                 </div>
@@ -119,6 +120,13 @@ class App extends Component<IProps, IState>{
         this.setState({
             donateRegisterLoginHome: state
         });
+    }
+
+    //updates the user properties
+    handler(userInfo: any){
+        UserInformation.token=userInfo.token;
+        UserInformation.loggedIn=userInfo.loggedIn;
+        UserInformation.isAdmin=userInfo.isAdmin;
     }
 
     isTheUserLoggedIn(){

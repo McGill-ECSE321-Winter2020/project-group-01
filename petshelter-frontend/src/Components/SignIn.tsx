@@ -10,9 +10,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import CheckCircleIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import UserInformation from "../CurrentUserInformation";
 
 interface IProps {
+    userInfo: any,
+    handler
 }
 
 interface IState {
@@ -155,7 +156,7 @@ class SignIn extends Component<IProps, IState> {
                 this.setState({hasError: false});
                 this.setState({error: ''});
                 this.setState({loginOrReset: 'Done'});
-                UserInformation.loggedIn=true;
+                this.props.userInfo.loggedIn=true;
                 return response.text();
             } else {
                 this.setState({hasError: true});
@@ -167,9 +168,10 @@ class SignIn extends Component<IProps, IState> {
                 this.setState({error: data});
             }
             else {
-                UserInformation.token=data.token;
-                UserInformation.isAdmin = data.userType === "ADMIN";
+                this.props.userInfo.token=data.token;
+                this.props.userInfo.isAdmin = data.userType === "ADMIN";
             }
+            this.props.handler(this.props.userInfo);
             console.log(data);
         }).catch(function (error) {
             console.log('There has been a problem with your fetch operation: ' + error);
