@@ -10,7 +10,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import CheckCircleIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import DashBoard from "./DashBoard";
+import UserInformation from "../CurrentUserInformation";
 
 interface IProps {
 }
@@ -133,8 +133,6 @@ class SignIn extends Component<IProps, IState> {
                 {this.state.hasError && <p style={{color: "red", fontSize: "0.7em", fontWeight: "bold"}}>
                     {this.state.error}
                 </p>}
-
-                {this.state.loginOrReset === "LoggedIn" && <DashBoard/>}
                 <Box mt={8}>
                 </Box>
             </Container>
@@ -157,16 +155,20 @@ class SignIn extends Component<IProps, IState> {
                 this.setState({hasError: false});
                 this.setState({error: ''});
                 this.setState({loginOrReset: 'Done'});
+                UserInformation.loggedIn=true;
                 return response.text();
             } else {
                 this.setState({hasError: true});
-
                 console.log(this.state.hasError);
                 return response.text();
             }
-        }).then((data) => {
+        }).then((data:any) => {
             if (this.state.hasError) {
                 this.setState({error: data});
+            }
+            else {
+                UserInformation.token=data.token;
+                UserInformation.isAdmin = data.userType === "ADMIN";
             }
             console.log(data);
         }).catch(function (error) {
