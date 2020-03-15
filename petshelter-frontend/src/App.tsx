@@ -4,7 +4,7 @@ import profile from './profile.png';
 import './App.css';
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
-import {MdAssignment, MdMonetizationOn, MdPersonAdd, MdPersonPin} from 'react-icons/md';
+import {MdMonetizationOn, MdPersonAdd, MdPersonPin} from 'react-icons/md';
 import {IconContext} from "react-icons";
 import Register from './Components/Register'
 import SignIn from "./Components/SignIn";
