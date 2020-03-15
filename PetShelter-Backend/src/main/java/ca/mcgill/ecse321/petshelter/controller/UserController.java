@@ -311,4 +311,43 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 	}
+	
+	/**
+	 * Determines if the token it is provided belongs to a user.
+	 * This is used to determine what to display on the website.
+	 * @param token user's token
+	 * @return deletes user token
+	 */
+	@PostMapping("/validUser")
+	public ResponseEntity<?> validUser(@RequestBody String token) {
+		User user = userRepo.findUserByApiToken(token);
+		// if the user cannot be found
+		if (user == null) {
+			return new ResponseEntity<>("Account not found",HttpStatus.BAD_REQUEST);
+		} else {
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+	}
+	
+	/**
+	 * Determines if the token it is provided belongs to an admin.
+	 * This is used to determine what to display on the website.
+	 * @param token user's token
+	 * @return deletes user token
+	 */
+	@PostMapping("/admin")
+	public ResponseEntity<?> admin(@RequestBody String token) {
+		User user = userRepo.findUserByApiToken(token);
+		// if the user cannot be found
+		if (user == null) {
+			return new ResponseEntity<>("Account not found",HttpStatus.BAD_REQUEST);
+		} else {
+			if(user.getUserType().equals(UserType.ADMIN)) {
+				return new ResponseEntity<>(true,HttpStatus.OK);
+			}
+			return new ResponseEntity<>(false,HttpStatus.OK);
+		}
+	}
+
+
 }
