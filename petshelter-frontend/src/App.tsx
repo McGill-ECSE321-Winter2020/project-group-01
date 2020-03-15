@@ -43,7 +43,8 @@ class App extends Component<IProps, IState>{
                             /> Pawlace
                         </span>
                     </Navbar.Brand>
-                    <Navbar.Collapse className="justify-content-end">
+                        {UserInformation.loggedIn &&
+                        <Navbar.Collapse className="justify-content-end">
                         <IconContext.Provider value={{ color: "white", className: "global-class-name", size:"2em" }}>
                             <Nav.Link className="a2" onClick={() => this.changeState('Register')}>
                                 <MdPersonAdd/>
@@ -64,7 +65,42 @@ class App extends Component<IProps, IState>{
                                 </div>
                             </Nav.Link>
                         </IconContext.Provider>
-                    </Navbar.Collapse>
+                    </Navbar.Collapse>}
+                        {!UserInformation.loggedIn &&
+                        <Navbar.Collapse className="justify-content-end">
+                            <IconContext.Provider value={{ color: "white", className: "global-class-name", size:"2em" }}>
+                                <Nav.Link className="a2" onClick={() => this.changeState('Forums')}>
+                                    <MdPersonAdd/>
+                                    <div className="bg">
+                                        Forum
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link className="a2" onClick={() => this.changeState('Advertisements')}>
+                                    <MdPersonPin/>
+                                    <div className="bg">
+                                        Advertisements
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link className="a2" onClick={() => this.changeState('Pets')}>
+                                    <MdMonetizationOn/>
+                                    <div className="bg">
+                                        Pets
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link className="a2" onClick={() => this.changeState('Profile')}>
+                                    <MdMonetizationOn/>
+                                    <div className="bg">
+                                        Profile
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link className="a2" onClick={() => this.changeState('Donate')}>
+                                    <MdMonetizationOn/>
+                                    <div className="bg">
+                                        Donate
+                                    </div>
+                                </Nav.Link>
+                            </IconContext.Provider>
+                        </Navbar.Collapse>}
                     </Navbar>
                     <header className="App-header">
                         {this.state.donateRegisterLoginHome === 'Home' &&
@@ -87,7 +123,23 @@ class App extends Component<IProps, IState>{
 
     isTheUserLoggedIn(){
         if(!UserInformation.loggedIn){
-            //make backend call with token, have to change the backend first
+            //make backend call with token
+            fetch("http://petshelter-backend.herokuapp.com/api/user/register", {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token: UserInformation.token
+                })
+            }).then((response) => {
+                if (response.status === 200) {
+                    UserInformation.loggedIn=true;
+                } else {
+                    UserInformation.token="";
+                    UserInformation.isAdmin=false;
+                }
+            })
         }
         else{
             UserInformation.token="";
