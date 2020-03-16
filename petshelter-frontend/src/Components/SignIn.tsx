@@ -152,16 +152,14 @@ class SignIn extends Component<IProps, IState> {
             })
         }).then((response) => {
             if (response.status === 200) {
-                console.log(response);
                 this.setState({hasError: false});
                 this.setState({error: ''});
                 this.setState({loginOrReset: 'Done'});
                 this.props.userInfo.loggedIn=true;
-                return response.text();
+                return response.json();
             } else {
                 this.setState({hasError: true});
-                console.log(this.state.hasError);
-                return response.text();
+                return response.json();
             }
         }).then((data:any) => {
             if (this.state.hasError) {
@@ -172,11 +170,7 @@ class SignIn extends Component<IProps, IState> {
                 this.props.userInfo.isAdmin = data.userType === "ADMIN";
             }
             this.props.handler(this.props.userInfo);
-            console.log(data);
-            console.log(this.state);
-            console.log(this.props);
         }).catch(function (error) {
-            console.log('There has been a problem with your fetch operation: ' + error);
         });
         event.preventDefault();
 
@@ -204,17 +198,13 @@ class SignIn extends Component<IProps, IState> {
                     return response.text();
                 } else {
                     this.setState({hasError: true});
-
-                    console.log(this.state.hasError);
                     return response.text();
                 }
             }).then((data) => {
                 if (this.state.hasError) {
                     this.setState({error: data});
                 }
-                console.log(data);
             }).catch(function (error) {
-                console.log('There has been a problem with your fetch operation: ' + error);
             });
         }
     }
