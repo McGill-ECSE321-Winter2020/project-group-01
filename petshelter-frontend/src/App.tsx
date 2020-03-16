@@ -10,6 +10,7 @@ import Register from './Components/Register'
 import SignIn from "./Components/SignIn";
 import Donate from "./Components/Donate";
 import UserInformation from "./CurrentUserInformation";
+import DashBoard from "./Components/DashBoard";
 
 
 // The landing page of the website.
@@ -26,9 +27,9 @@ class App extends Component<IProps, IState>{
             donateRegisterLoginHome: 'Home'
         };
         this.handler = this.handler.bind(this)
+        this.isTheUserLoggedIn();
     }
     render() {
-        this.isTheUserLoggedIn();
         return (
             <div>
                 <div className="App" id="home">
@@ -107,8 +108,9 @@ class App extends Component<IProps, IState>{
                         {this.state.donateRegisterLoginHome === 'Home' &&
                         <img src={logo} className="App-logo" alt="logo"/>}
                         {this.state.donateRegisterLoginHome === 'Register' && <Register/>}
-                        {this.state.donateRegisterLoginHome === 'Login' && <SignIn userInfo={UserInformation} handler={this.handler}/>}
+                        {this.state.donateRegisterLoginHome === 'Login' && !UserInformation.loggedIn && <SignIn userInfo={UserInformation} handler={this.handler}/>}
                         {this.state.donateRegisterLoginHome === 'Donate' && <Donate isHome={true}/>}
+                        {this.state.donateRegisterLoginHome === 'Login' && UserInformation.loggedIn && <DashBoard/>}
                     </header>
                 </div>
             </div>
@@ -127,6 +129,9 @@ class App extends Component<IProps, IState>{
         UserInformation.token=userInfo.token;
         UserInformation.loggedIn=userInfo.loggedIn;
         UserInformation.isAdmin=userInfo.isAdmin;
+        this.setState({donateRegisterLoginHome:""});
+        this.render();
+        console.log(UserInformation)
     }
 
     isTheUserLoggedIn(){
