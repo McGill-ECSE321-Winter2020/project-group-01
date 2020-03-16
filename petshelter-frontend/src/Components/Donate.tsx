@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import ThankYou from "./ThankYou";
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import {AppSettings} from "../Utils/AppSettings";
 
 interface IProps {
     isHome: boolean
@@ -153,7 +154,7 @@ class Donate extends Component<IProps, IState> {
 
     submitDonation(event) {
         console.log(this.state);
-        fetch("http://petshelter-backend.herokuapp.com/api/donation/", {
+        fetch(AppSettings.API_ENDPOINT + "donation/", {
             method: "post",
             headers: {
                 'Content-Type': 'application/json',
