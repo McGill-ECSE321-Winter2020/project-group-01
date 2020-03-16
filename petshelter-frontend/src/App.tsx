@@ -4,13 +4,14 @@ import profile from './profile.png';
 import './App.css';
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
-import {MdMonetizationOn, MdPersonAdd, MdPersonPin, MdPets, MdShoppingCart, MdForum, MdFace} from 'react-icons/md';
+import {MdFace, MdForum, MdMonetizationOn, MdPersonAdd, MdPersonPin, MdPets, MdShoppingCart} from 'react-icons/md';
 import {IconContext} from "react-icons";
 import Register from './Components/Register'
 import SignIn from "./Components/SignIn";
 import Donate from "./Components/Donate";
-import UserInformation from "./CurrentUserInformation";
+import UserInformation from "./interface/CurrentUserInformation";
 import DashBoard from "./Components/DashBoard";
+import {AppSettings} from "./Utils/AppSettings";
 
 
 // The landing page of the website.
@@ -26,7 +27,7 @@ class App extends Component<IProps, IState>{
         this.state = {
             donateRegisterLoginHome: 'Home'
         };
-        this.handler = this.handler.bind(this)
+        this.handler = this.handler.bind(this);
         this.isTheUserLoggedIn();
     }
     render() {
@@ -137,7 +138,7 @@ class App extends Component<IProps, IState>{
     isTheUserLoggedIn(){
         if(UserInformation.token!==""){
             //make backend call with token
-            fetch("http://petshelter-backend.herokuapp.com/api/user/register", {
+            fetch(AppSettings.API_ENDPOINT + "user/register", {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',

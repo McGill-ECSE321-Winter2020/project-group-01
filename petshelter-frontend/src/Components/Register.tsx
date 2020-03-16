@@ -9,6 +9,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import CheckCircleIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import {AppSettings} from "../Utils/AppSettings";
 
 interface IProps {
 }
@@ -143,7 +144,7 @@ class Register extends Component<IProps, IState> {
     };
 
     submitForm(event) {
-        fetch("http://petshelter-backend.herokuapp.com/api/user/register", {
+        fetch(AppSettings.API_ENDPOINT + "user/register", {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
