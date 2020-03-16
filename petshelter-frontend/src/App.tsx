@@ -12,7 +12,7 @@ import Donate from "./Components/Donate";
 import UserInformation from "./interface/CurrentUserInformation";
 import DashBoard from "./Components/DashBoard";
 import {AppSettings} from "./Utils/AppSettings";
-
+import {Link} from "react-router";
 
 // The landing page of the website.
 interface IProps {
@@ -51,9 +51,9 @@ class App extends Component<IProps, IState>{
                         <IconContext.Provider value={{ color: "white", className: "global-class-name", size:"2em" }}>
                             <Nav.Link className="a2" onClick={() => this.changeState('Register')}>
                                 <MdPersonAdd/>
-                                <div className="bg">
+                                <div className="bg"><Link to={"/register"}>
                                     Register
-                                </div>
+                                </Link></div>
                             </Nav.Link>
                             <Nav.Link className="a2" onClick={() => this.changeState('Login')}>
                                 <MdPersonPin/>
@@ -69,6 +69,7 @@ class App extends Component<IProps, IState>{
                             </Nav.Link>
                         </IconContext.Provider>
                     </Navbar.Collapse>}
+
                         {UserInformation.loggedIn &&
                         <Navbar.Collapse className="justify-content-end">
                             <IconContext.Provider value={{ color: "white", className: "global-class-name", size:"2em" }}>

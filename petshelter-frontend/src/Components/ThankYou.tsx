@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Container} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import App from "../App";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Avatar from "@material-ui/core/Avatar";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -23,9 +22,10 @@ class ThankYou extends Component<IProps, IState> {
         this.state = {
             isDone: false
         };
-        this.doneDonation = this.doneDonation.bind(this);
+//        this.doneDonation = this.doneDonation.bind(this);
 
     }
+
 
     render() {
         //takes user back to home page or the dashboard
@@ -35,7 +35,9 @@ class ThankYou extends Component<IProps, IState> {
                     ""
                 );
             else
-                return (<App/>);
+                return (
+                    ""
+                );
         };
 
 
@@ -64,7 +66,7 @@ class ThankYou extends Component<IProps, IState> {
                             variant="contained"
                             color="primary"
                             style={{marginTop: "5%",}}
-                            onClick={() => this.doneDonation}
+                            onClick={() => this.changeState(true)}
                         >
                             Go Back!
                         </Button>
@@ -85,13 +87,13 @@ class ThankYou extends Component<IProps, IState> {
         })
     }
 
-    doneDonation(event) {
-        console.log(this.state);
-
-
-        event.preventDefault();
-        this.changeState(true);
-    }
+    // doneDonation(event) {
+    //     console.log(this.state);
+    //
+    //
+    //     event.preventDefault();
+    //     this.changeState(true);
+    // }
 
 }
 

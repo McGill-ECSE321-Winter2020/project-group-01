@@ -8,7 +8,6 @@ import Box from '@material-ui/core/Box';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import 'production'
 import {AppSettings} from "../Utils/AppSettings";
 
 interface IProps {
