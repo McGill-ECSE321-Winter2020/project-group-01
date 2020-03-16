@@ -110,7 +110,7 @@ class App extends Component<IProps, IState>{
                         {this.state.donateRegisterLoginHome === 'Register' && <Register/>}
                         {this.state.donateRegisterLoginHome === 'Login' && !UserInformation.loggedIn && <SignIn userInfo={UserInformation} handler={this.handler}/>}
                         {this.state.donateRegisterLoginHome === 'Donate' && <Donate isHome={true}/>}
-                        {this.state.donateRegisterLoginHome === 'Login' && UserInformation.loggedIn && <DashBoard/>}
+                        {UserInformation.loggedIn && <DashBoard/>}
                     </header>
                 </div>
             </div>
