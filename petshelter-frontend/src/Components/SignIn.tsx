@@ -173,13 +173,13 @@ class SignIn extends Component<IProps, IState> {
             }
             this.props.handler(this.props.userInfo);
             console.log(data);
+            console.log(this.state);
+            console.log(this.props);
         }).catch(function (error) {
             console.log('There has been a problem with your fetch operation: ' + error);
         });
         event.preventDefault();
-        this.setState({
-            loginOrReset: "LoggedIn"
-        });
+
     }
 
     submitReset() {
