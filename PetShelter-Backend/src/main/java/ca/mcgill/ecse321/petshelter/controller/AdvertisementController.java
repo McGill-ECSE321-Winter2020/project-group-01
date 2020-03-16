@@ -60,35 +60,7 @@ public class AdvertisementController {
 		
 		return applicationDTO;
 	}
-	
-	/**
-	 * Converts an advertisement to an advertisement DTO.
-	 *
-	 * @param ad The advertisement to convert.
-	 * @return An advertisement DTO.
-	 */
-	AdvertisementDTO advertisementToDto(Advertisement ad) {
-		AdvertisementDTO adDto = new AdvertisementDTO();
-		Set<Application> applications = new HashSet<>();
-		applications.addAll(ad.getApplication());
-		adDto.setAdId(ad.getId());
-		adDto.setApplication(applications);
-		adDto.setDescription(ad.getDescription());
-		adDto.setTitle(ad.getTitle());
-		adDto.setDescription(ad.getDescription());
-		adDto.setFulfilled(ad.isIsFulfilled());
-		List<Long> petIds = new ArrayList<>();
-		Set<PetDTO> allPets = petService.getAllPets();
-		for (PetDTO pet : allPets) {
-			if (pet.getAdvertisement().equals(ad.getId())) {
-				petIds.add(pet.getId());
-			}
-		}
-		Long[] ids = (Long[]) petIds.toArray();
-		adDto.setPetIds(ids);
-		return adDto;
-	}
-	
+
 	/**
 	 * Gets the desired advertisement.
 	 *
@@ -162,9 +134,7 @@ public class AdvertisementController {
 		boolean isOwner = user.getPets().contains(pet);
 		if (user != null && isOwner && advertisementDTO.getTitle() != null && !advertisementDTO.getTitle().trim().equals("") && advertisementDTO.getDescription() != null
 				&& !advertisementDTO.getDescription().trim().equals("")) {
-			Long[] petIds = new Long[1];
-			petIds[0] = petId;
-			AdvertisementDTO adDto = createAdDto(advertisementDTO.getTitle(), false, petIds, new HashSet<>(), advertisementDTO.getDescription());
+			AdvertisementDTO adDto = createAdDto(advertisementDTO.getTitle(), false, petService.convertToDTO(pet), new HashSet<>(), advertisementDTO.getDescription());
 			adDto = advertisementService.createAdvertisement(adDto);
 			if (adDto != null) {
 				return new ResponseEntity<>(adDto, HttpStatus.CREATED);
@@ -208,26 +178,14 @@ public class AdvertisementController {
 									  @RequestHeader String token) {
 		User user = userRepository.findUserByApiToken(token);
 		AdvertisementDTO advertisementOld = advertisementService.getAdvertisementById(advertisementDTO.getAdId());
-		if (user != null // Check if user an advert exist and if user can modify it.
-				&& advertisementOld != null
-				&& hasRightsForAd(user, advertisementOld)
-				&& advertisementDTO.getTitle() != null // Check if the new title is valid.
-				&& !advertisementDTO.getTitle().trim().equals("")) {
-
+		if (user != null && hasRightsForAd(user, advertisementOld)) {  // Check if user exist and if user can modify.
 			// Converts all the pets of the user to a set of their IDs.
 			Set<Long> petsID = petService.getPetsByUser(user.getUserName()).stream()
 					.map(PetDTO::getId)
 					.collect(Collectors.toSet());
-
-			// Create a set with all IDs.
-			Long[] idArray = advertisementDTO.getPetIds();
-			Set<Long> idSet = new HashSet<>();
-			if (idArray != null) {
-				Collections.addAll(idSet, idArray);
-			}
 			
 			// Then verify if the pets of the new advertisement are contained in that set.
-			if (petsID.containsAll(idSet)) {
+			if (petsID.contains(advertisementDTO.getPet().getId())) {
 				AdvertisementDTO adDTO = advertisementService.editAdvertisement(advertisementDTO);
 				return new ResponseEntity<>(
 						adDTO,
@@ -246,19 +204,19 @@ public class AdvertisementController {
 	 *
 	 * @param title title given
 	 * @param isfulfilled is it sold
-	 * @param aD_PET_IDS id of pet
+	 * @param petDTO pet
 	 * @param adoptionApplication adoptions
 	 * @param description ad description
 	 * @return adDTO
 	 */
-	private AdvertisementDTO createAdDto(String title, boolean isfulfilled, Long[] aD_PET_IDS,
-										 Set<Application> adoptionApplication, String description) {
+	private AdvertisementDTO createAdDto(String title, boolean isfulfilled, PetDTO petDTO,
+										 Set<ApplicationDTO> adoptionApplication, String description) {
 		AdvertisementDTO dto = new AdvertisementDTO();
 		dto.setApplication(adoptionApplication);
 		dto.setDescription(description);
 		dto.setTitle(title);
 		dto.setFulfilled(isfulfilled);
-		dto.setPetIds(aD_PET_IDS);
+		dto.setPet(petDTO);
 		return dto;
 	}
 
