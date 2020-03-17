@@ -46,8 +46,7 @@ public class Advertisement {
     public void setApplication(Set<Application> applications) {
         this.application = applications;
     }
-    
-    
+
     private String title;
     
     public String getTitle() {
@@ -56,6 +55,18 @@ public class Advertisement {
     
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    private Pet pet;
+
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    public Pet getPet() {
+        return pet;
+    }
+
+    public void setPet(Pet pet) {
+        this.pet = pet;
     }
     
     @Override
@@ -66,6 +77,8 @@ public class Advertisement {
                 ", isFulfilled=" + isFulfilled +
                 ", adoptionApplication=" + application +
                 ", title='" + title + '\'' +
+                ", pet=" + pet +
                 '}';
     }
+
 }

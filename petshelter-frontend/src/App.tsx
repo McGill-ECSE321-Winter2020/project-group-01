@@ -4,11 +4,14 @@ import profile from './profile.png';
 import './App.css';
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
-import {MdMonetizationOn, MdPersonAdd, MdPersonPin} from 'react-icons/md';
+import {MdFace, MdForum, MdMonetizationOn, MdPersonAdd, MdPersonPin, MdPets, MdShoppingCart} from 'react-icons/md';
 import {IconContext} from "react-icons";
-import SignUp from './Components/SignUp'
 import Register from './Components/Register'
+import SignIn from "./Components/SignIn";
 import Donate from "./Components/Donate";
+import UserInformation from "./interface/CurrentUserInformation";
+import DashBoard from "./Components/DashBoard";
+import {AppSettings} from "./Utils/AppSettings";
 
 
 // The landing page of the website.
@@ -24,23 +27,27 @@ class App extends Component<IProps, IState>{
         this.state = {
             donateRegisterLoginHome: 'Home'
         };
+        this.handler = this.handler.bind(this);
+        this.isTheUserLoggedIn();
     }
     render() {
         return (
-            <div className="App">
-                <Navbar bg="dark" expand={true} collapseOnSelect={false} style={{maxHeight:"10vh"}}>
-                    <Navbar.Brand href="" onClick={() => this.changeState('Home')}>
+            <div>
+                <div className="App" id="home">
+                    <Navbar bg="dark" expand={true} collapseOnSelect={false} style={{maxHeight: "10vh"}}>
+                        <Navbar.Brand href="" onClick={() => this.changeState('Home')}>
                         <span>
                             <img
                                 src={profile}
-                                width="60"
-                                height="60"
-                                className="d-inline-block align-top"
+                                width="70"
+                                height="70"
+                                className="d-inline-block align-middle"
                                 alt="logo"
-                            /> Pet Pawlace
+                            /> Pawlace
                         </span>
                     </Navbar.Brand>
-                    <Navbar.Collapse className="justify-content-end">
+                        {!UserInformation.loggedIn &&
+                        <Navbar.Collapse className="justify-content-end">
                         <IconContext.Provider value={{ color: "white", className: "global-class-name", size:"2em" }}>
                             <Nav.Link className="a2" onClick={() => this.changeState('Register')}>
                                 <MdPersonAdd/>
@@ -61,15 +68,52 @@ class App extends Component<IProps, IState>{
                                 </div>
                             </Nav.Link>
                         </IconContext.Provider>
-                    </Navbar.Collapse>
-                </Navbar>
-                <header className="App-header">
-                    {this.state.donateRegisterLoginHome === 'Home' && <img src={logo} className="App-logo" alt="logo"/>}
-                    {this.state.donateRegisterLoginHome === 'Register' && <Register/>}
-                    {this.state.donateRegisterLoginHome === 'Login' && <SignUp/>}
-                    {this.state.donateRegisterLoginHome === 'Donate' && <Donate isHome={true}/>}
-                </header>
-
+                    </Navbar.Collapse>}
+                        {UserInformation.loggedIn &&
+                        <Navbar.Collapse className="justify-content-end">
+                            <IconContext.Provider value={{ color: "white", className: "global-class-name", size:"2em" }}>
+                                <Nav.Link className="a2" onClick={() => this.changeState('Forums')}>
+                                    <MdForum/>
+                                    <div className="bg">
+                                        Forum
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link className="a2" onClick={() => this.changeState('Advertisements')}>
+                                    <MdShoppingCart/>
+                                    <div className="bg">
+                                        Advertisements
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link className="a2" onClick={() => this.changeState('Pets')}>
+                                    <MdPets/>
+                                    <div className="bg">
+                                        Pets
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link className="a2" onClick={() => this.changeState('Profile')}>
+                                    <MdFace/>
+                                    <div className="bg">
+                                        Profile
+                                    </div>
+                                </Nav.Link>
+                                <Nav.Link className="a2" onClick={() => this.changeState('Donate')}>
+                                    <MdMonetizationOn/>
+                                    <div className="bg">
+                                        Donate
+                                    </div>
+                                </Nav.Link>
+                            </IconContext.Provider>
+                        </Navbar.Collapse>}
+                    </Navbar>
+                    <header className="App-header">
+                        {this.state.donateRegisterLoginHome === 'Home' &&
+                        <img src={logo} className="App-logo" alt="logo"/>}
+                        {this.state.donateRegisterLoginHome === 'Register' && <Register/>}
+                        {this.state.donateRegisterLoginHome === 'Login' && !UserInformation.loggedIn && <SignIn userInfo={UserInformation} handler={this.handler}/>}
+                        {this.state.donateRegisterLoginHome === 'Donate' && <Donate isHome={true}/>}
+                        {UserInformation.loggedIn && <DashBoard/>}
+                    </header>
+                </div>
             </div>
         );
     }
@@ -79,6 +123,43 @@ class App extends Component<IProps, IState>{
         this.setState({
             donateRegisterLoginHome: state
         });
+    }
+
+    //updates the user properties
+    handler(userInfo: any){
+        UserInformation.token=userInfo.token;
+        UserInformation.loggedIn=userInfo.loggedIn;
+        UserInformation.isAdmin=userInfo.isAdmin;
+        this.setState({donateRegisterLoginHome:""});
+        this.render();
+        console.log(UserInformation)
+    }
+
+    isTheUserLoggedIn(){
+        if(UserInformation.token!==""){
+            //make backend call with token
+            fetch(AppSettings.API_ENDPOINT + "user/register", {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token: UserInformation.token
+                })
+            }).then((response) => {
+                if (response.status === 200) {
+                    UserInformation.loggedIn=true;
+                } else {
+                    UserInformation.token="";
+                    UserInformation.isAdmin=false;
+                    UserInformation.loggedIn=false;
+                }
+            })
+        }
+        else{
+            UserInformation.token="";
+            UserInformation.loggedIn=false;
+        }
     }
 }
 

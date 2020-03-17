@@ -96,8 +96,8 @@ public class Pet {
     }
     
     private Advertisement advertisement;
-    
-    @ManyToOne
+
+    @OneToOne(mappedBy="pet", cascade=CascadeType.ALL, optional=true)
     public Advertisement getAdvertisement() {
         return this.advertisement;
     }

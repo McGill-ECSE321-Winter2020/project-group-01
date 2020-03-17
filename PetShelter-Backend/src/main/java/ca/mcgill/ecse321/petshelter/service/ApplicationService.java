@@ -54,7 +54,7 @@ public class ApplicationService {
     
     /**
      * @param name user object
-     * @return all the applications that matches that user
+     * @return all the applications that match that user
      */
     @Transactional
     public List<ApplicationDTO> getAllUserApplications(String name) {
@@ -62,8 +62,8 @@ public class ApplicationService {
     }
     
     /**
-     * @param name user object
-     * @return all the applications that matches that user
+     * @param advertisement Advertisement entity object.
+     * @return all the applications that match that advertisement.
      */
     @Transactional
     public List<ApplicationDTO> getAllAdvertisementApplications(Advertisement advertisement) {
@@ -115,13 +115,13 @@ public class ApplicationService {
     @Transactional
     public ApplicationDTO createApplication(ApplicationDTO applicationDTO) {
         //condition checks
-        if (applicationDTO.getDescription() == null) {
+        if (applicationDTO.getDescription() == null || applicationDTO.getDescription() == "") {
             throw new ApplicationException("Description can't be null!");
         }
         if (applicationDTO.getUsername() == null) {
             throw new ApplicationException("Username can't be null!");
         }
-        if (applicationDTO.getAdvertisementTitle() == null) {
+        if (applicationDTO.getAdvertisementTitle() == null || applicationDTO.getAdvertisementTitle() == "") {
             throw new ApplicationException("Advertisement Title can't be null!");
         }
         Advertisement advertisement = advertisementRepository.findAdvertisementById(applicationDTO.getAdId());
@@ -177,6 +177,32 @@ public class ApplicationService {
         applicationDTO.setAdId(application.getAdvertisement().getId());
         applicationDTO.setAppId(application.getId());
         return applicationDTO;
+    }
+
+    /**
+     * Converts ApplicationDTO to Application
+     *
+     * @param applicationDTO application DTO
+     * @return application entity object./
+     */
+    public Application convertToEntity(ApplicationDTO applicationDTO) {
+        Application application = new Application();
+        application.setDescription(applicationDTO.getDescription());
+        User user = userRepository.findUserByUserName(applicationDTO.getUsername());
+        if (user != null) {
+            application.setUser(user);
+        } else {
+            throw new ApplicationException("User does not exist.");
+        }
+        Optional<Advertisement> advertisement = advertisementRepository.findById(applicationDTO.getAdId());
+        if (advertisement.isPresent()) {
+            application.setAdvertisement(advertisement.get());
+        } else {
+            throw new ApplicationException(("Advertisement does not exist."));
+        }
+        application.setIsAccepted(applicationDTO.getIsAccepted());
+        application.setId(applicationDTO.getAppId());
+        return application;
     }
     
     /**
