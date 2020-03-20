@@ -1,6 +1,6 @@
 # ECSE321 Project Group 1 ![Travis Build Status](https://travis-ci.com/McGill-ECSE321-Winter2020/project-group-01.svg?token=fsmRFkAy9TTnJy5UEPzf&branch=master) [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/McGill-ECSE321-Winter2020/project-group-01)
 
-## Project Overview(*)
+## Project Overview
 We are developing a website and an Android app to facilitate the pet adoption process of a local pet shelter. In this system,
 users can post advertisements to put their pets up for adoption. They can also apply to adopt a pet on an advertisement
 posted by a user or by the shelter itself. The system is implemented in teams of 5. The implementation of this system
@@ -28,11 +28,11 @@ We are 5 McGill University students from the Faculty of Engineering
 ### Project
 | NAME                   | ROLE |  SPRINT 1 | SPRINT 2 | SPRINT 3 | SPRINT 4 |
 |------------------------|------|-----------|----------|----------|----------|
-| Louis Barrette-Vanasse | Project Manager | 25        |   32       |    6      |          |
-| Mathieu Bissonnette    |Software Developer| 10        |     25     |          |          |
-| Christopher Boustros   | Backend Lead| 17        |      17   |          |          |
-| Ding Ma                |   Testing Lead | 18        |     47     |          |          |
-| Katrina Poulin         | Documentation Lead | 16        |    20      |          |          |
+| Louis Barrette-Vanasse | Project Manager | 25        |   32       |    20      |          |
+| Mathieu Bissonnette    |Software Developer| 10        |     25     |     0     |          |
+| Christopher Boustros   | Software Developer| 17        |      17   |      0    |          |
+| Ding Ma                |   Testing Lead | 18        |     47     |      17    |          |
+| Katrina Poulin         | Documentation Lead | 16        |    20      |    0      |          |
 ### Deliverable 1
 
 The project report for this deliverable can be found [here](https://github.com/McGill-ECSE321-Winter2020/project-group-01/wiki/Project-Report:-Sprint-1).
@@ -61,13 +61,15 @@ The project report for this deliverable can be found [here](https://github.com/M
 
 The project report for this deliverable can be found [here](https://github.com/McGill-ECSE321-Winter2020/project-group-01/wiki/Project-Report:-Sprint-3).
 
+The project was cancelled due to the coronavirus pandemic, so that is why the contributions below are disproportionate. 
+
 | Name | Contributions | Hours |
 | ------------- | ------------- | ------------- |
-| Louis Barrette-Vanasse | <ul><li>Landing page</li><li>Navbar</li><li>Logo</li><li>Deploying to heroku</li></ul>| 12 |
-| Mathieu Bissonnette | | 0 |
-| Christopher Boustros |  | 0 |
-| Ding Ma |<ul><li>Landing page</li><li>Donation</li><li>Dashboard</li><li>Fixed auto deploy to heroku</li></ul> |10 |
-| Katrina Poulin || 0 |
+| Louis Barrette-Vanasse | <ul><li>Landing page</li><li>Navbar</li><li>Logo</li><li>Deploying to heroku</li><li>Bootstrap themes + overarching css</li><li>Sign in and register</li><li>Forgot password and email verification</li></ul>| 20 |
+| Mathieu Bissonnette | N/A| 0 |
+| Christopher Boustros | N/A | 0 |
+| Ding Ma |<ul><li>Donation</li><li>Dashboard</li><li>Fixed auto deploy to heroku</li></ul> |17 |
+| Katrina Poulin | N/A| 0 |
 
 (*) *From ECSE321_Project_Description.pdf written by M. Kanaan, posted on myCourses.*
 
