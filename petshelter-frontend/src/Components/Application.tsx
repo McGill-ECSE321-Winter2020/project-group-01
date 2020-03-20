@@ -8,8 +8,6 @@ import Box from '@material-ui/core/Box';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import 'production'
-import {AppSettings} from "../Utils/AppSettings";
 
 interface IProps {
 }
@@ -114,7 +112,7 @@ class Application extends Component<IProps, IState> {
     };
 
     submitForm(event) {
-        fetch(AppSettings.API_ENDPOINT + "application/create", {
+        fetch("http://petshelter-backend.herokuapp.com/api/application/create", {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',

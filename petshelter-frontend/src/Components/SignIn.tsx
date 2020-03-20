@@ -10,7 +10,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import CheckCircleIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import {AppSettings} from "../Utils/AppSettings";
 
 interface IProps {
     userInfo: any,
@@ -182,7 +181,7 @@ class SignIn extends Component<IProps, IState> {
             this.setState({hasError: true});
             this.setState({error: 'Enter your username first.'});
         } else {
-            fetch(AppSettings.API_ENDPOINT + "user/resetPassword", {
+            fetch("http://petshelter-backend.herokuapp.com/api/user/resetPassword", {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',
