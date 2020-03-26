@@ -1,4 +1,9 @@
-# ECSE321 Project Group 1 ![Travis Build Status](https://travis-ci.com/McGill-ECSE321-Winter2020/project-group-01.svg?token=fsmRFkAy9TTnJy5UEPzf&branch=master) [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/McGill-ECSE321-Winter2020/project-group-01)
+# ECSE321 Project Group 1 
+![Travis Build Status](https://travis-ci.com/McGill-ECSE321-Winter2020/project-group-01.svg?token=fsmRFkAy9TTnJy5UEPzf&branch=master) [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/McGill-ECSE321-Winter2020/project-group-01)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/McGill-ECSE321-Winter2020/project-group-01)
+![GitHub forks](https://img.shields.io/github/forks/McGill-ECSE321-Winter2020/project-group-01?style=social)
+![GitHub stars](https://img.shields.io/github/stars/McGill-ECSE321-Winter2020/project-group-01?style=social)
+![GitHub issues](https://img.shields.io/github/issues/McGill-ECSE321-Winter2020/project-group-01)
 
 ## Project Overview
 We are developing a website and an Android app to facilitate the pet adoption process of a local pet shelter. In this system,
